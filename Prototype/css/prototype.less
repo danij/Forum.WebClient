@@ -1,0 +1,128 @@
+.uk-dropdown-nav .uk-badge {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.uk-navbar-dropdown {
+    width: 250px;
+}
+
+.uk-dropdown.user-info {
+    width: 300px;
+
+    li > span:not(.uk-badge) {
+        color: #999;
+        padding: 5px 0;
+    }
+}
+
+.align-left {
+    float: left;
+}
+
+.align-right {
+    float: right;
+}
+
+.page-content {
+    position: absolute;
+    top: 80px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+.discussion-thread-message {
+    padding-bottom: 10px !important;;
+}
+
+.message-author {
+    margin-right: 20px;
+
+    .username {
+        font-weight: bold;
+        font-variant: small-caps;
+        font-size: 0.875rem;
+        text-align: center;
+    }
+}
+
+.pointer-cursor {
+    cursor: pointer;
+}
+
+@avatar-size: 96px;
+
+.text-avatar {
+    box-sizing: border-box;
+    width: @avatar-size;
+    height: @avatar-size;
+    font-size: 64px;
+    border-radius: 500px;
+    background: #f8f8f8;
+    vertical-align: middle;
+    display: -ms-inline-flexbox;
+    display: -webkit-inline-flex;
+    display: inline-flex;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-transition: .1s ease-in-out;
+    transition: .1s ease-in-out;
+    -webkit-transition-property: color,background-color;
+    transition-property: color,background-color;
+
+    &:hover {
+        background-color: #EBEBEB;
+    }
+}
+
+.message-time-container {
+    margin-top: -14px;
+}
+
+.message-time {
+    font-weight: lighter;
+    color: #444444;
+    text-transform: uppercase;
+}
+
+.message-actions {
+    float: right;
+    width: 20px;
+    margin-right: -10px;
+
+    a:not(:first-child) {
+        margin-top: 15px;
+    }
+}
+
+.message-content {
+    .uk-table {
+        width: 75%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    pre {
+        margin-right: 20px;
+    }
+
+    ol, ul {
+        margin-left: 100px;
+    }
+}
+
+.message-vote {
+
+    margin-top: 10px;
+
+    a {
+        display: block;
+    }
+}

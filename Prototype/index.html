@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Fast Forum – Prototype</title>
+    <link rel="stylesheet" href="css/uikit.min.css">
+    <link rel="stylesheet" href="css/prototype.css">
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/uikit.min.js"></script>
+    <script type="text/javascript" src="js/uikit-icons.min.js"></script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+    },
+    "HTML-CSS": { availableFonts: ["TeX"] }
+    });
+
+
+    </script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
+</head>
+<body>
+
+<div class="uk-navbar-container" uk-navbar>
+    <div class="uk-navbar-center">
+        <div class="uk-navbar-center-left">
+            <div>
+                <ul class="uk-navbar-nav uk-text-center">
+                    <li class="uk-active"><a href="Home">
+                        <div><span uk-icon="icon: home"></span>
+                            <div class="uk-navbar-subtitle">Home</div>
+                        </div>
+                    </a></li>
+                    <li><a href="RecentThreads">
+                        <div>Recent
+                            <div class="uk-navbar-subtitle">Threads</div>
+                        </div>
+                    </a></li>
+                    <li><a href="RecentMessages">
+                        <div>Recent
+                            <div class="uk-navbar-subtitle">Messages</div>
+                        </div>
+                    </a></li>
+                    <li><a href="Users">
+                        <div><span uk-icon="icon: users"></span>
+                            <div class="uk-navbar-subtitle">Users</div>
+                        </div>
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+        <a href="" class="uk-navbar-item uk-logo">Fast Forum</a>
+        <div class="uk-navbar-center-right">
+            <div>
+                <ul class="uk-navbar-nav">
+                    <li><a href="Help" class="uk-text-center">
+                        <div><span uk-icon="icon: question"></span>
+                            <div class="uk-navbar-subtitle">Help</div>
+                        </div>
+                    </a></li>
+                    <li><a href="Rules" class="uk-text-center">
+                        <div><span uk-icon="icon: info"></span>
+                            <div class="uk-navbar-subtitle">Rules</div>
+                        </div>
+                    </a></li>
+                    <li><a href="NewThread" class="uk-text-center">
+                        <div>New
+                            <div class="uk-navbar-subtitle">Thread</div>
+                        </div>
+                    </a></li>
+                    <li><a href="User" class="uk-text-center">
+                        <div><span uk-icon="icon: user"></span>
+                            <div class="uk-navbar-subtitle">MyUser123</div>
+                        </div>
+                        <div class="uk-navbar-dropdown">
+                            <ul class="uk-nav uk-navbar-dropdown-nav">
+                                <li class="uk-nav-header">Content</li>
+                                <li>
+                                    <a href="MyThreads" class="align-left">
+                                        <span>My Threads</span>
+                                    </a>
+                                    <span class="uk-badge align-right">278</span>
+                                    <div class="uk-clearfix"></div>
+                                </li>
+                                <li>
+                                    <a href="MyMessages" class="align-left">
+                                        <span>My Messages</span>
+                                    </a>
+                                    <span class="uk-badge align-right">15371</span>
+                                    <div class="uk-clearfix"></div>
+                                </li>
+                                <li>
+                                    <a href="SubscribedThreads" class="align-left">
+                                        <span>Subscribed Threads</span>
+                                    </a>
+                                    <span class="uk-badge align-right">148</span>
+                                    <div class="uk-clearfix"></div>
+                                </li>
+                                <!--<li class="uk-nav-header">Attachments</li>-->
+                                <!--<li><a href="MyMessages">Manage</a></li>-->
+                                <!--<li><a href="MyMessages">Statistics</a></li>-->
+                                <li class="uk-nav-divider"></li>
+                                <li><a href="Logout">Logout</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-content">
+    <div class="uk-container uk-container-expand">
+        <div class="uk-card uk-card-hover uk-card-hover uk-card-body discussion-thread-message">
+            <div class="message-author uk-float-left">
+                <div class="pointer-cursor">
+                    <div class="text-avatar" style="color: #1CAF10">A</div>
+                    <div class="username uk-text-small">Abreamel</div>
+                </div>
+                <div uk-dropdown class="user-info">
+                    <ul class="uk-nav uk-dropdown-nav">
+                        <li class="uk-nav-header">Content</li>
+                        <li>
+                            <a href="UserThreads" class="align-left">
+                                <span>Threads</span>
+                            </a>
+                            <span class="uk-badge align-right">17</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li>
+                            <a href="UserMessages" class="align-left">
+                                <span>Messages</span>
+                            </a>
+                            <span class="uk-badge align-right">524</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li class="uk-nav-header">Activity</li>
+                        <li>
+                        <span href="MyThreads" class="align-left">
+                            <span>Joined</span>
+                        </span>
+                            <span class="uk-badge align-right">324 days ago</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li>
+                        <span href="MyMessages" class="align-left">
+                            <span>Last seen</span>
+                        </span>
+                            <span class="uk-badge align-right">2 minutes ago</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li class="uk-nav-header">Feedback Received</li>
+                        <li>
+                        <span href="MyMessages" class="align-left">
+                            <span>Up votes</span>
+                        </span>
+                            <span class="uk-badge align-right">15</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li>
+                        <span href="MyMessages" class="align-left">
+                            <span>Down votes</span>
+                        </span>
+                            <span class="uk-badge align-right">3</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="uk-text-center uk-float-left message-vote">
+                    <a uk-icon="icon: plus-circle" href="upVoteMessage" title="Up vote message" uk-tooltip></a>
+                    <span class="uk-label uk-label-success" title="Current message up votes" uk-tooltip>14</span>
+                </div>
+                <div class="uk-text-center uk-float-right message-vote">
+                    <a uk-icon="icon: minus-circle" href="downVoteMessage" title="Down vote message" uk-tooltip></a>
+                    <span class="uk-label uk-label-danger" title="Current message down votes" uk-tooltip>2</span>
+                </div>
+            </div>
+            <div class="uk-card-badge message-time-container">
+                <span class="message-time" title="Tue, July 25th 2017 14:15:32+3" uk-tooltip>1 day, 2 hours, 23 minutes ago</span>
+            </div>
+            <div class="message-actions">
+                <a uk-icon="icon: file-edit" href="editMessage" title="Edit message content" uk-tooltip></a>
+                <a uk-icon="icon: move" href="moveMessage" title="Move to different thread" uk-tooltip></a>
+                <a uk-icon="icon: trash" href="deleteMessage" title="Delete message" uk-tooltip></a>
+                <a uk-icon="icon: warning" href="commentMessage" title="Flag & comment" uk-tooltip></a>
+                <a uk-icon="icon: commenting" href="quoteMessage" title="Quote content" uk-tooltip></a>
+            </div>
+            <div class="message-content">
+                <p>In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. <strong>Nullam dictum</strong> felis
+                    eu
+                    pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean
+                    vulputate
+                    eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem
+                    ante, dapibus in, viverra quis, feugiat a, tellus.</p>
+                <p>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed aliquam,
+                    nisi
+                    quis porttitor congue, elit erat euismod orci, ac placerat dolor lectus quis orci. Phasellus
+                    consectetuer vestibulum elit. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc.
+                    Vestibulum fringilla pede sit amet augue. In turpis. Pellentesque posuere. Praesent turpis. 😜</p>
+                <p>Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
+                    Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. $\frac{x^2}{2}$</p>
+                <p>Phasellus dolor. Maecenas vestibulum mollis diam. Pellentesque ut neque. Pellentesque habitant morbi
+                    tristique senectus et netus et malesuada fames ac turpis egestas. In dui magna, posuere eget,
+                    vestibulum et, tempor auctor, justo. In ac felis quis tortor malesuada pretium. Pellentesque auctor
+                    neque nec urna. Proin sapien ipsum, porta a, auctor quis, euismod ut, mi. Aenean viverra rhoncus
+                    pede. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                    Ut non enim eleifend felis pretium feugiat. Vivamus quis mi. Phasellus a est. Phasellus magna. In
+                    hac habitasse platea dictumst. Curabitur at lacus ac velit ornare lobortis. Curabitur a felis in
+                    nunc fringilla tristique.</p>
+            </div>
+        </div>
+        <hr class="uk-divider-icon">
+        <div class="uk-card uk-card-hover uk-card-hover uk-card-body discussion-thread-message">
+            <div class="message-author uk-float-left">
+                <div class="pointer-cursor">
+                    <div class="text-avatar" style="color: #0A2ADF">H</div>
+                    <div class="username uk-text-small">Hoptekke</div>
+                </div>
+                <div uk-dropdown class="user-info">
+                    <ul class="uk-nav uk-dropdown-nav">
+                        <li class="uk-nav-header">Content</li>
+                        <li>
+                            <a href="UserThreads" class="align-left">
+                                <span>Threads</span>
+                            </a>
+                            <span class="uk-badge align-right">0</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li>
+                            <a href="UserMessages" class="align-left">
+                                <span>Messages</span>
+                            </a>
+                            <span class="uk-badge align-right">274</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li class="uk-nav-header">Activity</li>
+                        <li>
+                        <span href="MyThreads" class="align-left">
+                            <span>Joined</span>
+                        </span>
+                            <span class="uk-badge align-right">125 days ago</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li>
+                        <span href="MyMessages" class="align-left">
+                            <span>Last seen</span>
+                        </span>
+                            <span class="uk-badge align-right">5 hours ago</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li class="uk-nav-header">Feedback Received</li>
+                        <li>
+                        <span href="MyMessages" class="align-left">
+                            <span>Up votes</span>
+                        </span>
+                            <span class="uk-badge align-right">45</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li>
+                        <span href="MyMessages" class="align-left">
+                            <span>Down votes</span>
+                        </span>
+                            <span class="uk-badge align-right">2</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="uk-text-center uk-float-left message-vote">
+                    <a uk-icon="icon: plus-circle" href="upVoteMessage" title="Up vote message" uk-tooltip></a>
+                    <span class="uk-label uk-label-success" title="Current message up votes" uk-tooltip>25</span>
+                </div>
+                <div class="uk-text-center uk-float-right message-vote">
+                    <a uk-icon="icon: minus-circle" href="downVoteMessage" title="Down vote message" uk-tooltip></a>
+                    <span class="uk-label uk-label-danger" title="Current message down votes" uk-tooltip>0</span>
+                </div>
+            </div>
+            <div class="uk-card-badge message-time-container">
+                <span class="message-time" title="Tue, July 25th 2017 21:35:19+3"
+                      uk-tooltip>20 hours, 4 minutes ago</span>
+            </div>
+            <div class="message-actions">
+                <a uk-icon="icon: file-edit" href="editMessage" title="Edit message content" uk-tooltip></a>
+                <a uk-icon="icon: move" href="moveMessage" title="Move to different thread" uk-tooltip></a>
+                <a uk-icon="icon: trash" href="deleteMessage" title="Delete message" uk-tooltip></a>
+                <a uk-icon="icon: warning" href="commentMessage" title="Flag & comment" uk-tooltip></a>
+                <a uk-icon="icon: commenting" href="quoteMessage" title="Quote content" uk-tooltip></a>
+            </div>
+            <div class="message-content">
+                <p>Should $a \ne 0$ then \(ax^2 + bx + c = 0\) has two solutions: $$x = {-b \pm \sqrt{b^2-4ac} \over
+                    2a}.$$</p>
+                <pre>#include &lt;iostream&gt;
+int main()
+{
+    return 0;
+}</pre>
+            </div>
+        </div>
+        <hr class="uk-divider-icon">
+        <div class="uk-card uk-card-hover uk-card-hover uk-card-body discussion-thread-message">
+            <div class="message-author uk-float-left">
+                <div class="pointer-cursor">
+                    <div class="text-avatar" style="color: #01AFD0">A</div>
+                    <div class="username uk-text-small">Advanid</div>
+                </div>
+                <div uk-dropdown class="user-info">
+                    <ul class="uk-nav uk-dropdown-nav">
+                        <li class="uk-nav-header">Content</li>
+                        <li>
+                            <a href="UserThreads" class="align-left">
+                                <span>Threads</span>
+                            </a>
+                            <span class="uk-badge align-right">1</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li>
+                            <a href="UserMessages" class="align-left">
+                                <span>Messages</span>
+                            </a>
+                            <span class="uk-badge align-right">14</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li class="uk-nav-header">Activity</li>
+                        <li>
+                        <span href="MyThreads" class="align-left">
+                            <span>Joined</span>
+                        </span>
+                            <span class="uk-badge align-right">10 days ago</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li>
+                        <span href="MyMessages" class="align-left">
+                            <span>Last seen</span>
+                        </span>
+                            <span class="uk-badge align-right">2 hours ago</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li class="uk-nav-header">Feedback Received</li>
+                        <li>
+                        <span href="MyMessages" class="align-left">
+                            <span>Up votes</span>
+                        </span>
+                            <span class="uk-badge align-right">3</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                        <li>
+                        <span href="MyMessages" class="align-left">
+                            <span>Down votes</span>
+                        </span>
+                            <span class="uk-badge align-right">8</span>
+                            <div class="uk-clearfix"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="uk-text-center uk-float-left message-vote">
+                    <a uk-icon="icon: plus-circle" href="upVoteMessage" title="Up vote message" uk-tooltip></a>
+                    <span class="uk-label uk-label-success" title="Current message up votes" uk-tooltip>2</span>
+                </div>
+                <div class="uk-text-center uk-float-right message-vote">
+                    <a uk-icon="icon: minus-circle" href="downVoteMessage" title="Down vote message" uk-tooltip></a>
+                    <span class="uk-label uk-label-danger" title="Current message down votes" uk-tooltip>5</span>
+                </div>
+            </div>
+            <div class="uk-card-badge message-time-container">
+                <span class="message-time" title="Tue, July 26th 2017 18:10:32+3" uk-tooltip>4 hours, 26 minutes ago</span>
+            </div>
+            <div class="message-actions">
+                <a uk-icon="icon: file-edit" href="editMessage" title="Edit message content" uk-tooltip></a>
+                <a uk-icon="icon: move" href="moveMessage" title="Move to different thread" uk-tooltip></a>
+                <a uk-icon="icon: trash" href="deleteMessage" title="Delete message" uk-tooltip></a>
+                <a uk-icon="icon: warning" href="commentMessage" title="Flag & comment" uk-tooltip></a>
+                <a uk-icon="icon: commenting" href="quoteMessage" title="Quote content" uk-tooltip></a>
+            </div>
+            <div class="message-content">
+                <p>Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam
+                    quis
+                    ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet
+                    nibh.
+                    Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
+                    quis
+                    gravida magna mi a libero. Fusce vulputate eleifend sapien.</p>
+                <ol>
+                    <li>🍰 Quisque rutrum</li>
+                    <li>🍒 Aenean imperdiet</li>
+                    <li>🍏 Etiam ultricies</li>
+                    <li>☕️ Curabitur ullamcorper</li>
+                </ol>
+                <table class="uk-table uk-table-divider">
+                    <thead>
+                    <tr>
+                        <th>Input</th>
+                        <th>Output</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>0.5</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>4.5</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <p>Phasellus viverra nulla ut metus varius laoreet. Nisi vel augue ultricies. Nam eget dui. Etiam
+                    rhoncus.
+                    Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem
+                    neque
+                    sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
