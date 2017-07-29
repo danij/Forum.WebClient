@@ -1,3 +1,30 @@
+html {
+    background-color: #F8F3EA;
+    color: black;
+}
+
+.uk-navbar {
+    background-color: #EADFC5 !important;
+}
+
+.uk-navbar-nav > li > a {
+    color: #333333;
+}
+
+.uk-navbar-nav > li.uk-active > a {
+    color: #111111;
+    font-weight: 500;
+}
+
+
+.uk-table th {
+    color: #333333;
+}
+
+.uk-badge {
+    background-color: #3F99E6;
+}
+
 .uk-dropdown-nav .uk-badge {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -61,7 +88,8 @@
     height: @avatar-size;
     font-size: 64px;
     border-radius: 500px;
-    background: #f8f8f8;
+    background: white;
+    border-color: #EADFC5;
     vertical-align: middle;
     display: -ms-inline-flexbox;
     display: -webkit-inline-flex;
@@ -74,11 +102,11 @@
     align-items: center;
     -webkit-transition: .1s ease-in-out;
     transition: .1s ease-in-out;
-    -webkit-transition-property: color,background-color;
-    transition-property: color,background-color;
+    -webkit-transition-property: color, background-color;
+    transition-property: color, background-color;
 
     &:hover {
-        background-color: #EBEBEB;
+        background-color: #EADFC5;
     }
 }
 
@@ -89,7 +117,6 @@
 .message-time {
     font-size: 0.875rem;
     font-weight: lighter;
-    color: #444444;
     text-transform: uppercase;
 }
 
@@ -112,6 +139,8 @@
 
     pre {
         margin-right: 20px;
+        background-color: #FFFAF2;
+        border-color: #EADFC5;
     }
 
     ol, ul {
@@ -123,6 +152,11 @@
 
     position: absolute;
     bottom: 2px;
+
+    span {
+        color: white;
+        background: #6DB629;
+    }
 }
 
 .message-down-vote {
@@ -131,4 +165,9 @@
     bottom: 2px;
     right: 0;
     margin-right: 31px;
+
+    span {
+        color: white;
+        background: #F25347;
+    }
 }

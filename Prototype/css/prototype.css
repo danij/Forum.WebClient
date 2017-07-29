@@ -1,3 +1,23 @@
+html {
+  background-color: #F8F3EA;
+  color: black;
+}
+.uk-navbar {
+  background-color: #EADFC5 !important;
+}
+.uk-navbar-nav > li > a {
+  color: #333333;
+}
+.uk-navbar-nav > li.uk-active > a {
+  color: #111111;
+  font-weight: 500;
+}
+.uk-table th {
+  color: #333333;
+}
+.uk-badge {
+  background-color: #3F99E6;
+}
 .uk-dropdown-nav .uk-badge {
   margin-top: 5px;
   margin-bottom: 5px;
@@ -48,7 +68,8 @@
   height: 96px;
   font-size: 64px;
   border-radius: 500px;
-  background: #f8f8f8;
+  background: white;
+  border-color: #EADFC5;
   vertical-align: middle;
   display: -ms-inline-flexbox;
   display: -webkit-inline-flex;
@@ -65,7 +86,7 @@
   transition-property: color, background-color;
 }
 .text-avatar:hover {
-  background-color: #EBEBEB;
+  background-color: #EADFC5;
 }
 .message-time-container {
   margin-top: -14px;
@@ -73,7 +94,6 @@
 .message-time {
   font-size: 0.875rem;
   font-weight: lighter;
-  color: #444444;
   text-transform: uppercase;
 }
 .message-actions {
@@ -91,6 +111,8 @@
 }
 .message-content pre {
   margin-right: 20px;
+  background-color: #FFFAF2;
+  border-color: #EADFC5;
 }
 .message-content ol,
 .message-content ul {
@@ -100,9 +122,17 @@
   position: absolute;
   bottom: 2px;
 }
+.message-up-vote span {
+  color: white;
+  background: #6DB629;
+}
 .message-down-vote {
   position: absolute;
   bottom: 2px;
   right: 0;
   margin-right: 31px;
+}
+.message-down-vote span {
+  color: white;
+  background: #F25347;
 }
