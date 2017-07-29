@@ -95,9 +95,13 @@
 .message-content ul {
   margin-left: 100px;
 }
-.message-vote {
-  margin-top: 10px;
+.message-up-vote {
+  position: absolute;
+  bottom: 2px;
 }
-.message-vote a {
-  display: block;
+.message-down-vote {
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  margin-right: 31px;
 }
