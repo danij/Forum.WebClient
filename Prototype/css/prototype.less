@@ -149,10 +149,12 @@ html {
     }
 }
 
+@message-extra-bottom: 2px;
+
 .message-up-vote {
 
     position: absolute;
-    bottom: 2px;
+    bottom: @message-extra-bottom;
 
     span {
         color: white;
@@ -163,7 +165,7 @@ html {
 .message-down-vote {
 
     position: absolute;
-    bottom: 2px;
+    bottom: @message-extra-bottom;
     right: 0;
     margin-right: 31px;
 
