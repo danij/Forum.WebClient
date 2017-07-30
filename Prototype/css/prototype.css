@@ -88,7 +88,9 @@
   margin-right: auto;
 }
 .message-content pre {
-  margin-right: 20px;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
 }
 .message-content ol,
 .message-content ul {
