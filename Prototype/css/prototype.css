@@ -23,11 +23,21 @@
 .page-content {
   position: absolute;
   top: 80px;
-  bottom: 0;
+  bottom: 20px;
   left: 0;
   right: 0;
   overflow-y: auto;
   padding-bottom: 20px;
+}
+.page-footer {
+  position: absolute;
+  height: 20px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #F8F8F8;
+  font-size: 0.875rem;
+  text-align: center;
 }
 .discussion-thread-message {
   padding-bottom: 10px !important;

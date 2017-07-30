@@ -50,14 +50,27 @@ html {
     float: right;
 }
 
+@page-footer-size: 20px;
+
 .page-content {
     position: absolute;
     top: 80px;
-    bottom: 0;
+    bottom: @page-footer-size;
     left: 0;
     right: 0;
     overflow-y: auto;
     padding-bottom: 20px;
+}
+
+.page-footer {
+    position: absolute;
+    height: @page-footer-size;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #F8F8F8;
+    font-size: 0.875rem;
+    text-align: center;
 }
 
 .discussion-thread-message {
@@ -197,3 +210,4 @@ html {
     width: @avatar-size;
     text-align: center;
 }
+
