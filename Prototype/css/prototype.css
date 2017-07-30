@@ -114,3 +114,14 @@
   color: white;
   background: #F25347;
 }
+.thread-header .uk-card {
+  padding-top: 20px;
+  padding-bottom: 0;
+}
+.thread-header .uk-badge {
+  vertical-align: text-bottom;
+}
+.thread-details {
+  font-size: 0.875rem;
+  margin-top: -20px;
+}
