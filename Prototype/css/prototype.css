@@ -1,22 +1,5 @@
-html {
-  background-color: #F8F3EA;
-  color: black;
-}
-.uk-navbar {
-  background-color: #EADFC5 !important;
-}
-.uk-navbar-nav > li > a {
-  color: #333333;
-}
 .uk-navbar-nav > li.uk-active > a {
-  color: #111111;
   font-weight: 500;
-}
-.uk-table th {
-  color: #333333;
-}
-.uk-badge {
-  background-color: #3F99E6;
 }
 .uk-dropdown-nav .uk-badge {
   margin-top: 5px;
@@ -29,7 +12,6 @@ html {
   width: 300px;
 }
 .uk-dropdown.user-info li > span:not(.uk-badge) {
-  color: #999;
   padding: 5px 0;
 }
 .align-left {
@@ -68,8 +50,7 @@ html {
   height: 96px;
   font-size: 64px;
   border-radius: 500px;
-  background: white;
-  border-color: #EADFC5;
+  background: #F4F4F4;
   vertical-align: middle;
   display: -ms-inline-flexbox;
   display: -webkit-inline-flex;
@@ -84,9 +65,6 @@ html {
   transition: 0.1s ease-in-out;
   -webkit-transition-property: color, background-color;
   transition-property: color, background-color;
-}
-.text-avatar:hover {
-  background-color: #EADFC5;
 }
 .message-time-container {
   margin-top: -14px;
@@ -111,8 +89,6 @@ html {
 }
 .message-content pre {
   margin-right: 20px;
-  background-color: #FFFAF2;
-  border-color: #EADFC5;
 }
 .message-content ol,
 .message-content ul {
