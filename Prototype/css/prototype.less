@@ -50,13 +50,24 @@ html {
     float: right;
 }
 
-@page-footer-size: 20px;
+@page-header-size: 80px;
+@recent-threads-width: 150px;
+@page-footer-size: 23px;
+
+.recent-threads-content {
+    position: absolute;
+    top: @page-header-size;
+    left: 0;
+    width: @recent-threads-width;
+    overflow-y: auto;
+    padding: 10px;
+}
 
 .page-content {
     position: absolute;
-    top: 80px;
+    top: @page-header-size;
     bottom: @page-footer-size;
-    left: 0;
+    left: @recent-threads-width;
     right: 0;
     overflow-y: auto;
     padding-bottom: 20px;
@@ -70,6 +81,14 @@ html {
     bottom: 0;
     background-color: #F8F8F8;
     font-size: 0.875rem;
+    text-align: center;
+}
+
+.thread-title {
+}
+
+.thread-actions {
+    margin-top: -20px;
     text-align: center;
 }
 
@@ -123,7 +142,10 @@ html {
 }
 
 .message-time-container {
-    margin-top: -14px;
+    margin-top: -24px;
+    left: 0;
+    right: 0;
+    text-align: center;
 }
 
 .message-time {
@@ -134,8 +156,9 @@ html {
 
 .message-actions {
     float: right;
-    width: 20px;
+    width: 30px;
     margin-right: -10px;
+    padding-left: 10px;
 
     a:not(:first-child) {
         margin-top: 15px;
@@ -211,3 +234,12 @@ html {
     text-align: center;
 }
 
+.recent-thread {
+
+}
+
+@media (max-width: 1200px) {
+    .message-number {
+        top: 10px;
+    }
+}

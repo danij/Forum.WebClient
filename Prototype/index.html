@@ -34,7 +34,7 @@
                             <div class="uk-navbar-subtitle">Home</div>
                         </div>
                     </a></li>
-                    <li><a href="RecentThreads">
+                    <li class="uk-active"><a href="RecentThreads">
                         <div>Recent
                             <div class="uk-navbar-subtitle">Threads</div>
                         </div>
@@ -109,31 +109,44 @@
     </div>
 </div>
 
+<div class="recent-threads-content">
+    <h4>Recent Threads</h4>
+
+    <div class="uk-box-shadow-small recent-thread">
+        Hello World
+    </div>
+</div>
+
 <div class="page-content">
     <div class="uk-container uk-container-expand thread-header">
         <div class="uk-card uk-card-body">
-            <div class="uk-align-left">
-                <a href="" class="uk-logo">Vel illum qui dolorem eum fugiat quo voluptas nulla
-                    pariatur?</a>
-                <span class="uk-badge" uk-icon="icon: tag">Software</span>
-                <span class="uk-badge" uk-icon="icon: tag">Maths</span>
-            </div>
-            <div class="uk-align-right">
+            <div class="thread-actions">
                 <a uk-icon="icon: file-edit" href="editThreadTitle" title="Edit thread title" uk-tooltip></a>
                 <a uk-icon="icon: tag" href="editThreadTags" title="Edit thread tags" uk-tooltip></a>
                 <a uk-icon="icon: settings" href="editThreadAccess" title="Edit thread access" uk-tooltip></a>
                 <a uk-icon="icon: trash" href="deleteThread" title="Delete thread" uk-tooltip></a>
             </div>
+            <div class="uk-align-left thread-title">
+                <a href="" class="uk-logo">Vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</a>
+                <span class="uk-badge" uk-icon="icon: tag">Software</span>
+                <span class="uk-badge" uk-icon="icon: tag">Maths</span>
+            </div>
             <div class="uk-clearfix"></div>
-            <div class="thread-details uk-align-left uk-text-meta">
-                <span>Current visitors:</span>
-                <a href="user">Alistaym</a>
-                <a href="user">CapoShay</a>
-                <a href="user">Imadezi</a>
+            <div class="thread-details uk-align-left">
+                <span>Displayed under:</span>
+                <a href="user">Using Software</a> &middot;
+                <a href="user">School</a> &middot;
+                <a href="user">Maths</a> &middot; 20 total views
+            </div>
+            <div class="uk-clearfix"></div>
+            <div class="thread-details uk-align-left">
+                <span>Current visitors (4):</span>
+                <a href="user">Alistaym</a> &middot;
+                <a href="user">CapoShay</a> &middot;
+                <a href="user">Imadezi</a> &middot;
                 <a href="user">Peerrail</a>
             </div>
             <div class="thread-details uk-align-right uk-text-meta">
-                <span class="uk-align-right">20 total visits</span>
             </div>
         </div>
     </div>
@@ -207,10 +220,10 @@
                     </ul>
                 </div>
                 <div class="uk-text-center uk-float-left message-up-vote">
-                    <span class="uk-label" title="Up vote message" uk-tooltip>14</span>
+                    <span class="uk-label" title="Up vote message" uk-tooltip>➕ 14</span>
                 </div>
                 <div class="uk-text-center uk-float-right message-down-vote">
-                    <span class="uk-label" title="Down vote message" uk-tooltip>2</span>
+                    <span class="uk-label" title="Down vote message" uk-tooltip>➖ 2</span>
                 </div>
             </div>
             <div class="uk-card-badge message-time-container">
@@ -307,10 +320,10 @@
                     </ul>
                 </div>
                 <div class="uk-text-center uk-float-left message-up-vote">
-                    <span class="uk-label" title="Up vote message" uk-tooltip>25</span>
+                    <span class="uk-label" title="Up vote message" uk-tooltip>➕ 25</span>
                 </div>
                 <div class="uk-text-center uk-float-right message-down-vote">
-                    <span class="uk-label" title="Down vote message" uk-tooltip>0</span>
+                    <span class="uk-label" title="Down vote message" uk-tooltip>➖ 0</span>
                 </div>
             </div>
             <div class="uk-card-badge message-time-container">
@@ -401,10 +414,10 @@ int main()
                     </ul>
                 </div>
                 <div class="uk-text-center uk-float-left message-up-vote">
-                    <span class="uk-label" title="Up vote message" uk-tooltip>2</span>
+                    <span class="uk-label" title="Up vote message" uk-tooltip>➕ 2</span>
                 </div>
                 <div class="uk-text-center uk-float-right message-down-vote">
-                    <span class="uk-label" title="Down vote message" uk-tooltip>5</span>
+                    <span class="uk-label" title="Down vote message" uk-tooltip>➖ 5</span>
                 </div>
             </div>
             <div class="uk-card-badge message-time-container">
@@ -478,7 +491,7 @@ int main()
 </div>
 
 <div class="page-footer">
-    <span class="uk-text-meta">&copy; 2017</span>
+    <span class="uk-text-meta">&copy; 2017 &middot; <a href="#">Terms of Service</a></span>
 </div>
 </body>
 </html>
