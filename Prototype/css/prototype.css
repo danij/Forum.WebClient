@@ -88,6 +88,28 @@
   -webkit-transition-property: color, background-color;
   transition-property: color, background-color;
 }
+.text-avatar-flag {
+  box-sizing: border-box;
+  width: 72px;
+  height: 72px;
+  font-size: 48px;
+  border-radius: 500px;
+  background: #F4F4F4;
+  vertical-align: middle;
+  display: -ms-inline-flexbox;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+}
 .message-time-container {
   margin-top: -24px;
   left: 0;
@@ -156,6 +178,25 @@
   top: 20px;
   width: 96px;
   text-align: center;
+}
+.uk-card {
+  padding-left: 0;
+  padding-right: 0;
+}
+#flags-modal .uk-modal-dialog {
+  max-height: 75%;
+  overflow: auto;
+}
+#flags-modal .flag-message {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+#flags-modal .flag-content p {
+  margin-bottom: 0;
+}
+#flags-modal .uk-divider-icon {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 @media (max-width: 1200px) {
   .message-number {

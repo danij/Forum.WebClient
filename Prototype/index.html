@@ -424,7 +424,7 @@ int main()
                 <span class="message-time" title="Tue, July 26th 2017 18:10:32+3"
                       uk-tooltip>4 hours, 26 minutes ago</span>
                 <samp>192.168.0.1</samp>
-                <a><span uk-icon="icon: warning"></span> 3 flags <span uk-icon="icon: warning"></span></a>
+                <a uk-toggle="target: #flags-modal"><span uk-icon="icon: warning"></span> 3 flags <span uk-icon="icon: warning"></span></a>
             </div>
             <div class="message-actions">
                 <a uk-icon="icon: file-edit" href="editMessage" title="Edit message content" uk-tooltip></a>
@@ -488,6 +488,67 @@ int main()
         <li><a href="#">8</a></li>
         <li><a href="#"><span uk-pagination-next></span></a></li>
     </ul>
+</div>
+
+<div id="flags-modal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Flags</h2>
+        <div class="uk-card uk-card-body flag-message">
+            <div class="message-author uk-float-left">
+                <div class="pointer-cursor">
+                    <div class="text-avatar-flag" style="color: #2A0ADF">L</div>
+                    <div class="username uk-text-small">Lisecha</div>
+                </div>
+            </div>
+            <div class="flag-content">
+                <div>
+                    <span class="message-time" title="Tue, July 25th 2017 21:35:19+3"
+                          uk-tooltip>2 hours, 10 minutes ago</span>
+                    <samp>192.168.127.15</samp>
+                </div>
+                <p>Missing formula: $f(x) = x^2$</p>
+            </div>
+        </div>
+        <hr class="uk-divider-icon">
+        <div class="uk-card uk-card-body flag-message">
+            <div class="message-author uk-float-left">
+                <div class="pointer-cursor">
+                    <div class="text-avatar-flag" style="color: #DC01A7">C</div>
+                    <div class="username uk-text-small">Chereon</div>
+                </div>
+            </div>
+            <div class="flag-content">
+                <div>
+                    <span class="message-time" title="Tue, July 25th 2017 21:35:19+3"
+                          uk-tooltip>15 hours, 14 minutes ago</span>
+                    <samp>192.168.104.240</samp>
+                </div>
+                <p>Quite inaccurate.</p>
+                <p>Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.</p>
+                <p>Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum.</p>
+                <p>Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus.</p>
+                <p>Please remove the table.</p>
+            </div>
+        </div>
+        <hr class="uk-divider-icon">
+        <div class="uk-card uk-card-body flag-message">
+            <div class="message-author uk-float-left">
+                <div class="pointer-cursor">
+                    <div class="text-avatar-flag" style="color: #2A0ADF">L</div>
+                    <div class="username uk-text-small">Lisecha</div>
+                </div>
+            </div>
+            <div class="flag-content">
+                <div>
+                    <span class="message-time" title="Tue, July 25th 2017 21:35:19+3"
+                          uk-tooltip>20 hours, 4 minutes ago</span>
+                    <samp>192.168.127.15</samp>
+                </div>
+                <p>Missing formula: $f(x) = x^2$</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="page-footer">

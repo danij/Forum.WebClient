@@ -113,11 +113,11 @@ html {
 
 @avatar-size: 96px;
 
-.text-avatar {
+.text-avatar-mixin(@dimension, @scale) {
     box-sizing: border-box;
-    width: @avatar-size;
-    height: @avatar-size;
-    font-size: 64px;
+    width: @dimension * @scale;
+    height: @dimension * @scale;
+    font-size: 64px * @scale;
     border-radius: 500px;
     background: #F4F4F4;
     //border-color: #EADFC5;
@@ -139,6 +139,14 @@ html {
     &:hover {
         //background-color: #EADFC5;
     }
+}
+
+.text-avatar {
+    .text-avatar-mixin(@avatar-size, 1);
+}
+
+.text-avatar-flag {
+    .text-avatar-mixin(@avatar-size, 0.75);
 }
 
 .message-time-container {
@@ -238,6 +246,34 @@ html {
 
 }
 
+.uk-card {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#flags-modal {
+
+    .uk-modal-dialog {
+        max-height: 75%;
+        overflow: auto;
+    }
+
+    .flag-message {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .flag-content {
+        p {
+            margin-bottom: 0;
+        }
+    }
+
+    .uk-divider-icon {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
 @media (max-width: 1200px) {
     .message-number {
         top: 10px;
