@@ -63,14 +63,18 @@ html {
     padding: 10px;
 }
 
-.page-content {
+.vertical-fill-page(@extra-bottom-space: 0px) {
     position: absolute;
     top: @page-header-size;
-    bottom: @page-footer-size;
-    left: @recent-threads-width;
-    right: 0;
+    bottom: @page-footer-size + @extra-bottom-space;
     overflow-y: auto;
     padding-bottom: 20px;
+}
+
+.page-content {
+    left: @recent-threads-width;
+    right: 0;
+    .vertical-fill-page();
 }
 
 .page-footer {
@@ -200,6 +204,9 @@ html {
 }
 
 @message-extra-bottom: 2px;
+@up-vote-color: #6DB629;
+@down-vote-color: #F25347;
+@neutral-vote-color: #A0A0A0;
 
 .message-up-vote {
 
@@ -208,7 +215,7 @@ html {
 
     span {
         color: white;
-        background: #6DB629;
+        background: @up-vote-color;
     }
 }
 
@@ -221,7 +228,7 @@ html {
 
     span {
         color: white;
-        background: #F25347;
+        background: @down-vote-color;
     }
 }
 
@@ -248,8 +255,55 @@ html {
     text-align: center;
 }
 
-.recent-thread {
+.recent-threads-content {
+    .vertical-fill-page(10px);
+    font-size: 0.875rem;
 
+    .thread-vote {
+        padding: 1px;
+        font-size: 0.75rem;
+        min-width: 17px;
+        display: inline-block;
+        text-align: center;
+
+        &.up-vote {
+            color: white;
+            background-color: @up-vote-color;
+        }
+        &.neutral-vote {
+            color: white;
+            background-color: @neutral-vote-color;
+        }
+        &.down-vote {
+            color: white;
+            background-color: @down-vote-color;
+        }
+    }
+
+    .recent-thread {
+        padding-bottom: 10px;
+
+        &:not(:last-child) {
+            border-bottom: solid 1px #E5E5E5;
+            margin-bottom: 10px;
+        }
+
+        .header {
+            a.recent-thread-link {
+                color: black;
+                font-size: 0.80rem;
+            }
+        }
+
+        .details {
+            .uk-badge {
+                font-size: 0.75em;
+                svg {
+                    transform: scale(0.85, 0.85);
+                }
+            }
+        }
+    }
 }
 
 .uk-card {
@@ -280,6 +334,7 @@ html {
         margin-bottom: 10px;
     }
 }
+
 @media (max-width: 1200px) {
     .message-number {
         top: 10px;
