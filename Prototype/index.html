@@ -173,7 +173,8 @@
             <div class="thread-actions">
                 <a uk-icon="icon: file-edit" href="editThreadTitle" title="Edit thread title" uk-tooltip></a>
                 <a uk-icon="icon: tag" href="editThreadTags" title="Edit thread tags" uk-tooltip></a>
-                <a uk-icon="icon: settings" href="editThreadAccess" title="Edit thread access" uk-tooltip></a>
+                <a uk-icon="icon: settings" href="editThreadPrivileges" title="Edit thread access" uk-tooltip
+                   uk-toggle="target: #privileges-modal"></a>
                 <a uk-icon="icon: trash" href="deleteThread" title="Delete thread" uk-tooltip></a>
             </div>
             <div class="uk-align-left thread-title">
@@ -276,7 +277,7 @@
                 </div>
             </div>
             <div class="uk-card-badge message-time-container">
-                <span class="message-time" title="Tue, July 25th 2017 14:15:32+3"
+                <span class="message-time" title="Tue, July 25th 2017 14:15:32 +3"
                       uk-tooltip>1 day, 2 hours, 23 minutes ago</span>
                 <samp>192.168.2.1</samp>
             </div>
@@ -342,14 +343,14 @@
                         <span href="MyThreads" class="align-left">
                             <span>Joined</span>
                         </span>
-                            <span class="uk-badge align-right" title="Mon, March 6th 2017 12:04:12+3" uk-tooltip>125 days ago</span>
+                            <span class="uk-badge align-right" title="Mon, March 6th 2017 12:04:12 +3" uk-tooltip>125 days ago</span>
                             <div class="uk-clearfix"></div>
                         </li>
                         <li>
                         <span href="MyMessages" class="align-left">
                             <span>Last seen</span>
                         </span>
-                            <span class="uk-badge align-right" title="Sat, July 15th 2017 01:05:41+3" uk-tooltip>5 hours ago</span>
+                            <span class="uk-badge align-right" title="Sat, July 15th 2017 01:05:41 +3" uk-tooltip>5 hours ago</span>
                             <div class="uk-clearfix"></div>
                         </li>
                         <li class="uk-nav-header">Feedback Received</li>
@@ -377,9 +378,9 @@
                 </div>
             </div>
             <div class="uk-card-badge message-time-container">
-                <span class="message-time" title="Tue, July 25th 2017 21:35:19+3"
+                <span class="message-time" title="Tue, July 25th 2017 21:35:19 +3"
                       uk-tooltip>20 hours, 4 minutes ago</span>
-                <span class="message-time uk-text-warning" title="Tue, July 25th 2017 22:35:19+3"
+                <span class="message-time uk-text-warning" title="Tue, July 25th 2017 22:35:19 +3"
                       uk-tooltip>Edited 19 hours, 4 minutes ago</span>
                 <samp>192.168.1.101</samp>
             </div>
@@ -436,14 +437,14 @@ int main()
                         <span href="MyThreads" class="align-left">
                             <span>Joined</span>
                         </span>
-                            <span class="uk-badge align-right" title="Sun, July 16th 2017 19:04:11+3" uk-tooltip>10 days ago</span>
+                            <span class="uk-badge align-right" title="Sun, July 16th 2017 19:04:11 +3" uk-tooltip>10 days ago</span>
                             <div class="uk-clearfix"></div>
                         </li>
                         <li>
                         <span href="MyMessages" class="align-left">
                             <span>Last seen</span>
                         </span>
-                            <span class="uk-badge align-right" title="Wed, July 26th 2017 14:05:10+3" uk-tooltip>2 hours ago</span>
+                            <span class="uk-badge align-right" title="Wed, July 26th 2017 14:05:10 +3" uk-tooltip>2 hours ago</span>
                             <div class="uk-clearfix"></div>
                         </li>
                         <li class="uk-nav-header">Feedback Received</li>
@@ -471,7 +472,7 @@ int main()
                 </div>
             </div>
             <div class="uk-card-badge message-time-container">
-                <span class="message-time" title="Tue, July 26th 2017 18:10:32+3"
+                <span class="message-time" title="Tue, July 26th 2017 18:10:32 +3"
                       uk-tooltip>4 hours, 26 minutes ago</span>
                 <samp>192.168.0.1</samp>
                 <a uk-toggle="target: #flags-modal"><span uk-icon="icon: warning"></span> 3 flags <span uk-icon="icon: warning"></span></a>
@@ -602,7 +603,7 @@ int main()
             </div>
             <div class="flag-content">
                 <div>
-                    <span class="message-time" title="Tue, July 25th 2017 21:35:19+3"
+                    <span class="message-time" title="Tue, July 25th 2017 21:35:19 +3"
                           uk-tooltip>2 hours, 10 minutes ago</span>
                     <samp>192.168.127.15</samp>
                 </div>
@@ -619,7 +620,7 @@ int main()
             </div>
             <div class="flag-content">
                 <div>
-                    <span class="message-time" title="Tue, July 25th 2017 21:35:19+3"
+                    <span class="message-time" title="Tue, July 25th 2017 21:35:19 +3"
                           uk-tooltip>15 hours, 14 minutes ago</span>
                     <samp>192.168.104.240</samp>
                 </div>
@@ -640,12 +641,110 @@ int main()
             </div>
             <div class="flag-content">
                 <div>
-                    <span class="message-time" title="Tue, July 25th 2017 21:35:19+3"
+                    <span class="message-time" title="Tue, July 25th 2017 21:35:19 +3"
                           uk-tooltip>20 hours, 4 minutes ago</span>
                     <samp>192.168.127.15</samp>
                 </div>
                 <p>Missing formula: $f(x) = x^2$</p>
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="privileges-modal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Privileges</h2>
+
+        <div class="uk-column-1-2">
+            <h3>Discussion Thread Message Required Levels</h3>
+            <table class="uk-table uk-table-divier uk-table-small uk-table-striped">
+                <thead>
+                    <tr>
+                        <th>Privilege</th>
+                        <th>Thread</th>
+                        <th>Tag</th>
+                        <th>Forum Wide</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <tr><td>View</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>View Creator User</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>View IP Address</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>View Votes</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>Upvote</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>Downvote</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>Reset Vote</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>Add Comment</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>Solve Comment</td><td>-</td><td>-</td><td>1000</td></tr>
+                    <tr><td>Get Comments</td><td>100</td><td>-</td><td>1000</td></tr>
+                    <tr><td>Change Content</td><td>-</td><td>-</td><td>100</td></tr>
+                    <tr><td>Delete</td><td>-</td><td uk-tooltip title="School">2000</td><td>1000</td></tr>
+                    <tr><td>Move</td><td>-</td><td>-</td><td>5000</td></tr>
+                </tr>
+                </tbody>
+            </table>
+            <h3>Discussion Thread Required Levels</h3>
+            <table class="uk-table uk-table-divier uk-table-small uk-table-striped">
+                <thead>
+                    <tr>
+                        <th>Privilege</th>
+                        <th>Thread</th>
+                        <th>Tag</th>
+                        <th>Forum Wide</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>View</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>Subscribe</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>Unsubscribe</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>Add Message</td><td>-</td><td>-</td><td>0</td></tr>
+                    <tr><td>Change Name</td><td>-</td><td>-</td><td>100</td></tr>
+                    <tr><td>Change Order</td><td>-</td><td>-</td><td>100</td></tr>
+                    <tr><td>Add Tag</td><td>-</td><td>-</td><td>100</td></tr>
+                    <tr><td>Remove Tag</td><td>-</td><td>-</td><td>100</td></tr>
+                    <tr><td>Delete</td><td>-</td><td>-</td><td>100</td></tr>
+                    <tr><td>Merge</td><td>-</td><td>-</td><td>1000</td></tr>
+                    <tr><td>Adjust Privilege</td><td>-</td><td>5000</td><td>10000</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <hr class="uk-divider-icon">
+        <div class="uk-column-1-2">
+            <h3>Granted Privileges</h3>
+            <table class="uk-table uk-table-divier uk-table-small uk-table-striped">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Level</th>
+                        <th>At</th>
+                        <th>From</th>
+                        <th>Until</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Alistaym</td><td>500</td><td>Thread</td><td>Thu, 31 Jul 2008 14:19:59 +3</td><td>Fri, 06 Mar 2009 15:18:57 +3</td></tr>
+                    <tr><td>Abreamel</td><td>100</td><td>Thread</td><td>Sun, 02 Sep 2007 18:59:38 +3</td><td>Sun, 02 Sep 2007 19:09:38 +3</td></tr>
+                    <tr><td>Hoptekke</td><td>5000</td><td uk-tooltip title="Maths">Tag</td><td>Tue, 08 Feb 2005 10:49:47 +3</td><td>&infin;</td></tr>
+                </tbody>
+            </table>
+            <h3>Revoked Privileges</h3>
+            <table class="uk-table uk-table-divier uk-table-small uk-table-striped">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Level</th>
+                        <th>At</th>
+                        <th>From</th>
+                        <th>Until</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>NeedHelp</td><td>&minus;500</td><td>Thread</td><td>Sat, 20 Oct 2007 04:03:36 +3</td><td>Sat, 20 Oct 2007 16:03:36 +3</td></tr>
+                    <tr><td>NeedHelp</td><td>&minus;500</td><td uk-tooltip title="School">Tag</td><td>Tue, 19 Apr 2011 23:25:24 +3</td><td>&infin;</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

@@ -380,12 +380,12 @@ html {
     padding-right: 0;
 }
 
-#flags-modal {
+.uk-modal-dialog {
+    max-height: 75%;
+    overflow: auto;
+}
 
-    .uk-modal-dialog {
-        max-height: 75%;
-        overflow: auto;
-    }
+#flags-modal {
 
     .flag-message {
         padding-top: 0;
@@ -401,6 +401,30 @@ html {
     .uk-divider-icon {
         margin-top: 10px;
         margin-bottom: 10px;
+    }
+}
+
+#privileges-modal {
+
+    .uk-modal-dialog {
+        width: 90%;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        margin: 10px 0px;
+    }
+
+    td, th {
+        padding: 2px;
+        text-align: center;
+
+        &:first-child {
+            text-align: left;
+        }
+    }
+
+    td {
+        font-size: 0.85rem;
     }
 }
 

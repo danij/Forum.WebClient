@@ -291,7 +291,7 @@
   padding-left: 0;
   padding-right: 0;
 }
-#flags-modal .uk-modal-dialog {
+.uk-modal-dialog {
   max-height: 75%;
   overflow: auto;
 }
@@ -305,6 +305,29 @@
 #flags-modal .uk-divider-icon {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+#privileges-modal .uk-modal-dialog {
+  width: 90%;
+}
+#privileges-modal h1,
+#privileges-modal h2,
+#privileges-modal h3,
+#privileges-modal h4,
+#privileges-modal h5,
+#privileges-modal h6 {
+  margin: 10px 0px;
+}
+#privileges-modal td,
+#privileges-modal th {
+  padding: 2px;
+  text-align: center;
+}
+#privileges-modal td:first-child,
+#privileges-modal th:first-child {
+  text-align: left;
+}
+#privileges-modal td {
+  font-size: 0.85rem;
 }
 .reply-container {
   padding: 10px;
