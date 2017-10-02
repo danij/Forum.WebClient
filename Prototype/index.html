@@ -39,7 +39,7 @@
                             <div class="uk-navbar-subtitle">Threads</div>
                         </div>
                     </a></li>
-                    <li><a href="RecentMessages">
+                    <li class="uk-active"><a href="RecentMessages">
                         <div>Recent
                             <div class="uk-navbar-subtitle">Messages</div>
                         </div>
@@ -53,6 +53,8 @@
             </div>
         </div>
         <a href="" class="uk-navbar-item uk-logo">Fast Forum</a>
+        <a href="" class="uk-navbar-item users-online" uk-tooltip title="Alistaym &middot; CapoShay &middot; Imadezi &middot; Peerrail
+">4 users online</a>
         <div class="uk-navbar-center-right">
             <div>
                 <ul class="uk-navbar-nav">
@@ -98,6 +100,13 @@
                                     <span class="uk-badge align-right">148</span>
                                     <div class="uk-clearfix"></div>
                                 </li>
+                                <li>
+                                    <a href="VoteHistory" class="align-left">
+                                        <span>Received Votes</span>
+                                    </a>
+                                    <span class="uk-badge align-right">15</span>
+                                    <div class="uk-clearfix"></div>
+                                </li>
                                 <li class="uk-nav-divider"></li>
                                 <li><a href="Logout">Logout</a></li>
                             </ul>
@@ -110,100 +119,51 @@
 </div>
 
 <div class="recent-threads-content uk-box-shadow-small">
+    <h4 class="recent-threads-title">Recent Threads</h4>
     <div class="recent-thread">
-        <div class="header">
-            <span class="thread-vote up-vote" title="Vote score" uk-tooltip>&plus;2</span>
-            <a class="recent-thread-link" href="#">How do I boot an ISO image?</a>
-            <span class="author"><a href="user">Peerrail</a></span>
-        </div>
-        <div class="details">
-            <span class="uk-badge" uk-icon="icon: tag">Software</span>
-        </div>
+        <span class="thread-vote up-vote" title="Vote score" uk-tooltip>&plus;2</span>
+        <a class="recent-thread-link" href="#">How do I boot an ISO image?</a>
+        <span class="author"><a href="user">Peerrail</a></span>
     </div>
     <div class="recent-thread">
-        <div class="header">
-            <span class="thread-vote down-vote" title="Vote score" uk-tooltip>&minus;3</span>
-            <a class="recent-thread-link" href="#">Is this free?</a>
-            <span class="author"><a href="user">Syscheal</a></span>
-        </div>
-        <div class="details">
-            <span class="uk-badge" uk-icon="icon: tag">Free</span>
-            <span class="uk-badge" uk-icon="icon: tag">Software</span>
-        </div>
+        <span class="thread-vote down-vote" title="Vote score" uk-tooltip>&minus;3</span>
+        <a class="recent-thread-link" href="#">Is this free?</a>
+        <span class="author"><a href="user">Syscheal</a></span>
     </div>
     <div class="recent-thread">
-        <div class="header">
-            <span class="thread-vote neutral-vote" title="Vote score" uk-tooltip>0</span>
-            <a class="recent-thread-link" href="#">Calculating the interest rate</a>
-            <span class="author"><a href="user">Latestrolo</a></span>
-        </div>
-        <div class="details">
-            <span class="uk-badge" uk-icon="icon: tag">Economics</span>
-        </div>
+        <span class="thread-vote neutral-vote" title="Vote score" uk-tooltip>0</span>
+        <a class="recent-thread-link" href="#">Calculating the interest rate</a>
+        <span class="author"><a href="user">Latestrolo</a></span>
     </div>
     <div class="recent-thread">
-        <div class="header">
-            <span class="thread-vote down-vote" title="Vote score" uk-tooltip>&minus;20</span>
-            <a class="recent-thread-link" href="#">Please help me</a>
-            <span class="author"><a href="user">NeedHelp</a></span>
-        </div>
-        <div class="details">
-            <span class="uk-badge" uk-icon="icon: tag">Homework</span>
-        </div>
+        <span class="thread-vote down-vote" title="Vote score" uk-tooltip>&minus;20</span>
+        <a class="recent-thread-link" href="#">Please help me</a>
+        <span class="author"><a href="user">NeedHelp</a></span>
     </div>
     <div class="recent-thread">
-        <div class="header">
-            <span class="thread-vote down-vote" title="Vote score" uk-tooltip>&minus;21</span>
-            <a class="recent-thread-link" href="#">Exercise 1</a>
-            <span class="author"><a href="user">NeedHelp</a></span>
-        </div>
-        <div class="details">
-            <span class="uk-badge" uk-icon="icon: tag">Homework</span>
-        </div>
+        <span class="thread-vote down-vote" title="Vote score" uk-tooltip>&minus;21</span>
+        <a class="recent-thread-link" href="#">Exercise 1</a>
+        <span class="author"><a href="user">NeedHelp</a></span>
     </div>
     <div class="recent-thread">
-        <div class="header">
-            <span class="thread-vote up-vote" title="Vote score" uk-tooltip>&plus;2</span>
-            <a class="recent-thread-link" href="#">Easy application profiling</a>
-            <span class="author"><a href="user">Hoptekke</a></span>
-        </div>
-        <div class="details">
-            <span class="uk-badge" uk-icon="icon: tag">Programming</span>
-            <span class="uk-badge" uk-icon="icon: tag">C++</span>
-        </div>
+        <span class="thread-vote up-vote" title="Vote score" uk-tooltip>&plus;2</span>
+        <a class="recent-thread-link" href="#">Easy application profiling</a>
+        <span class="author"><a href="user">Hoptekke</a></span>
     </div>
     <div class="recent-thread">
-        <div class="header">
-            <span class="thread-vote up-vote" title="Vote score" uk-tooltip>&plus;2</span>
-            <a class="recent-thread-link" href="#">Plotting 3D functions</a>
-            <span class="author"><a href="user">Hoptekke</a></span>
-        </div>
-        <div class="details">
-            <span class="uk-badge" uk-icon="icon: tag">Math</span>
-            <span class="uk-badge" uk-icon="icon: tag">Tutorial</span>
-        </div>
+        <span class="thread-vote up-vote" title="Vote score" uk-tooltip>&plus;2</span>
+        <a class="recent-thread-link" href="#">Plotting 3D functions</a>
+        <span class="author"><a href="user">Hoptekke</a></span>
     </div>
     <div class="recent-thread">
-        <div class="header">
-            <span class="thread-vote neutral-vote" title="Vote score" uk-tooltip>0</span>
-            <a class="recent-thread-link" href="#">Defragmenting question</a>
-            <span class="author"><a href="user">Imadezi</a></span>
-        </div>
-        <div class="details">
-            <span class="uk-badge" uk-icon="icon: tag">Software</span>
-            <span class="uk-badge" uk-icon="icon: tag">Hardware</span>
-        </div>
+        <span class="thread-vote neutral-vote" title="Vote score" uk-tooltip>0</span>
+        <a class="recent-thread-link" href="#">Defragmenting question</a>
+        <span class="author"><a href="user">Imadezi</a></span>
     </div>
     <div class="recent-thread">
-        <div class="header">
-            <span class="thread-vote down-vote" title="Vote score" uk-tooltip>&minus;15</span>
-            <a class="recent-thread-link" href="#">Sort algorithm</a>
-            <span class="author"><a href="user">NeedHelp</a></span>
-        </div>
-        <div class="details">
-            <span class="uk-badge" uk-icon="icon: tag">Homework</span>
-            <span class="uk-badge" uk-icon="icon: tag">Programming</span>
-        </div>
+        <span class="thread-vote down-vote" title="Vote score" uk-tooltip>&minus;15</span>
+        <a class="recent-thread-link" href="#">Sort algorithm</a>
+        <span class="author"><a href="user">NeedHelp</a></span>
     </div>
 </div>
 
@@ -218,24 +178,20 @@
             </div>
             <div class="uk-align-left thread-title">
                 <a href="" class="uk-logo">Vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</a>
-                <span class="uk-badge" uk-icon="icon: tag">Software</span>
-                <span class="uk-badge" uk-icon="icon: tag">Maths</span>
+                <a href="user">Abreamel</a>
             </div>
             <div class="uk-clearfix"></div>
             <div class="thread-details uk-align-left">
+                <span class="uk-badge" uk-icon="icon: tag">Software</span>
+                <span class="uk-badge" uk-icon="icon: tag">Maths</span>
                 <span>Displayed under:</span>
                 <a href="user">Using Software</a> &middot;
                 <a href="user">School</a> &middot;
-                <a href="user">Maths</a> &middot; 20 total views
+                <a href="user">Maths</a> &middot;
+                20 total views &middot;
+                <a href="subscribed">3 subscribed users</a>
             </div>
             <div class="uk-clearfix"></div>
-            <div class="thread-details uk-align-left">
-                <span>Current visitors (4):</span>
-                <a href="user">Alistaym</a> &middot;
-                <a href="user">CapoShay</a> &middot;
-                <a href="user">Imadezi</a> &middot;
-                <a href="user">Peerrail</a>
-            </div>
             <div class="thread-details uk-align-right uk-text-meta">
             </div>
         </div>
@@ -253,7 +209,7 @@
     </ul>
 
     <div class="uk-container uk-container-expand">
-        <div class="uk-card uk-card-body discussion-thread-message">
+        <div class="uk-card uk-card-body discussion-thread-message message-by-thread-author">
             <div class="message-number uk-text-meta">#71</div>
             <div class="message-author uk-float-left">
                 <div class="pointer-cursor">
@@ -309,11 +265,14 @@
                         </li>
                     </ul>
                 </div>
+                <div class="uk-text-center uk-float-left message-signature">
+                    <span title="User signature" uk-tooltip><kbd>CTRL+C</kbd>, <kbd>CTRL+V</kbd> = ❤️</span>
+                </div>
                 <div class="uk-text-center uk-float-left message-up-vote">
-                    <span class="uk-label" title="Up vote message" uk-tooltip>➕ 14</span>
+                    <span class="uk-label" title="Up vote message" uk-tooltip>&plus; 14</span>
                 </div>
                 <div class="uk-text-center uk-float-right message-down-vote">
-                    <span class="uk-label" title="Down vote message" uk-tooltip>➖ 2</span>
+                    <span class="uk-label" title="Down vote message" uk-tooltip>&minus; 2</span>
                 </div>
             </div>
             <div class="uk-card-badge message-time-container">
@@ -411,10 +370,10 @@
                     </ul>
                 </div>
                 <div class="uk-text-center uk-float-left message-up-vote">
-                    <span class="uk-label" title="Up vote message" uk-tooltip>➕ 25</span>
+                    <span class="uk-label" title="Up vote message" uk-tooltip>&plus; 25</span>
                 </div>
                 <div class="uk-text-center uk-float-right message-down-vote">
-                    <span class="uk-label" title="Down vote message" uk-tooltip>➖ 0</span>
+                    <span class="uk-label" title="Down vote message" uk-tooltip>&minus; 0</span>
                 </div>
             </div>
             <div class="uk-card-badge message-time-container">
@@ -505,10 +464,10 @@ int main()
                     </ul>
                 </div>
                 <div class="uk-text-center uk-float-left message-up-vote">
-                    <span class="uk-label" title="Up vote message" uk-tooltip>➕ 2</span>
+                    <span class="uk-label" title="Up vote message" uk-tooltip>&plus; 2</span>
                 </div>
                 <div class="uk-text-center uk-float-right message-down-vote">
-                    <span class="uk-label" title="Down vote message" uk-tooltip>➖ 5</span>
+                    <span class="uk-label" title="Down vote message" uk-tooltip>&minus; 5</span>
                 </div>
             </div>
             <div class="uk-card-badge message-time-container">
@@ -579,6 +538,55 @@ int main()
         <li><a href="#">8</a></li>
         <li><a href="#"><span uk-pagination-next></span></a></li>
     </ul>
+
+    <div class="reply-container">
+        <textarea class="uk-textarea">I would like to add...</textarea>
+        <button class="uk-button uk-button-primary">Post reply</button>
+    </div>
+</div>
+
+<div class="recent-messages-content uk-box-shadow-small">
+    <h4 class="recent-messages-title">Recent Messages</h4>
+    <div class="recent-message">
+        <span class="author"><a href="user">Peerrail</a>:&nbsp;</span>
+        <a class="recent-message-thread-link" href="#" uk-tooltip title="Calculating the interest rate">Calculating the interest rate</a>
+        <a class="recent-message-link" href="#" uk-tooltip title="Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Sed aliquam ultrices mauris. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris.">Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Sed aliquam ultrices mauris. Integer ante arcu, accumsan a, consectetuer eget, posuere ut, mauris.</a>
+    </div>
+    <div class="recent-message">
+        <span class="author"><a href="user">Latestrolo</a>:&nbsp;</span>
+        <a class="recent-message-thread-link" href="#" uk-tooltip title="Calculating the interest rate">Calculating the interest rate</a>
+        <a class="recent-message-link" href="#" uk-tooltip title="Suspendisse pulvinar, augue ac venenatis condimentum, sem libero volutpat nibh, nec pellentesque velit pede quis nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce id purus.">
+            Suspendisse pulvinar, augue ac venenatis condimentum, sem libero volutpat nibh, nec pellentesque velit pede quis nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce id purus.
+        </a>
+    </div>
+    <div class="recent-message">
+        <span class="author"><a href="user">NeedHelp</a>:&nbsp;</span>
+        <a class="recent-message-thread-link" href="#" uk-tooltip title="Please help me">Please help me</a>
+        <a class="recent-message-link" href="#" uk-tooltip title="Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.">
+            Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.
+        </a>
+    </div>
+    <div class="recent-message">
+        <span class="author"><a href="user">Imadezi</a>:&nbsp;</span>
+        <a class="recent-message-thread-link" href="#" uk-tooltip title="Calculating the interest rate">Calculating the interest rate</a>
+        <a class="recent-message-link" href="#" uk-tooltip title="Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Fusce vulputate eleifend sapien.">
+            Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero. Fusce vulputate eleifend sapien.
+        </a>
+    </div>
+    <div class="recent-message">
+        <span class="author"><a href="user">Alistaym</a>:&nbsp;</span>
+        <a class="recent-message-thread-link" href="#" uk-tooltip title="Defragmenting question">Defragmenting question</a>
+        <a class="recent-message-link" href="#" uk-tooltip title="Ut varius tincidunt libero. Phasellus dolor. Maecenas vestibulum mollis diam. Pellentesque ut neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In dui magna, posuere eget, vestibulum et, tempor auctor, justo.">
+            Ut varius tincidunt libero. Phasellus dolor. Maecenas vestibulum mollis diam. Pellentesque ut neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In dui magna, posuere eget, vestibulum et, tempor auctor, justo.
+        </a>
+    </div>
+    <div class="recent-message">
+        <span class="author"><a href="user">Advanid</a>:&nbsp;</span>
+        <a class="recent-message-thread-link" href="#" uk-tooltip title="Vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?">Vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</a>
+        <a class="recent-message-link" href="#" uk-tooltip title="Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo.">
+            Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo.
+        </a>
+    </div>
 </div>
 
 <div id="flags-modal" uk-modal>
