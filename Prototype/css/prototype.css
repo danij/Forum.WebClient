@@ -85,9 +85,6 @@
 .discussion-thread-message {
   padding-bottom: 10px !important;
 }
-.message-by-thread-author {
-  background: radial-gradient(#F0F0F0 25%, white 60%);
-}
 .message-author {
   margin-right: 20px;
 }
@@ -96,6 +93,9 @@
   font-variant: small-caps;
   font-size: 0.875rem;
   text-align: center;
+}
+.message-author .username .thread-author {
+  font-size: 1.2rem;
 }
 .message-author .usertitle {
   font-weight: bold;
