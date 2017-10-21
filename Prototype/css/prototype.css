@@ -88,16 +88,19 @@
 .message-author {
   margin-right: 20px;
 }
-.message-author .username {
+.message-author .username,
+.user-in-list .username {
   font-weight: bold;
   font-variant: small-caps;
   font-size: 0.875rem;
   text-align: center;
 }
-.message-author .username .thread-author {
+.message-author .username .thread-author,
+.user-in-list .username .thread-author {
   font-size: 1.2rem;
 }
-.message-author .usertitle {
+.message-author .usertitle,
+.user-in-list .usertitle {
   font-weight: bold;
   font-variant: small-caps;
   font-size: 0.675rem;
@@ -340,4 +343,41 @@
   .message-number {
     top: 10px;
   }
+}
+.users-list-header {
+  margin-left: 15px;
+  padding: 10px;
+}
+.users-list-header .user-list-sort-order {
+  padding-top: 8.5px;
+}
+.users-list {
+  padding: 20px;
+}
+.users-list .uk-card-body {
+  padding: 10px;
+}
+.user-in-list {
+  font-size: 0.875rem;
+}
+.user-in-list .uk-float-right {
+  font-size: 0.775rem;
+}
+.user-in-list .min-date {
+  text-align: right;
+  min-width: 70px;
+}
+.user-in-list .user-up-votes {
+  float: left;
+}
+.user-in-list .user-up-votes span {
+  color: white;
+  background: #6DB629;
+}
+.user-in-list .user-down-votes {
+  float: right;
+}
+.user-in-list .user-down-votes span {
+  color: white;
+  background: #F25347;
 }

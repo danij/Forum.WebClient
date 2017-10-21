@@ -136,7 +136,9 @@ html {
 
 .message-author {
     margin-right: 20px;
+}
 
+.message-author, .user-in-list {
     .username {
         font-weight: bold;
         font-variant: small-caps;
@@ -440,5 +442,52 @@ html {
 @media (max-width: 1200px) {
     .message-number {
         top: 10px;
+    }
+}
+
+.users-list-header {
+    margin-left: 15px;
+    padding: 10px;
+
+    .user-list-sort-order {
+        padding-top: 8.5px;
+
+    }
+}
+
+.users-list {
+    padding: 20px;
+
+    .uk-card-body {
+        padding: 10px;
+    }
+}
+
+.user-in-list {
+    font-size: 0.875rem;
+
+    .uk-float-right {
+        font-size: 0.775rem;
+    }
+
+    .min-date {
+        text-align: right;
+        min-width: 70px;
+    }
+
+    .user-up-votes {
+        float: left;
+        span {
+            color: white;
+            background: @up-vote-color;
+        }
+    }
+
+    .user-down-votes {
+        float: right;
+        span {
+            color: white;
+            background: @down-vote-color;
+        }
     }
 }
