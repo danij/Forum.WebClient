@@ -492,3 +492,218 @@ html {
         }
     }
 }
+
+.categories-list-header, .thread-list-header {
+    margin-left: 15px;
+    padding: 10px;
+
+    .thread-list-sort-order {
+        padding-top: 8.5px;
+    }
+}
+
+@latest-message-in-table-width: 280px;
+
+.categories-table {
+    margin-left: 15px;
+    padding: 10px 10px 0 10px;
+
+    th:first-child, td:first-child {
+        padding-left: 0;
+    }
+
+    th:last-child, td:last-child {
+        padding-right: 0;
+    }
+
+    .latest-message-header {
+        width: @latest-message-in-table-width;
+    }
+
+    .category-tags-header {
+        min-width: 150px;
+    }
+
+    .category-statistics {
+        font-size: 0.875rem;
+        min-width: 150px;
+
+        table {
+            margin: auto;
+
+            tr, td {
+                padding: 0;
+                margin: 0;
+            }
+            td:first-child {
+                padding-right: 10px;
+            }
+        }
+    }
+
+    .latest-message {
+        width: @latest-message-in-table-width;
+        overflow-x: hidden;
+        display: block;
+        text-overflow: ellipsis;
+        font-size: 0.875rem;
+
+        &:not(:last-child) {
+            border-bottom: solid 1px #E5E5E5;
+            margin-bottom: 10px;
+        }
+
+        .author-logo {
+            .text-avatar-mixin(@avatar-size, 0.6);
+            float: left;
+            margin-right: 10px;
+        }
+
+        .author {
+            float: left;
+            display: block;
+        }
+
+        a.recent-message-link {
+            display: block;
+            text-decoration: none;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            color: black;
+            font-size: 0.70rem;
+        }
+
+        a.recent-message-thread-link {
+            display: block;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            color: black;
+        }
+    }
+}
+
+.spaced-number {
+    word-spacing: -0.1em;
+}
+
+.thread-list-header {
+    margin-top: -20px;
+}
+
+.threads-table {
+    margin-left: 15px;
+    padding: 10px 10px 0 10px;
+
+    th:first-child, td:first-child {
+        padding-left: 0;
+    }
+
+    th:last-child, td:last-child {
+        padding-right: 0;
+    }
+
+    .uk-button {
+        text-transform: none;
+    }
+
+    .latest-message-header {
+        width: @latest-message-in-table-width;
+    }
+
+    .thread-created-header {
+        min-width: 160px;
+    }
+
+    .thread-tags {
+        margin-left: 25px;
+    }
+
+    .uk-icon-button {
+        margin-left: -16px;
+    }
+
+    .thread-created {
+        .author-logo {
+            .text-avatar-mixin(@avatar-size, 0.5);
+            float: left;
+            margin-right: 10px;
+        }
+
+        .author {
+            display: block;
+        }
+    }
+
+    .thread-statistics {
+        font-size: 0.875rem;
+        min-width: 150px;
+
+        table {
+            margin: auto;
+            margin-top: -10px;
+            margin-bottom: -10px;
+
+            tr, td {
+                padding: 0;
+                margin: 0;
+            }
+            td:first-child {
+                padding-right: 10px;
+            }
+        }
+    }
+
+    .thread-score-up {
+        color: white;
+        background: @up-vote-color;
+    }
+
+    .thread-score-down {
+        color: white;
+        background: @down-vote-color;
+    }
+
+    .latest-message {
+        width: @latest-message-in-table-width;
+        overflow-x: hidden;
+        display: block;
+        text-overflow: ellipsis;
+        font-size: 0.875rem;
+
+        &:not(:last-child) {
+            border-bottom: solid 1px #E5E5E5;
+            margin-bottom: 10px;
+        }
+
+        .author-logo {
+            .text-avatar-mixin(@avatar-size, 0.5);
+            float: left;
+            margin-right: 10px;
+        }
+
+        .author {
+            display: block;
+        }
+
+        a.recent-message-link {
+            display: block;
+            text-decoration: none;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            color: black;
+            font-size: 0.70rem;
+            margin-top: 7px;
+        }
+
+        a.recent-message-thread-link {
+            display: block;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            color: black;
+        }
+    }
+}

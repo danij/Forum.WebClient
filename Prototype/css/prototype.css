@@ -382,3 +382,240 @@
   color: white;
   background: #F25347;
 }
+.categories-list-header,
+.thread-list-header {
+  margin-left: 15px;
+  padding: 10px;
+}
+.categories-list-header .thread-list-sort-order,
+.thread-list-header .thread-list-sort-order {
+  padding-top: 8.5px;
+}
+.categories-table {
+  margin-left: 15px;
+  padding: 10px 10px 0 10px;
+}
+.categories-table th:first-child,
+.categories-table td:first-child {
+  padding-left: 0;
+}
+.categories-table th:last-child,
+.categories-table td:last-child {
+  padding-right: 0;
+}
+.categories-table .latest-message-header {
+  width: 280px;
+}
+.categories-table .category-tags-header {
+  min-width: 150px;
+}
+.categories-table .category-statistics {
+  font-size: 0.875rem;
+  min-width: 150px;
+}
+.categories-table .category-statistics table {
+  margin: auto;
+}
+.categories-table .category-statistics table tr,
+.categories-table .category-statistics table td {
+  padding: 0;
+  margin: 0;
+}
+.categories-table .category-statistics table td:first-child {
+  padding-right: 10px;
+}
+.categories-table .latest-message {
+  width: 280px;
+  overflow-x: hidden;
+  display: block;
+  text-overflow: ellipsis;
+  font-size: 0.875rem;
+}
+.categories-table .latest-message:not(:last-child) {
+  border-bottom: solid 1px #E5E5E5;
+  margin-bottom: 10px;
+}
+.categories-table .latest-message .author-logo {
+  box-sizing: border-box;
+  width: 57.6px;
+  height: 57.6px;
+  font-size: 38.4px;
+  border-radius: 500px;
+  background: #F4F4F4;
+  vertical-align: middle;
+  display: -ms-inline-flexbox;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+  float: left;
+  margin-right: 10px;
+}
+.categories-table .latest-message .author {
+  float: left;
+  display: block;
+}
+.categories-table .latest-message a.recent-message-link {
+  display: block;
+  text-decoration: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: black;
+  font-size: 0.70rem;
+}
+.categories-table .latest-message a.recent-message-thread-link {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: black;
+}
+.spaced-number {
+  word-spacing: -0.1em;
+}
+.thread-list-header {
+  margin-top: -20px;
+}
+.threads-table {
+  margin-left: 15px;
+  padding: 10px 10px 0 10px;
+}
+.threads-table th:first-child,
+.threads-table td:first-child {
+  padding-left: 0;
+}
+.threads-table th:last-child,
+.threads-table td:last-child {
+  padding-right: 0;
+}
+.threads-table .uk-button {
+  text-transform: none;
+}
+.threads-table .latest-message-header {
+  width: 280px;
+}
+.threads-table .thread-created-header {
+  min-width: 160px;
+}
+.threads-table .thread-tags {
+  margin-left: 25px;
+}
+.threads-table .uk-icon-button {
+  margin-left: -16px;
+}
+.threads-table .thread-created .author-logo {
+  box-sizing: border-box;
+  width: 48px;
+  height: 48px;
+  font-size: 32px;
+  border-radius: 500px;
+  background: #F4F4F4;
+  vertical-align: middle;
+  display: -ms-inline-flexbox;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+  float: left;
+  margin-right: 10px;
+}
+.threads-table .thread-created .author {
+  display: block;
+}
+.threads-table .thread-statistics {
+  font-size: 0.875rem;
+  min-width: 150px;
+}
+.threads-table .thread-statistics table {
+  margin: auto;
+  margin-top: -10px;
+  margin-bottom: -10px;
+}
+.threads-table .thread-statistics table tr,
+.threads-table .thread-statistics table td {
+  padding: 0;
+  margin: 0;
+}
+.threads-table .thread-statistics table td:first-child {
+  padding-right: 10px;
+}
+.threads-table .thread-score-up {
+  color: white;
+  background: #6DB629;
+}
+.threads-table .thread-score-down {
+  color: white;
+  background: #F25347;
+}
+.threads-table .latest-message {
+  width: 280px;
+  overflow-x: hidden;
+  display: block;
+  text-overflow: ellipsis;
+  font-size: 0.875rem;
+}
+.threads-table .latest-message:not(:last-child) {
+  border-bottom: solid 1px #E5E5E5;
+  margin-bottom: 10px;
+}
+.threads-table .latest-message .author-logo {
+  box-sizing: border-box;
+  width: 48px;
+  height: 48px;
+  font-size: 32px;
+  border-radius: 500px;
+  background: #F4F4F4;
+  vertical-align: middle;
+  display: -ms-inline-flexbox;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+  float: left;
+  margin-right: 10px;
+}
+.threads-table .latest-message .author {
+  display: block;
+}
+.threads-table .latest-message a.recent-message-link {
+  display: block;
+  text-decoration: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: black;
+  font-size: 0.70rem;
+  margin-top: 7px;
+}
+.threads-table .latest-message a.recent-message-thread-link {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: black;
+}
