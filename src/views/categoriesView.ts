@@ -80,7 +80,7 @@ export module CategoriesView {
                 latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
                 latestMessageColumn.append(UsersView.createAuthorSmall(latestMessage.createdBy));
 
-                let threadTitle = latestMessage.threadTitle || 'unknown';
+                let threadTitle = latestMessage.threadName || 'unknown';
 
                 let threadTitleElement = $('<a class="recent-message-thread-link" href="#" uk-tooltip></a>');
                 latestMessageColumn.append(threadTitleElement);
@@ -95,7 +95,7 @@ export module CategoriesView {
                 recentMessageTimeContent.text(DisplayHelpers.getAgoTime(latestMessage.created));
                 recentMessageTimeContent.attr('title', DisplayHelpers.getFullDateTime(latestMessage.created));
 
-                let messageContent = latestMessage.message || 'empty';
+                let messageContent = latestMessage.content || 'empty';
 
                 let messageLink = $('<a class="recent-message-link" href="#" uk-tooltip></a>');
                 latestMessageColumn.append(messageLink);

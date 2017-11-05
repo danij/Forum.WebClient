@@ -8,9 +8,9 @@ export module CategoryRepository {
         id: string;
         created: number;
         createdBy: UserRepository.User;
-        message: string;
+        content: string;
         threadId: string;
-        threadTitle: string;
+        threadName: string;
     }
 
     export interface Category {
