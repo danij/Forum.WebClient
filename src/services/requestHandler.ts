@@ -26,7 +26,7 @@ export module RequestHandler {
                 if (type != 'json') {
                     return data;
                 }
-                if (data.startsWith(serviceConfig.responsePrefix)) {
+                if (0 == data.indexOf(serviceConfig.responsePrefix)) {
                     data = data.substr(serviceConfig.responsePrefix.length);
                 }
                 return data;
