@@ -6,10 +6,13 @@
     <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self'">-->
     <link rel="stylesheet" href="css/uikit.min.css">
     <link rel="stylesheet" href="css/main.css">
-    <script type="text/x-mathjax-config" src="config/mathjax.js"></script>
-    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
-    <script type="text/javascript" async src="config/config.js"></script>
-    <script type="text/javascript" async src="dist/bundle.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <!--<script type="text/x-mathjax-config" src="config/mathjax.js"></script>-->
+    <!--<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>-->
+    <script type="text/javascript" src="config/config.js"></script>
+    <script type="text/javascript" src="dist/bundle.js"></script>
+    <script type="text/javascript" src="js/uikit.min.js"></script>
+    <script type="text/javascript" src="js/uikit-icons.min.js"></script>
 </head>
 <body>
 
@@ -73,7 +76,11 @@
     <h4 class="recent-threads-title">Recent Threads</h4>
 </div>
 
-<div class="page-content">
+<div id="pageContentContainer" class="page-content">
+</div>
+
+<div id="pageLoadSpinner">
+    <div uk-spinner></div>
 </div>
 
 <div class="recent-messages-content uk-box-shadow-small uk-hidden">
@@ -81,7 +88,9 @@
 </div>
 
 <div class="page-footer">
-    <span class="uk-text-meta">&copy; 2017 &middot; <a href="#">Terms of Service</a> &middot; <a href="" uk-tooltip title="Alistaym &middot; CapoShay &middot; Imadezi &middot; Peerrail">4 users online</a>
+    <span class="uk-text-meta">&copy; 2017
+        &middot; <a href="#">Terms of Service</a>
+        &middot; <a href="" uk-tooltip title="Alistaym &middot; CapoShay &middot; Imadezi &middot; Peerrail">4 users online</a>
     </span>
 </div>
 </body>

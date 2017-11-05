@@ -17,8 +17,8 @@ module.exports = {
     module: {
         loaders: [
             {test: /\.ts$/, loader: 'ts-loader'},
-            {test: require.resolve('jquery/dist/jquery.min'), loader: 'expose-loader?jQuery!expose-loader?$'},
-            {test: require.resolve('uikit/dist/js/uikit.min'), loader: 'expose-loader?UIkit!expose-loader?$'}
+            // {test: require.resolve('jquery/dist/jquery.min'), loader: 'expose-loader?jQuery!expose-loader?$'},
+            // {test: require.resolve('uikit/dist/js/uikit.min'), loader: 'expose-loader?UIkit!expose-loader?$'}
         ]
     }
 }

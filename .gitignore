@@ -1,5 +1,6 @@
 .idea
 dist
+js
 node_modules
 src/**/*.js
 css/**/*.css

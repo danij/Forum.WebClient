@@ -1,14 +1,9 @@
-import {UIkit, Icons} from './externals';
 import {HomePage} from "./pages/homePage";
+import {RequestHandler} from "./services/requestHandler";
 
 $(function() {
 
-    try {
-        UIkit.use(Icons);
-    }
-    catch(e) {
-
-    }
+    RequestHandler.bootstrap();
 
     let page = new HomePage();
     page.display();
