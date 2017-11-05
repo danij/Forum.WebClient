@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@types/jquery": "^3.2.16",
+    "copy-webpack-plugin": "^4.2.0",
     "expose-loader": "^0.7.3"
   },
   "scripts": {
