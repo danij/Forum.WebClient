@@ -2,14 +2,14 @@ import {UserRepository} from "../services/userRepository";
 
 export module UsersView {
 
-    function getUserLogoColor(name: string): string {
+    function getUserLogoColor(id: string): string {
 
         let r = 283, g = 347, b = 409;
         const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67];
 
-        for (let i = 0; i < name.length; ++i) {
+        for (let i = 0; i < id.length; ++i) {
 
-            const char = name.charCodeAt(i);
+            const char = id.charCodeAt(i);
             const ri = primes.length - (i % primes.length);
             const gi = i;
             const bi = i;
@@ -26,7 +26,7 @@ export module UsersView {
 
         let element = $('<div class="author-logo"></div>');
         element.text(user.name[0]);
-        element.css('color', getUserLogoColor(user.name));
+        element.css('color', getUserLogoColor(user.id));
 
         return element[0];
     }
