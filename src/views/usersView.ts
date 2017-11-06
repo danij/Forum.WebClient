@@ -1,4 +1,6 @@
 import {UserRepository} from "../services/userRepository";
+import {DisplayHelpers} from "../helpers/displayHelpers";
+import {Views} from "./common";
 
 export module UsersView {
 
@@ -19,16 +21,23 @@ export module UsersView {
             b += (char * bi) % primes[bi % primes.length];
         }
 
-        return `rgb(${r % 255}, ${g % 255}, ${b % 255})`;
+        return `rgb(${r % 224}, ${g % 224}, ${b % 224})`;
     }
 
     export function createUserLogoSmall(user: UserRepository.User): HTMLElement {
 
-        let element = $('<div class="author-logo"></div>');
+        let container = $('<div></div>');
+
+        let element = $('<div class="author-logo pointer-cursor"></div>');
+        container.append(element);
         element.text(user.name[0]);
         element.css('color', getUserLogoColor(user.id));
 
-        return element[0];
+        let dropdown = $(createUserDropdown(user));
+        container.append(dropdown);
+        dropdown.addClass('user-info');
+
+        return container[0];
     }
 
     export function createAuthorSmall(user: UserRepository.User): HTMLElement {
@@ -41,5 +50,67 @@ export module UsersView {
         element.append(':&nbsp;');
 
         return element[0];
+    }
+
+    function createUserDropdown(user: UserRepository.User): HTMLElement {
+
+        let content = $('<div></div>');
+        content.append($(('<li>\n' +
+            '    <a href="UserThreads" class="align-left">\n' +
+            '        <span>Threads</span>\n' +
+            '    </a>\n' +
+            '    <span class="uk-badge align-right">{nrOfThreads}</span>\n' +
+            '    <div class="uk-clearfix"></div>\n' +
+            '</li>').replace('{nrOfThreads}', user.threadCount.toString())));
+
+        content.append($(('<li>\n' +
+            '    <a href="UserMessages" class="align-left">\n' +
+            '        <span>Messages</span>\n' +
+            '    </a>\n' +
+            '    <span class="uk-badge align-right">{nrOfMessages}</span>\n' +
+            '    <div class="uk-clearfix"></div>\n' +
+            '</li>').replace('{nrOfMessages}', user.messageCount.toString())));
+
+        content.append($('<li class="uk-nav-header">Activity</li>'));
+        content.append($(('<li>\n' +
+            '<span href="MyThreads" class="align-left">\n' +
+            '    <span>Joined</span>\n' +
+            '</span>\n' +
+            '    <span class="uk-badge align-right" title="{joinedExpanded}" uk-tooltip>{joinedAgo}</span>\n' +
+            '    <div class="uk-clearfix"></div>\n' +
+            '</li>')
+                .replace('{joinedExpanded}', DisplayHelpers.getFullDateTime(user.created))
+                .replace('{joinedAgo}', DisplayHelpers.getAgoTimeShort(user.created))));
+
+        content.append($(('<li>\n' +
+            '<span href="MyMessages" class="align-left">\n' +
+            '    <span>Last seen</span>\n' +
+            '</span>\n' +
+            '    <span class="uk-badge align-right" title="{lastSeenExpanded}" uk-tooltip>{lastSeenAgo}</span>\n' +
+            '    <div class="uk-clearfix"></div>\n' +
+            '</li>')
+                .replace('{lastSeenExpanded}', DisplayHelpers.getFullDateTime(user.lastSeen))
+                .replace('{lastSeenAgo}', DisplayHelpers.getAgoTimeShort(user.lastSeen))));
+
+        content.append($('<li class="uk-nav-header">Feedback Received</li>'));
+        content.append($(('<li>\n' +
+            '<span href="MyMessages" class="align-left">\n' +
+            '    <span>Up votes</span>\n' +
+            '</span>\n' +
+            '    <span class="uk-badge align-right">{upVotes}</span>\n' +
+            '    <div class="uk-clearfix"></div>\n' +
+            '</li>').replace('{upVotes}', (user.upVotes || 0).toString())));
+        content.append($(('<li>\n' +
+            '<span href="MyMessages" class="align-left">\n' +
+            '    <span>Down votes</span>\n' +
+            '</span>\n' +
+            '    <span class="uk-badge align-right">{downVotes}</span>\n' +
+            '    <div class="uk-clearfix"></div>\n' +
+            '</li>').replace('{downVotes}', (user.downVotes || 0).toString())));
+
+        return Views.createDropdown(user.name, content, {
+            mode: 'hover',
+            pos: 'bottom-right'
+        });
     }
 }
