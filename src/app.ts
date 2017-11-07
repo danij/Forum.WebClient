@@ -1,10 +1,10 @@
 import {RequestHandler} from "./services/requestHandler";
-import {UsersPage} from "./pages/usersPage";
+import {TagsPage} from "./pages/tagsPage";
 
 $(function() {
 
     RequestHandler.bootstrap();
 
-    let page = new UsersPage();
+    let page = new TagsPage();
     page.display();
 });

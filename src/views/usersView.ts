@@ -4,8 +4,6 @@ import {Views} from "./common";
 
 export module UsersView {
 
-    import UserCollection = UserRepository.UserCollection;
-
     function getUserLogoColor(id: string): string {
 
         let r = 283, g = 347, b = 409;
@@ -125,7 +123,7 @@ export module UsersView {
         });
     }
 
-    export function createUsersList(collection: UserCollection): HTMLElement {
+    export function createUsersList(collection: UserRepository.UserCollection): HTMLElement {
 
         let result = $("<div></div>");
 
