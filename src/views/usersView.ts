@@ -142,6 +142,7 @@ export module UsersView {
 
             usersListGrid.append(createUserInList(user));
         }
+        result.append(Views.createPaginationControl(collection));
 
         return result[0];
     }
