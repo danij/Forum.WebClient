@@ -27,7 +27,7 @@ export module TagsView {
             '    </a>\n' +
             '    <span class="uk-badge align-right">{nrOfThreads}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{nrOfThreads}', DisplayHelpers.formatNumberForStatistics(tag.threadCount))));
+            '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount))));
 
         content.append($(('<li>\n' +
             '    <a href="UserMessages" class="align-left">\n' +
@@ -35,7 +35,7 @@ export module TagsView {
             '    </a>\n' +
             '    <span class="uk-badge align-right">{nrOfMessages}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{nrOfMessages}', DisplayHelpers.formatNumberForStatistics(tag.messageCount))));
+            '</li>').replace('{nrOfMessages}', DisplayHelpers.intToString(tag.messageCount))));
 
         return Views.createDropdown(tag.name, content, {
             mode: 'hover',
@@ -103,13 +103,13 @@ export module TagsView {
             '    <div class="uk-float-left"><a href="#">Threads</a></div>\n' +
             '    <div class="uk-float-right">{nrOfThreads}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</div>').replace('{nrOfThreads}', DisplayHelpers.formatNumberForStatistics(tag.threadCount))));
+            '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount))));
 
         wrapper.append($(('<div>\n' +
             '    <div class="uk-float-left"><a href="#">Messages</a></div>\n' +
             '    <div class="uk-float-right">{nrOfMessages}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</div>').replace('{nrOfMessages}', DisplayHelpers.formatNumberForStatistics(tag.messageCount))));
+            '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(tag.messageCount))));
 
         wrapper.append($(('<div>\n' +
             '    <div class="uk-float-left">Added</div>\n' +

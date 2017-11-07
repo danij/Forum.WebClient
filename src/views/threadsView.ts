@@ -83,13 +83,13 @@ export module ThreadsView {
                 nameColumn.append(details);
 
                 if (thread.voteScore < 0) {
-                    details.append($(`<span class="uk-label thread-score-down">− ${DisplayHelpers.formatNumberForStatistics(thread.voteScore)}</span>`));
+                    details.append($(`<span class="uk-label thread-score-down">− ${DisplayHelpers.intToString(thread.voteScore)}</span>`));
                 }
                 else if (thread.voteScore == 0) {
                     details.append($(`<span class="uk-label thread-score-up">0</span>`));
                 }
                 else {
-                    details.append($(`<span class="uk-label thread-score-up">+ ${DisplayHelpers.formatNumberForStatistics(thread.voteScore)}</span>`));
+                    details.append($(`<span class="uk-label thread-score-up">+ ${DisplayHelpers.intToString(thread.voteScore)}</span>`));
                 }
                 details.append(' ');
 
@@ -131,9 +131,9 @@ export module ThreadsView {
                     '        </tr>\n' +
                     '    </table>\n' +
                     '</td>')
-                    .replace('{nrOfMessages}', DisplayHelpers.formatNumberForStatistics(thread.messageCount))
-                    .replace('{nrOfViews}', DisplayHelpers.formatNumberForStatistics(thread.visited))
-                    .replace('{nrOfSubscribed}', DisplayHelpers.formatNumberForStatistics(thread.subscribedUsersCount))
+                    .replace('{nrOfMessages}', DisplayHelpers.intToString(thread.messageCount))
+                    .replace('{nrOfViews}', DisplayHelpers.intToString(thread.visited))
+                    .replace('{nrOfSubscribed}', DisplayHelpers.intToString(thread.subscribedUsersCount))
                 );
                 row.append(statisticsColumn);
             }

@@ -78,7 +78,7 @@ export module UsersView {
             '    </a>\n' +
             '    <span class="uk-badge align-right">{nrOfThreads}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{nrOfThreads}', DisplayHelpers.formatNumberForStatistics(user.threadCount))));
+            '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount))));
 
         content.append($(('<li>\n' +
             '    <a href="UserMessages" class="align-left">\n' +
@@ -86,7 +86,7 @@ export module UsersView {
             '    </a>\n' +
             '    <span class="uk-badge align-right">{nrOfMessages}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{nrOfMessages}', DisplayHelpers.formatNumberForStatistics(user.messageCount))));
+            '</li>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount))));
 
         content.append($('<li class="uk-nav-header">Activity</li>'));
         content.append($(('<li>\n' +
@@ -116,14 +116,14 @@ export module UsersView {
             '</span>\n' +
             '    <span class="uk-badge align-right">{upVotes}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{upVotes}', DisplayHelpers.formatNumberForStatistics(user.upVotes))));
+            '</li>').replace('{upVotes}', DisplayHelpers.intToString(user.upVotes))));
         content.append($(('<li>\n' +
             '<span href="MyMessages" class="align-left">\n' +
             '    <span>Down votes</span>\n' +
             '</span>\n' +
             '    <span class="uk-badge align-right">{downVotes}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{downVotes}', DisplayHelpers.formatNumberForStatistics(user.downVotes))));
+            '</li>').replace('{downVotes}', DisplayHelpers.intToString(user.downVotes))));
 
         return Views.createDropdown(user.name, content, {
             mode: 'hover',
@@ -203,13 +203,13 @@ export module UsersView {
             '    <div class="uk-float-left"><a href="#">Threads</a></div>\n' +
             '    <div class="uk-float-right">{nrOfThreads}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</div>').replace('{nrOfThreads}', DisplayHelpers.formatNumberForStatistics(user.threadCount))));
+            '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount))));
 
         wrapper.append($(('<div>\n' +
             '    <div class="uk-float-left"><a href="#">Messages</a></div>\n' +
             '    <div class="uk-float-right">{nrOfMessages}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</div>').replace('{nrOfMessages}', DisplayHelpers.formatNumberForStatistics(user.messageCount))));
+            '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount))));
 
         wrapper.append($(('<div>\n' +
             '    <div class="uk-float-left">Joined</div>\n' +
@@ -240,8 +240,8 @@ export module UsersView {
             '    </div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
-                .replace('{upVotes}', DisplayHelpers.formatNumberForStatistics(user.upVotes))
-                .replace('{downVotes}', DisplayHelpers.formatNumberForStatistics(user.downVotes))));
+                .replace('{upVotes}', DisplayHelpers.intToString(user.upVotes))
+                .replace('{downVotes}', DisplayHelpers.intToString(user.downVotes))));
 
         return result[0];
     }

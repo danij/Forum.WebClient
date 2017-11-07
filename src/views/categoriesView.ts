@@ -67,8 +67,8 @@ export module CategoriesView {
                     '        </tr>\n' +
                     '    </table>\n' +
                     '</td>')
-                    .replace('{nrOfThreads}', DisplayHelpers.formatNumberForStatistics(category.threadTotalCount))
-                    .replace('{nrOfMessages}', DisplayHelpers.formatNumberForStatistics(category.messageTotalCount)));
+                    .replace('{nrOfThreads}', DisplayHelpers.intToString(category.threadTotalCount))
+                    .replace('{nrOfMessages}', DisplayHelpers.intToString(category.messageTotalCount)));
                 row.append(statisticsColumn);
             }
             {

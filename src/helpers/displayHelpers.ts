@@ -2,7 +2,7 @@ export module DisplayHelpers {
 
     const EnMonths: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    export function formatNumberForStatistics(value: number): string {
+    export function intToString(value: number): string {
 
         return (value || 0).toLocaleString('en').replace(/,/g, ' ');
     }
@@ -69,7 +69,7 @@ export module DisplayHelpers {
         const days = Math.floor(difference / (24 * 3600));
         const hours = Math.floor((difference - days * 24 * 3600) / 3600);
 
-        return `${formatNumberForStatistics(days)} ${days != 1 ? 'days' : 'day'}, ${hours} ${hours != 1 ? 'hours' : 'hour'} ago`;
+        return `${intToString(days)} ${days != 1 ? 'days' : 'day'}, ${hours} ${hours != 1 ? 'hours' : 'hour'} ago`;
     }
 
     export function getAgoTimeShort(epochTime: number): string {
@@ -97,6 +97,6 @@ export module DisplayHelpers {
 
         const days = Math.floor(difference / (24 * 3600));
 
-        return `${formatNumberForStatistics(days)} ${days != 1 ? 'days' : 'day'} ago`;
+        return `${intToString(days)} ${days != 1 ? 'days' : 'day'} ago`;
     }
 }
