@@ -1,10 +1,10 @@
 import {RequestHandler} from "./services/requestHandler";
-import {TagsPage} from "./pages/tagsPage";
+import {ThreadsPage} from "./pages/threadsPage";
 
 $(function() {
 
     RequestHandler.bootstrap();
 
-    let page = new TagsPage();
+    let page = new ThreadsPage();
     page.display();
 });

@@ -56,6 +56,14 @@ export module UsersView {
         let link = $('<a href="user"></a>');
         element.append(link);
         link.text(user.name);
+
+        return element[0];
+    }
+
+    export function createAuthorSmallWithColon(user: UserRepository.User): HTMLElement {
+
+        let element = $(createAuthorSmall(user));
+
         element.append(':&nbsp;');
 
         return element[0];

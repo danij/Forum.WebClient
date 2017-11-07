@@ -78,7 +78,7 @@ export module CategoriesView {
                 const latestMessage = category.latestMessage;
 
                 latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
-                latestMessageColumn.append(UsersView.createAuthorSmall(latestMessage.createdBy));
+                latestMessageColumn.append(UsersView.createAuthorSmallWithColon(latestMessage.createdBy));
 
                 let threadTitle = latestMessage.threadName || 'unknown';
 
