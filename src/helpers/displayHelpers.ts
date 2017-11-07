@@ -2,7 +2,7 @@ export module DisplayHelpers {
 
     export function formatNumberForStatistics(value: number): string {
 
-        return value.toLocaleString('en').replace(/,/g, ' ');
+        return (value || 0).toLocaleString('en').replace(/,/g, ' ');
     }
 
     function getCurrentEpochTime(): number {
@@ -52,7 +52,7 @@ export module DisplayHelpers {
         const days = Math.floor(difference / (24 * 3600));
         const hours = Math.floor((difference - days * 24 * 3600) / 3600);
 
-        return `${days} ${days != 1 ? 'days' : 'day'}, ${hours} ${hours != 1 ? 'hours' : 'hour'} ago`;
+        return `${formatNumberForStatistics(days)} ${days != 1 ? 'days' : 'day'}, ${hours} ${hours != 1 ? 'hours' : 'hour'} ago`;
     }
 
     export function getAgoTimeShort(epochTime: number): string {
@@ -80,6 +80,6 @@ export module DisplayHelpers {
 
         const days = Math.floor(difference / (24 * 3600));
 
-        return `${days} ${days != 1 ? 'days' : 'day'} ago`;
+        return `${formatNumberForStatistics(days)} ${days != 1 ? 'days' : 'day'} ago`;
     }
 }
