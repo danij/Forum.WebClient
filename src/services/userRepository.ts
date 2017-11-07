@@ -1,6 +1,10 @@
+import {RequestHandler} from "./requestHandler";
+import {CommonEntities} from "./commonEntities";
+
 export module UserRepository {
 
     export interface User {
+
         id: string;
         name: string;
         info: string;
@@ -14,4 +18,17 @@ export module UserRepository {
         upVotes: number;
         downVotes: number;
     }
+
+    export interface UserCollection extends CommonEntities.PaginationInfo {
+
+        users: User[];
+    }
+
+    export async function getUsers(): Promise<UserCollection> {
+
+        return await RequestHandler.get({
+            path: 'users'
+        }) as UserCollection;
+    }
+
 }

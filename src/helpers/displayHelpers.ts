@@ -1,8 +1,15 @@
 export module DisplayHelpers {
 
+    const EnMonths: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
     export function formatNumberForStatistics(value: number): string {
 
         return (value || 0).toLocaleString('en').replace(/,/g, ' ');
+    }
+
+    export function padPositiveWithZeros(value: number, size: number): string {
+
+        return ('0'.repeat(size || 1) + value).substr(-size);
     }
 
     function getCurrentEpochTime(): number {
@@ -20,13 +27,23 @@ export module DisplayHelpers {
 
     export function getFullDateTime(epochTime: number): string {
 
+        if (epochTime < 1) return '-';
+
         const date = dateFromEpochTime(epochTime);
         return date.toString();
     }
 
+    export function getShortDate(epochTime: number): string {
+
+        if (epochTime < 1) return '-';
+
+        const date = dateFromEpochTime(epochTime);
+        return `${date.getDate()}-${EnMonths[date.getMonth()]}-${padPositiveWithZeros(date.getFullYear() % 100, 2)}`;
+    }
+
     export function getAgoTime(epochTime: number): string {
 
-        const difference = getCurrentEpochTime() - epochTime;
+        const difference = getCurrentEpochTime() - (epochTime || 0);
 
         if (difference < 2) {
             return '1 second ago';
