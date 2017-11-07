@@ -138,6 +138,8 @@ export module UsersView {
 
         for (let user of collection.users)
         {
+            if (null == user) continue;
+
             usersListGrid.append(createUserInList(user));
         }
 

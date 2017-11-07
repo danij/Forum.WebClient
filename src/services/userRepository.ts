@@ -30,5 +30,4 @@ export module UserRepository {
             path: 'users'
         }) as UserCollection;
     }
-
 }
