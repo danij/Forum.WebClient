@@ -5,22 +5,33 @@ export module Pages {
         display(): void;
     }
 
-    export async function changePage(handler: () => Promise<HTMLElement>) {
+    export async function changeContent(container: HTMLElement, handler: () => Promise<HTMLElement>) {
 
         $("#pageLoadSpinner").show();
 
-        let newPageContent = await handler();
-        if (null == newPageContent)
+        let spinner = $('<div class="spinnerElement"><div uk-spinner></div></div>');
+        try
         {
-            $("#pageLoadSpinner").hide();
-            return;
+            container.appendChild(spinner[0]);
+
+            let newPageContent = await handler();
+            if (null == newPageContent)
+            {
+                return;
+            }
+
+            container.innerHTML = '';
+            container.appendChild(newPageContent);
         }
+        finally
+        {
+            spinner.remove();
+        }
+    }
 
-        var container = document.getElementById('pageContentContainer');
-        container.innerHTML = '';
-        container.appendChild(newPageContent);
+    export function changePage(handler: () => Promise<HTMLElement>) {
 
-        $("#pageLoadSpinner").hide();
+        changeContent(document.getElementById('pageContentContainer'), handler);
     }
 
     declare var UIkit: any;
