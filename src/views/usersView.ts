@@ -131,28 +131,35 @@ export module UsersView {
         });
     }
 
-    export function createUsersList(collection: UserRepository.UserCollection): HTMLElement {
+    export class UsersPageContent {
 
-        let result = $("<div></div>");
+        sortControls: HTMLElement;
+        paginationTop: HTMLElement;
+        paginationBottom: HTMLElement;
+        list: HTMLElement
+    }
 
-        result.append(createUserListSortControls());
-        result.append(Views.createPaginationControl(collection));
+    export function createUsersPageContent(collection: UserRepository.UserCollection,
+                                           onPageNumberChange: Views.PageNumberChangeCallback) {
+
+        collection = collection || UserRepository.defaultUserCollection();
+
+        let result = new UsersPageContent();
+
+        let resultList = $("<div></div>");
+
+        resultList.append(result.sortControls = createUserListSortControls());
+        resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange));
 
         let usersList = $('<div class="users-list"></div>');
-        result.append(usersList);
+        resultList.append(usersList);
 
-        let usersListGrid = $('<div class="uk-grid-match uk-text-center" uk-grid></div>');
-        usersList.append(usersListGrid);
+        usersList.append(createUserListContent(collection.users));
 
-        for (let user of collection.users)
-        {
-            if (null == user) continue;
+        resultList.append(result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange));
 
-            usersListGrid.append(createUserInList(user));
-        }
-        result.append(Views.createPaginationControl(collection));
-
-        return result[0];
+        result.list = resultList[0];
+        return result;
     }
 
     function createUserListSortControls(): HTMLElement {
@@ -162,21 +169,40 @@ export module UsersView {
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="user-list-sort-order">\n' +
             '                Sort by:\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" checked> Name</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy"> Created</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy"> Last Seen</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy"> Thread Count</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy"> Message Count</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="name" checked> Name</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="created"> Created</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="lastseen"> Last Seen</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="threadcount"> Thread Count</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="messagecount"> Message Count</label>\n' +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
-            '                <select class="uk-select" name="orderDirection">\n' +
-            '                    <option>Ascending</option>\n' +
-            '                    <option>Descending</option>\n' +
+            '                <select class="uk-select" name="sortOrder">\n' +
+            '                    <option value="ascending">Ascending</option>\n' +
+            '                    <option value="descending">Descending</option>\n' +
             '                </select>\n' +
             '            </div>\n' +
             '        </div>\n' +
             '    </form>\n' +
             '</div>')[0];
+    }
+
+    export function createUserListContent(users: UserRepository.User[]): HTMLElement {
+
+        let usersListGrid = $('<div class="uk-grid-match uk-text-center" uk-grid></div>');
+
+        if (users && users.length) {
+            for (let user of users)
+            {
+                if (null == user) continue;
+
+                usersListGrid.append(createUserInList(user));
+            }
+        }
+        else {
+            usersListGrid.append($('<h3>No users found</h3>'));
+        }
+
+        return usersListGrid[0];
     }
 
     function createUserInList(user: UserRepository.User): HTMLElement {

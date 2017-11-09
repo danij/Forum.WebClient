@@ -5,23 +5,27 @@ export module Pages {
         display(): void;
     }
 
-    export async function changeContent(container: HTMLElement, handler: () => Promise<HTMLElement>) {
-
-        $("#pageLoadSpinner").show();
+    export async function changeContent(containerElement: HTMLElement, handler: () => Promise<HTMLElement>) {
 
         let spinner = $('<div class="spinnerElement"><div uk-spinner></div></div>');
+        let container = $(containerElement);
+        let disabledElement = $('<div class="disabledElement"></div>');
+
         try
         {
-            container.appendChild(spinner[0]);
+            container.append(disabledElement);
+            container.append(spinner);
+            spinner.show();
 
             let newPageContent = await handler();
             if (null == newPageContent)
             {
+                disabledElement.remove();
                 return;
             }
 
-            container.innerHTML = '';
-            container.appendChild(newPageContent);
+            container.empty();
+            container.append(newPageContent);
         }
         finally
         {

@@ -6,6 +6,7 @@ export module RequestHandler {
 
         path: string;
         extra?: string[];
+        query?: any;
     }
 
     export interface GetRequest extends Request {
@@ -36,8 +37,15 @@ export module RequestHandler {
 
     function getUrl(request: Request) {
 
-        var extra = request.extra || [];
-        return PathHelpers.joinPath(serviceConfig.uri, request.path, ...extra);
+        const extra = request.extra || [];
+        const path = PathHelpers.joinPath(serviceConfig.uri, request.path, ...extra);
+
+        const query = Object.keys(request.query || {})
+            .filter(key => request.query.hasOwnProperty(key))
+            .map(key => `${key}=${request.query[key]}`)
+            .join("&");
+
+        return query.length > 0 ? path + '?' + query : path;
     }
 
     export function get(request: GetRequest) {

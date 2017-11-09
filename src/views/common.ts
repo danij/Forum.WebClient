@@ -2,6 +2,15 @@ import {CommonEntities} from "../services/commonEntities";
 
 export module Views {
 
+    interface DisplayConfig {
+
+        pageNumbersBefore: number,
+        pageNumbersMiddle: number,
+        pageNumbersAfter: number
+    }
+
+    declare const displayConfig: DisplayConfig;
+
     export function createDropdown(header: string | HTMLElement, content: any, properties?: any) {
 
         let propertiesString = '';
@@ -26,17 +35,120 @@ export module Views {
         return element[0];
     }
 
-    export function createPaginationControl(info: CommonEntities.PaginationInfo) {
+    export declare type PageNumberChangeCallback = (value: number, relative: boolean) => void;
 
-        return $('<ul class="uk-pagination uk-flex-center uk-margin-remove-top" uk-margin>\n' +
-            '    <li><a href="#"><span uk-pagination-previous></span></a></li>\n' +
-            '    <li><a href="#">1</a></li>\n' +
-            '    <li class="uk-disabled"><span>...</span></li>\n' +
-            '    <li><a href="#">5</a></li>\n' +
-            '    <li><a href="#">6</a></li>\n' +
-            '    <li class="uk-active"><span>7</span></li>\n' +
-            '    <li><a href="#">8</a></li>\n' +
-            '    <li><a href="#"><span uk-pagination-next></span></a></li>\n' +
-            '</ul>')[0];
+    export function createPaginationControl(info: CommonEntities.PaginationInfo,
+                                            onPageNumberChange: Views.PageNumberChangeCallback) {
+
+        let container = $('<ul class="uk-pagination uk-flex-center uk-margin-remove-top" uk-margin></ul>');
+
+        let pageCount = CommonEntities.getPageCount(info);
+
+        let previous = $('<li><a><span uk-pagination-previous></span></a></li>');
+        container.append(previous);
+        previous.on('click', (e) => {
+
+            onPageNumberChange(-1, true);
+            e.preventDefault();
+        });
+
+        function pageClickCallback(e) {
+
+            onPageNumberChange(parseInt((e.target as HTMLAnchorElement).text) - 1, false);
+            e.preventDefault();
+        }
+
+        function addPageLink(pageNumber: number) {
+
+            let listElement = $('<li></li>');
+            container.append(listElement[0]);
+
+            let link = $(`<a>${pageNumber + 1}</a>`);
+            listElement.append(link);
+            link.on('click', pageClickCallback);
+
+            if (pageNumber == info.page) {
+                link.addClass('uk-text-bold');
+            }
+        }
+
+        function addEllipsis(): void {
+
+            let listElement = $('<li class="pointer-cursor"></li>');
+            container.append(listElement[0]);
+
+            let span = $('<span>...</span>');
+            listElement.append(span);
+
+            span.on('click', () => {
+
+                const pageNumber = (parseInt(prompt("Please enter the page number:")) || 1) - 1;
+                onPageNumberChange(pageNumber, false);
+            });
+        }
+
+        if (pageCount <= (displayConfig.pageNumbersAfter + displayConfig.pageNumbersMiddle + displayConfig.pageNumbersAfter)) {
+
+            //display all pages
+            for (let i = 0; i < pageCount; ++i) {
+
+                addPageLink(i);
+            }
+        }
+        else if (info.page <= (displayConfig.pageNumbersAfter + displayConfig.pageNumbersMiddle)) {
+
+            //current page is among the first ones
+            for (let i = 0; i < (displayConfig.pageNumbersAfter + displayConfig.pageNumbersMiddle); ++i) {
+
+                addPageLink(i);
+            }
+            addEllipsis();
+            for (let i = (pageCount - displayConfig.pageNumbersAfter); i < pageCount; ++i) {
+
+                addPageLink(i);
+            }
+        }
+        else if (info.page >= (pageCount - (displayConfig.pageNumbersAfter + displayConfig.pageNumbersMiddle))) {
+
+            //current page is among the last ones
+            for (let i = 0; i < displayConfig.pageNumbersBefore; ++i) {
+
+                addPageLink(i);
+            }
+            addEllipsis();
+            for (let i = (pageCount - displayConfig.pageNumbersMiddle - displayConfig.pageNumbersAfter); i < pageCount; ++i) {
+
+                addPageLink(i);
+            }
+        }
+        else {
+            for (let i = 0; i < displayConfig.pageNumbersBefore; ++i) {
+
+                addPageLink(i);
+            }
+            addEllipsis();
+
+            let start = info.page - Math.floor(displayConfig.pageNumbersMiddle / 2);
+            for (let i = 0; i < displayConfig.pageNumbersMiddle; ++i) {
+
+                addPageLink(start + i);
+            }
+
+            addEllipsis();
+            for (let i = (pageCount - displayConfig.pageNumbersAfter); i < pageCount; ++i) {
+
+                addPageLink(i);
+            }
+        }
+
+        let next = $('<li><a href="#"><span uk-pagination-next></span></a></li>');
+        container.append(next);
+        next.on('click', (e) => {
+
+            onPageNumberChange(1, true);
+            e.preventDefault();
+        });
+
+        return container[0];
     }
 }
