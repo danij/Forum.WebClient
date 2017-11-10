@@ -6,10 +6,48 @@ export module Views {
 
         pageNumbersBefore: number,
         pageNumbersMiddle: number,
-        pageNumbersAfter: number
+        pageNumbersAfter: number,
+        showSpinnerAfterMilliSeconds: number;
     }
 
     declare const displayConfig: DisplayConfig;
+
+    export async function changeContent(containerElement: HTMLElement, handler: () => Promise<HTMLElement>) {
+
+        let spinner = $('<div class="spinnerElement"><div uk-spinner></div></div>');
+        let container = $(containerElement);
+        let disabledElement = $('<div class="disabledElement"></div>');
+
+        let timer = setTimeout(() => {
+
+            container.append(disabledElement);
+            container.append(spinner);
+            spinner.show();
+
+        }, displayConfig.showSpinnerAfterMilliSeconds);
+
+        try
+        {
+            let newPageContent = await handler();
+
+            //no more need to show the spinner
+            clearTimeout(timer);
+
+            if (null == newPageContent)
+            {
+                disabledElement.remove();
+                return;
+            }
+
+            container.empty();
+            container.append(newPageContent);
+        }
+        finally
+        {
+            spinner.remove();
+            disabledElement.remove();
+        }
+    }
 
     export function createDropdown(header: string | HTMLElement, content: any, properties?: any) {
 

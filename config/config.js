@@ -9,5 +9,6 @@ window.displayConfig = {
 
     pageNumbersBefore: 3,
     pageNumbersMiddle: 5,
-    pageNumbersAfter: 3
+    pageNumbersAfter: 3,
+    showSpinnerAfterMilliSeconds: 1000
 };

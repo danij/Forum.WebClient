@@ -48,7 +48,7 @@ export class UsersPage implements Pages.Page {
 
     private refreshList(): void {
 
-        Pages.changeContent($('#pageContentContainer .users-list')[0], async () => {
+        Views.changeContent($('#pageContentContainer .users-list')[0], async () => {
 
             let userCollection = await this.getAllUsers();
 
