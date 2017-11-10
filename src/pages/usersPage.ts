@@ -24,6 +24,8 @@ export class UsersPage implements Pages.Page {
 
             let userCollection = await this.getAllUsers();
 
+            if (null == userCollection) return null;
+
             let elements = UsersView.createUsersPageContent(userCollection,
                 (value: number) => this.onPageNumberChange(value));
 
@@ -51,6 +53,8 @@ export class UsersPage implements Pages.Page {
         Views.changeContent($('#pageContentContainer .users-list')[0], async () => {
 
             let userCollection = await this.getAllUsers();
+
+            if (null == userCollection) return null;
 
             let newTopPaginationControl = Views.createPaginationControl(userCollection,
                 (value: number) => this.onPageNumberChange(value));
