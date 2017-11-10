@@ -15,8 +15,8 @@ export module UserRepository {
         lastSeen: number;
         threadCount: number;
         messageCount: number;
-        upVotes: number;
-        downVotes: number;
+        receivedUpVotes: number;
+        receivedDownVotes: number;
     }
 
     export interface UserCollection extends CommonEntities.PaginationInfo {

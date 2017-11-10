@@ -114,16 +114,16 @@ export module UsersView {
             '<span href="MyMessages" class="align-left">\n' +
             '    <span>Up votes</span>\n' +
             '</span>\n' +
-            '    <span class="uk-badge align-right">{upVotes}</span>\n' +
+            '    <span class="uk-badge align-right">{receivedUpVotes}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{upVotes}', DisplayHelpers.intToString(user.upVotes))));
+            '</li>').replace('{receivedUpVotes}', DisplayHelpers.intToString(user.receivedUpVotes))));
         content.append($(('<li>\n' +
             '<span href="MyMessages" class="align-left">\n' +
             '    <span>Down votes</span>\n' +
             '</span>\n' +
-            '    <span class="uk-badge align-right">{downVotes}</span>\n' +
+            '    <span class="uk-badge align-right">{receivedDownVotes}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{downVotes}', DisplayHelpers.intToString(user.downVotes))));
+            '</li>').replace('{receivedDownVotes}', DisplayHelpers.intToString(user.receivedDownVotes))));
 
         return Views.createDropdown(user.name, content, {
             mode: 'hover',
@@ -259,15 +259,15 @@ export module UsersView {
 
         wrapper.append($(('<div>\n' +
             '    <div class="user-up-votes">\n' +
-            '        <span class="uk-label">&plus; {upVotes}</span>\n' +
+            '        <span class="uk-label">&plus; {receivedUpVotes}</span>\n' +
             '    </div>\n' +
             '    <div class="user-down-votes">\n' +
-            '        <span class="uk-label">&minus; {downVotes}</span>\n' +
+            '        <span class="uk-label">&minus; {receivedDownVotes}</span>\n' +
             '    </div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
-                .replace('{upVotes}', DisplayHelpers.intToString(user.upVotes))
-                .replace('{downVotes}', DisplayHelpers.intToString(user.downVotes))));
+                .replace('{receivedUpVotes}', DisplayHelpers.intToString(user.receivedUpVotes))
+                .replace('{receivedDownVotes}', DisplayHelpers.intToString(user.receivedDownVotes))));
 
         return result[0];
     }
