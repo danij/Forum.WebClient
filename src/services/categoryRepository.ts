@@ -35,9 +35,27 @@ export module CategoryRepository {
 
     export async function getRootCategories(): Promise<Category[]> {
 
-        return (await RequestHandler.get({
+        return sortChildCategories((await RequestHandler.get({
             path: 'categories/root'
-        }) as CategoryCollection).categories;
+        }) as CategoryCollection).categories);
+    }
+
+    function sortChildCategories(categories: Category[]): Category[] {
+
+        if (null == categories) return null;
+
+        for (let category of categories) {
+
+            if (category.children && category.children.length) {
+
+                category.children.sort((first, second) => {
+
+                    return second.displayOrder - first.displayOrder;
+                })
+            }
+        }
+
+        return categories;
     }
 }
 

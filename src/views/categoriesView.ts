@@ -34,13 +34,35 @@ export module CategoriesView {
                 row.append(nameColumn);
 
                 nameColumn.append($('<span class="uk-icon" uk-icon="icon: folder"></span>'));
+
                 let nameLink = $('<a class="uk-button uk-button-text" href="#"></a>');
                 nameColumn.append(nameLink);
                 nameLink.text(' ' + category.name);
                 nameColumn.append($('<br/>'));
+
                 let description = $('<span class="category-description uk-text-meta"></span>');
                 nameColumn.append(description);
                 description.text(category.description);
+
+                if (category.children && category.children.length) {
+
+                    let childCategoryElement = $('<span class="category-children uk-text-small"></span>');
+                    nameColumn.append(' ');
+                    nameColumn.append(childCategoryElement);
+
+                    for (let i = 0; i < category.children.length; ++i) {
+
+                        let childCategory = category.children[i];
+
+                        let element = $('<a></a>');
+                        childCategoryElement.append(element);
+                        element.text(childCategory.name);
+
+                        if (i < (category.children.length - 1)) {
+                            childCategoryElement.append(' · ');
+                        }
+                    }
+                }
             }
             {
                 let tagColumn = $('<td class="uk-text-center uk-table-shrink"></td>');
