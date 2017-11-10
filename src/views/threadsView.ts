@@ -11,11 +11,11 @@ export module ThreadsView {
         let result = $("<div></div>");
 
         result.append(createThreadListSortControls());
-        result.append(Views.createPaginationControl(collection));
+        result.append(Views.createPaginationControl(collection, null));
 
         result.append(createThreadsTable(collection.threads));
 
-        result.append(Views.createPaginationControl(collection));
+        result.append(Views.createPaginationControl(collection, null));
 
         return result[0];
     }

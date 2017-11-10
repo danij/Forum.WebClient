@@ -35,7 +35,7 @@ export module Views {
         return element[0];
     }
 
-    export declare type PageNumberChangeCallback = (value: number, relative: boolean) => void;
+    export declare type PageNumberChangeCallback = (value: number) => void;
 
     export function createPaginationControl(info: CommonEntities.PaginationInfo,
                                             onPageNumberChange: Views.PageNumberChangeCallback) {
@@ -44,17 +44,20 @@ export module Views {
 
         let pageCount = CommonEntities.getPageCount(info);
 
-        let previous = $('<li><a><span uk-pagination-previous></span></a></li>');
-        container.append(previous);
-        previous.on('click', (e) => {
+        if (info.page > 0) {
 
-            onPageNumberChange(-1, true);
-            e.preventDefault();
-        });
+            let previous = $('<li><a><span uk-pagination-previous></span></a></li>');
+            container.append(previous);
+            previous.on('click', (e) => {
+
+                onPageNumberChange(info.page - 1);
+                e.preventDefault();
+            });
+        }
 
         function pageClickCallback(e) {
 
-            onPageNumberChange(parseInt((e.target as HTMLAnchorElement).text) - 1, false);
+            onPageNumberChange(parseInt((e.target as HTMLAnchorElement).text) - 1);
             e.preventDefault();
         }
 
@@ -83,7 +86,7 @@ export module Views {
             span.on('click', () => {
 
                 const pageNumber = (parseInt(prompt("Please enter the page number:")) || 1) - 1;
-                onPageNumberChange(pageNumber, false);
+                onPageNumberChange(pageNumber);
             });
         }
 
@@ -141,13 +144,16 @@ export module Views {
             }
         }
 
-        let next = $('<li><a href="#"><span uk-pagination-next></span></a></li>');
-        container.append(next);
-        next.on('click', (e) => {
+        if (info.page < (pageCount - 1)) {
 
-            onPageNumberChange(1, true);
-            e.preventDefault();
-        });
+            let next = $('<li><a href="#"><span uk-pagination-next></span></a></li>');
+            container.append(next);
+            next.on('click', (e) => {
+
+                onPageNumberChange(info.page + 1);
+                e.preventDefault();
+            });
+        }
 
         return container[0];
     }

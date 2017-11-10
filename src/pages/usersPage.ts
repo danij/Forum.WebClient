@@ -25,7 +25,7 @@ export class UsersPage implements Pages.Page {
             let userCollection = await this.getAllUsers();
 
             let elements = UsersView.createUsersPageContent(userCollection,
-                (value: number, relative: boolean) => this.onPageNumberChange(value, relative));
+                (value: number) => this.onPageNumberChange(value));
 
             this.setupSortControls(elements.sortControls);
 
@@ -53,12 +53,12 @@ export class UsersPage implements Pages.Page {
             let userCollection = await this.getAllUsers();
 
             let newTopPaginationControl = Views.createPaginationControl(userCollection,
-                (value: number, relative: boolean) => this.onPageNumberChange(value, relative));
+                (value: number) => this.onPageNumberChange(value));
             $(this.topPaginationControl).replaceWith(newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
             let newBottomPaginationControl = Views.createPaginationControl(userCollection,
-                (value: number, relative: boolean) => this.onPageNumberChange(value, relative));
+                (value: number) => this.onPageNumberChange(value));
             $(this.bottomPaginationControl).replaceWith(newBottomPaginationControl);
             this.bottomPaginationControl = newBottomPaginationControl;
 
@@ -83,19 +83,9 @@ export class UsersPage implements Pages.Page {
         });
     }
 
-    private onPageNumberChange(newPageNumber: number, relative: boolean): void {
+    private onPageNumberChange(newPageNumber: number): void {
 
-        let newValue = newPageNumber;
-
-        if (relative) {
-
-            newValue = Math.max(0, Math.min(this.pageNumber + newPageNumber, this.pageCount - 1));
-        }
-
-        if (newValue != this.pageNumber) {
-
-            this.pageNumber = newValue;
-            this.refreshList();
-        }
+        this.pageNumber = newPageNumber;
+        this.refreshList();
     }
 }
