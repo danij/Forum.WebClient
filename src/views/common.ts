@@ -1,6 +1,9 @@
 import {CommonEntities} from "../services/commonEntities";
+import {DOMHelpers} from "../helpers/domHelpers";
 
 export module Views {
+
+    import DOMAppender = DOMHelpers.DOMAppender;
 
     interface DisplayConfig {
 
@@ -49,7 +52,7 @@ export module Views {
         }
     }
 
-    export function createDropdown(header: string | HTMLElement, content: any, properties?: any) {
+    export function createDropdown(header: string | DOMAppender, content: any, properties?: any, classes?: any): DOMAppender {
 
         let propertiesString = '';
         if (null != properties) {
@@ -57,20 +60,31 @@ export module Views {
             propertiesString = Object.keys(properties).map(key => `${key}: ${properties[key]}`).join('; ');
         }
 
-        let element = $(`<div uk-dropdown="${propertiesString}"></div>`);
+        let classString = '';
+        if (null != classes) {
+            classString = `class="${classes}"`
+        }
 
-        let nav = $('<ul class="uk-nav uk-dropdown-nav"></ul>');
+        let element = new DOMAppender(`<div uk-dropdown="${propertiesString}" ${classString}>`, '</div>');
+
+        let nav = new DOMAppender('<ul class="uk-nav uk-dropdown-nav">', '</ul>');
         element.append(nav);
 
         if (null != header) {
-            let headerElement = $('<li class="uk-nav-header"></li>');
+            let headerElement = new DOMAppender('<li class="uk-nav-header">', '</li>');
             nav.append(headerElement);
-            headerElement.append(header);
+
+            if (header instanceof DOMAppender) {
+                headerElement.append(header);
+            }
+            else {
+                headerElement.appendString(header);
+            }
         }
 
         nav.append(content);
 
-        return element[0];
+        return element;
     }
 
     export declare type PageNumberChangeCallback = (value: number) => void;

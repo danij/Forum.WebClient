@@ -1,8 +1,11 @@
 import {UserRepository} from "../services/userRepository";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {Views} from "./common";
+import {DOMHelpers} from "../helpers/domHelpers";
 
 export module UsersView {
+
+    import DOMAppender = DOMHelpers.DOMAppender;
 
     function getUserLogoColor(id: string): string {
 
@@ -24,72 +27,69 @@ export module UsersView {
         return `rgb(${r % 224}, ${g % 224}, ${b % 224})`;
     }
 
-    export function createUserLogoSmall(user: UserRepository.User): HTMLElement {
+    export function createUserLogoSmall(user: UserRepository.User): DOMAppender {
 
-        let container = $('<div></div>');
+        let container = new DOMAppender('<div>', '</div>');
 
-        let element = $('<div class="author-logo pointer-cursor"></div>');
+        let element = new DOMAppender(`<div class="author-logo pointer-cursor" style="color: ${getUserLogoColor(user.id)}">`, '</div>');
         container.append(element);
-        element.text(user.name[0]);
-        element.css('color', getUserLogoColor(user.id));
+        element.appendString(user.name[0]);
 
-        let dropdown = $(createUserDropdown(user));
+        let dropdown = createUserDropdown(user, 'user-info');
         container.append(dropdown);
-        dropdown.addClass('user-info');
 
-        return container[0];
+        return container;
     }
 
-    export function createUserLogoForList(user: UserRepository.User): HTMLElement {
+    export function createUserLogoForList(user: UserRepository.User): DOMAppender {
 
-        let element = $('<div class="text-avatar"></div>');
-        element.text(user.name[0]);
-        element.css('color', getUserLogoColor(user.id));
+        let element = new DOMAppender(`<div class="text-avatar" style="color: ${getUserLogoColor(user.id)}">`, '</div>');
+        element.appendString(user.name[0]);
 
-        return element[0];
+        return element;
     }
 
-    export function createAuthorSmall(user: UserRepository.User): HTMLElement {
+    export function createAuthorSmall(user: UserRepository.User): DOMAppender {
 
-        let element = $('<span class="author"></span>');
+        let element = new DOMAppender('<span class="author">', '</span>');
 
-        let link = $('<a href="user"></a>');
+        let link = new DOMAppender('<a href="user">', '</a>');
         element.append(link);
-        link.text(user.name);
+        link.appendString(user.name);
 
-        return element[0];
+        return element;
     }
 
-    export function createAuthorSmallWithColon(user: UserRepository.User): HTMLElement {
+    export function createAuthorSmallWithColon(user: UserRepository.User): DOMAppender {
 
-        let element = $(createAuthorSmall(user));
+        let element = createAuthorSmall(user);
 
-        element.append(':&nbsp;');
+        element.appendRaw(':&nbsp;');
 
-        return element[0];
+        return element;
     }
 
-    function createUserDropdown(user: UserRepository.User): HTMLElement {
+    function createUserDropdown(user: UserRepository.User, classString?: string): DOMAppender {
 
-        let content = $('<div></div>');
-        content.append($(('<li>\n' +
+        let content = new DOMAppender('<div>', '</div>');
+        content.appendRaw(('<li>\n' +
             '    <a href="UserThreads" class="align-left">\n' +
             '        <span>Threads</span>\n' +
             '    </a>\n' +
             '    <span class="uk-badge align-right">{nrOfThreads}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount))));
+            '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount)));
 
-        content.append($(('<li>\n' +
+        content.appendRaw(('<li>\n' +
             '    <a href="UserMessages" class="align-left">\n' +
             '        <span>Messages</span>\n' +
             '    </a>\n' +
             '    <span class="uk-badge align-right">{nrOfMessages}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount))));
+            '</li>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));
 
-        content.append($('<li class="uk-nav-header">Activity</li>'));
-        content.append($(('<li>\n' +
+        content.appendRaw('<li class="uk-nav-header">Activity</li>');
+        content.appendRaw(('<li>\n' +
             '<span href="MyThreads" class="align-left">\n' +
             '    <span>Joined</span>\n' +
             '</span>\n' +
@@ -97,9 +97,9 @@ export module UsersView {
             '    <div class="uk-clearfix"></div>\n' +
             '</li>')
             .replace('{joinedExpanded}', DisplayHelpers.getFullDateTime(user.created))
-            .replace('{joinedAgo}', DisplayHelpers.getAgoTimeShort(user.created))));
+            .replace('{joinedAgo}', DisplayHelpers.getAgoTimeShort(user.created)));
 
-        content.append($(('<li>\n' +
+        content.appendRaw(('<li>\n' +
             '<span href="MyMessages" class="align-left">\n' +
             '    <span>Last seen</span>\n' +
             '</span>\n' +
@@ -107,28 +107,28 @@ export module UsersView {
             '    <div class="uk-clearfix"></div>\n' +
             '</li>')
             .replace('{lastSeenExpanded}', DisplayHelpers.getFullDateTime(user.lastSeen))
-            .replace('{lastSeenAgo}', DisplayHelpers.getAgoTimeShort(user.lastSeen))));
+            .replace('{lastSeenAgo}', DisplayHelpers.getAgoTimeShort(user.lastSeen)));
 
-        content.append($('<li class="uk-nav-header">Feedback Received</li>'));
-        content.append($(('<li>\n' +
+        content.appendRaw('<li class="uk-nav-header">Feedback Received</li>');
+        content.appendRaw(('<li>\n' +
             '<span href="MyMessages" class="align-left">\n' +
             '    <span>Up votes</span>\n' +
             '</span>\n' +
             '    <span class="uk-badge align-right">{receivedUpVotes}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{receivedUpVotes}', DisplayHelpers.intToString(user.receivedUpVotes))));
-        content.append($(('<li>\n' +
+            '</li>').replace('{receivedUpVotes}', DisplayHelpers.intToString(user.receivedUpVotes)));
+        content.appendRaw(('<li>\n' +
             '<span href="MyMessages" class="align-left">\n' +
             '    <span>Down votes</span>\n' +
             '</span>\n' +
             '    <span class="uk-badge align-right">{receivedDownVotes}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{receivedDownVotes}', DisplayHelpers.intToString(user.receivedDownVotes))));
+            '</li>').replace('{receivedDownVotes}', DisplayHelpers.intToString(user.receivedDownVotes)));
 
         return Views.createDropdown(user.name, content, {
             mode: 'hover',
-            pos: 'bottom-right'
-        });
+            pos: 'bottom-right',
+        }, classString);
     }
 
     export class UsersPageContent {
@@ -188,7 +188,7 @@ export module UsersView {
 
     export function createUserListContent(users: UserRepository.User[]): HTMLElement {
 
-        let usersListGrid = $('<div class="uk-grid-match uk-text-center" uk-grid></div>');
+        let usersListGrid = new DOMAppender('<div class="uk-grid-match uk-text-center" uk-grid>', '</div>');
 
         if (users && users.length) {
             for (let user of users)
@@ -199,45 +199,45 @@ export module UsersView {
             }
         }
         else {
-            usersListGrid.append($('<h3>No users found</h3>'));
+            usersListGrid.appendRaw('<h3>No users found</h3>');
         }
 
-        return usersListGrid[0];
+        return usersListGrid.toElement();
     }
 
-    function createUserInList(user: UserRepository.User): HTMLElement {
+    function createUserInList(user: UserRepository.User): DOMAppender {
 
-        let result = $('<div></div>');
+        let result = new DOMAppender('<div>', '</div>');
 
-        let card = $('<div class="uk-card uk-card-default uk-card-body"></div>');
+        let card = new DOMAppender('<div class="uk-card uk-card-default uk-card-body">', '</div>');
         result.append(card);
 
-        let wrapper = $('<div class="user-in-list"></div>');
+        let wrapper = new DOMAppender('<div class="user-in-list">', '</div>');
         card.append(wrapper);
 
         wrapper.append(createUserLogoForList(user));
 
-        let userName = $('<div class="username uk-text-small"></div>');
+        let userName = new DOMAppender('<div class="username uk-text-small">', '</div>');
         wrapper.append(userName);
-        userName.text(user.name);
+        userName.appendString(user.name);
 
-        let userTitle = $('<div class="usertitle uk-text-small"></div>');
+        let userTitle = new DOMAppender('<div class="usertitle uk-text-small">', '</div>');
         wrapper.append(userTitle);
-        userTitle.text(user.title);
+        userTitle.appendString(user.title);
 
-        wrapper.append($(('<div>\n' +
+        wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left"><a href="#">Threads</a></div>\n' +
             '    <div class="uk-float-right">{nrOfThreads}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount))));
+            '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount)));
 
-        wrapper.append($(('<div>\n' +
+        wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left"><a href="#">Messages</a></div>\n' +
             '    <div class="uk-float-right">{nrOfMessages}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
-            '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount))));
+            '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));
 
-        wrapper.append($(('<div>\n' +
+        wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left">Joined</div>\n' +
             '    <div class="uk-float-right min-date">\n' +
             '        <span title="{JoinedExpanded}" uk-tooltip>{JoinedShort}</span>\n' +
@@ -245,9 +245,9 @@ export module UsersView {
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
                 .replace('{JoinedExpanded}', DisplayHelpers.getFullDateTime(user.created))
-                .replace('{JoinedShort}', DisplayHelpers.getShortDate(user.created))));
+                .replace('{JoinedShort}', DisplayHelpers.getShortDate(user.created)));
 
-        wrapper.append($(('<div>\n' +
+        wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left">Last Seen</div>\n' +
             '    <div class="uk-float-right min-date">\n' +
             '        <span title="{LastSeenExpanded}" uk-tooltip>{LastSeenShort}</span>\n' +
@@ -255,9 +255,9 @@ export module UsersView {
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
                 .replace('{LastSeenExpanded}', DisplayHelpers.getFullDateTime(user.lastSeen))
-                .replace('{LastSeenShort}', DisplayHelpers.getShortDate(user.lastSeen))));
+                .replace('{LastSeenShort}', DisplayHelpers.getShortDate(user.lastSeen)));
 
-        wrapper.append($(('<div>\n' +
+        wrapper.appendRaw(('<div>\n' +
             '    <div class="user-up-votes">\n' +
             '        <span class="uk-label">&plus; {receivedUpVotes}</span>\n' +
             '    </div>\n' +
@@ -267,8 +267,8 @@ export module UsersView {
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
                 .replace('{receivedUpVotes}', DisplayHelpers.intToString(user.receivedUpVotes))
-                .replace('{receivedDownVotes}', DisplayHelpers.intToString(user.receivedDownVotes))));
+                .replace('{receivedDownVotes}', DisplayHelpers.intToString(user.receivedDownVotes)));
 
-        return result[0];
+        return result;
     }
 }

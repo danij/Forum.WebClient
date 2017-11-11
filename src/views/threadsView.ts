@@ -3,8 +3,11 @@ import {Views} from "./common";
 import {UsersView} from "./usersView";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {TagsView} from "./tagsView";
+import {DOMHelpers} from "../helpers/domHelpers";
 
 export module ThreadsView {
+
+    import DOMAppender = DOMHelpers.DOMAppender;
 
     export class ThreadsPageContent {
 
@@ -15,7 +18,7 @@ export module ThreadsView {
     }
 
     export function createThreadsPageContent(collection: ThreadRepository.ThreadCollection,
-                                           onPageNumberChange: Views.PageNumberChangeCallback) {
+                                             onPageNumberChange: Views.PageNumberChangeCallback) {
 
         collection = collection || ThreadRepository.defaultThreadCollection();
 
@@ -26,7 +29,9 @@ export module ThreadsView {
         resultList.append(result.sortControls = createThreadListSortControls());
         resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange));
 
-        resultList.append(createThreadsTable(collection.threads));
+        let tableContainer = $('<div class="threads-table"></div>');
+        resultList.append(tableContainer);
+        tableContainer.append(createThreadsTable(collection.threads));
 
         resultList.append(result.paginationBottom = Views.createPaginationControl(collection, null));
 
@@ -59,77 +64,76 @@ export module ThreadsView {
 
     export function createThreadsTable(threads: ThreadRepository.Thread[]): HTMLElement {
 
-        let tableContainer = $('<div class="threads-table"></div>');
-        let table = $('<table class="uk-table uk-table-divider uk-table-middle"></table>');
-        tableContainer.append(table);
+        let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
 
-        let tableHeader = $('<thead>\n' +
+        let tableHeader = '<thead>\n' +
             '    <tr>\n' +
             '        <th class="uk-table-expand">Thread</th>\n' +
             '        <th class="uk-text-center thread-created-header uk-table-shrink">Added</th>\n' +
             '        <th class="uk-text-center uk-table-shrink">Statistics</th>\n' +
             '        <th class="uk-text-right latest-message-header">Latest Message</th>\n' +
             '    </tr>\n' +
-            '</thead>');
-        table.append(tableHeader);
-        let tbody = $('<tbody></tbody>');
+            '</thead>';
+        table.appendRaw(tableHeader);
+
+        let tbody = new DOMAppender('<tbody>', '</tbody>');
         table.append(tbody);
 
         for (let thread of threads) {
 
             if (null == thread) continue;
 
-            let row = $('<tr></tr>');
+            let row = new DOMAppender('<tr>', '</tr>');
             tbody.append(row);
             {
-                let nameColumn = $('<td class="uk-table-expand"></td>');
+                let nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
                 row.append(nameColumn);
 
                 const iconClass = thread.visitedSinceLastChange ? 'uk-icon' : 'uk-icon-button';
                 const icon = thread.pinned ? 'star' : 'forward';
-                nameColumn.append($(`<span class="${iconClass}" uk-icon="icon: ${icon}"></span>`));
+                nameColumn.append(new DOMAppender(`<span class="${iconClass}" uk-icon="icon: ${icon}">`, '</span>'));
 
-                let threadLink = $('<a class="uk-button uk-button-text" href="#"></a>');
+                let threadLink = new DOMAppender('<a class="uk-button uk-button-text" href="#">', '</a>');
                 nameColumn.append(threadLink);
-                threadLink.text(' ' + thread.name);
+                threadLink.appendString(' ' + thread.name);
 
-                let details = $('<div class="thread-tags"></div>');
+                let details = new DOMAppender('<div class="thread-tags">', '</div>');
                 nameColumn.append(details);
 
                 if (thread.voteScore < 0) {
-                    details.append($(`<span class="uk-label thread-score-down">− ${DisplayHelpers.intToString(thread.voteScore)}</span>`));
+                    details.appendRaw(`<span class="uk-label thread-score-down">− ${DisplayHelpers.intToString(thread.voteScore)}</span>`);
                 }
                 else if (thread.voteScore == 0) {
-                    details.append($(`<span class="uk-label thread-score-up">0</span>`));
+                    details.appendRaw(`<span class="uk-label thread-score-up">0</span>`);
                 }
                 else {
-                    details.append($(`<span class="uk-label thread-score-up">+ ${DisplayHelpers.intToString(thread.voteScore)}</span>`));
+                    details.appendRaw(`<span class="uk-label thread-score-up">+ ${DisplayHelpers.intToString(thread.voteScore)}</span>`);
                 }
-                details.append(' ');
+                details.appendRaw(' ');
 
                 for (let tag of thread.tags) {
 
                     if (null == tag) continue;
 
                     details.append(TagsView.createTagElement(tag));
-                    details.append(' ');
+                    details.appendRaw(' ');
                 }
             }
             {
-                let tagColumn = $('<td class="thread-created uk-text-center uk-table-shrink"></td>');
-                row.append(tagColumn);
+                let createdColumn = new DOMAppender('<td class="thread-created uk-text-center uk-table-shrink">', '</td>');
+                row.append(createdColumn);
 
-                tagColumn.append(UsersView.createUserLogoSmall(thread.createdBy));
-                tagColumn.append(UsersView.createAuthorSmall(thread.createdBy));
+                createdColumn.append(UsersView.createUserLogoSmall(thread.createdBy));
+                createdColumn.append(UsersView.createAuthorSmall(thread.createdBy));
 
-                tagColumn.append($(('<div class="thread-message-time uk-text-meta">\n' +
+                createdColumn.appendRaw(('<div class="thread-message-time uk-text-meta">\n' +
                     '    <span title="{AddedExpanded}" uk-tooltip>{AddedAgo}</span>\n' +
                     '</div>')
-                        .replace('{AddedExpanded}', DisplayHelpers.getFullDateTime(thread.created))
-                        .replace('{AddedAgo}', DisplayHelpers.getAgoTimeShort(thread.created))));
+                    .replace('{AddedExpanded}', DisplayHelpers.getFullDateTime(thread.created))
+                    .replace('{AddedAgo}', DisplayHelpers.getAgoTimeShort(thread.created)));
             }
             {
-                let statisticsColumn = $(('<td class="thread-statistics uk-table-shrink">\n' +
+                let statisticsColumn = ('<td class="thread-statistics uk-table-shrink">\n' +
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
@@ -147,36 +151,35 @@ export module ThreadsView {
                     '</td>')
                     .replace('{nrOfMessages}', DisplayHelpers.intToString(thread.messageCount))
                     .replace('{nrOfViews}', DisplayHelpers.intToString(thread.visited))
-                    .replace('{nrOfSubscribed}', DisplayHelpers.intToString(thread.subscribedUsersCount))
-                );
-                row.append(statisticsColumn);
+                    .replace('{nrOfSubscribed}', DisplayHelpers.intToString(thread.subscribedUsersCount));
+                row.appendRaw(statisticsColumn);
             }
             {
-                let latestMessageColumn = $('<td class="latest-message uk-text-center"></td>');
+                let latestMessageColumn = new DOMAppender('<td class="latest-message uk-text-center">', '</td>');
                 row.append(latestMessageColumn);
 
                 const latestMessage = thread.latestMessage;
 
                 latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
-                let authorElement = $(UsersView.createAuthorSmallWithColon(latestMessage.createdBy));
+                let authorElement = UsersView.createAuthorSmallWithColon(latestMessage.createdBy);
                 latestMessageColumn.append(authorElement);
 
                 let recentMessageTime = $('<span class="uk-text-meta" uk-tooltip></span>');
-                authorElement.append(recentMessageTime);
 
                 recentMessageTime.text(DisplayHelpers.getAgoTimeShort(latestMessage.created));
                 recentMessageTime.attr('title', DisplayHelpers.getFullDateTime(latestMessage.created));
+                authorElement.appendElement(recentMessageTime[0]);
 
                 let messageContent = latestMessage.content || 'empty';
 
                 let messageLink = $('<a class="recent-message-link" href="#" uk-tooltip></a>');
-                latestMessageColumn.append(messageLink);
                 messageLink.text(messageContent);
                 messageLink.attr('title', messageContent);
+                latestMessageColumn.appendElement(messageLink[0]);
             }
         }
 
-        return tableContainer[0];
+        return table.toElement();
     }
 }
