@@ -48,7 +48,7 @@ export module ThreadsView {
             '                Sort by:\n' +
             '                <label><input class="uk-radio" type="radio" name="orderBy" value="name" checked> Name</label>\n' +
             '                <label><input class="uk-radio" type="radio" name="orderBy" value="created"> Created</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" value="lastupdated"> Last Updated</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="latestmessagecreated"> Latest Message Created</label>\n' +
             '                <label><input class="uk-radio" type="radio" name="orderBy" value="messagecount"> Message Count</label>\n' +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
