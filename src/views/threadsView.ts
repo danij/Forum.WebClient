@@ -6,36 +6,50 @@ import {TagsView} from "./tagsView";
 
 export module ThreadsView {
 
-    export function createThreadList(collection: ThreadRepository.ThreadCollection): HTMLElement {
+    export class ThreadsPageContent {
 
-        let result = $("<div></div>");
+        sortControls: HTMLElement;
+        paginationTop: HTMLElement;
+        paginationBottom: HTMLElement;
+        list: HTMLElement
+    }
 
-        result.append(createThreadListSortControls());
-        result.append(Views.createPaginationControl(collection, null));
+    export function createThreadsPageContent(collection: ThreadRepository.ThreadCollection,
+                                           onPageNumberChange: Views.PageNumberChangeCallback) {
 
-        result.append(createThreadsTable(collection.threads));
+        collection = collection || ThreadRepository.defaultThreadCollection();
 
-        result.append(Views.createPaginationControl(collection, null));
+        let result = new ThreadsPageContent();
 
-        return result[0];
+        let resultList = $("<div></div>");
+
+        resultList.append(result.sortControls = createThreadListSortControls());
+        resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange));
+
+        resultList.append(createThreadsTable(collection.threads));
+
+        resultList.append(result.paginationBottom = Views.createPaginationControl(collection, null));
+
+        result.list = resultList[0];
+        return result;
     }
 
     function createThreadListSortControls(): HTMLElement {
 
-        return $('<div class="users-list-header">\n' +
+        return $('<div class="threads-list-header">\n' +
             '    <form>\n' +
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
-            '            <div class="user-list-sort-order">\n' +
+            '            <div class="threads-list-sort-order">\n' +
             '                Sort by:\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" checked> Name</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy"> Created</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy"> Last Updated</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy"> Message Count</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="name" checked> Name</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="created"> Created</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="lastupdated"> Last Updated</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="messagecount"> Message Count</label>\n' +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
-            '                <select class="uk-select" name="orderDirection">\n' +
-            '                    <option>Ascending</option>\n' +
-            '                    <option>Descending</option>\n' +
+            '                <select class="uk-select" name="sortOrder">\n' +
+            '                    <option value="ascending">Ascending</option>\n' +
+            '                    <option value="descending">Descending</option>\n' +
             '                </select>\n' +
             '            </div>\n' +
             '        </div>\n' +
@@ -148,7 +162,7 @@ export module ThreadsView {
                 let authorElement = $(UsersView.createAuthorSmallWithColon(latestMessage.createdBy));
                 latestMessageColumn.append(authorElement);
 
-                let recentMessageTime = $('<span class="uk-text-meta" ></span>');
+                let recentMessageTime = $('<span class="uk-text-meta" uk-tooltip></span>');
                 authorElement.append(recentMessageTime);
 
                 recentMessageTime.text(DisplayHelpers.getAgoTimeShort(latestMessage.created));

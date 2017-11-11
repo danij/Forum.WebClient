@@ -34,10 +34,28 @@ export module ThreadRepository {
         threads: Thread[];
     }
 
-    export async function getThreads(): Promise<ThreadCollection> {
+    export function defaultThreadCollection(): ThreadCollection {
+
+        return {
+            threads: [],
+            page: 0,
+            pageSize: 1,
+            totalCount: 0,
+        } as ThreadCollection;
+    }
+
+    export interface GetThreadsRequest {
+
+        page: number;
+        orderBy: string;
+        sort: string;
+    }
+
+    export async function getThreads(request: GetThreadsRequest): Promise<ThreadCollection> {
 
         return await RequestHandler.get({
-            path: 'threads'
+            path: 'threads',
+            query: request
         }) as ThreadCollection;
     }
 }
