@@ -136,7 +136,7 @@ export module Views {
                 addPageLink(i);
             }
         }
-        else if (info.page < (displayConfig.pageNumbersAfter + displayConfig.pageNumbersMiddle)) {
+        else if (info.page < (displayConfig.pageNumbersAfter + displayConfig.pageNumbersMiddle - 1)) {
 
             //current page is among the first ones
             for (let i = 0; i < (displayConfig.pageNumbersAfter + displayConfig.pageNumbersMiddle); ++i) {
@@ -149,7 +149,7 @@ export module Views {
                 addPageLink(i);
             }
         }
-        else if (info.page >= (pageCount - (displayConfig.pageNumbersAfter + displayConfig.pageNumbersMiddle))) {
+        else if (info.page > (pageCount - (displayConfig.pageNumbersAfter + displayConfig.pageNumbersMiddle))) {
 
             //current page is among the last ones
             for (let i = 0; i < displayConfig.pageNumbersBefore; ++i) {
