@@ -42,18 +42,31 @@ export module TagsView {
         });
     }
 
+    export class TagsPageContent {
+
+        sortControls: HTMLElement;
+        list: HTMLElement
+    }
+
+    export function createTagsPageContent(tags: TagRepository.Tag[]): TagsPageContent {
+
+        let result = new TagsPageContent();
+
+        let resultList = $("<div></div>");
+
+        resultList.append(result.sortControls = createTagListSortControls());
+
+        let tagsList = $('<div class="tags-list"></div>');
+        resultList.append(tagsList);
+        tagsList.append(this.createTagsList(tags));
+
+        result.list = resultList[0];
+        return result;
+    }
 
     export function createTagsList(tags: TagRepository.Tag[]): HTMLElement {
 
-        let result = $("<div></div>");
-
-        result.append(createTagListSortControls());
-
-        let tagsList = $('<div class="tags-list"></div>');
-        result.append(tagsList);
-
         let tagsListGrid = $('<div class="uk-grid-match uk-text-center" uk-grid></div>');
-        tagsList.append(tagsListGrid);
 
         for (let tag of tags)
         {
@@ -62,7 +75,7 @@ export module TagsView {
             tagsListGrid.append(createTagInList(tag));
         }
 
-        return result[0];
+        return tagsListGrid[0];
     }
 
     function createTagListSortControls(): HTMLElement {
@@ -72,14 +85,14 @@ export module TagsView {
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="user-list-sort-order">\n' +
             '                Sort by:\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" checked> Name</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy"> Thread Count</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy"> Message Count</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="name" checked> Name</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="threadcount"> Thread Count</label>\n' +
+            '                <label><input class="uk-radio" type="radio" name="orderBy" value="messagecount"> Message Count</label>\n' +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
-            '                <select class="uk-select" name="orderDirection">\n' +
-            '                    <option>Ascending</option>\n' +
-            '                    <option>Descending</option>\n' +
+            '                <select class="uk-select" name="sortOrder">\n' +
+            '                    <option value="ascending">Ascending</option>\n' +
+            '                    <option value="descending">Descending</option>\n' +
             '                </select>\n' +
             '            </div>\n' +
             '        </div>\n' +

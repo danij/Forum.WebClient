@@ -16,10 +16,17 @@ export module TagRepository {
         tags: Tag[];
     }
 
-    export async function getTags(): Promise<Tag[]> {
+    export interface GetTagsRequest {
 
-        return (await RequestHandler.get({
-            path: 'tags'
-        }) as TagCollection).tags;
+        orderBy: string;
+        sort: string;
+    }
+
+    export async function getTags(request: GetTagsRequest): Promise<TagCollection> {
+
+        return await RequestHandler.get({
+            path: 'tags',
+            query: request
+        }) as TagCollection;
     }
 }
