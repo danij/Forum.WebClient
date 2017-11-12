@@ -40,7 +40,7 @@ export module DOMHelpers {
         public toElement(): HTMLElement {
 
             const html = this.toString();
-            return $(html)[0];
+            return parseHTML(html);
         }
     }
 
@@ -49,7 +49,7 @@ export module DOMHelpers {
         return $('<div></div>').text(value).html();
     }
 
-    export function toElement(html: string): HTMLElement {
+    export function parseHTML(html: string): HTMLElement {
 
         let element = document.createElement('template');
         element.innerHTML = html;
