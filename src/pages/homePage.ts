@@ -22,4 +22,13 @@ export class HomePage implements Pages.Page {
             return CategoriesView.createCategoriesTable(categories);
         });
     }
+
+    static loadPage(url: string) : boolean {
+
+        if (('/' != url) && (url.indexOf('home/') != 0)) return false;
+
+        new HomePage().display();
+
+        return true;
+    }
 }

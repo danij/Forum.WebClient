@@ -42,6 +42,16 @@ export class UsersPage implements Pages.Page {
         });
     }
 
+
+    static loadPage(url: string) : boolean {
+
+        if (url.indexOf('users/') != 0) return false;
+
+        new UsersPage().display();
+
+        return true;
+    }
+
     private getAllUsers(): Promise<UserRepository.UserCollection> {
 
         return Pages.getOrShowError(UserRepository.getUsers({

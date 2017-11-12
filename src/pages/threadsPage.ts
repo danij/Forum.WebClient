@@ -41,6 +41,16 @@ export class ThreadsPage implements Pages.Page {
         });
     }
 
+
+    static loadPage(url: string) : boolean {
+
+        if (url.indexOf('threads/') != 0) return false;
+
+        new ThreadsPage().display();
+
+        return true;
+    }
+
     private getAllThreads(): Promise<ThreadRepository.ThreadCollection> {
 
         return Pages.getOrShowError(ThreadRepository.getThreads({

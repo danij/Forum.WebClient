@@ -44,6 +44,8 @@ export module MasterPage {
             new UsersPage().display();
             e.preventDefault();
         });
+
+        loadCurrentPage();
     }
 
     export function goTo(url: string, title: string) {
@@ -75,5 +77,39 @@ export module MasterPage {
     export function getUrl(relative: string): string {
 
         return `${masterPageConfig.baseUri}/${relative}`;
+    }
+
+    declare type LoadPageFn = (url: string) => boolean;
+
+    function loadCurrentPage(): void {
+
+        const functions = [
+
+            HomePage.loadPage,
+            TagsPage.loadPage,
+            ThreadsPage.loadPage,
+            UsersPage.loadPage
+        ];
+
+        let location = window.location.toString().toLowerCase();
+        if (location.indexOf(masterPageConfig.baseUri) == 0) {
+            location = location.substr(masterPageConfig.baseUri.length);
+            if (location.length > 0 && location[0] == '/') {
+                location = location.substr(1);
+            }
+            if (location.indexOf('/') < 0) {
+                location = location + '/';
+            }
+        }
+
+        for (let fn of functions) {
+
+            if (fn(location)) {
+                return;
+            }
+        }
+
+        //default
+        new HomePage().display();
     }
 }

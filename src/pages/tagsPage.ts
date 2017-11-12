@@ -31,6 +31,16 @@ export class TagsPage implements Pages.Page {
         });
     }
 
+
+    static loadPage(url: string) : boolean {
+
+        if (url.indexOf('tags/') != 0) return false;
+
+        new TagsPage().display();
+
+        return true;
+    }
+
     private getAllTags(): Promise<TagRepository.TagCollection> {
 
         return Pages.getOrShowError(TagRepository.getTags({

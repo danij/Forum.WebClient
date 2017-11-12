@@ -7,7 +7,4 @@ $(function() {
     RequestHandler.bootstrap();
 
     MasterPage.bootstrap();
-
-    let page = new UsersPage();
-    page.display();
 });
