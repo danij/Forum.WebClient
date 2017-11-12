@@ -48,4 +48,11 @@ export module DOMHelpers {
 
         return $('<div></div>').text(value).html();
     }
+
+    export function toElement(html: string): HTMLElement {
+
+        let element = document.createElement('template');
+        element.innerHTML = html;
+        return element.content.firstChild as HTMLElement;
+    }
 }
