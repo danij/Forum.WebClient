@@ -16,20 +16,21 @@ export class ThreadsPage implements Pages.Page {
     private sortOrder: string = 'ascending';
     private topPaginationControl: HTMLElement;
     private bottomPaginationControl: HTMLElement;
+    private Title: string = 'Tags';
 
     display(): void {
 
-        MasterPage.goTo('threads', 'Threads');
-
-        document.getElementById('ThreadsPageLink').classList.add('uk-active');
+        this.refreshUrl();
 
         Pages.changePage(async () => {
 
             let threadCollection = await this.getAllThreads();
             if (null == threadCollection) return;
 
-            let elements = ThreadsView.createThreadsPageContent(threadCollection,
-                (value: number) => this.onPageNumberChange(value));
+            let elements = ThreadsView.createThreadsPageContent(threadCollection, {
+                    orderBy: this.orderBy,
+                    sortOrder: this.sortOrder
+                }, (value: number) => this.onPageNumberChange(value));
 
             this.setupSortControls(elements.sortControls);
 
@@ -41,13 +42,17 @@ export class ThreadsPage implements Pages.Page {
         });
     }
 
-
-    static loadPage(url: string) : boolean {
+    static loadPage(url: string): boolean {
 
         if (url.indexOf('threads/') != 0) return false;
 
-        new ThreadsPage().display();
+        let page = new ThreadsPage();
 
+        page.orderBy = Pages.getOrderBy(url) || page.orderBy;
+        page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
+        page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
+
+        page.display();
         return true;
     }
 
@@ -90,12 +95,14 @@ export class ThreadsPage implements Pages.Page {
         elements.find('input[type=radio]').on('change', (e) => {
 
             this.orderBy = (e.target as HTMLInputElement).value;
+            this.refreshUrl();
             this.refreshList();
         });
 
         elements.find("select[name='sortOrder']").on('change', (e) => {
 
             this.sortOrder = (e.target as HTMLSelectElement).value;
+            this.refreshUrl();
             this.refreshList();
         });
     }
@@ -103,6 +110,17 @@ export class ThreadsPage implements Pages.Page {
     private onPageNumberChange(newPageNumber: number): void {
 
         this.pageNumber = newPageNumber;
+        this.refreshUrl();
         this.refreshList();
+    }
+
+    private refreshUrl() {
+
+        MasterPage.goTo('threads' + Pages.createUrl({
+            orderBy: this.orderBy,
+            sortOrder: this.sortOrder,
+            pageNumber: this.pageNumber
+        }), 'Threads');
+        document.getElementById('ThreadsPageLink').classList.add('uk-active');
     }
 }

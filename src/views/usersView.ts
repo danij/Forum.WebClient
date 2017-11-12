@@ -140,6 +140,7 @@ export module UsersView {
     }
 
     export function createUsersPageContent(collection: UserRepository.UserCollection,
+                                           info: Views.SortInfo,
                                            onPageNumberChange: Views.PageNumberChangeCallback) {
 
         collection = collection || UserRepository.defaultUserCollection();
@@ -148,7 +149,7 @@ export module UsersView {
 
         let resultList = $("<div></div>");
 
-        resultList.append(result.sortControls = createUserListSortControls());
+        resultList.append(result.sortControls = createUserListSortControls(info));
         resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange));
 
         let usersList = $('<div class="users-list"></div>');
@@ -162,23 +163,23 @@ export module UsersView {
         return result;
     }
 
-    function createUserListSortControls(): HTMLElement {
+    function createUserListSortControls(info: Views.SortInfo): HTMLElement {
 
         return $('<div class="users-list-header">\n' +
             '    <form>\n' +
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="order-by">\n' +
             '                Sort by:\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" value="name" checked> Name</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" value="created"> Created</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" value="lastseen"> Last Seen</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" value="threadcount"> Thread Count</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" value="messagecount"> Message Count</label>\n' +
+            Views.createOrderByLabel('name', 'Name', info) +
+            Views.createOrderByLabel('created', 'Created', info) +
+            Views.createOrderByLabel('lastseen', 'Last Seen', info) +
+            Views.createOrderByLabel('threadcount', 'Thread Count', info) +
+            Views.createOrderByLabel('messagecount', 'Message Count', info) +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
             '                <select class="uk-select" name="sortOrder">\n' +
-            '                    <option value="ascending">Ascending</option>\n' +
-            '                    <option value="descending">Descending</option>\n' +
+            Views.createSortOrderOption('ascending', 'Ascending', info) +
+            Views.createSortOrderOption('descending', 'Descending', info) +
             '                </select>\n' +
             '            </div>\n' +
             '        </div>\n' +

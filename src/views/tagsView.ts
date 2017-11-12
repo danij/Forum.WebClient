@@ -50,13 +50,13 @@ export module TagsView {
         list: HTMLElement
     }
 
-    export function createTagsPageContent(tags: TagRepository.Tag[]): TagsPageContent {
+    export function createTagsPageContent(tags: TagRepository.Tag[], info: Views.SortInfo): TagsPageContent {
 
         let result = new TagsPageContent();
 
         let resultList = $("<div></div>");
 
-        resultList.append(result.sortControls = createTagListSortControls());
+        resultList.append(result.sortControls = createTagListSortControls(info));
 
         let tagsList = $('<div class="tags-list"></div>');
         resultList.append(tagsList);
@@ -80,21 +80,21 @@ export module TagsView {
         return tagsListGrid.toElement();
     }
 
-    function createTagListSortControls(): HTMLElement {
+    function createTagListSortControls(info: Views.SortInfo): HTMLElement {
 
         return $('<div class="tags-list-header">\n' +
             '    <form>\n' +
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="order-by">\n' +
             '                Sort by:\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" value="name" checked> Name</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" value="threadcount"> Thread Count</label>\n' +
-            '                <label><input class="uk-radio" type="radio" name="orderBy" value="messagecount"> Message Count</label>\n' +
+            Views.createOrderByLabel('name', 'Name', info) +
+            Views.createOrderByLabel('threadcount', 'Thread Count', info) +
+            Views.createOrderByLabel('messagecount', 'Message Count', info) +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
             '                <select class="uk-select" name="sortOrder">\n' +
-            '                    <option value="ascending">Ascending</option>\n' +
-            '                    <option value="descending">Descending</option>\n' +
+            Views.createSortOrderOption('ascending', 'Ascending', info) +
+            Views.createSortOrderOption('descending', 'Descending', info) +
             '                </select>\n' +
             '            </div>\n' +
             '        </div>\n' +

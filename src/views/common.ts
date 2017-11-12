@@ -15,6 +15,12 @@ export module Views {
 
     declare const displayConfig: DisplayConfig;
 
+    export interface SortInfo {
+
+        orderBy: string,
+        sortOrder: string
+    }
+
     export async function changeContent(containerElement: HTMLElement, handler: () => Promise<HTMLElement>) {
 
         let spinner = $('<div class="spinnerElement"><div uk-spinner></div></div>');
@@ -29,15 +35,13 @@ export module Views {
 
         }, displayConfig.showSpinnerAfterMilliSeconds);
 
-        try
-        {
+        try {
             let newPageContent = await handler();
 
             //no more need to show the spinner
             clearTimeout(timer);
 
-            if (null == newPageContent)
-            {
+            if (null == newPageContent) {
                 disabledElement.remove();
                 return;
             }
@@ -45,8 +49,7 @@ export module Views {
             container.empty();
             container.append(newPageContent);
         }
-        finally
-        {
+        finally {
             spinner.remove();
             disabledElement.remove();
         }
@@ -209,4 +212,15 @@ export module Views {
 
         return container[0];
     }
+
+    export function createOrderByLabel(value: string, title: string, info: SortInfo) {
+
+        return `                <label><input class="uk-radio" type="radio" name="orderBy" value="${value}" ${value == info.orderBy ? 'checked' : ''}> ${title}</label>\n`;
+    }
+
+    export function createSortOrderOption(value: string, title: string, info: SortInfo) {
+
+        return `                    <option value="${value}" ${value == info.sortOrder ? 'selected' : ''}>${title}</option>\n`;
+    }
+
 }

@@ -4,6 +4,7 @@ import {TagsView} from "../views/tagsView";
 import {Views} from "../views/common";
 import {MasterPage} from "./masterPage";
 
+
 /**
  * Displays a list of all tags with custom sorting
  */
@@ -14,16 +15,17 @@ export class TagsPage implements Pages.Page {
 
     display(): void {
 
-        MasterPage.goTo('tags', 'Tags');
-
-        document.getElementById('TagsPageLink').classList.add('uk-active');
+        this.refreshUrl();
 
         Pages.changePage(async () => {
 
             let tagCollection = await this.getAllTags();
             if (null == tagCollection) return;
 
-            let elements = TagsView.createTagsPageContent(tagCollection.tags);
+            let elements = TagsView.createTagsPageContent(tagCollection.tags, {
+                orderBy: this.orderBy,
+                sortOrder: this.sortOrder
+            });
 
             this.setupSortControls(elements.sortControls);
 
@@ -31,13 +33,16 @@ export class TagsPage implements Pages.Page {
         });
     }
 
-
     static loadPage(url: string) : boolean {
 
         if (url.indexOf('tags/') != 0) return false;
 
-        new TagsPage().display();
+        let page = new TagsPage();
 
+        page.orderBy = Pages.getOrderBy(url) || page.orderBy;
+        page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
+
+        page.display();
         return true;
     }
 
@@ -68,13 +73,24 @@ export class TagsPage implements Pages.Page {
         elements.find('input[type=radio]').on('change', (e) => {
 
             this.orderBy = (e.target as HTMLInputElement).value;
+            this.refreshUrl();
             this.refreshList();
         });
 
         elements.find("select[name='sortOrder']").on('change', (e) => {
 
             this.sortOrder = (e.target as HTMLSelectElement).value;
+            this.refreshUrl();
             this.refreshList();
         });
+    }
+
+    private refreshUrl() {
+
+        MasterPage.goTo('tags' + Pages.createUrl({
+            orderBy: this.orderBy,
+            sortOrder: this.sortOrder
+        }), 'Tags');
+        document.getElementById('TagsPageLink').classList.add('uk-active');
     }
 }
