@@ -68,12 +68,16 @@ export module MasterPage {
             link.classList.remove('uk-active');
         }
 
+        const fullTitle = getTitle(title);
+
         if (goBackInProgress) {
-            window.history.replaceState(null, getTitle(title), getUrl(url));
+            window.history.replaceState(null, fullTitle, getUrl(url));
         }
         else {
             window.history.pushState(null, getTitle(title), getUrl(url));
         }
+
+        document.title = fullTitle;
     }
 
     export function getTitle(extra: string): string {
@@ -109,7 +113,7 @@ export module MasterPage {
             UsersPage.loadPage
         ];
 
-        let location = window.location.toString().toLowerCase();
+        let location = window.location.toString().toLowerCase().replace(/\\/g, '/');
         if (location.indexOf(masterPageConfig.baseUri) == 0) {
             location = location.substr(masterPageConfig.baseUri.length);
             if (location.length > 0 && location[0] == '/') {
