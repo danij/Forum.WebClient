@@ -44,7 +44,7 @@ export module ThreadsView {
         return $('<div class="threads-list-header">\n' +
             '    <form>\n' +
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
-            '            <div class="threads-list-sort-order">\n' +
+            '            <div class="threads-list-order-by">\n' +
             '                Sort by:\n' +
             '                <label><input class="uk-radio" type="radio" name="orderBy" value="name" checked> Name</label>\n' +
             '                <label><input class="uk-radio" type="radio" name="orderBy" value="created"> Created</label>\n' +

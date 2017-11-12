@@ -167,7 +167,7 @@ export module UsersView {
         return $('<div class="users-list-header">\n' +
             '    <form>\n' +
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
-            '            <div class="user-list-sort-order">\n' +
+            '            <div class="order-by">\n' +
             '                Sort by:\n' +
             '                <label><input class="uk-radio" type="radio" name="orderBy" value="name" checked> Name</label>\n' +
             '                <label><input class="uk-radio" type="radio" name="orderBy" value="created"> Created</label>\n' +
