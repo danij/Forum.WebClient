@@ -3,6 +3,7 @@ import {ThreadRepository} from "../services/threadRepository";
 import {ThreadsView} from "../views/threadsView";
 import {CommonEntities} from "../services/commonEntities";
 import {Views} from "../views/common";
+import {MasterPage} from "./masterPage";
 
 /**
  * Displays a list of threads with pagination and custom sorting
@@ -18,7 +19,10 @@ export class ThreadsPage implements Pages.Page {
 
     display(): void {
 
-        $('#ThreadsPageLink').addClass('uk-active');
+        MasterPage.goTo('threads', 'Threads');
+
+        document.getElementById('ThreadsPageLink').classList.add('uk-active');
+
         Pages.changePage(async () => {
 
             let threadCollection = await this.getAllThreads();

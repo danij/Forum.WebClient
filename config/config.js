@@ -12,3 +12,8 @@ window.displayConfig = {
     pageNumbersAfter: 3,
     showSpinnerAfterMilliSeconds: 1000
 };
+
+window.masterPageConfig = {
+
+    baseUri: "http://dani.forum:8080/forum"
+};

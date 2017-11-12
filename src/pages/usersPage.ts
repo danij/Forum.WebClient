@@ -3,6 +3,7 @@ import {UserRepository} from "../services/userRepository";
 import {UsersView} from "../views/usersView";
 import {CommonEntities} from "../services/commonEntities";
 import {Views} from "../views/common";
+import {MasterPage} from "./masterPage";
 
 /**
  * Displays a list of users with pagination and custom sorting
@@ -18,7 +19,9 @@ export class UsersPage implements Pages.Page {
 
     display(): void {
 
-        $('#UsersPageLink').addClass('uk-active');
+        MasterPage.goTo('users', 'Users');
+
+        document.getElementById('UsersPageLink').classList.add('uk-active');
 
         Pages.changePage(async () => {
 

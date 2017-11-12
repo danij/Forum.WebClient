@@ -2,6 +2,7 @@ import {Pages} from './common';
 import {TagRepository} from "../services/tagRepository";
 import {TagsView} from "../views/tagsView";
 import {Views} from "../views/common";
+import {MasterPage} from "./masterPage";
 
 /**
  * Displays a list of all tags with custom sorting
@@ -13,7 +14,10 @@ export class TagsPage implements Pages.Page {
 
     display(): void {
 
-        $('#TagsPageLink').addClass('uk-active');
+        MasterPage.goTo('tags', 'Tags');
+
+        document.getElementById('TagsPageLink').classList.add('uk-active');
+
         Pages.changePage(async () => {
 
             let tagCollection = await this.getAllTags();
