@@ -7,6 +7,7 @@ export module MasterPage {
 
     let originalTitle: string;
     let linkElements: HTMLElement[];
+    let goBackInProgress: boolean = false;
 
     export function bootstrap(): void {
 
@@ -45,7 +46,19 @@ export module MasterPage {
             e.preventDefault();
         });
 
+        window.onpopstate = () => onGoBack();
         loadCurrentPage();
+    }
+
+    function onGoBack() {
+
+        try {
+            goBackInProgress = true;
+            loadCurrentPage();
+        }
+        finally {
+            goBackInProgress = false;
+        }
     }
 
     export function goTo(url: string, title: string) {
@@ -55,7 +68,12 @@ export module MasterPage {
             link.classList.remove('uk-active');
         }
 
-        window.history.pushState(null, getTitle(title), getUrl(url));
+        if (goBackInProgress) {
+            window.history.replaceState(null, getTitle(title), getUrl(url));
+        }
+        else {
+            window.history.pushState(null, getTitle(title), getUrl(url));
+        }
     }
 
     export function getTitle(extra: string): string {
