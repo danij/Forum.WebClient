@@ -159,6 +159,13 @@ html {
     }
 }
 
+.user-header {
+    p {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+
 .pointer-cursor {
     cursor: pointer;
 }
@@ -671,16 +678,6 @@ html {
         }
     }
 
-    .thread-score-up {
-        color: white;
-        background: @up-vote-color;
-    }
-
-    .thread-score-down {
-        color: white;
-        background: @down-vote-color;
-    }
-
     .latest-message {
         width: @latest-message-in-table-width;
         overflow-x: hidden;
@@ -775,4 +772,20 @@ html {
 .tag-page-header {
     margin-top: 10px;
     margin-left: 10px;
+}
+
+.fix-content-margin {
+
+    margin-top: 10px;
+    margin-left: 25px;
+}
+
+.score-up {
+    color: white;
+    background: @up-vote-color;
+}
+
+.score-down {
+    color: white;
+    background: @down-vote-color;
 }

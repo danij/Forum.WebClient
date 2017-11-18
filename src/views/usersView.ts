@@ -278,6 +278,45 @@ export module UsersView {
 
     export function createUserPageHeader(user: UserRepository.User): HTMLElement {
 
-        return createAuthorSmall(user).toElement();
+        let result = new DOMAppender('<div class="fix-content-margin user-header">', '</div>');
+        let left = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
+        result.append(left);
+
+        left.append(createUserLogoForList(user));
+
+        let name = new DOMAppender('<div class="username uk-text-small">', '</div>');
+        left.append(name);
+        name.appendString(user.name);
+
+        if (user.title && user.title.length) {
+
+            let title = new DOMAppender('<div class="usertitle uk-text-small">', '</div>');
+            left.append(title);
+            title.appendString(user.title);
+        }
+
+        result.appendRaw(('<div>\n' +
+            '    <p>{threadCount} threads · {messageCount} messages <span class="uk-label score-up">+ {upVotes}</span> <span class="uk-label score-down">− {downVotes}</span></p>\n' +
+            '    <p>Joined <span class="uk-text-meta">{joined}</span> · Last seen <span class="uk-text-meta">{lastSeen}</span></p>\n' +
+            '</div>')
+                .replace('{threadCount}', DisplayHelpers.intToString(user.threadCount))
+                .replace('{messageCount}', DisplayHelpers.intToString(user.messageCount))
+                .replace('{joined}', DisplayHelpers.getFullDateTime(user.created))
+                .replace('{lastSeen}', DisplayHelpers.getFullDateTime(user.lastSeen))
+                .replace('{upVotes}', DisplayHelpers.intToString(user.receivedUpVotes))
+                .replace('{downVotes}', DisplayHelpers.intToString(user.receivedDownVotes))
+        );
+
+        if (user.info && user.info.length) {
+
+            let info = new DOMAppender('<div class="uk-text-primary uk-text-small">', '</div>');
+            result.append(info);
+
+            info.appendString(user.info);
+        }
+
+        result.appendRaw('<div class="uk-clearfix"></div>');
+
+        return result.toElement();
     }
 }
