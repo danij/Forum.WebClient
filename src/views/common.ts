@@ -1,6 +1,7 @@
 import {CommonEntities} from "../services/commonEntities";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {ThreadsPage} from "../pages/threadsPage";
+import {DisplayHelpers} from "../helpers/displayHelpers";
 
 export module Views {
 
@@ -96,7 +97,9 @@ export module Views {
     export function createPaginationControl(info: CommonEntities.PaginationInfo,
                                             onPageNumberChange: Views.PageNumberChangeCallback) {
 
-        let container = $('<ul class="uk-pagination uk-flex-center uk-margin-remove-top uk-margin-remove-bottom" uk-margin></ul>');
+        let result = $('<div></div>');
+        let container = $('<ul class="uk-pagination uk-flex-center uk-margin-remove-left uk-margin-remove-top uk-margin-remove-bottom" uk-margin></ul>');
+        result.append(container);
 
         let pageCount = CommonEntities.getPageCount(info);
 
@@ -211,7 +214,9 @@ export module Views {
             });
         }
 
-        return container[0];
+        result.append($(`<span class="uk-flex uk-flex-center uk-text-meta pagination-total">${DisplayHelpers.intToString(info.totalCount)} total</span>`));
+
+        return result[0];
     }
 
     export function createOrderByLabel(value: string, title: string, info: SortInfo) {
