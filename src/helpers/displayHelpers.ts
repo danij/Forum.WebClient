@@ -4,7 +4,16 @@ export module DisplayHelpers {
 
     export function intToString(value: number): string {
 
-        return (value || 0).toLocaleString('en').replace(/,/g, ' ');
+        let result = '';
+        value = (value || 0);
+
+        while (value >= 1000) {
+            result = ' ' + (value % 1000) + result;
+            value = Math.floor(value / 1000);
+        }
+        result = ' ' + value + result;
+
+        return result.trim();
     }
 
     export function padPositiveWithZeros(value: number, size: number): string {
