@@ -58,4 +58,12 @@ export module ThreadRepository {
             query: request
         }) as ThreadCollection;
     }
+
+    export async function getThreadsWithTag(tag: TagRepository.Tag, request: GetThreadsRequest): Promise<ThreadCollection> {
+
+        return await RequestHandler.get({
+            path: 'threads/tag/' + tag.id,
+            query: request
+        }) as ThreadCollection;
+    }
 }

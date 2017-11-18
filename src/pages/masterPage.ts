@@ -2,6 +2,7 @@ import {HomePage} from "./homePage";
 import {TagsPage} from "./tagsPage";
 import {ThreadsPage} from "./threadsPage";
 import {UsersPage} from "./usersPage";
+import {Pages} from "./common";
 
 export module MasterPage {
 
@@ -71,10 +72,10 @@ export module MasterPage {
         const fullTitle = getTitle(title);
 
         if (goBackInProgress) {
-            window.history.replaceState(null, fullTitle, getUrl(url));
+            window.history.replaceState(null, fullTitle, Pages.getUrl(url));
         }
         else {
-            window.history.pushState(null, getTitle(title), getUrl(url));
+            window.history.pushState(null, getTitle(title), Pages.getUrl(url));
         }
 
         document.title = fullTitle;
@@ -89,19 +90,8 @@ export module MasterPage {
         return originalTitle;
     }
 
-    export interface MasterPageConfig {
-
-        baseUri: string
-    }
-
-    declare const masterPageConfig: MasterPageConfig;
-
-    export function getUrl(relative: string): string {
-
-        return `${masterPageConfig.baseUri}/${relative}`;
-    }
-
     declare type LoadPageFn = (url: string) => boolean;
+    declare const masterPageConfig: Pages.MasterPageConfig;
 
     function loadCurrentPage(): void {
 

@@ -2,6 +2,7 @@ import {TagRepository} from "../services/tagRepository";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {Views} from "./common";
 import {DOMHelpers} from "../helpers/domHelpers";
+import {Pages} from "../pages/common";
 
 export module TagsView {
 
@@ -24,17 +25,13 @@ export module TagsView {
 
         let content = new DOMAppender('<div>', '</div>');
         content.appendRaw(('<li>\n' +
-            '    <a href="UserThreads" class="align-left">\n' +
-            '        <span>Threads</span>\n' +
-            '    </a>\n' +
+            '    <a href="' + Pages.getThreadsWithTagUrlFull(tag) + '" class="align-left" data-tagid="' + tag.id + '">Threads</a>\n' +
             '    <span class="uk-badge align-right">{nrOfThreads}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount)));
 
         content.appendRaw(('<li>\n' +
-            '    <a href="UserMessages" class="align-left">\n' +
-            '        <span>Messages</span>\n' +
-            '    </a>\n' +
+            '    <span class="align-left">Messages</span>\n' +
             '    <span class="uk-badge align-right">{nrOfMessages}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfMessages}', DisplayHelpers.intToString(tag.messageCount)));
@@ -77,7 +74,9 @@ export module TagsView {
             tagsListGrid.append(createTagInList(tag));
         }
 
-        return tagsListGrid.toElement();
+        let result = tagsListGrid.toElement();
+        Views.setupThreadsWithTagsLinks(result);
+        return result;
     }
 
     function createTagListSortControls(info: Views.SortInfo): HTMLElement {
@@ -115,13 +114,13 @@ export module TagsView {
         wrapper.append(createTagElement(tag));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a href="#">Threads</a></div>\n' +
+            '    <div class="uk-float-left"><a href="' + Pages.getThreadsWithTagUrlFull(tag) + '" data-tagid="' + tag.id + '">Threads</a></div>\n' +
             '    <div class="uk-float-right">{nrOfThreads}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount)));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a href="#">Messages</a></div>\n' +
+            '    <div class="uk-float-left">Messages</div>\n' +
             '    <div class="uk-float-right">{nrOfMessages}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(tag.messageCount)));
@@ -137,5 +136,10 @@ export module TagsView {
             .replace('{AddedShort}', DisplayHelpers.getShortDate(tag.created)));
 
         return result;
+    }
+
+    export function createTagPageHeader(tag: TagRepository.Tag): HTMLElement {
+
+        return this.createTagElement(tag).toElement();
     }
 }

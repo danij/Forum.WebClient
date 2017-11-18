@@ -87,7 +87,7 @@ export class TagsPage implements Pages.Page {
 
     private refreshUrl() {
 
-        MasterPage.goTo('tags' + Pages.createUrl({
+        MasterPage.goTo(Pages.appendToUrl('tags', {
             orderBy: this.orderBy,
             sortOrder: this.sortOrder
         }), 'Tags');

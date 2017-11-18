@@ -4,6 +4,7 @@ import {UsersView} from "./usersView";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {TagsView} from "./tagsView";
 import {DOMHelpers} from "../helpers/domHelpers";
+import {TagRepository} from "../services/tagRepository";
 
 export module ThreadsView {
 
@@ -17,8 +18,13 @@ export module ThreadsView {
         list: HTMLElement
     }
 
+    export interface ThreadPageDisplayInfo extends Views.SortInfo {
+
+        tag?: TagRepository.Tag
+    }
+
     export function createThreadsPageContent(collection: ThreadRepository.ThreadCollection,
-                                             info: Views.SortInfo,
+                                             info: ThreadPageDisplayInfo,
                                              onPageNumberChange: Views.PageNumberChangeCallback) {
 
         collection = collection || ThreadRepository.defaultThreadCollection();
@@ -26,6 +32,11 @@ export module ThreadsView {
         let result = new ThreadsPageContent();
 
         let resultList = $("<div></div>");
+
+        if (info.tag) {
+
+            resultList.append(TagsView.createTagPageHeader(info.tag));
+        }
 
         resultList.append(result.sortControls = createThreadListSortControls(info));
         resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange));
@@ -181,6 +192,8 @@ export module ThreadsView {
             }
         }
 
-        return table.toElement();
+        let result = table.toElement();
+        Views.setupThreadsWithTagsLinks(result);
+        return result;
     }
 }

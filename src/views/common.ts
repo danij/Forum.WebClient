@@ -1,5 +1,6 @@
 import {CommonEntities} from "../services/commonEntities";
 import {DOMHelpers} from "../helpers/domHelpers";
+import {ThreadsPage} from "../pages/threadsPage";
 
 export module Views {
 
@@ -223,4 +224,24 @@ export module Views {
         return `                    <option value="${value}" ${value == info.sortOrder ? 'selected' : ''}>${title}</option>\n`;
     }
 
+    function threadsWithTagLinkClicked(ev : Event) {
+
+        const tagId = (ev.target as HTMLElement).getAttribute('data-tagid');
+
+        new ThreadsPage().displayForTag(tagId);
+
+        ev.preventDefault();
+    }
+
+
+    export function setupThreadsWithTagsLinks(element: HTMLElement): void {
+
+        let links = element.querySelectorAll('[data-tagid]');
+
+        for (let i = 0; i < links.length; ++i) {
+
+            let link = links.item(i);
+            link.addEventListener('click', threadsWithTagLinkClicked);
+        }
+    }
 }

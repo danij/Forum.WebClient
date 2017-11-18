@@ -4,6 +4,7 @@ import {ThreadsView} from "../views/threadsView";
 import {CommonEntities} from "../services/commonEntities";
 import {Views} from "../views/common";
 import {MasterPage} from "./masterPage";
+import {TagRepository} from "../services/tagRepository";
 
 /**
  * Displays a list of threads with pagination and custom sorting
@@ -16,7 +17,7 @@ export class ThreadsPage implements Pages.Page {
     private sortOrder: string = 'ascending';
     private topPaginationControl: HTMLElement;
     private bottomPaginationControl: HTMLElement;
-    private Title: string = 'Tags';
+    private tagIdOrName: string;
 
     display(): void {
 
@@ -24,13 +25,20 @@ export class ThreadsPage implements Pages.Page {
 
         Pages.changePage(async () => {
 
-            let threadCollection = await this.getAllThreads();
+            let tag: TagRepository.Tag = null;
+            if (this.tagIdOrName && this.tagIdOrName.length) {
+                tag = await this.getCurrentTag();
+                if (null == tag) return;
+            }
+
+            let threadCollection = await (tag ? this.getThreadsWithTag(tag) : this.getAllThreads());
             if (null == threadCollection) return;
 
             let elements = ThreadsView.createThreadsPageContent(threadCollection, {
-                    orderBy: this.orderBy,
-                    sortOrder: this.sortOrder
-                }, (value: number) => this.onPageNumberChange(value));
+                orderBy: this.orderBy,
+                sortOrder: this.sortOrder,
+                tag: tag
+            }, (value: number) => this.onPageNumberChange(value));
 
             this.setupSortControls(elements.sortControls);
 
@@ -42,6 +50,19 @@ export class ThreadsPage implements Pages.Page {
         });
     }
 
+    displayForTag(tagId: string, tagName?: string): void {
+
+        if (tagId && tagId.length) {
+
+            this.tagIdOrName = tagId;
+        }
+        else {
+
+            this.tagIdOrName = tagName || '';
+        }
+        this.display();
+    }
+
     static loadPage(url: string): boolean {
 
         if (url.indexOf('threads/') != 0) return false;
@@ -51,6 +72,7 @@ export class ThreadsPage implements Pages.Page {
         page.orderBy = Pages.getOrderBy(url) || page.orderBy;
         page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
         page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
+        page.tagIdOrName = Pages.getTagIdOrName(url);
 
         page.display();
         return true;
@@ -65,14 +87,32 @@ export class ThreadsPage implements Pages.Page {
         } as ThreadRepository.GetThreadsRequest));
     }
 
+    private getThreadsWithTag(tag: TagRepository.Tag): Promise<ThreadRepository.ThreadCollection> {
+
+        return Pages.getOrShowError(ThreadRepository.getThreadsWithTag(tag, {
+            page: this.pageNumber,
+            orderBy: this.orderBy,
+            sort: this.sortOrder
+        } as ThreadRepository.GetThreadsRequest));
+    }
+
+    private getCurrentTag(): Promise<TagRepository.Tag> {
+
+        return Pages.getOrShowError(TagRepository.getTag(this.tagIdOrName));
+    }
 
     private refreshList(): void {
 
         Views.changeContent($('#pageContentContainer .threads-table')[0], async () => {
 
-            let threadCollection = await this.getAllThreads();
+            let tag: TagRepository.Tag = null;
+            if (this.tagIdOrName && this.tagIdOrName.length) {
+                tag = await this.getCurrentTag();
+                if (null == tag) return;
+            }
 
-            if (null == threadCollection) return null;
+            let threadCollection = await (tag ? this.getThreadsWithTag(tag) : this.getAllThreads());
+            if (null == threadCollection) return;
 
             let newTopPaginationControl = Views.createPaginationControl(threadCollection,
                 (value: number) => this.onPageNumberChange(value));
@@ -116,11 +156,20 @@ export class ThreadsPage implements Pages.Page {
 
     private refreshUrl() {
 
-        MasterPage.goTo('threads' + Pages.createUrl({
+        let url = 'threads';
+        let title = 'Threads';
+
+        if (this.tagIdOrName && this.tagIdOrName.length) {
+
+            url = Pages.getThreadsWithTagUrlByIdOrName(this.tagIdOrName);
+            title = 'Threads with Tag';
+        }
+
+        MasterPage.goTo(Pages.appendToUrl(url, {
             orderBy: this.orderBy,
             sortOrder: this.sortOrder,
             pageNumber: this.pageNumber
-        }), 'Threads');
+        }), title);
         document.getElementById('ThreadsPageLink').classList.add('uk-active');
     }
 }

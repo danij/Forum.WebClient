@@ -116,7 +116,7 @@ export class UsersPage implements Pages.Page {
 
     private refreshUrl() {
 
-        MasterPage.goTo('users' + Pages.createUrl({
+        MasterPage.goTo( Pages.appendToUrl('users', {
             orderBy: this.orderBy,
             sortOrder: this.sortOrder,
             pageNumber: this.pageNumber
