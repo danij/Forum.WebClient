@@ -8,7 +8,7 @@ export module DisplayHelpers {
         value = (value || 0);
 
         while (value >= 1000) {
-            result = ' ' + (value % 1000) + result;
+            result = ' ' + ('000' + (value % 1000)).slice(-3) + result;
             value = Math.floor(value / 1000);
         }
         result = ' ' + value + result;
