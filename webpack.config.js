@@ -18,7 +18,7 @@ module.exports = {
             },
             {
                 from: path.resolve(__dirname, 'node_modules/uikit/dist/js/uikit.min.js'),
-                to: path.resolve(__dirname, 'dist/uikit.min.js')
+                to: path.resolve(__dirname, 'dist/uikit.js')
             },
             {
                 from: path.resolve(__dirname, 'node_modules/uikit/dist/css/uikit.min.css'),
