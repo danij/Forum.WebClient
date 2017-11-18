@@ -66,7 +66,7 @@ export module ThreadsView {
             '                Sort by:\n' +
             Views.createOrderByLabel('name', 'Name', info) +
             Views.createOrderByLabel('created', 'Created', info) +
-            Views.createOrderByLabel('latestmessagecreated', 'Latest Message Created', info) +
+            Views.createOrderByLabel('latestmessagecreated', 'Latest Message Added', info) +
             Views.createOrderByLabel('messagecount', 'Message Count', info) +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
