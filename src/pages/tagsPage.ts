@@ -62,7 +62,7 @@ export class TagsPage implements Pages.Page {
 
             if (null == tagCollection) return null;
 
-            return TagsView.createTagsList(tagCollection.tags);
+            return TagsView.createTagsTable(tagCollection.tags);
         });
     }
 

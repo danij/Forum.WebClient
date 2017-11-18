@@ -1,4 +1,5 @@
 import {RequestHandler} from "./requestHandler";
+import {CategoryRepository} from "./categoryRepository";
 
 export module TagRepository {
 
@@ -9,6 +10,8 @@ export module TagRepository {
         created: number;
         threadCount: number;
         messageCount: number;
+        latestMessage: CategoryRepository.LatestMessage;
+        categories: CategoryRepository.Category[];
     }
 
     export interface TagCollection {

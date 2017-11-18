@@ -3,6 +3,7 @@ import {DisplayHelpers} from "../helpers/displayHelpers";
 import {Views} from "./common";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
+import {UsersView} from "./usersView";
 
 export module TagsView {
 
@@ -58,25 +59,138 @@ export module TagsView {
 
         let tagsList = $('<div class="tags-list"></div>');
         resultList.append(tagsList);
-        tagsList.append(this.createTagsList(tags));
+        tagsList.append(this.createTagsTable(tags));
 
         result.list = resultList[0];
         return result;
     }
 
-    export function createTagsList(tags: TagRepository.Tag[]): HTMLElement {
+    export function createTagsTable(tags: TagRepository.Tag[]): HTMLElement {
 
-        let tagsListGrid = new DOMAppender('<div class="uk-grid-match uk-text-center" uk-grid>', '</div>');
+        // let tagsListGrid = new DOMAppender('<div class="uk-grid-match uk-text-center" uk-grid>', '</div>');
+        //
+        // for (let tag of tags)
+        // {
+        //     if (null == tag) continue;
+        //
+        //     tagsListGrid.append(createTagInList(tag));
+        // }
+        //
+        // let result = tagsListGrid.toElement();
+        // Views.setupThreadsWithTagsLinks(result);
+        // return result;
 
-        for (let tag of tags)
-        {
+        let tableContainer = new DOMAppender('<div class="tags-table">', '</div>');
+        let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
+        tableContainer.append(table);
+
+        const tableHeader = '<thead>\n' +
+            '    <tr>\n' +
+            '        <th class="uk-table-expand">Tag</th>\n' +
+            '        <th class="uk-text-center uk-table-shrink">Statistics</th>\n' +
+            '        <th class="uk-text-right latest-message-header">Latest Message</th>\n' +
+            '    </tr>\n' +
+            '</thead>';
+        table.appendRaw(tableHeader);
+        let tbody = new DOMAppender('<tbody>', '</tbody>');
+        table.append(tbody);
+
+        for (let tag of tags) {
+
             if (null == tag) continue;
 
-            tagsListGrid.append(createTagInList(tag));
+            let row = new DOMAppender('<tr>', '</tr>');
+            tbody.append(row);
+            {
+                let nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
+                row.append(nameColumn);
+
+                nameColumn.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: tag">', '</span>'));
+
+                let nameLink = new DOMAppender('<a class="uk-button uk-button-text" href="' +
+                    Pages.getThreadsWithTagUrlFull(tag) +
+                    '" data-tagname="' + DOMHelpers.escapeStringForAttribute(tag.name) + '">', '</a>');
+                nameColumn.append(nameLink);
+                nameLink.appendString(' ' + tag.name);
+                nameColumn.appendRaw('<br/>');
+
+                if (tag.categories && tag.categories.length) {
+
+                    let categoryElement = new DOMAppender('<span class="category-children uk-text-small">', '</span>');
+                    nameColumn.appendRaw(' ');
+                    nameColumn.append(categoryElement);
+
+                    for (let i = 0; i < tag.categories.length; ++i) {
+
+                        let category = tag.categories[i];
+
+                        let element = new DOMAppender('<a href="' +
+                            Pages.getCategoryFullUrl(category) +
+                            '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
+                            DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
+                        categoryElement.append(element);
+                        element.appendString(category.name);
+
+                        if (i < (tag.categories.length - 1)) {
+                            categoryElement.appendRaw(' · ');
+                        }
+                    }
+                }
+            }
+            {
+                let statisticsColumn = ('<td class="tag-statistics uk-table-shrink">\n' +
+                    '    <table>\n' +
+                    '        <tr>\n' +
+                    '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +
+                    '            <td class="spaced-number uk-text-left uk-text-meta">threads</td>\n' +
+                    '        </tr>\n' +
+                    '        <tr>\n' +
+                    '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
+                    '            <td class="spaced-number uk-text-left uk-text-meta">messages</td>\n' +
+                    '        </tr>\n' +
+                    '    </table>\n' +
+                    '</td>')
+                    .replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount))
+                    .replace('{nrOfMessages}', DisplayHelpers.intToString(tag.messageCount));
+                row.appendRaw(statisticsColumn);
+            }
+            {
+                let latestMessageColumn = new DOMAppender('<td class="latest-message uk-text-center">', '</td>');
+                row.append(latestMessageColumn);
+
+                const latestMessage = tag.latestMessage;
+
+                latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
+                latestMessageColumn.append(UsersView.createAuthorSmallWithColon(latestMessage.createdBy));
+
+                let threadTitle = latestMessage.threadName || 'unknown';
+
+                let threadTitleElement = $('<a class="recent-message-thread-link" href="#" uk-tooltip></a>');
+                threadTitleElement.text(threadTitle);
+                threadTitleElement.attr('title', threadTitle);
+                latestMessageColumn.appendElement(threadTitleElement[0]);
+
+                let recentMessageTime = new DOMAppender('<div class="recent-message-time uk-text-meta">', '</div>');
+                latestMessageColumn.append(recentMessageTime);
+
+                let recentMessageTimeContent = $('<span uk-tooltip></span>');
+                recentMessageTimeContent.text(DisplayHelpers.getAgoTime(latestMessage.created));
+                recentMessageTimeContent.attr('title', DisplayHelpers.getFullDateTime(latestMessage.created));
+                recentMessageTime.appendElement(recentMessageTimeContent[0]);
+
+                let messageContent = latestMessage.content || 'empty';
+
+                let messageLink = $('<a class="recent-message-link" href="#" uk-tooltip></a>');
+                messageLink.text(messageContent);
+                messageLink.attr('title', messageContent);
+                latestMessageColumn.appendElement(messageLink[0]);
+            }
         }
 
-        let result = tagsListGrid.toElement();
+        let result = tableContainer.toElement();
+
         Views.setupThreadsWithTagsLinks(result);
+
         return result;
     }
 
