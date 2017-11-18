@@ -95,7 +95,7 @@ export module Views {
     export function createPaginationControl(info: CommonEntities.PaginationInfo,
                                             onPageNumberChange: Views.PageNumberChangeCallback) {
 
-        let container = $('<ul class="uk-pagination uk-flex-center uk-margin-remove-top" uk-margin></ul>');
+        let container = $('<ul class="uk-pagination uk-flex-center uk-margin-remove-top uk-margin-remove-bottom" uk-margin></ul>');
 
         let pageCount = CommonEntities.getPageCount(info);
 
