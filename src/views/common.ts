@@ -24,17 +24,16 @@ export module Views {
         sortOrder: string
     }
 
-    export async function changeContent(containerElement: HTMLElement, handler: () => Promise<HTMLElement>) {
+    export async function changeContent(container: HTMLElement, handler: () => Promise<HTMLElement>) {
 
-        let spinner = $('<div class="spinner-element"><div uk-spinner></div></div>');
-        let container = $(containerElement);
-        let disabledElement = $('<div class="disabled-element"></div>');
+        let spinner = DOMHelpers.parseHTML('<div class="spinner-element"><div uk-spinner></div></div>');
+        let disabledElement = DOMHelpers.parseHTML('<div class="disabled-element"></div>');
 
         let timer = setTimeout(() => {
 
-            container.append(disabledElement);
-            container.append(spinner);
-            spinner.show();
+            container.appendChild(disabledElement);
+            container.appendChild(spinner);
+            spinner.style.display = 'block';
 
         }, displayConfig.showSpinnerAfterMilliSeconds);
 
@@ -49,8 +48,8 @@ export module Views {
                 return;
             }
 
-            container.empty();
-            container.append(newPageContent);
+            container.innerHTML = '';
+            container.appendChild(newPageContent);
         }
         finally {
             spinner.remove();
