@@ -54,7 +54,7 @@ export module Pages {
     const orderByRegex = /\/orderby\/([^\/]+)/;
     const sortOrderRegex = /\/sortorder\/([^\/]+)/;
     const pageNumberRegex = /\/page\/([0-9]+)/;
-    const tagIdOrNameRegex = /\/tag\/([^/]+)/;
+    const tagNameRegex = /\/tag\/([^/]+)/;
     const userNameRegex = /\/user\/([^/]+)/;
     const categoryRootRegex = /^[\/]?category\/([^/]+)\/([^/]+)/;
 
@@ -88,9 +88,9 @@ export module Pages {
         return 0;
     }
 
-    export function getTagIdOrName(url: string): string {
+    export function getTagName(url: string): string {
 
-        let match = url.match(tagIdOrNameRegex);
+        let match = url.match(tagNameRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[1]);
@@ -143,12 +143,12 @@ export module Pages {
 
     export function getThreadsWithTagUrlFull(tag: TagRepository.Tag): string {
 
-        return getUrl(getThreadsWithTagUrlByIdOrName(tag.name));
+        return getUrl(getThreadsWithTagUrlByName(tag.name));
     }
 
-    export function getThreadsWithTagUrlByIdOrName(tagIdOrName: string): string {
+    export function getThreadsWithTagUrlByName(tagName: string): string {
 
-        return `threads/tag/${encodeURIComponent(tagIdOrName)}`;
+        return `threads/tag/${encodeURIComponent(tagName)}`;
     }
 
     export function getThreadsOfUserUrlFull(user: UserRepository.User): string {

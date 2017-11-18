@@ -34,10 +34,10 @@ export module TagRepository {
         return result;
     }
 
-    export async function getTag(idOrName: string): Promise<Tag> {
+    export async function getTag(name: string): Promise<Tag> {
 
         if (null == latestTags) await getTags(null);
 
-        return latestTags.find(t => (idOrName === t.id) || (idOrName.toLowerCase() === t.name.toLowerCase())) || null;
+        return latestTags.find(t => name.toLowerCase() === t.name.toLowerCase()) || null;
     }
 }

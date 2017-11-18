@@ -17,7 +17,7 @@ export class ThreadsPage implements Pages.Page {
     private sortOrder: string = 'ascending';
     private topPaginationControl: HTMLElement;
     private bottomPaginationControl: HTMLElement;
-    private tagIdOrName: string = null;
+    private tagName: string = null;
     private tag: TagRepository.Tag = null;
     private userName: string = null;
     private user: UserRepository.User = null;
@@ -28,7 +28,7 @@ export class ThreadsPage implements Pages.Page {
 
         Pages.changePage(async () => {
 
-            if (this.tagIdOrName && this.tagIdOrName.length) {
+            if (this.tagName && this.tagName.length) {
 
                 this.tag = await this.getCurrentTag();
                 if (null == this.tag) return;
@@ -59,16 +59,9 @@ export class ThreadsPage implements Pages.Page {
         });
     }
 
-    displayForTag(tagId: string, tagName?: string): void {
+    displayForTag(tagName: string): void {
 
-        if (tagId && tagId.length) {
-
-            this.tagIdOrName = tagId;
-        }
-        else {
-
-            this.tagIdOrName = tagName || '';
-        }
+        this.tagName = tagName;
         this.display();
     }
 
@@ -90,7 +83,7 @@ export class ThreadsPage implements Pages.Page {
         page.orderBy = Pages.getOrderBy(url) || page.orderBy;
         page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
         page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
-        page.tagIdOrName = Pages.getTagIdOrName(url);
+        page.tagName = Pages.getTagName(url);
         page.userName = Pages.getUserName(url);
 
         page.display();
@@ -126,7 +119,7 @@ export class ThreadsPage implements Pages.Page {
 
     private getCurrentTag(): Promise<TagRepository.Tag> {
 
-        return Pages.getOrShowError(TagRepository.getTag(this.tagIdOrName));
+        return Pages.getOrShowError(TagRepository.getTag(this.tagName));
     }
 
     private getCurrentUser(): Promise<UserRepository.User> {
@@ -189,15 +182,15 @@ export class ThreadsPage implements Pages.Page {
         let url = 'threads';
         let title = 'Threads';
 
-        if (this.tagIdOrName && this.tagIdOrName.length) {
+        if (this.tagName && this.tagName.length) {
 
-            url = Pages.getThreadsWithTagUrlByIdOrName(this.tagIdOrName);
-            title = 'Threads with Tag';
+            url = Pages.getThreadsWithTagUrlByName(this.tagName);
+            title = `Threads tagged with ${this.tagName}`;
         }
         else if (this.userName && this.userName.length) {
 
             url = Pages.getThreadsOfUserUrl(this.userName);
-            title = 'Threads of User ' + this.userName;
+            title = 'Threads created by ' + this.userName;
         }
 
         MasterPage.goTo(Pages.appendToUrl(url, {

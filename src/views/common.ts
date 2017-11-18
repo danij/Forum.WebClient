@@ -232,9 +232,9 @@ export module Views {
 
     function threadsWithTagLinkClicked(ev: Event) {
 
-        const tagId = (ev.target as HTMLElement).getAttribute('data-tagid');
+        const tagName = (ev.target as HTMLElement).getAttribute('data-tagname');
 
-        new ThreadsPage().displayForTag(tagId);
+        new ThreadsPage().displayForTag(tagName);
 
         ev.preventDefault();
     }

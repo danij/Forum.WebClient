@@ -25,7 +25,8 @@ export module TagsView {
 
         let content = new DOMAppender('<div>', '</div>');
         content.appendRaw(('<li>\n' +
-            '    <a href="' + Pages.getThreadsWithTagUrlFull(tag) + '" class="align-left" data-tagid="' + tag.id + '">Threads</a>\n' +
+            '    <a href="' + Pages.getThreadsWithTagUrlFull(tag) +
+                '" class="align-left" data-tagname="' + DOMHelpers.escapeStringForAttribute(tag.name) + '">Threads</a>\n' +
             '    <span class="uk-badge align-right">{nrOfThreads}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount)));
@@ -114,7 +115,8 @@ export module TagsView {
         wrapper.append(createTagElement(tag));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a href="' + Pages.getThreadsWithTagUrlFull(tag) + '" data-tagid="' + tag.id + '">Threads</a></div>\n' +
+            '    <div class="uk-float-left"><a href="' + Pages.getThreadsWithTagUrlFull(tag) +
+                '" data-tagname="' + DOMHelpers.escapeStringForAttribute(tag.name) + '">Threads</a></div>\n' +
             '    <div class="uk-float-right">{nrOfThreads}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount)));
