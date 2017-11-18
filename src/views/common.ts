@@ -25,9 +25,9 @@ export module Views {
 
     export async function changeContent(containerElement: HTMLElement, handler: () => Promise<HTMLElement>) {
 
-        let spinner = $('<div class="spinnerElement"><div uk-spinner></div></div>');
+        let spinner = $('<div class="spinner-element"><div uk-spinner></div></div>');
         let container = $(containerElement);
-        let disabledElement = $('<div class="disabledElement"></div>');
+        let disabledElement = $('<div class="disabled-element"></div>');
 
         let timer = setTimeout(() => {
 
