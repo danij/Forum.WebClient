@@ -34,7 +34,8 @@ export class ThreadsPage implements Pages.Page {
                 this.tag = await this.getCurrentTag();
                 if (null == this.tag) return;
             }
-            else {
+            else if (this.userName && this.userName.length) {
+
                 this.user = await this.getCurrentUser();
             }
 
