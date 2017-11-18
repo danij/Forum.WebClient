@@ -140,6 +140,16 @@ export module TagsView {
 
     export function createTagPageHeader(tag: TagRepository.Tag): HTMLElement {
 
-        return this.createTagElement(tag).toElement();
+        return DOMHelpers.parseHTML(('<div class="uk-grid-small tag-page-header">\n' +
+            '    <div class="uk-display-inline-block">\n' +
+            '        <span class="uk-badge uk-icon" uk-icon="icon: tag">{tagName}</span>\n' +
+            '    </div>\n' +
+            '    <span>{threadCount} threads</span>\n' +
+            '    <span>{messageCount} messages</span>\n' +
+            '</div>')
+                .replace('{tagName}', DOMHelpers.escapeStringForContent(tag.name))
+                .replace('{threadCount}', DisplayHelpers.intToString(tag.threadCount))
+                .replace('{messageCount}', DisplayHelpers.intToString(tag.messageCount))
+        );
     }
 }
