@@ -27,10 +27,17 @@ export module CategoryRepository {
         tags: TagRepository.Tag[];
         children: Category[];
         privileges: string[];
+        parent: Category;
     }
 
     export interface CategoryCollection {
+
         categories: Category[];
+    }
+
+    interface SingleCategory {
+
+        category: Category;
     }
 
     export async function getRootCategories(): Promise<Category[]> {
@@ -38,6 +45,17 @@ export module CategoryRepository {
         return sortChildCategories((await RequestHandler.get({
             path: 'categories/root'
         }) as CategoryCollection).categories);
+    }
+
+    export async function getCategoryById(id: string): Promise<Category> {
+
+        let result = (await RequestHandler.get({
+            path: 'category/' + encodeURIComponent(id)
+        }) as SingleCategory).category;
+
+        sortChildCategories(result.children);
+
+        return result;
     }
 
     function sortChildCategories(categories: Category[]): Category[] {

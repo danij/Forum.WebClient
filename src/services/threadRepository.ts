@@ -34,6 +34,11 @@ export module ThreadRepository {
         threads: Thread[];
     }
 
+    export interface PinnedThreadCollection extends ThreadCollection {
+
+        pinned_threads: Thread[]
+    }
+
     export function defaultThreadCollection(): ThreadCollection {
 
         return {
@@ -62,7 +67,7 @@ export module ThreadRepository {
     export async function getThreadsWithTag(tag: TagRepository.Tag, request: GetThreadsRequest): Promise<ThreadCollection> {
 
         return await RequestHandler.get({
-            path: 'threads/tag/' + tag.id,
+            path: 'threads/tag/' + encodeURIComponent(tag.id),
             query: request
         }) as ThreadCollection;
     }
@@ -70,7 +75,7 @@ export module ThreadRepository {
     export async function getThreadsOfUser(user: UserRepository.User, request: GetThreadsRequest): Promise<ThreadCollection> {
 
         let result = await RequestHandler.get({
-            path: 'threads/user/' + user.id,
+            path: 'threads/user/' + encodeURIComponent(user.id),
             query: request
         }) as ThreadCollection;
 
@@ -84,5 +89,37 @@ export module ThreadRepository {
         }
 
         return result;
+    }
+
+    export async function getThreadsOfCategory(category: CategoryRepository.Category,
+                                               request: GetThreadsRequest): Promise<ThreadCollection> {
+
+        return appendPinnedThreadCollection(await RequestHandler.get({
+            path: 'threads/category/' + encodeURIComponent(category.id),
+            query: request
+        }) as PinnedThreadCollection);
+    }
+
+    function appendPinnedThreadCollection(collection: PinnedThreadCollection): ThreadCollection {
+
+        let oldThreads = collection.threads;
+        collection.pinned_threads = collection.pinned_threads || [];
+        collection.threads = collection.pinned_threads;
+
+        let pinnedThreadIds = {};
+
+        for (let thread of collection.pinned_threads) {
+
+            pinnedThreadIds[thread.id] = true;
+        }
+
+        for (let thread of oldThreads) {
+
+            if (pinnedThreadIds.hasOwnProperty(thread.id)) continue;
+
+            collection.threads.push(thread);
+        }
+
+        return collection;
     }
 }

@@ -199,8 +199,11 @@ export module ThreadsView {
         }
 
         let result = table.toElement();
+
+        Views.setupCategoryLinks(result);
         Views.setupThreadsWithTagsLinks(result);
         Views.setupThreadsOfUsersLinks(result);
+
         return result;
     }
 }

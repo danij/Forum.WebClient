@@ -1,6 +1,7 @@
 import {Views} from "../views/common";
 import {TagRepository} from "../services/tagRepository";
 import {UserRepository} from "../services/userRepository";
+import {CategoryRepository} from "../services/categoryRepository";
 
 export module Pages {
 
@@ -44,11 +45,18 @@ export module Pages {
         }
     }
 
+    export interface IdNamePair {
+
+        id: string,
+        name: string
+    }
+
     const orderByRegex = /\/orderby\/([^\/]+)/;
     const sortOrderRegex = /\/sortorder\/([^\/]+)/;
     const pageNumberRegex = /\/page\/([0-9]+)/;
     const tagIdOrNameRegex = /\/tag\/([^/]+)/;
     const userNameRegex = /\/user\/([^/]+)/;
+    const categoryRootRegex = /^[\/]?category\/([^/]+)\/([^/]+)/;
 
     export function getOrderBy(url: string): string {
 
@@ -100,7 +108,20 @@ export module Pages {
         return null;
     }
 
-    export function appendToUrl(extra: string, details: {orderBy: string, sortOrder: string, pageNumber?: number}): string {
+    export function getCategory(url: string): IdNamePair {
+
+        let match = url.match(categoryRootRegex);
+        if (match && match.length) {
+
+            return {
+                id: decodeURIComponent(match[2]),
+                name: decodeURIComponent(match[1])
+            };
+        }
+        return null;
+    }
+
+    export function appendToUrl(extra: string, details: { orderBy: string, sortOrder: string, pageNumber?: number }): string {
 
         let result = '';
 
@@ -125,7 +146,7 @@ export module Pages {
         return getUrl(getThreadsWithTagUrlByIdOrName(tag.name));
     }
 
-    export function getThreadsWithTagUrlByIdOrName(tagIdOrName: string) : string {
+    export function getThreadsWithTagUrlByIdOrName(tagIdOrName: string): string {
 
         return `threads/tag/${encodeURIComponent(tagIdOrName)}`;
     }
@@ -135,8 +156,18 @@ export module Pages {
         return getUrl(getThreadsOfUserUrl(user.name));
     }
 
-    export function getThreadsOfUserUrl(name: string) : string {
+    export function getThreadsOfUserUrl(name: string): string {
 
         return `threads/user/${encodeURIComponent(name)}`;
+    }
+
+    export function getCategoryFullUrl(category: CategoryRepository.Category): string {
+
+        return getUrl(getCategoryUrl(category.id, category.name));
+    }
+
+    export function getCategoryUrl(id: string, name: string): string {
+
+        return `category/${encodeURIComponent(name)}/${encodeURIComponent(id)}`;
     }
 }

@@ -2,6 +2,7 @@ import {CommonEntities} from "../services/commonEntities";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {ThreadsPage} from "../pages/threadsPage";
 import {DisplayHelpers} from "../helpers/displayHelpers";
+import {HomePage} from "../pages/homePage";
 
 export module Views {
 
@@ -229,7 +230,7 @@ export module Views {
         return `                    <option value="${value}" ${value == info.sortOrder ? 'selected' : ''}>${title}</option>\n`;
     }
 
-    function threadsWithTagLinkClicked(ev : Event) {
+    function threadsWithTagLinkClicked(ev: Event) {
 
         const tagId = (ev.target as HTMLElement).getAttribute('data-tagid');
 
@@ -238,11 +239,23 @@ export module Views {
         ev.preventDefault();
     }
 
-    function threadsOfUserLinkClicked(ev : Event) {
+    function threadsOfUserLinkClicked(ev: Event) {
 
         const userName = (ev.target as HTMLElement).getAttribute('data-threadusername');
 
         new ThreadsPage().displayForUser(userName);
+
+        ev.preventDefault();
+    }
+
+    function categoryLinkClicked(ev: Event) {
+
+        const link = ev.target as HTMLElement;
+
+        const categoryId = link.getAttribute('data-categoryid');
+        const categoryName = link.getAttribute('data-categoryname') || '';
+
+        new HomePage().displayCategory(categoryId, categoryName);
 
         ev.preventDefault();
     }
@@ -267,5 +280,21 @@ export module Views {
             let link = links.item(i);
             link.addEventListener('click', threadsOfUserLinkClicked);
         }
+    }
+
+    export function setupCategoryLinks(element: HTMLElement): void {
+
+        let links = element.querySelectorAll('[data-categoryid]');
+
+        for (let i = 0; i < links.length; ++i) {
+
+            let link = links.item(i) as HTMLAnchorElement;
+            setupCategoryLink(link);
+        }
+    }
+
+    export function setupCategoryLink(link: HTMLAnchorElement): void {
+
+        link.addEventListener('click', categoryLinkClicked);
     }
 }

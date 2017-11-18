@@ -4,6 +4,7 @@ import {UsersView} from "./usersView";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Views} from "./common";
+import {Pages} from "../pages/common";
 
 export module CategoriesView {
 
@@ -11,7 +12,7 @@ export module CategoriesView {
 
     export function createCategoriesTable(categories: CategoryRepository.Category[]): HTMLElement {
 
-        let tableContainer = new DOMAppender('<div class="categories-table">','</div>');
+        let tableContainer = new DOMAppender('<div class="categories-table">', '</div>');
         let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
         tableContainer.append(table);
 
@@ -39,7 +40,10 @@ export module CategoriesView {
 
                 nameColumn.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: folder">', '</span>'));
 
-                let nameLink = new DOMAppender('<a class="uk-button uk-button-text" href="#">', '</a>');
+                let nameLink = new DOMAppender('<a class="uk-button uk-button-text" href="' +
+                    Pages.getCategoryFullUrl(category) +
+                    '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
+                    DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
                 nameColumn.append(nameLink);
                 nameLink.appendString(' ' + category.name);
                 nameColumn.appendRaw('<br/>');
@@ -58,7 +62,10 @@ export module CategoriesView {
 
                         let childCategory = category.children[i];
 
-                        let element = new DOMAppender('<a>', '</a>');
+                        let element = new DOMAppender('<a href="' +
+                            Pages.getCategoryFullUrl(childCategory) +
+                            '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(childCategory.id) + '" data-categoryname="' +
+                            DOMHelpers.escapeStringForAttribute(childCategory.name) + '">', '</a>');
                         childCategoryElement.append(element);
                         element.appendString(childCategory.name);
 
@@ -134,6 +141,83 @@ export module CategoriesView {
 
         Views.setupThreadsWithTagsLinks(result);
         Views.setupThreadsOfUsersLinks(result);
+        Views.setupCategoryLinks(result);
+
+        return result;
+    }
+
+    export function createCategoryHeader(category: CategoryRepository.Category): HTMLElement {
+
+        let result = document.createElement('div');
+        result.classList.add('categories-list-header');
+
+        let breadcrumbsList = document.createElement('ul');
+        result.appendChild(breadcrumbsList);
+        breadcrumbsList.classList.add('uk-breadcrumb');
+
+        function addToBreadCrumbs(value: CategoryRepository.Category): void {
+
+            if (value.parent) addToBreadCrumbs(value.parent);
+
+            let element = document.createElement('li');
+            breadcrumbsList.appendChild(element);
+
+            let link = document.createElement('a');
+            element.appendChild(link);
+
+            link.href = Pages.getCategoryFullUrl(value);
+
+            link.appendChild(document.createTextNode(value.name));
+            if (value.description && value.description.length) {
+
+                link.setAttribute('title', value.description);
+                link.setAttribute('uk-tooltip', '');
+            }
+
+            link.setAttribute('data-categoryid', value.id);
+            link.setAttribute('data-categoryname', value.name);
+
+            Views.setupCategoryLink(link);
+        }
+
+        if (category.parent) {
+            addToBreadCrumbs(category.parent);
+        }
+
+        //add the current element also
+        let element = document.createElement('li');
+        breadcrumbsList.appendChild(element);
+        element.appendChild(document.createTextNode(category.name));
+
+        return result;
+    }
+
+    export function createCategoryDisplay(category: CategoryRepository.Category,
+                                          threadList: HTMLElement): HTMLElement {
+
+        let result = document.createElement('div');
+        result.appendChild(createCategoryHeader(category));
+
+        let separatorNeeded = false;
+
+        if (category.children && category.children.length) {
+
+            result.appendChild(createCategoriesTable(category.children));
+            separatorNeeded = true;
+        }
+
+        if (threadList) {
+
+            if (separatorNeeded) {
+                let separator = document.createElement('hr');
+                result.appendChild(separator);
+
+                separator.classList.add('uk-divider-icon');
+                separator.classList.add('divider-margin');
+            }
+
+            result.appendChild(threadList);
+        }
 
         return result;
     }
