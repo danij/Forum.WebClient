@@ -189,6 +189,24 @@ export module CategoriesView {
         breadcrumbsList.appendChild(element);
         element.appendChild(document.createTextNode(category.name));
 
+        if (category.description && category.description.length) {
+
+            let descriptionElement = document.createElement('span');
+            result.appendChild(descriptionElement);
+
+            descriptionElement.appendChild(document.createTextNode(category.description));
+            descriptionElement.classList.add('uk-text-meta');
+        }
+
+        if (category.tags && category.tags.length) {
+
+            for (let tag of category.tags) {
+
+                result.appendChild(TagsView.createTagElement(tag).toElement());
+                result.appendChild(document.createTextNode(' '));
+            }
+        }
+
         return result;
     }
 
