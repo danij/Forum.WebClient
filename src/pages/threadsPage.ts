@@ -5,6 +5,7 @@ import {CommonEntities} from "../services/commonEntities";
 import {Views} from "../views/common";
 import {MasterPage} from "./masterPage";
 import {TagRepository} from "../services/tagRepository";
+import {UserRepository} from "../services/userRepository";
 
 /**
  * Displays a list of threads with pagination and custom sorting
@@ -17,7 +18,10 @@ export class ThreadsPage implements Pages.Page {
     private sortOrder: string = 'ascending';
     private topPaginationControl: HTMLElement;
     private bottomPaginationControl: HTMLElement;
-    private tagIdOrName: string;
+    private tagIdOrName: string = null;
+    private tag: TagRepository.Tag = null;
+    private userName: string = null;
+    private user: UserRepository.User = null;
 
     display(): void {
 
@@ -25,19 +29,25 @@ export class ThreadsPage implements Pages.Page {
 
         Pages.changePage(async () => {
 
-            let tag: TagRepository.Tag = null;
             if (this.tagIdOrName && this.tagIdOrName.length) {
-                tag = await this.getCurrentTag();
-                if (null == tag) return;
+
+                this.tag = await this.getCurrentTag();
+                if (null == this.tag) return;
+            }
+            else {
+                this.user = await this.getCurrentUser();
             }
 
-            let threadCollection = await (tag ? this.getThreadsWithTag(tag) : this.getAllThreads());
+            let threadCollection = await (this.tag
+                ? this.getThreadsWithTag(this.tag)
+                : (this.user ? this.getThreadsOfUser(this.user) : this.getAllThreads()));
             if (null == threadCollection) return;
 
             let elements = ThreadsView.createThreadsPageContent(threadCollection, {
                 orderBy: this.orderBy,
                 sortOrder: this.sortOrder,
-                tag: tag
+                tag: this.tag,
+                user: this.user
             }, (value: number) => this.onPageNumberChange(value));
 
             this.setupSortControls(elements.sortControls);
@@ -63,6 +73,15 @@ export class ThreadsPage implements Pages.Page {
         this.display();
     }
 
+    displayForUser(userName: string): void {
+
+        if (userName && userName.length) {
+
+            this.userName = userName;
+        }
+        this.display();
+    }
+
     static loadPage(url: string): boolean {
 
         if (url.indexOf('threads/') != 0) return false;
@@ -73,6 +92,7 @@ export class ThreadsPage implements Pages.Page {
         page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
         page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
         page.tagIdOrName = Pages.getTagIdOrName(url);
+        page.userName = Pages.getUserName(url);
 
         page.display();
         return true;
@@ -96,22 +116,33 @@ export class ThreadsPage implements Pages.Page {
         } as ThreadRepository.GetThreadsRequest));
     }
 
+    private getThreadsOfUser(user: UserRepository.User): Promise<ThreadRepository.ThreadCollection> {
+
+        return Pages.getOrShowError(ThreadRepository.getThreadsOfUser(user, {
+            page: this.pageNumber,
+            orderBy: this.orderBy,
+            sort: this.sortOrder
+        } as ThreadRepository.GetThreadsRequest));
+    }
+
     private getCurrentTag(): Promise<TagRepository.Tag> {
 
         return Pages.getOrShowError(TagRepository.getTag(this.tagIdOrName));
+    }
+
+    private getCurrentUser(): Promise<UserRepository.User> {
+
+        return Pages.getOrShowError(UserRepository.getUserByName(this.userName));
     }
 
     private refreshList(): void {
 
         Views.changeContent($('#pageContentContainer .threads-table')[0], async () => {
 
-            let tag: TagRepository.Tag = null;
-            if (this.tagIdOrName && this.tagIdOrName.length) {
-                tag = await this.getCurrentTag();
-                if (null == tag) return;
-            }
+            let threadCollection = await (this.tag
+                ? this.getThreadsWithTag(this.tag)
+                : (this.user ? this.getThreadsOfUser(this.user) : this.getAllThreads()));
 
-            let threadCollection = await (tag ? this.getThreadsWithTag(tag) : this.getAllThreads());
             if (null == threadCollection) return;
 
             let newTopPaginationControl = Views.createPaginationControl(threadCollection,
@@ -163,6 +194,11 @@ export class ThreadsPage implements Pages.Page {
 
             url = Pages.getThreadsWithTagUrlByIdOrName(this.tagIdOrName);
             title = 'Threads with Tag';
+        }
+        else if (this.userName && this.userName.length) {
+
+            url = Pages.getThreadsOfUserUrl(this.userName);
+            title = 'Threads of User ' + this.userName;
         }
 
         MasterPage.goTo(Pages.appendToUrl(url, {

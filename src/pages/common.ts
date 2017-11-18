@@ -1,5 +1,6 @@
 import {Views} from "../views/common";
 import {TagRepository} from "../services/tagRepository";
+import {UserRepository} from "../services/userRepository";
 
 export module Pages {
 
@@ -47,6 +48,7 @@ export module Pages {
     const sortOrderRegex = /\/sortorder\/([^\/]+)/;
     const pageNumberRegex = /\/page\/([0-9]+)/;
     const tagIdOrNameRegex = /\/tag\/([^/]+)/;
+    const userNameRegex = /\/user\/([^/]+)/;
 
     export function getOrderBy(url: string): string {
 
@@ -88,6 +90,16 @@ export module Pages {
         return null;
     }
 
+    export function getUserName(url: string): string {
+
+        let match = url.match(userNameRegex);
+        if (match && match.length) {
+
+            return decodeURIComponent(match[1]);
+        }
+        return null;
+    }
+
     export function appendToUrl(extra: string, details: {orderBy: string, sortOrder: string, pageNumber?: number}): string {
 
         let result = '';
@@ -118,4 +130,13 @@ export module Pages {
         return `threads/tag/${encodeURIComponent(tagIdOrName)}`;
     }
 
+    export function getThreadsOfUserUrlFull(user: UserRepository.User): string {
+
+        return getUrl(getThreadsOfUserUrl(user.name));
+    }
+
+    export function getThreadsOfUserUrl(name: string) : string {
+
+        return `threads/user/${encodeURIComponent(name)}`;
+    }
 }

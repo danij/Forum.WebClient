@@ -24,6 +24,11 @@ export module UserRepository {
         users: User[];
     }
 
+    interface SingleUser {
+
+        user: User;
+    }
+
     export function defaultUserCollection(): UserCollection {
 
         return {
@@ -47,5 +52,12 @@ export module UserRepository {
             path: 'users',
             query: request
         }) as UserCollection;
+    }
+
+    export async function getUserByName(name: string): Promise<User> {
+
+        return (await RequestHandler.get({
+            path: 'users/name/' + encodeURIComponent(name)
+        }) as SingleUser).user;
     }
 }

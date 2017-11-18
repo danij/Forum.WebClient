@@ -2,6 +2,7 @@ import {UserRepository} from "../services/userRepository";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {Views} from "./common";
 import {DOMHelpers} from "../helpers/domHelpers";
+import {Pages} from "../pages/common";
 
 export module UsersView {
 
@@ -73,9 +74,8 @@ export module UsersView {
 
         let content = new DOMAppender('<div>', '</div>');
         content.appendRaw(('<li>\n' +
-            '    <a href="UserThreads" class="align-left">\n' +
-            '        <span>Threads</span>\n' +
-            '    </a>\n' +
+            '    <a href="' + Pages.getThreadsOfUserUrlFull(user) + '" class="align-left" data-threadusername="' +
+                DOMHelpers.escapeStringForAttribute(user.name) + '">Threads</a>\n' +
             '    <span class="uk-badge align-right">{nrOfThreads}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount)));
@@ -203,7 +203,9 @@ export module UsersView {
             usersListGrid.appendRaw('<h3>No users found</h3>');
         }
 
-        return usersListGrid.toElement();
+        let result = usersListGrid.toElement();
+        Views.setupThreadsOfUsersLinks(result);
+        return result;
     }
 
     function createUserInList(user: UserRepository.User): DOMAppender {
@@ -227,7 +229,8 @@ export module UsersView {
         userTitle.appendString(user.title);
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a href="#">Threads</a></div>\n' +
+            '    <div class="uk-float-left"><a href="' + Pages.getThreadsOfUserUrlFull(user) + '" data-threadusername="' +
+                DOMHelpers.escapeStringForAttribute(user.name)+ '">Threads</a></div>\n' +
             '    <div class="uk-float-right">{nrOfThreads}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount)));
@@ -271,5 +274,10 @@ export module UsersView {
                 .replace('{receivedDownVotes}', DisplayHelpers.intToString(user.receivedDownVotes)));
 
         return result;
+    }
+
+    export function createUserPageHeader(user: UserRepository.User): HTMLElement {
+
+        return createAuthorSmall(user).toElement();
     }
 }

@@ -66,4 +66,23 @@ export module ThreadRepository {
             query: request
         }) as ThreadCollection;
     }
+
+    export async function getThreadsOfUser(user: UserRepository.User, request: GetThreadsRequest): Promise<ThreadCollection> {
+
+        let result = await RequestHandler.get({
+            path: 'threads/user/' + user.id,
+            query: request
+        }) as ThreadCollection;
+
+        if (result.threads && result.threads.length) {
+
+            for (let thread of result.threads) {
+
+                //createdBy might not be populated when querying threads of a user
+                thread.createdBy = thread.createdBy || user;
+            }
+        }
+
+        return result;
+    }
 }

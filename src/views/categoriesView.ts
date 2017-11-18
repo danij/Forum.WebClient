@@ -3,6 +3,7 @@ import {TagsView} from "./tagsView";
 import {UsersView} from "./usersView";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {DOMHelpers} from "../helpers/domHelpers";
+import {Views} from "./common";
 
 export module CategoriesView {
 
@@ -129,6 +130,11 @@ export module CategoriesView {
             }
         }
 
-        return tableContainer.toElement();
+        let result = tableContainer.toElement();
+
+        Views.setupThreadsWithTagsLinks(result);
+        Views.setupThreadsOfUsersLinks(result);
+
+        return result;
     }
 }

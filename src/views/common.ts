@@ -233,6 +233,14 @@ export module Views {
         ev.preventDefault();
     }
 
+    function threadsOfUserLinkClicked(ev : Event) {
+
+        const userName = (ev.target as HTMLElement).getAttribute('data-threadusername');
+
+        new ThreadsPage().displayForUser(userName);
+
+        ev.preventDefault();
+    }
 
     export function setupThreadsWithTagsLinks(element: HTMLElement): void {
 
@@ -242,6 +250,17 @@ export module Views {
 
             let link = links.item(i);
             link.addEventListener('click', threadsWithTagLinkClicked);
+        }
+    }
+
+    export function setupThreadsOfUsersLinks(element: HTMLElement): void {
+
+        let links = element.querySelectorAll('[data-threadusername]');
+
+        for (let i = 0; i < links.length; ++i) {
+
+            let link = links.item(i);
+            link.addEventListener('click', threadsOfUserLinkClicked);
         }
     }
 }

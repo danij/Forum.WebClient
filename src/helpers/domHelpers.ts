@@ -49,6 +49,19 @@ export module DOMHelpers {
         return $('<div></div>').text(value).html();
     }
 
+    export function escapeStringForAttribute(value: string): string {
+
+        let span = document.createElement('span');
+        span.setAttribute('a', value);
+
+        let html = span.outerHTML;
+        let firstQuote = html.indexOf('"');
+        let lastQuote = html.lastIndexOf('"');
+
+        let result = html.substring(firstQuote + 1, lastQuote);
+        return result;
+    }
+
     export function parseHTML(html: string): HTMLElement {
 
         let element = document.createElement('template');
