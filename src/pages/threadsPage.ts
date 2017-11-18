@@ -13,7 +13,6 @@ import {UserRepository} from "../services/userRepository";
 export class ThreadsPage implements Pages.Page {
 
     private pageNumber: number = 0;
-    private pageCount: number = 1;
     private orderBy: string = 'name';
     private sortOrder: string = 'ascending';
     private topPaginationControl: HTMLElement;
@@ -55,7 +54,6 @@ export class ThreadsPage implements Pages.Page {
 
             this.topPaginationControl = elements.paginationTop;
             this.bottomPaginationControl = elements.paginationBottom;
-            this.pageCount = CommonEntities.getPageCount(threadCollection);
 
             return elements.list;
         });

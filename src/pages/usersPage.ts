@@ -11,7 +11,6 @@ import {MasterPage} from "./masterPage";
 export class UsersPage implements Pages.Page {
 
     private pageNumber: number = 0;
-    private pageCount: number = 1;
     private orderBy: string = 'name';
     private sortOrder: string = 'ascending';
     private topPaginationControl: HTMLElement;
@@ -36,7 +35,6 @@ export class UsersPage implements Pages.Page {
 
             this.topPaginationControl = elements.paginationTop;
             this.bottomPaginationControl = elements.paginationBottom;
-            this.pageCount = CommonEntities.getPageCount(userCollection);
 
             return elements.list;
         });
