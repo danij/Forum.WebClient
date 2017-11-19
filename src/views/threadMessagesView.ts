@@ -2,10 +2,30 @@ import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
 import {Views} from "./common";
+import {ThreadRepository} from "../services/threadRepository";
+import {UserRepository} from "../services/userRepository";
+import {ThreadsView} from "./threadsView";
+import {UsersView} from "./usersView";
+import {DisplayHelpers} from "../helpers/displayHelpers";
 
 export module ThreadMessagesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
+    import ThreadMessageLastUpdated = ThreadMessageRepository.ThreadMessageLastUpdated;
+
+    export class ThreadMessagesPageContent {
+
+        sortControls: HTMLElement;
+        paginationTop: HTMLElement;
+        paginationBottom: HTMLElement;
+        list: HTMLElement
+    }
+
+    export interface ThreadMessagePageDisplayInfo extends Views.SortInfo {
+
+        thread?: ThreadRepository.ThreadWithMessages,
+        user?: UserRepository.User
+    }
 
     export function createRecentThreadMessagesView(messages: ThreadMessageRepository.ThreadMessage[]): HTMLElement {
 
@@ -28,13 +48,15 @@ export module ThreadMessagesView {
 
             let threadTitle = DOMHelpers.escapeStringForAttribute(message.parentThread.name);
 
-            let threadLink = new DOMAppender(`<a class="recent-message-thread-link" title="${threadTitle}" uk-tooltip>`, '</a>');
+            let href = Pages.getThreadMessagesOfThreadUrlFull(message.parentThread);
+            data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(message.parentThread.id)}"`;
+            let threadLink = new DOMAppender(`<a href="${href}" class="recent-message-thread-link" title="${threadTitle}" ${data}>`, '</a>');
             element.append(threadLink);
             threadLink.appendString(message.parentThread.name);
 
             let messageTitle = DOMHelpers.escapeStringForAttribute(message.content);
 
-            let link = new DOMAppender(`<a class="recent-message-link" title="${messageTitle}" uk-tooltip>`, '</a>');
+            let link = new DOMAppender(`<a class="recent-message-link" title="${messageTitle}">`, '</a>');
             element.append(link);
             link.appendString(message.content);
         }
@@ -42,7 +64,167 @@ export module ThreadMessagesView {
         let resultElement = result.toElement();
 
         Views.setupThreadsOfUsersLinks(resultElement);
+        Views.setupThreadMessagesOfUsersLinks(resultElement);
+        Views.setupThreadMessagesOfThreadsLinks(resultElement);
 
         return resultElement;
+    }
+
+    export function createThreadMessagesPageContent(collection: ThreadMessageRepository.ThreadMessageCollection,
+                                                    info: ThreadMessagePageDisplayInfo,
+                                                    onPageNumberChange: Views.PageNumberChangeCallback,
+                                                    thread: ThreadRepository.Thread): ThreadMessagesPageContent {
+
+        collection = collection || ThreadMessageRepository.defaultThreadMessageCollection();
+
+        let result = new ThreadMessagesPageContent();
+
+        let resultList = document.createElement('div');
+
+        if (info.thread) {
+
+            resultList.appendChild(ThreadsView.createThreadPageHeader(info.thread));
+        }
+        else if (info.user) {
+
+            resultList.appendChild(UsersView.createUserPageHeader(info.user));
+            resultList.appendChild(result.sortControls = createThreadMessageListSortControls(info));
+        }
+
+        resultList.appendChild(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange));
+
+        let listContainer = document.createElement('div');
+        listContainer.classList.add('thread-message-list');
+        listContainer.appendChild(createThreadMessageList(collection, thread));
+        resultList.appendChild(listContainer);
+
+        resultList.appendChild(result.paginationBottom = Views.createPaginationControl(collection, null));
+
+        result.list = resultList;
+        return result;
+    }
+
+    function createThreadMessageListSortControls(info: Views.SortInfo): HTMLElement {
+
+        return $('<div class="thread-messages-list-header uk-flex uk-flex-center">\n' +
+            '    <form>\n' +
+            '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
+            '            <div class="uk-float-right">\n' +
+            '                <select class="uk-select" name="sortOrder">\n' +
+            Views.createSortOrderOption('ascending', 'Ascending', info) +
+            Views.createSortOrderOption('descending', 'Descending', info) +
+            '                </select>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '    </form>\n' +
+            '</div>')[0];
+    }
+
+
+    export function createThreadMessageList(collection: ThreadMessageRepository.ThreadMessageCollection,
+                                            thread?: ThreadRepository.Thread): HTMLElement {
+
+        const messages = collection.messages || [];
+
+        let result = new DOMAppender('<div class="uk-container uk-container-expand">', '</div>');
+
+        for (let i = 0; i < messages.length; ++i) {
+
+            const message = messages[i];
+
+            let messageContainer = new DOMAppender('<div class="uk-card uk-card-body discussion-thread-message">', '</div>');
+            result.append(messageContainer);
+
+            {
+                const number = collection.page * collection.pageSize + i + 1;
+                messageContainer.appendRaw(`<div class="message-number uk-text-meta">#${DisplayHelpers.intToString(number)}</div>`);
+            }
+            {
+                let author = message.createdBy;
+                let authorContainer = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
+                messageContainer.append(authorContainer);
+                {
+                    let userContainer = new DOMAppender('<div class="pointer-cursor">', '</div>');
+                    authorContainer.append(userContainer);
+
+                    userContainer.append(UsersView.createUserLogoForList(author));
+
+                    let usernameElement = UsersView.createUserNameElement(author);
+
+                    const messageThread = message.parentThread || thread;
+                    if (messageThread && messageThread.createdBy && messageThread.createdBy.id === author.id) {
+
+                        usernameElement.appendRaw('<span class="thread-author" uk-tooltip title="Thread Author">✍</span>');
+                    }
+
+                    userContainer.append(usernameElement);
+
+                    userContainer.append(UsersView.createUserTitleElement(author));
+                }
+                {
+                    authorContainer.append(UsersView.createUserDropdown(author, 'user-info', 'bottom-left'));
+                }
+                {
+                    author.signature = author.signature || '';
+
+                    let signatureContainer = new DOMAppender('<div class="uk-text-center uk-float-left message-signature">', '</div>');
+                    authorContainer.append(signatureContainer);
+
+                    let signature = new DOMAppender('<span title="User signature" uk-tooltip>', '</span>');
+                    signatureContainer.append(signature);
+                    signature.appendString(author.signature);
+                }
+                {
+                    let upVotesNr = DisplayHelpers.intToString((message.upVotes || []).length);
+                    let downVotesNr = DisplayHelpers.intToString((message.downVotes || []).length);
+
+                    authorContainer.appendRaw(`<div class="uk-text-center uk-float-left message-up-vote"><span class="uk-label" title="Up vote message" uk-tooltip>&plus; ${upVotesNr}</span></div>`);
+                    authorContainer.appendRaw(`<div class="uk-text-center uk-float-right message-down-vote"><span class="uk-label" title="Down vote message" uk-tooltip>&minus; ${downVotesNr}</span></div>`);
+                }
+            }
+            {
+                let messageDetailsContainer = new DOMAppender('<div class="uk-card-badge message-time-container">', '</div>');
+                messageContainer.append(messageDetailsContainer);
+
+                messageDetailsContainer.appendRaw(`<span class="message-time" title="${DisplayHelpers.getFullDateTime(message.created)}" uk-tooltip>${DisplayHelpers.getAgoTime(message.created)} </span>`);
+
+                if (message.lastUpdated && message.lastUpdated.at) {
+
+                    messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning" title="${DisplayHelpers.getFullDateTime(message.lastUpdated.at)}" uk-tooltip>Edited ${DisplayHelpers.getAgoTime(message.lastUpdated.at)} </span>`);
+                }
+                if (message.ip && message.ip.length) {
+
+                    messageDetailsContainer.appendRaw(`<samp>${DOMHelpers.escapeStringForContent(message.ip)}</samp>`);
+                }
+            }
+            {
+                /*
+        <div class="message-actions">
+            <a uk-icon="icon: file-edit" href="editMessage" title="Edit message content" uk-tooltip></a>
+            <a uk-icon="icon: move" href="moveMessage" title="Move to different thread" uk-tooltip></a>
+            <a uk-icon="icon: trash" href="deleteMessage" title="Delete message" uk-tooltip></a>
+            <a uk-icon="icon: warning" href="commentMessage" title="Flag & comment" uk-tooltip></a>
+            <a uk-icon="icon: commenting" href="quoteMessage" title="Quote content" uk-tooltip></a>
+        </div>
+                 */
+            }
+            {
+                let content = new DOMAppender('<div class="message-content">', '</div>');
+                messageContainer.append(content);
+                content.appendString(message.content);
+            }
+
+            if (i < (messages.length - 1)) {
+
+                result.appendRaw('<hr class="uk-divider-icon" />');
+            }
+        }
+
+        let element = result.toElement();
+
+        Views.setupThreadsOfUsersLinks(element);
+        Views.setupThreadMessagesOfUsersLinks(element);
+
+        return element;
     }
 }

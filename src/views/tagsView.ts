@@ -4,6 +4,7 @@ import {Views} from "./common";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
 import {UsersView} from "./usersView";
+import {ThreadRepository} from "../services/threadRepository";
 
 export module TagsView {
 
@@ -165,7 +166,14 @@ export module TagsView {
 
                 let threadTitle = latestMessage.threadName || 'unknown';
 
-                let threadTitleElement = $('<a class="recent-message-thread-link" href="#" uk-tooltip></a>');
+                let href = Pages.getThreadMessagesOfThreadUrlFull({
+                    id: latestMessage.threadId,
+                    name: latestMessage.threadName
+                } as ThreadRepository.Thread);
+
+                let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(latestMessage.threadId)}"`;
+
+                let threadTitleElement = $(`<a class="recent-message-thread-link" href="${href}" ${data}></a>`);
                 threadTitleElement.text(threadTitle);
                 threadTitleElement.attr('title', threadTitle);
                 latestMessageColumn.appendElement(threadTitleElement[0]);
@@ -180,7 +188,7 @@ export module TagsView {
 
                 let messageContent = latestMessage.content || 'empty';
 
-                let messageLink = $('<a class="recent-message-link" href="#" uk-tooltip></a>');
+                let messageLink = $('<a class="recent-message-link" href="#"></a>');
                 messageLink.text(messageContent);
                 messageLink.attr('title', messageContent);
                 latestMessageColumn.appendElement(messageLink[0]);
@@ -190,6 +198,7 @@ export module TagsView {
         let result = tableContainer.toElement();
 
         Views.setupThreadsWithTagsLinks(result);
+        Views.setupThreadMessagesOfThreadsLinks(result);
 
         return result;
     }

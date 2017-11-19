@@ -42,7 +42,7 @@ export module ThreadsView {
         }
         else if (info.user) {
 
-           resultList.append(UsersView.createUserPageHeader(info.user));
+            resultList.append(UsersView.createUserPageHeader(info.user));
         }
 
         resultList.append(result.sortControls = createThreadListSortControls(info));
@@ -112,7 +112,10 @@ export module ThreadsView {
                 const icon = thread.pinned ? 'star' : 'forward';
                 nameColumn.append(new DOMAppender(`<span class="${iconClass}" uk-icon="icon: ${icon}">`, '</span>'));
 
-                let threadLink = new DOMAppender('<a class="uk-button uk-button-text" href="#">', '</a>');
+                let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
+                let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
+
+                let threadLink = new DOMAppender(`<a class="uk-button uk-button-text" href="${href}" ${data}>`, '</a>');
                 nameColumn.append(threadLink);
                 threadLink.appendString(' ' + thread.name);
 
@@ -204,6 +207,8 @@ export module ThreadsView {
         Views.setupCategoryLinks(result);
         Views.setupThreadsWithTagsLinks(result);
         Views.setupThreadsOfUsersLinks(result);
+        Views.setupThreadMessagesOfUsersLinks(result);
+        Views.setupThreadMessagesOfThreadsLinks(result);
 
         return result;
     }
@@ -223,14 +228,14 @@ export module ThreadsView {
 
             if (0 === thread.voteScore) {
 
-                element.appendRaw(`<span class="thread-vote neutral-vote" uk-tooltip="" aria-expanded="false">0</span>`);
+                element.appendRaw(`<span class="thread-vote neutral-vote" aria-expanded="false">0</span>`);
             }
             else if (thread.voteScore < 0) {
 
-                element.appendRaw(`<span class="thread-vote down-vote" uk-tooltip="" aria-expanded="false">−${score}</span>`);
+                element.appendRaw(`<span class="thread-vote down-vote" aria-expanded="false">−${score}</span>`);
             }
             else {
-                element.appendRaw(`<span class="thread-vote up-vote" uk-tooltip="" aria-expanded="false">+${score}</span>`);
+                element.appendRaw(`<span class="thread-vote up-vote" aria-expanded="false">+${score}</span>`);
             }
 
             let user = new DOMAppender('<span class="author">', '</span>');
@@ -243,7 +248,9 @@ export module ThreadsView {
 
             let title = DOMHelpers.escapeStringForAttribute(thread.name);
 
-            let link = new DOMAppender(`<a class="recent-thread-link" title="${title}" uk-tooltip>`, '</a>');
+            let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
+            data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
+            let link = new DOMAppender(`<a href="${href}" class="recent-thread-link" title="${title}" ${data}>`, '</a>');
             element.append(link);
             link.appendString(thread.name);
         }
@@ -251,7 +258,92 @@ export module ThreadsView {
         let resultElement = result.toElement();
 
         Views.setupThreadsOfUsersLinks(resultElement);
+        Views.setupThreadMessagesOfThreadsLinks(resultElement);
 
         return resultElement;
+    }
+
+    export function createThreadPageHeader(thread: ThreadRepository.Thread): HTMLElement {
+
+        let result = new DOMAppender('<div class="uk-container uk-container-expand thread-header">', '</div>');
+
+        let card = new DOMAppender('<div class="uk-card uk-card-body">', '</div>');
+        result.append(card);
+
+        {
+        /* append to card:
+    <div class="thread-actions">
+        <button class="uk-button uk-button-primary uk-button-small">Subscribe</button>
+        <a uk-icon="icon: file-edit" href="editThreadTitle" title="Edit thread title" uk-tooltip></a>
+        <a uk-icon="icon: tag" href="editThreadTags" title="Edit thread tags" uk-tooltip></a>
+        <a uk-icon="icon: settings" href="editThreadPrivileges" title="Edit thread access" uk-tooltip
+           uk-toggle="target: #privileges-modal"></a>
+        <a uk-icon="icon: trash" href="deleteThread" title="Delete thread" uk-tooltip></a>
+    </div>
+        */
+        }
+        {
+            let title = new DOMAppender(' <div class="uk-align-left thread-title">', '</div>');
+            card.append(title);
+
+            let threadTitle = new DOMAppender('<span class="uk-logo">', '</span>');
+            title.append(threadTitle);
+            threadTitle.appendString(thread.name);
+            title.appendRaw(' ');
+
+            let href = Pages.getThreadsOfUserUrlFull(thread.createdBy);
+            let data = `data-threadusername="${DOMHelpers.escapeStringForAttribute(thread.createdBy.name)}"`;
+
+            let userLink = new DOMAppender(`<a href="${href}" ${data}>`, '</a>');
+            title.append(userLink);
+            userLink.appendString(thread.createdBy.name);
+        }
+        {
+            card.appendRaw('<div class="uk-clearfix"></div>');
+        }
+        {
+            let details = new DOMAppender('<div class="thread-details uk-align-left">', '</div>');
+            card.append(details);
+
+            if (thread.tags && thread.tags.length){
+
+                for (let tag of thread.tags) {
+
+                    details.append(TagsView.createTagElement(tag));
+                    details.appendRaw(' ');
+                }
+            }
+
+            details.appendRaw('<span>Displayed under: </span>');
+            if (thread.categories && thread.categories.length) {
+
+                for (let category of thread.categories) {
+
+                    let element = new DOMAppender('<a href="' +
+                        Pages.getCategoryFullUrl(category) +
+                        '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
+                        DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
+                    details.append(element);
+                    element.appendString(category.name);
+                    details.appendRaw(' · ');
+                }
+            }
+            else {
+
+                details.appendString('<none> · ');
+            }
+            details.appendRaw(`${DisplayHelpers.intToString(thread.visited)} total views · `);
+            details.appendRaw(`<a href="subscribed">${DisplayHelpers.intToString(thread.subscribedUsersCount)} subscribed users</a>`);
+        }
+        {
+            card.appendRaw('<div class="uk-clearfix"></div>');
+        }
+        let element = result.toElement();
+
+        Views.setupThreadsWithTagsLinks(element);
+        Views.setupThreadsOfUsersLinks(element);
+        Views.setupCategoryLinks(element);
+
+        return element;
     }
 }

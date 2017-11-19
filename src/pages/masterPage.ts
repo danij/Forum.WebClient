@@ -10,6 +10,7 @@ import {ThreadRepository} from "../services/threadRepository";
 import {ThreadsView} from "../views/threadsView";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "../views/threadMessagesView";
+import {ThreadMessagesPage} from "./threadMessagesPage";
 
 export module MasterPage {
 
@@ -121,6 +122,7 @@ export module MasterPage {
             HomePage.loadPage,
             TagsPage.loadPage,
             ThreadsPage.loadPage,
+            ThreadMessagesPage.loadPage,
             UsersPage.loadPage
         ];
 

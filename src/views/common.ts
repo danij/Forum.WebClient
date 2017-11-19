@@ -3,6 +3,7 @@ import {DOMHelpers} from "../helpers/domHelpers";
 import {ThreadsPage} from "../pages/threadsPage";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {HomePage} from "../pages/homePage";
+import {ThreadMessagesPage} from "../pages/threadMessagesPage";
 
 export module Views {
 
@@ -251,6 +252,24 @@ export module Views {
         ev.preventDefault();
     }
 
+    function threadMessagesOfUserLinkClicked(ev: Event) {
+
+        const userName = (ev.target as HTMLElement).getAttribute('data-threadmessageusername');
+
+        new ThreadMessagesPage().displayForUser(userName);
+
+        ev.preventDefault();
+    }
+
+    function threadMessagesOfThreadLinkClicked(ev: Event) {
+
+        const threadId = (ev.target as HTMLElement).getAttribute('data-threadmessagethreadid');
+
+        new ThreadMessagesPage().displayForThread(threadId);
+
+        ev.preventDefault();
+    }
+
     function categoryLinkClicked(ev: Event) {
 
         const link = ev.target as HTMLElement;
@@ -282,6 +301,28 @@ export module Views {
 
             let link = links.item(i);
             link.addEventListener('click', threadsOfUserLinkClicked);
+        }
+    }
+
+    export function setupThreadMessagesOfUsersLinks(element: HTMLElement): void {
+
+        let links = element.querySelectorAll('[data-threadmessageusername]');
+
+        for (let i = 0; i < links.length; ++i) {
+
+            let link = links.item(i);
+            link.addEventListener('click', threadMessagesOfUserLinkClicked);
+        }
+    }
+
+    export function setupThreadMessagesOfThreadsLinks(element: HTMLElement): void {
+
+        let links = element.querySelectorAll('[data-threadmessagethreadid]');
+
+        for (let i = 0; i < links.length; ++i) {
+
+            let link = links.item(i);
+            link.addEventListener('click', threadMessagesOfThreadLinkClicked);
         }
     }
 

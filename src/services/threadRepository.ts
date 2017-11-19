@@ -3,6 +3,7 @@ import {UserRepository} from "./userRepository";
 import {TagRepository} from "./tagRepository";
 import {CommonEntities} from "./commonEntities";
 import {RequestHandler} from "./requestHandler";
+import {ThreadMessageRepository} from "./threadMessageRepository";
 
 export module ThreadRepository {
 
@@ -35,6 +36,15 @@ export module ThreadRepository {
     export interface PinnedThreadCollection extends ThreadCollection {
 
         pinned_threads: Thread[]
+    }
+
+    export interface ThreadWithMessages extends Thread, ThreadMessageRepository.ThreadMessageCollection {
+
+    }
+
+    export interface ThreadWithMessagesResponse {
+
+        thread: ThreadWithMessages;
     }
 
     export function defaultThreadCollection(): ThreadCollection {
@@ -96,6 +106,14 @@ export module ThreadRepository {
             path: 'threads/category/' + encodeURIComponent(category.id),
             query: request
         }) as PinnedThreadCollection);
+    }
+
+    export async function getThreadById(id: string, request: GetThreadsRequest): Promise<ThreadWithMessagesResponse> {
+
+        return await RequestHandler.get({
+            path: 'threads/id/' + encodeURIComponent(id),
+            query: request
+        }) as ThreadWithMessagesResponse;
     }
 
     function appendPinnedThreadCollection(collection: PinnedThreadCollection): ThreadCollection {

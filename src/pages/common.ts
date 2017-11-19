@@ -2,6 +2,7 @@ import {Views} from "../views/common";
 import {TagRepository} from "../services/tagRepository";
 import {UserRepository} from "../services/userRepository";
 import {CategoryRepository} from "../services/categoryRepository";
+import {ThreadRepository} from "../services/threadRepository";
 
 export module Pages {
 
@@ -55,6 +56,7 @@ export module Pages {
     const sortOrderRegex = /\/sortorder\/([^\/]+)/;
     const pageNumberRegex = /\/page\/([0-9]+)/;
     const tagNameRegex = /\/tag\/([^/]+)/;
+    const threadIdRegex = /\/thread\/([^/]+)\/([^/]+)/;
     const userNameRegex = /\/user\/([^/]+)/;
     const categoryRootRegex = /^[\/]?category\/([^/]+)\/([^/]+)/;
 
@@ -98,6 +100,16 @@ export module Pages {
         return null;
     }
 
+    export function getThreadId(url: string): string {
+
+        let match = url.match(threadIdRegex);
+        if (match && match.length) {
+
+            return decodeURIComponent(match[2]);
+        }
+        return null;
+    }
+
     export function getUserName(url: string): string {
 
         let match = url.match(userNameRegex);
@@ -121,7 +133,7 @@ export module Pages {
         return null;
     }
 
-    export function appendToUrl(extra: string, details: { orderBy: string, sortOrder: string, pageNumber?: number }): string {
+    export function appendToUrl(extra: string, details: { orderBy?: string, sortOrder: string, pageNumber?: number }): string {
 
         let result = '';
 
@@ -159,6 +171,26 @@ export module Pages {
     export function getThreadsOfUserUrl(name: string): string {
 
         return `threads/user/${encodeURIComponent(name)}`;
+    }
+
+    export function getThreadMessagesOfUserUrlFull(user: UserRepository.User): string {
+
+        return getUrl(getThreadMessagesOfUserUrl(user.name));
+    }
+
+    export function getThreadMessagesOfUserUrl(name: string): string {
+
+        return `thread_messages/user/${encodeURIComponent(name)}`;
+    }
+
+    export function getThreadMessagesOfThreadUrlFull(thread: ThreadRepository.Thread): string {
+
+        return getUrl(getThreadMessagesOfThreadUrl(thread.id, thread.name));
+    }
+
+    export function getThreadMessagesOfThreadUrl(id: string, name: string): string {
+
+        return `thread_messages/thread/${encodeURIComponent(name)}/${encodeURIComponent(id)}`;
     }
 
     export function getCategoryFullUrl(category: CategoryRepository.Category): string {

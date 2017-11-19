@@ -5,6 +5,7 @@ import {DisplayHelpers} from "../helpers/displayHelpers";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Views} from "./common";
 import {Pages} from "../pages/common";
+import {ThreadRepository} from "../services/threadRepository";
 
 export module CategoriesView {
 
@@ -115,7 +116,14 @@ export module CategoriesView {
 
                 let threadTitle = latestMessage.threadName || 'unknown';
 
-                let threadTitleElement = $('<a class="recent-message-thread-link" href="#" uk-tooltip></a>');
+                let href = Pages.getThreadMessagesOfThreadUrlFull({
+                    id: latestMessage.threadId,
+                    name: latestMessage.threadName
+                } as ThreadRepository.Thread);
+
+                let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(latestMessage.threadId)}"`;
+
+                let threadTitleElement = $(`<a class="recent-message-thread-link" href="${href}" ${data}></a>`);
                 threadTitleElement.text(threadTitle);
                 threadTitleElement.attr('title', threadTitle);
                 latestMessageColumn.appendElement(threadTitleElement[0]);
@@ -130,7 +138,7 @@ export module CategoriesView {
 
                 let messageContent = latestMessage.content || 'empty';
 
-                let messageLink = $('<a class="recent-message-link" href="#" uk-tooltip></a>');
+                let messageLink = $('<a class="recent-message-link" href="#"></a>');
                 messageLink.text(messageContent);
                 messageLink.attr('title', messageContent);
                 latestMessageColumn.appendElement(messageLink[0]);
@@ -141,6 +149,8 @@ export module CategoriesView {
 
         Views.setupThreadsWithTagsLinks(result);
         Views.setupThreadsOfUsersLinks(result);
+        Views.setupThreadMessagesOfUsersLinks(result);
+        Views.setupThreadMessagesOfThreadsLinks(result);
         Views.setupCategoryLinks(result);
 
         return result;

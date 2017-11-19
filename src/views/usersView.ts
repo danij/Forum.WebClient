@@ -70,7 +70,8 @@ export module UsersView {
         return element;
     }
 
-    function createUserDropdown(user: UserRepository.User, classString?: string): DOMAppender {
+    export function createUserDropdown(user: UserRepository.User, classString?: string,
+                                       position: string = 'bottom-right'): DOMAppender {
 
         let content = new DOMAppender('<div>', '</div>');
         content.appendRaw(('<li>\n' +
@@ -81,9 +82,8 @@ export module UsersView {
             '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount)));
 
         content.appendRaw(('<li>\n' +
-            '    <a href="UserMessages" class="align-left">\n' +
-            '        <span>Messages</span>\n' +
-            '    </a>\n' +
+            '    <a href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" class="align-left" data-threadmessageusername="' +
+                DOMHelpers.escapeStringForAttribute(user.name) + '">Messages</a>\n' +
             '    <span class="uk-badge align-right">{nrOfMessages}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));
@@ -127,7 +127,7 @@ export module UsersView {
 
         return Views.createDropdown(user.name, content, {
             mode: 'hover',
-            pos: 'bottom-right',
+            pos: position,
         }, classString);
     }
 
@@ -204,7 +204,26 @@ export module UsersView {
         }
 
         let result = usersListGrid.toElement();
+
         Views.setupThreadsOfUsersLinks(result);
+        Views.setupThreadMessagesOfUsersLinks(result);
+
+        return result;
+    }
+
+    export function createUserNameElement(user: UserRepository.User): DOMAppender {
+
+        let result = new DOMAppender('<div class="username uk-text-small">', '</div>');
+        result.appendString(user.name);
+
+        return result;
+    }
+
+    export function createUserTitleElement(user: UserRepository.User): DOMAppender {
+
+        let result = new DOMAppender('<div class="usertitle uk-text-small">', '</div>');
+        result.appendString(user.title);
+
         return result;
     }
 
@@ -219,14 +238,9 @@ export module UsersView {
         card.append(wrapper);
 
         wrapper.append(createUserLogoForList(user));
+        wrapper.append(createUserNameElement(user));
 
-        let userName = new DOMAppender('<div class="username uk-text-small">', '</div>');
-        wrapper.append(userName);
-        userName.appendString(user.name);
-
-        let userTitle = new DOMAppender('<div class="usertitle uk-text-small">', '</div>');
-        wrapper.append(userTitle);
-        userTitle.appendString(user.title);
+        wrapper.append(createUserTitleElement(user));
 
         wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left"><a href="' + Pages.getThreadsOfUserUrlFull(user) + '" data-threadusername="' +
@@ -236,7 +250,8 @@ export module UsersView {
             '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount)));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a href="#">Messages</a></div>\n' +
+            '    <div class="uk-float-left"><a href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" data-threadmessageusername="' +
+                DOMHelpers.escapeStringForAttribute(user.name)+ '">Threads</a></div>\n' +
             '    <div class="uk-float-right">{nrOfMessages}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));
@@ -295,8 +310,13 @@ export module UsersView {
             title.appendString(user.title);
         }
 
+        let threadsLink = '<a href="' + Pages.getThreadsOfUserUrlFull(user) + '" data-threadusername="' +
+                DOMHelpers.escapeStringForAttribute(user.name)+ '">threads</a>';
+        let threadMessagesLink = '<a href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" data-threadmessageusername="' +
+                DOMHelpers.escapeStringForAttribute(user.name)+ '">messages</a>';
+
         result.appendRaw(('<div>\n' +
-            '    <p>{threadCount} threads · {messageCount} messages <span class="uk-label score-up">+ {upVotes}</span> <span class="uk-label score-down">− {downVotes}</span></p>\n' +
+            `    <p>{threadCount} ${threadsLink} · {messageCount} ${threadMessagesLink} <span class="uk-label score-up">+ {upVotes}</span> <span class="uk-label score-down">− {downVotes}</span></p>\n` +
             '    <p>Joined <span class="uk-text-meta">{joined}</span> · Last seen <span class="uk-text-meta">{lastSeen}</span></p>\n' +
             '</div>')
                 .replace('{threadCount}', DisplayHelpers.intToString(user.threadCount))
@@ -317,6 +337,11 @@ export module UsersView {
 
         result.appendRaw('<div class="uk-clearfix"></div>');
 
-        return result.toElement();
+        let resultElement = result.toElement();
+
+        Views.setupThreadsOfUsersLinks(resultElement);
+        Views.setupThreadMessagesOfUsersLinks(resultElement);
+
+        return resultElement;
     }
 }
