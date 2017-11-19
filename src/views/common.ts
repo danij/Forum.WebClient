@@ -15,6 +15,7 @@ export module Views {
         pageNumbersAfter: number,
         showSpinnerAfterMilliSeconds: number;
         updateStatisticsEveryMilliSeconds: number;
+        updateRecentThreadsEveryMilliSeconds: number;
     }
 
     declare const displayConfig: DisplayConfig;

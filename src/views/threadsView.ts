@@ -6,6 +6,7 @@ import {TagsView} from "./tagsView";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {TagRepository} from "../services/tagRepository";
 import {UserRepository} from "../services/userRepository";
+import {Pages} from "../pages/common";
 
 export module ThreadsView {
 
@@ -205,5 +206,52 @@ export module ThreadsView {
         Views.setupThreadsOfUsersLinks(result);
 
         return result;
+    }
+
+    export function createRecentThreadsView(threads: ThreadRepository.Thread[]): HTMLElement {
+
+        let result = new DOMAppender('<div>', '</div>');
+
+        for (let thread of threads) {
+
+            if (null === thread) continue;
+
+            let element = new DOMAppender('<div class="recent-thread">', '</div>');
+            result.append(element);
+
+            let score = DisplayHelpers.intToString(Math.abs(thread.voteScore));
+
+            if (0 === thread.voteScore) {
+
+                element.appendRaw(`<span class="thread-vote neutral-vote" uk-tooltip="" aria-expanded="false">0</span>`);
+            }
+            else if (thread.voteScore < 0) {
+
+                element.appendRaw(`<span class="thread-vote down-vote" uk-tooltip="" aria-expanded="false">−${score}</span>`);
+            }
+            else {
+                element.appendRaw(`<span class="thread-vote up-vote" uk-tooltip="" aria-expanded="false">+${score}</span>`);
+            }
+
+            let user = new DOMAppender('<span class="author">', '</span>');
+            element.append(user);
+
+            let data = `data-threadusername="${DOMHelpers.escapeStringForAttribute(thread.createdBy.name)}"`;
+            let userLink = new DOMAppender(`<a href="${Pages.getThreadsOfUserUrlFull(thread.createdBy)}" ${data}>`, '</a>');
+            user.append(userLink);
+            userLink.appendString(thread.createdBy.name);
+
+            let title = DOMHelpers.escapeStringForAttribute(thread.name);
+
+            let link = new DOMAppender(`<a class="recent-thread-link" title="${title}" uk-tooltip>`, '</a>');
+            element.append(link);
+            link.appendString(thread.name);
+        }
+
+        let resultElement = result.toElement();
+
+        Views.setupThreadsOfUsersLinks(resultElement);
+
+        return resultElement;
     }
 }

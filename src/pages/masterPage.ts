@@ -6,6 +6,8 @@ import {Pages} from "./common";
 import {Views} from "../views/common";
 import {StatisticsRepository} from "../services/statisticsRepository";
 import {DisplayHelpers} from "../helpers/displayHelpers";
+import {ThreadRepository} from "../services/threadRepository";
+import {ThreadsView} from "../views/threadsView";
 
 export module MasterPage {
 
@@ -146,6 +148,28 @@ export module MasterPage {
 
         updateStatistics();
         setInterval(updateStatistics, Views.DisplayConfig.updateStatisticsEveryMilliSeconds);
+
+        updateRecentThreads();
+        setInterval(updateRecentThreads, Views.DisplayConfig.updateRecentThreadsEveryMilliSeconds);
+
+        let recentThreadsToggle = document.getElementById('RecentThreadsToggle');
+        let recentThreadsToggleListItem = recentThreadsToggle.parentElement;
+
+        recentThreadsToggle.addEventListener('click', (ev) => {
+
+            let panel = document.getElementsByClassName('recent-threads-content')[0] as HTMLElement;
+
+            if ($(panel).is(':visible')) {
+
+                panel.classList.add('uk-hidden');
+                recentThreadsToggleListItem.classList.remove('uk-active');
+            }
+            else {
+
+                panel.classList.remove('uk-hidden');
+                recentThreadsToggleListItem.classList.add('uk-active');
+            }
+        });
     }
 
     function updateStatistics(): void {
@@ -161,6 +185,23 @@ export module MasterPage {
                 DisplayHelpers.intToString(value.discussionCategories),
             ];
             span.innerText = `· ${values[0]} users · ${values[1]} threads · ${values[2]} thread messages · ${values[3]} tags · ${values[4]} categories`;
+        });
+    }
+
+    function updateRecentThreads(): void {
+
+        const request: ThreadRepository.GetThreadsRequest = {
+            page: 0,
+            orderBy: 'descending',
+            sort: 'created'
+        };
+
+        ThreadRepository.getThreads(request).then(value => {
+
+            let panel = document.getElementsByClassName('recent-threads-content')[0] as HTMLElement;
+
+            panel.innerHTML = '';
+            panel.appendChild(ThreadsView.createRecentThreadsView(value.threads || []));
         });
     }
 }

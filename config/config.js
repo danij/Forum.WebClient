@@ -11,7 +11,8 @@ window.displayConfig = {
     pageNumbersMiddle: 5,
     pageNumbersAfter: 3,
     showSpinnerAfterMilliSeconds: 1000,
-    updateStatisticsEveryMilliSeconds: 60000
+    updateStatisticsEveryMilliSeconds: 60000,
+    updateRecentThreadsEveryMilliSeconds: 60000
 };
 
 window.masterPageConfig = {
