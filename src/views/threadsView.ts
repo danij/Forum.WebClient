@@ -299,7 +299,7 @@ export module ThreadsView {
             let href = Pages.getThreadsOfUserUrlFull(thread.createdBy);
             let data = `data-threadusername="${DOMHelpers.escapeStringForAttribute(thread.createdBy.name)}"`;
 
-            let userLink = new DOMAppender(`<a href="${href}" ${data}>`, '</a>');
+            let userLink = new DOMAppender(`<a href="${href}" class="author" ${data}>`, '</a>');
             title.append(userLink);
             userLink.appendString(thread.createdBy.name);
         }

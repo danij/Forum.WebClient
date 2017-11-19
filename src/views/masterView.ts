@@ -12,7 +12,7 @@ export module MasterView {
             ['tags', DisplayHelpers.intToString(statistics.discussionTags)],
             ['categories', DisplayHelpers.intToString(statistics.discussionCategories)],
         ];
-        const separator = '· ';
+        const separator = ' · ';
         return separator + values.map(t => `${t[1]} ${t[0]}`).join(separator);
     }
 }
