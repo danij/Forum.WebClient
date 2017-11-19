@@ -3,6 +3,9 @@ import {TagsPage} from "./tagsPage";
 import {ThreadsPage} from "./threadsPage";
 import {UsersPage} from "./usersPage";
 import {Pages} from "./common";
+import {Views} from "../views/common";
+import {StatisticsRepository} from "../services/statisticsRepository";
+import {DisplayHelpers} from "../helpers/displayHelpers";
 
 export module MasterPage {
 
@@ -51,6 +54,8 @@ export module MasterPage {
 
         window.onpopstate = () => onGoBack();
         loadCurrentPage();
+
+        setupUpdates();
     }
 
     function fixLinks() {
@@ -135,5 +140,27 @@ export module MasterPage {
 
         //default
         new HomePage().display();
+    }
+
+    function setupUpdates(): void {
+
+        updateStatistics();
+        setInterval(updateStatistics, Views.DisplayConfig.updateStatisticsEveryMilliSeconds);
+    }
+
+    function updateStatistics(): void {
+
+        StatisticsRepository.getEntityCount().then(value => {
+
+            let span = document.getElementById('entityCount');
+            const values = [
+                DisplayHelpers.intToString(value.users),
+                DisplayHelpers.intToString(value.discussionThreads),
+                DisplayHelpers.intToString(value.discussionMessages),
+                DisplayHelpers.intToString(value.discussionTags),
+                DisplayHelpers.intToString(value.discussionCategories),
+            ];
+            span.innerText = `· ${values[0]} users · ${values[1]} threads · ${values[2]} thread messages · ${values[3]} tags · ${values[4]} categories`;
+        });
     }
 }

@@ -10,7 +10,8 @@ window.displayConfig = {
     pageNumbersBefore: 3,
     pageNumbersMiddle: 5,
     pageNumbersAfter: 3,
-    showSpinnerAfterMilliSeconds: 1000
+    showSpinnerAfterMilliSeconds: 1000,
+    updateStatisticsEveryMilliSeconds: 60000
 };
 
 window.masterPageConfig = {

@@ -14,9 +14,11 @@ export module Views {
         pageNumbersMiddle: number,
         pageNumbersAfter: number,
         showSpinnerAfterMilliSeconds: number;
+        updateStatisticsEveryMilliSeconds: number;
     }
 
     declare const displayConfig: DisplayConfig;
+    export const DisplayConfig = displayConfig;
 
     export interface SortInfo {
 
