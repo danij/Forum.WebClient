@@ -190,7 +190,7 @@ export class ThreadsPage implements Pages.Page {
         else if (this.userName && this.userName.length) {
 
             url = Pages.getThreadsOfUserUrl(this.userName);
-            title = 'Threads created by ' + this.userName;
+            title = 'Threads added by ' + this.userName;
         }
 
         MasterPage.goTo(Pages.appendToUrl(url, {
