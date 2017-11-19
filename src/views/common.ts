@@ -264,7 +264,7 @@ export module Views {
 
     export function setupThreadsWithTagsLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll('[data-tagid]');
+        let links = element.querySelectorAll('[data-tagname]');
 
         for (let i = 0; i < links.length; ++i) {
 
