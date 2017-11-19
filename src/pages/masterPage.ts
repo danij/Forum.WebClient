@@ -202,8 +202,8 @@ export module MasterPage {
 
         const request: ThreadRepository.GetThreadsRequest = {
             page: 0,
-            orderBy: 'descending',
-            sort: 'created'
+            orderBy: 'created',
+            sort: 'descending'
         };
 
         ThreadRepository.getThreads(request).then(value => {
