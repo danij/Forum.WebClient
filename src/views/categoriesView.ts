@@ -138,7 +138,10 @@ export module CategoriesView {
 
                 let messageContent = latestMessage.content || 'empty';
 
-                let messageLink = $('<a class="recent-message-link" href="#"></a>');
+                href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id);
+                data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(latestMessage.id)}"`;
+
+                let messageLink = $(`<a class="recent-message-link" href="${href}" ${data}></a>`);
                 messageLink.text(messageContent);
                 messageLink.attr('title', messageContent);
                 latestMessageColumn.appendElement(messageLink[0]);
@@ -151,6 +154,7 @@ export module CategoriesView {
         Views.setupThreadsOfUsersLinks(result);
         Views.setupThreadMessagesOfUsersLinks(result);
         Views.setupThreadMessagesOfThreadsLinks(result);
+        Views.setupThreadMessagesOfMessageParentThreadLinks(result);
         Views.setupCategoryLinks(result);
 
         return result;

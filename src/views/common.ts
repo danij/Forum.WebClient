@@ -29,7 +29,7 @@ export module Views {
         sortOrder: string
     }
 
-    export async function changeContent(container: HTMLElement, handler: () => Promise<HTMLElement>) {
+    export async function changeContent(container: HTMLElement, handler: () => Promise<HTMLElement>): Promise<void> {
 
         let spinner = DOMHelpers.parseHTML('<div class="spinner-element"><div uk-spinner></div></div>');
         let disabledElement = DOMHelpers.parseHTML('<div class="disabled-element"></div>');
@@ -270,6 +270,15 @@ export module Views {
         ev.preventDefault();
     }
 
+    function threadMessagesOfParentThreadLinkClicked(ev: Event) {
+
+        const threadMessageId = (ev.target as HTMLElement).getAttribute('data-threadmessagemessageid');
+
+        new ThreadMessagesPage().displayForThreadMessage(threadMessageId);
+
+        ev.preventDefault();
+    }
+
     function categoryLinkClicked(ev: Event) {
 
         const link = ev.target as HTMLElement;
@@ -326,6 +335,17 @@ export module Views {
         }
     }
 
+    export function setupThreadMessagesOfMessageParentThreadLinks(element: HTMLElement): void {
+
+        let links = element.querySelectorAll('[data-threadmessagemessageid]');
+
+        for (let i = 0; i < links.length; ++i) {
+
+            let link = links.item(i);
+            link.addEventListener('click', threadMessagesOfParentThreadLinkClicked);
+        }
+    }
+
     export function setupCategoryLinks(element: HTMLElement): void {
 
         let links = element.querySelectorAll('[data-categoryid]');
@@ -340,5 +360,25 @@ export module Views {
     export function setupCategoryLink(link: HTMLAnchorElement): void {
 
         link.addEventListener('click', categoryLinkClicked);
+    }
+
+    export function scrollToTop(): void {
+
+        window.scrollTo(0, 0);
+        document.getElementById('pageContentContainer').scrollTo(0, 0);
+    }
+
+    export function scrollContainerToId(elementId: string): void {
+
+        setTimeout(() => {
+
+            let element = document.getElementById(elementId);
+            let container = document.getElementById('pageContentContainer');
+            if (element) {
+
+                const top = $(element).offset().top - $(container).offset().top;
+                container.scrollTo(0, top);
+            }
+        }, 100);
     }
 }

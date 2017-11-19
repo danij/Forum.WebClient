@@ -54,7 +54,7 @@ export module UsersView {
 
         let element = new DOMAppender('<span class="author">', '</span>');
 
-        let link = new DOMAppender('<a href="user">', '</a>');
+        let link = new DOMAppender('<a>', '</a>');
         element.append(link);
         link.appendString(user.name);
 
@@ -251,7 +251,7 @@ export module UsersView {
 
         wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left"><a href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" data-threadmessageusername="' +
-                DOMHelpers.escapeStringForAttribute(user.name)+ '">Threads</a></div>\n' +
+                DOMHelpers.escapeStringForAttribute(user.name)+ '">Messages</a></div>\n' +
             '    <div class="uk-float-right">{nrOfMessages}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));

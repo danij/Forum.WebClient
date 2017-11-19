@@ -52,7 +52,7 @@ export module ThreadsView {
         resultList.append(tableContainer);
         tableContainer.append(createThreadsTable(collection.threads));
 
-        resultList.append(result.paginationBottom = Views.createPaginationControl(collection, null));
+        resultList.append(result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange));
 
         result.list = resultList[0];
         return result;
@@ -195,7 +195,10 @@ export module ThreadsView {
 
                 let messageContent = latestMessage.content || 'empty';
 
-                let messageLink = $('<a class="recent-message-link" href="#" uk-tooltip></a>');
+                let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id);
+                let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(latestMessage.id)}"`;
+
+                let messageLink = $(`<a class="recent-message-link" href="${href}" uk-tooltip ${data}></a>`);
                 messageLink.text(messageContent);
                 messageLink.attr('title', messageContent);
                 latestMessageColumn.appendElement(messageLink[0]);
@@ -209,6 +212,7 @@ export module ThreadsView {
         Views.setupThreadsOfUsersLinks(result);
         Views.setupThreadMessagesOfUsersLinks(result);
         Views.setupThreadMessagesOfThreadsLinks(result);
+        Views.setupThreadMessagesOfMessageParentThreadLinks(result);
 
         return result;
     }
@@ -259,6 +263,7 @@ export module ThreadsView {
 
         Views.setupThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfThreadsLinks(resultElement);
+        Views.setupThreadMessagesOfMessageParentThreadLinks(resultElement);
 
         return resultElement;
     }

@@ -41,6 +41,14 @@ export module ThreadMessageRepository {
         messages: ThreadMessage[];
     }
 
+    export interface ThreadMessageRankInfo {
+
+        id: string;
+        parentId: string;
+        rank: number;
+        pageSize: number;
+    }
+
     export function defaultThreadMessageCollection(): ThreadMessageCollection {
 
         return {
@@ -77,5 +85,12 @@ export module ThreadMessageRepository {
             message.createdBy = message.createdBy || user;
         }
         return result;
+    }
+
+    export async function getThreadMessageRank(threadMessageId: string) : Promise<ThreadMessageRankInfo> {
+
+        return await RequestHandler.get({
+            path: 'thread_messages/rank/' + encodeURIComponent(threadMessageId)
+        }) as ThreadMessageRankInfo;
     }
 }

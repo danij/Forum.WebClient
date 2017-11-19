@@ -19,14 +19,24 @@ export class ThreadMessagesPage implements Pages.Page {
 
     private threadId: string = null;
     private thread: ThreadRepository.ThreadWithMessages = null;
+    private threadMessageId: string = null;
     private userName: string = null;
     private user: UserRepository.User = null;
 
     display(): void {
 
-        this.refreshUrl();
+        let jumpToId = '';
 
         Pages.changePage(async () => {
+
+            if (this.threadMessageId && this.threadMessageId.length) {
+
+                let rank = await ThreadMessageRepository.getThreadMessageRank(this.threadMessageId);
+                this.threadId = rank.parentId;
+                this.pageNumber = Math.floor(rank.rank / rank.pageSize);
+
+                jumpToId = 'message-' + this.threadMessageId;
+            }
 
             if (this.userName && this.userName.length) {
 
@@ -37,6 +47,8 @@ export class ThreadMessagesPage implements Pages.Page {
                 this.thread = await this.getCurrentThread();
                 if (null == this.thread) return;
             }
+
+            this.refreshUrl();
 
             let messageCollection: ThreadMessageRepository.ThreadMessageCollection =
                 this.thread
@@ -57,12 +69,25 @@ export class ThreadMessagesPage implements Pages.Page {
             this.bottomPaginationControl = elements.paginationBottom;
 
             return elements.list;
-        });
+
+        }).then(() => {
+
+            if (jumpToId) {
+
+                Views.scrollContainerToId(jumpToId);
+            }
+        })
     }
 
-    displayForThread(id: string): void {
+    displayForThread(threadId: string): void {
 
-        this.threadId = id;
+        this.threadId = threadId;
+        this.display();
+    }
+
+    displayForThreadMessage(threadMessageId: string): void {
+
+        this.threadMessageId = threadMessageId;
         this.display();
     }
 
@@ -84,6 +109,7 @@ export class ThreadMessagesPage implements Pages.Page {
         page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
         page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
         page.threadId = Pages.getThreadId(url);
+        page.threadMessageId = Pages.getThreadMessageId(url);
         page.userName = Pages.getUserName(url);
 
         page.display();
@@ -159,22 +185,23 @@ export class ThreadMessagesPage implements Pages.Page {
 
         let url = 'thread_messages';
         let title = 'Thread Messages';
+        let setActive = 'ThreadsPageLink';
 
         if (this.threadId && this.threadId.length) {
 
-            url = Pages.getThreadMessagesOfThreadUrl(this.threadId, (this.thread ? this.thread.name : null) || 'thread');
-            document.getElementById('ThreadsPageLink').classList.add('uk-active');
+            url = Pages.getThreadMessagesOfThreadUrl(this.threadId, title = (this.thread ? this.thread.name : null) || title);
         }
         else if (this.userName && this.userName.length) {
 
             url = Pages.getThreadMessagesOfUserUrl(this.userName);
             title = 'Thread messages added by ' + this.userName;
-            document.getElementById('UsersPageLink').classList.add('uk-active');
+            setActive = 'UsersPageLink';
         }
 
         MasterPage.goTo(Pages.appendToUrl(url, {
             sortOrder: this.sortOrder,
             pageNumber: this.pageNumber
         }), title);
+        document.getElementById(setActive).classList.add('uk-active');
     }
 }

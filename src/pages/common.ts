@@ -3,6 +3,7 @@ import {TagRepository} from "../services/tagRepository";
 import {UserRepository} from "../services/userRepository";
 import {CategoryRepository} from "../services/categoryRepository";
 import {ThreadRepository} from "../services/threadRepository";
+import {ThreadMessageRepository} from "../services/threadMessageRepository";
 
 export module Pages {
 
@@ -11,9 +12,12 @@ export module Pages {
         display(): void;
     }
 
-    export function changePage(handler: () => Promise<HTMLElement>) {
+    export function changePage(handler: () => Promise<HTMLElement>): Promise<void> {
 
-        return Views.changeContent(document.getElementById('pageContentContainer'), handler);
+        return Views.changeContent(document.getElementById('pageContentContainer'), handler).then(() => {
+
+            Views.scrollToTop();
+        });
     }
 
     declare var UIkit: any;
@@ -57,6 +61,7 @@ export module Pages {
     const pageNumberRegex = /\/page\/([0-9]+)/;
     const tagNameRegex = /\/tag\/([^/]+)/;
     const threadIdRegex = /\/thread\/([^/]+)\/([^/]+)/;
+    const threadMessageIdRegex = /\/message\/([^/]+)/;
     const userNameRegex = /\/user\/([^/]+)/;
     const categoryRootRegex = /^[\/]?category\/([^/]+)\/([^/]+)/;
 
@@ -106,6 +111,16 @@ export module Pages {
         if (match && match.length) {
 
             return decodeURIComponent(match[2]);
+        }
+        return null;
+    }
+
+    export function getThreadMessageId(url: string): string {
+
+        let match = url.match(threadMessageIdRegex);
+        if (match && match.length) {
+
+            return decodeURIComponent(match[1]);
         }
         return null;
     }
@@ -191,6 +206,16 @@ export module Pages {
     export function getThreadMessagesOfThreadUrl(id: string, name: string): string {
 
         return `thread_messages/thread/${encodeURIComponent(name)}/${encodeURIComponent(id)}`;
+    }
+
+    export function getThreadMessagesOfMessageParentThreadUrlFull(messageId: string): string {
+
+        return getUrl(getThreadMessagesOfMessageParentThreadUrl(messageId));
+    }
+
+    export function getThreadMessagesOfMessageParentThreadUrl(id: string): string {
+
+        return `thread_messages/message/${encodeURIComponent(id)}`;
     }
 
     export function getCategoryFullUrl(category: CategoryRepository.Category): string {

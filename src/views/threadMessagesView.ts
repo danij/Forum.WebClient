@@ -11,7 +11,6 @@ import {DisplayHelpers} from "../helpers/displayHelpers";
 export module ThreadMessagesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
-    import ThreadMessageLastUpdated = ThreadMessageRepository.ThreadMessageLastUpdated;
 
     export class ThreadMessagesPageContent {
 
@@ -56,7 +55,9 @@ export module ThreadMessagesView {
 
             let messageTitle = DOMHelpers.escapeStringForAttribute(message.content);
 
-            let link = new DOMAppender(`<a class="recent-message-link" title="${messageTitle}">`, '</a>');
+            href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
+            data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+            let link = new DOMAppender(`<a href="${href}" class="recent-message-link" title="${messageTitle}" ${data}>`, '</a>');
             element.append(link);
             link.appendString(message.content);
         }
@@ -66,6 +67,7 @@ export module ThreadMessagesView {
         Views.setupThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfThreadsLinks(resultElement);
+        Views.setupThreadMessagesOfMessageParentThreadLinks(resultElement);
 
         return resultElement;
     }
@@ -98,7 +100,7 @@ export module ThreadMessagesView {
         listContainer.appendChild(createThreadMessageList(collection, thread));
         resultList.appendChild(listContainer);
 
-        resultList.appendChild(result.paginationBottom = Views.createPaginationControl(collection, null));
+        resultList.appendChild(result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange));
 
         result.list = resultList;
         return result;
@@ -137,7 +139,10 @@ export module ThreadMessagesView {
 
             {
                 const number = collection.page * collection.pageSize + i + 1;
-                messageContainer.appendRaw(`<div class="message-number uk-text-meta">#${DisplayHelpers.intToString(number)}</div>`);
+                let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
+                let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+                let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
+                messageContainer.appendRaw(`<div class="message-number uk-text-meta"><a id="${id}" href="${href}" ${data}>#${DisplayHelpers.intToString(number)}</a></div>`);
             }
             {
                 let author = message.createdBy;
@@ -224,6 +229,7 @@ export module ThreadMessagesView {
 
         Views.setupThreadsOfUsersLinks(element);
         Views.setupThreadMessagesOfUsersLinks(element);
+        Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
         return element;
     }
