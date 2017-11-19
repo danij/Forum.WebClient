@@ -11,6 +11,7 @@ import {ThreadsView} from "../views/threadsView";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "../views/threadMessagesView";
 import {ThreadMessagesPage} from "./threadMessagesPage";
+import {MasterView} from "../views/masterView";
 
 export module MasterPage {
 
@@ -189,14 +190,7 @@ export module MasterPage {
         StatisticsRepository.getEntityCount().then(value => {
 
             let span = document.getElementById('entityCount');
-            const values = [
-                DisplayHelpers.intToString(value.users),
-                DisplayHelpers.intToString(value.discussionThreads),
-                DisplayHelpers.intToString(value.discussionMessages),
-                DisplayHelpers.intToString(value.discussionTags),
-                DisplayHelpers.intToString(value.discussionCategories),
-            ];
-            span.innerText = `· ${values[0]} users · ${values[1]} threads · ${values[2]} thread messages · ${values[3]} tags · ${values[4]} categories`;
+            span.innerText = MasterView.getStatisticsText(value);
         });
     }
 
