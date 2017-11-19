@@ -8,6 +8,8 @@ import {StatisticsRepository} from "../services/statisticsRepository";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {ThreadRepository} from "../services/threadRepository";
 import {ThreadsView} from "../views/threadsView";
+import {ThreadMessageRepository} from "../services/threadMessageRepository";
+import {ThreadMessagesView} from "../views/threadMessagesView";
 
 export module MasterPage {
 
@@ -151,23 +153,31 @@ export module MasterPage {
 
         updateRecentThreads();
         setInterval(updateRecentThreads, Views.DisplayConfig.updateRecentThreadsEveryMilliSeconds);
+        setupToggle('RecentThreadsToggle', 'recent-threads-content');
 
-        let recentThreadsToggle = document.getElementById('RecentThreadsToggle');
-        let recentThreadsToggleListItem = recentThreadsToggle.parentElement;
+        updateRecentThreadMessages();
+        setInterval(updateRecentThreadMessages, Views.DisplayConfig.updateRecentThreadMessagesEveryMilliSeconds);
+        setupToggle('RecentThreadMessagesToggle', 'recent-messages-content');
+    }
 
-        recentThreadsToggle.addEventListener('click', (ev) => {
+    function setupToggle(elementId: string, destinationClass: string): void {
 
-            let panel = document.getElementsByClassName('recent-threads-content')[0] as HTMLElement;
+        let toggle = document.getElementById(elementId);
+        let toggleListItem = toggle.parentElement;
+
+        toggle.addEventListener('click', (ev) => {
+
+            let panel = document.getElementsByClassName(destinationClass)[0] as HTMLElement;
 
             if ($(panel).is(':visible')) {
 
                 panel.classList.add('uk-hidden');
-                recentThreadsToggleListItem.classList.remove('uk-active');
+                toggleListItem.classList.remove('uk-active');
             }
             else {
 
                 panel.classList.remove('uk-hidden');
-                recentThreadsToggleListItem.classList.add('uk-active');
+                toggleListItem.classList.add('uk-active');
             }
         });
     }
@@ -202,6 +212,17 @@ export module MasterPage {
 
             panel.innerHTML = '';
             panel.appendChild(ThreadsView.createRecentThreadsView(value.threads || []));
+        });
+    }
+
+    function updateRecentThreadMessages(): void {
+
+        ThreadMessageRepository.getLatestThreadMessages().then(value => {
+
+            let panel = document.getElementsByClassName('recent-messages-content')[0] as HTMLElement;
+
+            panel.innerHTML = '';
+            panel.appendChild(ThreadMessagesView.createRecentThreadMessagesView(value.messages || []));
         });
     }
 }
