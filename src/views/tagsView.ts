@@ -181,10 +181,9 @@ export module TagsView {
                 let recentMessageTime = new DOMAppender('<div class="recent-message-time uk-text-meta">', '</div>');
                 latestMessageColumn.append(recentMessageTime);
 
-                let recentMessageTimeContent = $('<span uk-tooltip></span>');
-                recentMessageTimeContent.text(DisplayHelpers.getAgoTime(latestMessage.created));
-                recentMessageTimeContent.attr('title', DisplayHelpers.getFullDateTime(latestMessage.created));
-                recentMessageTime.appendElement(recentMessageTimeContent[0]);
+                let recentMessageTimeContent = document.createElement('span');
+                recentMessageTimeContent.innerText = DisplayHelpers.getDateTime(latestMessage.created);
+                recentMessageTime.appendElement(recentMessageTimeContent);
 
                 let messageContent = latestMessage.content || 'empty';
 
@@ -257,12 +256,11 @@ export module TagsView {
         wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left">Added</div>\n' +
             '    <div class="uk-float-right min-date">\n' +
-            '        <span title="{AddedExpanded}" uk-tooltip>{AddedShort}</span>\n' +
+            '        <span>{Added}</span>\n' +
             '    </div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
-            .replace('{AddedExpanded}', DisplayHelpers.getFullDateTime(tag.created))
-            .replace('{AddedShort}', DisplayHelpers.getShortDate(tag.created)));
+            .replace('{Added}', DisplayHelpers.getDateTime(tag.created)));
 
         return result;
     }

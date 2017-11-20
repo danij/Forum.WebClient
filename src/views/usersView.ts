@@ -93,21 +93,19 @@ export module UsersView {
             '<span href="MyThreads" class="align-left">\n' +
             '    <span>Joined</span>\n' +
             '</span>\n' +
-            '    <span class="uk-badge align-right" title="{joinedExpanded}" uk-tooltip>{joinedAgo}</span>\n' +
+            '    <span class="uk-badge align-right">{joined}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>')
-            .replace('{joinedExpanded}', DisplayHelpers.getFullDateTime(user.created))
-            .replace('{joinedAgo}', DisplayHelpers.getAgoTimeShort(user.created)));
+            .replace('{joined}', DisplayHelpers.getDateTime(user.created)));
 
         content.appendRaw(('<li>\n' +
             '<span href="MyMessages" class="align-left">\n' +
             '    <span>Last seen</span>\n' +
             '</span>\n' +
-            '    <span class="uk-badge align-right" title="{lastSeenExpanded}" uk-tooltip>{lastSeenAgo}</span>\n' +
+            '    <span class="uk-badge align-right">{lastSeen}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>')
-            .replace('{lastSeenExpanded}', DisplayHelpers.getFullDateTime(user.lastSeen))
-            .replace('{lastSeenAgo}', DisplayHelpers.getAgoTimeShort(user.lastSeen)));
+            .replace('{lastSeen}', DisplayHelpers.getDateTime(user.lastSeen)));
 
         content.appendRaw('<li class="uk-nav-header">Feedback Received</li>');
         content.appendRaw(('<li>\n' +
@@ -259,22 +257,20 @@ export module UsersView {
         wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left">Joined</div>\n' +
             '    <div class="uk-float-right min-date">\n' +
-            '        <span title="{JoinedExpanded}" uk-tooltip>{JoinedShort}</span>\n' +
+            '        <span>{Joined}</span>\n' +
             '    </div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
-                .replace('{JoinedExpanded}', DisplayHelpers.getFullDateTime(user.created))
-                .replace('{JoinedShort}', DisplayHelpers.getShortDate(user.created)));
+                .replace('{Joined}', DisplayHelpers.getShortDate(user.created)));
 
         wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left">Last Seen</div>\n' +
             '    <div class="uk-float-right min-date">\n' +
-            '        <span title="{LastSeenExpanded}" uk-tooltip>{LastSeenShort}</span>\n' +
+            '        <span>{LastSeen}</span>\n' +
             '    </div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
-                .replace('{LastSeenExpanded}', DisplayHelpers.getFullDateTime(user.lastSeen))
-                .replace('{LastSeenShort}', DisplayHelpers.getShortDate(user.lastSeen)));
+                .replace('{LastSeen}', DisplayHelpers.getShortDate(user.lastSeen)));
 
         wrapper.appendRaw(('<div>\n' +
             '    <div class="user-up-votes">\n' +
@@ -321,8 +317,8 @@ export module UsersView {
             '</div>')
                 .replace('{threadCount}', DisplayHelpers.intToString(user.threadCount))
                 .replace('{messageCount}', DisplayHelpers.intToString(user.messageCount))
-                .replace('{joined}', DisplayHelpers.getFullDateTime(user.created))
-                .replace('{lastSeen}', DisplayHelpers.getFullDateTime(user.lastSeen))
+                .replace('{joined}', DisplayHelpers.getDateTime(user.created))
+                .replace('{lastSeen}', DisplayHelpers.getDateTime(user.lastSeen))
                 .replace('{upVotes}', DisplayHelpers.intToString(user.receivedUpVotes))
                 .replace('{downVotes}', DisplayHelpers.intToString(user.receivedDownVotes))
         );

@@ -191,11 +191,11 @@ export module ThreadMessagesView {
                 let messageDetailsContainer = new DOMAppender('<div class="uk-card-badge message-time-container">', '</div>');
                 messageContainer.append(messageDetailsContainer);
 
-                messageDetailsContainer.appendRaw(`<span class="message-time" title="${DisplayHelpers.getFullDateTime(message.created)}" uk-tooltip>${DisplayHelpers.getAgoTime(message.created)} </span>`);
+                messageDetailsContainer.appendRaw(`<span class="message-time">${DisplayHelpers.getDateTime(message.created)} </span>`);
 
                 if (message.lastUpdated && message.lastUpdated.at) {
 
-                    messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning" title="${DisplayHelpers.getFullDateTime(message.lastUpdated.at)}" uk-tooltip>Edited ${DisplayHelpers.getAgoTime(message.lastUpdated.at)} </span>`);
+                    messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning">Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
                 }
                 if (message.ip && message.ip.length) {
 

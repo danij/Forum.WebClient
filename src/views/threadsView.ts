@@ -149,10 +149,9 @@ export module ThreadsView {
                 createdColumn.append(UsersView.createAuthorSmall(thread.createdBy));
 
                 createdColumn.appendRaw(('<div class="thread-message-time uk-text-meta">\n' +
-                    '    <span title="{AddedExpanded}" uk-tooltip>{AddedAgo}</span>\n' +
+                    '    <span>{Added}</span>\n' +
                     '</div>')
-                    .replace('{AddedExpanded}', DisplayHelpers.getFullDateTime(thread.created))
-                    .replace('{AddedAgo}', DisplayHelpers.getAgoTimeShort(thread.created)));
+                    .replace('{Added}', DisplayHelpers.getDateTime(thread.created)));
             }
             {
                 let statisticsColumn = ('<td class="thread-statistics uk-table-shrink">\n' +
@@ -187,10 +186,9 @@ export module ThreadsView {
                 let authorElement = UsersView.createAuthorSmallWithColon(latestMessage.createdBy);
                 latestMessageColumn.append(authorElement);
 
-                let recentMessageTime = $('<span class="uk-text-meta" uk-tooltip></span>');
+                let recentMessageTime = $('<span class="uk-text-meta"></span>');
 
-                recentMessageTime.text(DisplayHelpers.getAgoTimeShort(latestMessage.created));
-                recentMessageTime.attr('title', DisplayHelpers.getFullDateTime(latestMessage.created));
+                recentMessageTime.text(DisplayHelpers.getDateTime(latestMessage.created));
                 authorElement.appendElement(recentMessageTime[0]);
 
                 let messageContent = latestMessage.content || 'empty';

@@ -131,10 +131,9 @@ export module CategoriesView {
                 let recentMessageTime = new DOMAppender('<div class="recent-message-time uk-text-meta">', '</div>');
                 latestMessageColumn.append(recentMessageTime);
 
-                let recentMessageTimeContent = $('<span uk-tooltip></span>');
-                recentMessageTimeContent.text(DisplayHelpers.getAgoTime(latestMessage.created));
-                recentMessageTimeContent.attr('title', DisplayHelpers.getFullDateTime(latestMessage.created));
-                recentMessageTime.appendElement(recentMessageTimeContent[0]);
+                let recentMessageTimeContent = document.createElement('span');
+                recentMessageTimeContent.innerText = DisplayHelpers.getDateTime(latestMessage.created);
+                recentMessageTime.appendElement(recentMessageTimeContent);
 
                 let messageContent = latestMessage.content || 'empty';
 
