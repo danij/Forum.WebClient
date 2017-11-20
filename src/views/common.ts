@@ -4,6 +4,7 @@ import {ThreadsPage} from "../pages/threadsPage";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {HomePage} from "../pages/homePage";
 import {ThreadMessagesPage} from "../pages/threadMessagesPage";
+import {ViewsExtra} from "./extra";
 
 export module Views {
 
@@ -55,6 +56,8 @@ export module Views {
 
             container.innerHTML = '';
             container.appendChild(newPageContent);
+
+            ViewsExtra.refreshMath(container);
         }
         finally {
             spinner.remove();

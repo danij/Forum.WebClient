@@ -4,6 +4,7 @@ export module ViewsExtra {
 
     declare var Remarkable: any;
     declare var hljs: any;
+    declare var MathJax: any;
 
     export function init() {
 
@@ -16,6 +17,18 @@ export module ViewsExtra {
             typographer: true,
             quotes: '“”‘’',
             highlight: highlightCode
+        });
+
+        MathJax.Hub.Config({
+
+            extensions: ["tex2jax.js"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+            tex2jax: {
+                inlineMath: [['$', '$'], ["\\(", "\\)"]],
+                displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+                processEscapes: true
+            },
+            "HTML-CSS": {availableFonts: ["TeX"]}
         });
     }
 
@@ -41,5 +54,10 @@ export module ViewsExtra {
     export function expandContent(content: string): string {
 
         return remarkable.render(content);
+    }
+
+    export function refreshMath(element: HTMLElement): void {
+
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
     }
 }
