@@ -234,17 +234,18 @@ export module Views {
         return `                    <option value="${value}" ${value == info.sortOrder ? 'selected' : ''}>${title}</option>\n`;
     }
 
+    export const ThreadsWithTagData = 'data-tagname';
+    export const UserThreadsData = 'data-threadusername';
+    export const UserMessagesData = 'data-threadmessageusername';
+
     function threadsWithTagLinkClicked(ev: Event) {
 
-        const tagName = (ev.target as HTMLElement).getAttribute('data-tagname');
+        const tagName = (ev.target as HTMLElement).getAttribute(ThreadsWithTagData);
 
         new ThreadsPage().displayForTag(tagName);
 
         ev.preventDefault();
     }
-
-    export const UserThreadsData = 'data-threadusername';
-    export const UserMessagesData = 'data-threadmessageusername';
 
     function threadsOfUserLinkClicked(ev: Event) {
 
@@ -296,7 +297,7 @@ export module Views {
 
     export function setupThreadsWithTagsLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll('[data-tagname]');
+        let links = element.querySelectorAll(`[${ThreadsWithTagData}]`);
 
         for (let i = 0; i < links.length; ++i) {
 

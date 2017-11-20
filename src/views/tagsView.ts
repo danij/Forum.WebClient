@@ -14,34 +14,18 @@ export module TagsView {
 
         let container = new DOMAppender('<div class="uk-display-inline-block">', '</div>');
 
-        let tagElement = new DOMAppender('<span class="uk-badge uk-icon" uk-icon="icon: tag">', '</span>');
+        let tagElement = new DOMAppender('<a class="uk-badge uk-icon" uk-icon="icon: tag" ' +
+            getThreadsWithTagLinkContent(tag) + '>', '</a>');
         container.append(tagElement);
         tagElement.appendString(tag.name);
-
-        container.append(createTagDropdown(tag));
 
         return container;
     }
 
-    function createTagDropdown(tag: TagRepository.Tag): DOMAppender {
+    export function getThreadsWithTagLinkContent(tag: TagRepository.Tag): string {
 
-        let content = new DOMAppender('<div>', '</div>');
-        content.appendRaw(('<li>\n' +
-            '    <a href="' + Pages.getThreadsWithTagUrlFull(tag) +
-                '" class="align-left" data-tagname="' + DOMHelpers.escapeStringForAttribute(tag.name) + '">Threads</a>\n' +
-            '    <span class="uk-badge align-right">{nrOfThreads}</span>\n' +
-            '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount)));
-
-        content.appendRaw(('<li>\n' +
-            '    <span class="align-left">Messages</span>\n' +
-            '    <span class="uk-badge align-right">{nrOfMessages}</span>\n' +
-            '    <div class="uk-clearfix"></div>\n' +
-            '</li>').replace('{nrOfMessages}', DisplayHelpers.intToString(tag.messageCount)));
-
-        return Views.createDropdown(tag.name, content, {
-            mode: 'hover',
-        });
+        return 'href="' + Pages.getThreadsWithTagUrlFull(tag) + '" ' + Views.ThreadsWithTagData + '="' +
+            DOMHelpers.escapeStringForAttribute(tag.name) + '"';
     }
 
     export class TagsPageContent {
@@ -108,9 +92,7 @@ export module TagsView {
 
                 nameColumn.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: tag">', '</span>'));
 
-                let nameLink = new DOMAppender('<a class="uk-button uk-button-text" href="' +
-                    Pages.getThreadsWithTagUrlFull(tag) +
-                    '" data-tagname="' + DOMHelpers.escapeStringForAttribute(tag.name) + '">', '</a>');
+                let nameLink = new DOMAppender('<a class="uk-button uk-button-text" ' + getThreadsWithTagLinkContent(tag) + '>', '</a>');
                 nameColumn.append(nameLink);
                 nameLink.appendString(' ' + tag.name);
                 nameColumn.appendRaw('<br/>');
@@ -241,8 +223,7 @@ export module TagsView {
         wrapper.append(createTagElement(tag));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a href="' + Pages.getThreadsWithTagUrlFull(tag) +
-                '" data-tagname="' + DOMHelpers.escapeStringForAttribute(tag.name) + '">Threads</a></div>\n' +
+            '    <div class="uk-float-left"><a ' + getThreadsWithTagLinkContent(tag) + '>Threads</a></div>\n' +
             '    <div class="uk-float-right">{nrOfThreads}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount)));
