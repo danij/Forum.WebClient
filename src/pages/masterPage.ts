@@ -12,6 +12,7 @@ import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "../views/threadMessagesView";
 import {ThreadMessagesPage} from "./threadMessagesPage";
 import {MasterView} from "../views/masterView";
+import {ViewsExtra} from "../views/extra";
 
 export module MasterPage {
 
@@ -56,6 +57,7 @@ export module MasterPage {
             e.preventDefault();
         });
 
+        ViewsExtra.init();
         fixLinks();
 
         window.onpopstate = () => onGoBack();

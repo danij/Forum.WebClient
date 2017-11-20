@@ -31,6 +31,18 @@ module.exports = {
             {
                 from: path.resolve(__dirname, 'node_modules/es6-promise/dist/es6-promise.auto.min.js'),
                 to: path.resolve(__dirname, 'dist/es6-promise.auto.min.js')
+            },
+            {
+                from: path.resolve(__dirname, 'node_modules/remarkable/dist/remarkable.min.js'),
+                to: path.resolve(__dirname, 'dist/remarkable.min.js')
+            },
+            {
+                from: path.resolve(__dirname, 'node_modules/highlight.js/lib/highlight.pack.js'),
+                to: path.resolve(__dirname, 'dist/highlight.pack.js')
+            },
+            {
+                from: path.resolve(__dirname, 'node_modules/highlight.js/styles/default.css'),
+                to: path.resolve(__dirname, 'dist/highlight-default.css')
             }
         ])
     ],

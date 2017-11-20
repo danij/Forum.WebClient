@@ -7,6 +7,7 @@ import {UserRepository} from "../services/userRepository";
 import {ThreadsView} from "./threadsView";
 import {UsersView} from "./usersView";
 import {DisplayHelpers} from "../helpers/displayHelpers";
+import {ViewsExtra} from "./extra";
 
 export module ThreadMessagesView {
 
@@ -215,7 +216,7 @@ export module ThreadMessagesView {
             {
                 let content = new DOMAppender('<div class="message-content">', '</div>');
                 messageContainer.append(content);
-                content.appendString(message.content);
+                content.appendRaw(ViewsExtra.expandContent(message.content));
             }
 
             if (i < (messages.length - 1)) {
