@@ -54,11 +54,23 @@ export module UsersView {
 
         let element = new DOMAppender('<span class="author">', '</span>');
 
-        let link = new DOMAppender('<a>', '</a>');
+        let link = new DOMAppender('<a ' + getThreadsOfUserLinkContent(user) + '>', '</a>');
         element.append(link);
         link.appendString(user.name);
 
         return element;
+    }
+
+    export function getThreadsOfUserLinkContent(user: UserRepository.User): string {
+
+        return 'href="' + Pages.getThreadsOfUserUrlFull(user) + '" ' + Views.UserThreadsData + '="' +
+            DOMHelpers.escapeStringForAttribute(user.name) + '"';
+    }
+
+    export function getMessagesOfUserLinkContent(user: UserRepository.User): string {
+
+        return 'href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" ' + Views.UserMessagesData + '="' +
+            DOMHelpers.escapeStringForAttribute(user.name) + '"';
     }
 
     export function createUserDropdown(user: UserRepository.User, classString?: string,
@@ -66,15 +78,13 @@ export module UsersView {
 
         let content = new DOMAppender('<div>', '</div>');
         content.appendRaw(('<li>\n' +
-            '    <a href="' + Pages.getThreadsOfUserUrlFull(user) + '" class="align-left" data-threadusername="' +
-                DOMHelpers.escapeStringForAttribute(user.name) + '">Threads</a>\n' +
+            '    <a class="align-left" ' + getThreadsOfUserLinkContent(user) + '>Threads</a>\n' +
             '    <span class="uk-badge align-right">{nrOfThreads}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount)));
 
         content.appendRaw(('<li>\n' +
-            '    <a href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" class="align-left" data-threadmessageusername="' +
-                DOMHelpers.escapeStringForAttribute(user.name) + '">Messages</a>\n' +
+            '    <a class="align-left" ' + getMessagesOfUserLinkContent(user) + '>Messages</a>\n' +
             '    <span class="uk-badge align-right">{nrOfMessages}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));
@@ -181,8 +191,7 @@ export module UsersView {
         let usersListGrid = new DOMAppender('<div class="uk-grid-match uk-text-center" uk-grid>', '</div>');
 
         if (users && users.length) {
-            for (let user of users)
-            {
+            for (let user of users) {
                 if (null == user) continue;
 
                 usersListGrid.append(createUserInList(user));
@@ -232,15 +241,13 @@ export module UsersView {
         wrapper.append(createUserTitleElement(user));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a href="' + Pages.getThreadsOfUserUrlFull(user) + '" data-threadusername="' +
-                DOMHelpers.escapeStringForAttribute(user.name)+ '">Threads</a></div>\n' +
+            '    <div class="uk-float-left"><a ' + getThreadsOfUserLinkContent(user) + '>Threads</a></div>\n' +
             '    <div class="uk-float-right">{nrOfThreads}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount)));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" data-threadmessageusername="' +
-                DOMHelpers.escapeStringForAttribute(user.name)+ '">Messages</a></div>\n' +
+            '    <div class="uk-float-left"><a ' + getMessagesOfUserLinkContent(user) + '>Messages</a></div>\n' +
             '    <div class="uk-float-right">{nrOfMessages}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));
@@ -252,7 +259,7 @@ export module UsersView {
             '    </div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
-                .replace('{Joined}', DisplayHelpers.getShortDate(user.created)));
+            .replace('{Joined}', DisplayHelpers.getShortDate(user.created)));
 
         wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left">Last Seen</div>\n' +
@@ -261,7 +268,7 @@ export module UsersView {
             '    </div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
-                .replace('{LastSeen}', DisplayHelpers.getShortDate(user.lastSeen)));
+            .replace('{LastSeen}', DisplayHelpers.getShortDate(user.lastSeen)));
 
         wrapper.appendRaw(('<div>\n' +
             '    <div class="user-up-votes">\n' +
@@ -272,8 +279,8 @@ export module UsersView {
             '    </div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>')
-                .replace('{receivedUpVotes}', DisplayHelpers.intToString(user.receivedUpVotes))
-                .replace('{receivedDownVotes}', DisplayHelpers.intToString(user.receivedDownVotes)));
+            .replace('{receivedUpVotes}', DisplayHelpers.intToString(user.receivedUpVotes))
+            .replace('{receivedDownVotes}', DisplayHelpers.intToString(user.receivedDownVotes)));
 
         return result;
     }
@@ -297,21 +304,19 @@ export module UsersView {
             title.appendString(user.title);
         }
 
-        let threadsLink = '<a href="' + Pages.getThreadsOfUserUrlFull(user) + '" data-threadusername="' +
-                DOMHelpers.escapeStringForAttribute(user.name)+ '">threads</a>';
-        let threadMessagesLink = '<a href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" data-threadmessageusername="' +
-                DOMHelpers.escapeStringForAttribute(user.name)+ '">messages</a>';
+        let threadsLink = '<a ' + getThreadsOfUserLinkContent(user) + '>threads</a>';
+        let threadMessagesLink = '<a ' + getMessagesOfUserLinkContent(user) + '>messages</a>';
 
         result.appendRaw(('<div>\n' +
             `    <p>{threadCount} ${threadsLink} · {messageCount} ${threadMessagesLink} <span class="uk-label score-up">+ {upVotes}</span> <span class="uk-label score-down">− {downVotes}</span></p>\n` +
             '    <p>Joined <span class="uk-text-meta">{joined}</span> · Last seen <span class="uk-text-meta">{lastSeen}</span></p>\n' +
             '</div>')
-                .replace('{threadCount}', DisplayHelpers.intToString(user.threadCount))
-                .replace('{messageCount}', DisplayHelpers.intToString(user.messageCount))
-                .replace('{joined}', DisplayHelpers.getDateTime(user.created))
-                .replace('{lastSeen}', DisplayHelpers.getDateTime(user.lastSeen))
-                .replace('{upVotes}', DisplayHelpers.intToString(user.receivedUpVotes))
-                .replace('{downVotes}', DisplayHelpers.intToString(user.receivedDownVotes))
+            .replace('{threadCount}', DisplayHelpers.intToString(user.threadCount))
+            .replace('{messageCount}', DisplayHelpers.intToString(user.messageCount))
+            .replace('{joined}', DisplayHelpers.getDateTime(user.created))
+            .replace('{lastSeen}', DisplayHelpers.getDateTime(user.lastSeen))
+            .replace('{upVotes}', DisplayHelpers.intToString(user.receivedUpVotes))
+            .replace('{downVotes}', DisplayHelpers.intToString(user.receivedDownVotes))
         );
 
         if (user.info && user.info.length) {

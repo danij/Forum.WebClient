@@ -243,15 +243,14 @@ export module ThreadsView {
             let user = new DOMAppender('<span class="author">', '</span>');
             element.append(user);
 
-            let data = `data-threadusername="${DOMHelpers.escapeStringForAttribute(thread.createdBy.name)}"`;
-            let userLink = new DOMAppender(`<a href="${Pages.getThreadsOfUserUrlFull(thread.createdBy)}" ${data}>`, '</a>');
+            let userLink = new DOMAppender(`<a ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}>`, '</a>');
             user.append(userLink);
             userLink.appendString(thread.createdBy.name);
 
             let title = DOMHelpers.escapeStringForAttribute(thread.name);
 
             let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
-            data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
+            let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
             let link = new DOMAppender(`<a href="${href}" class="recent-thread-link" title="${title}" ${data}>`, '</a>');
             element.append(link);
             link.appendString(thread.name);
@@ -294,10 +293,7 @@ export module ThreadsView {
             threadTitle.appendString(thread.name);
             title.appendRaw(' ');
 
-            let href = Pages.getThreadsOfUserUrlFull(thread.createdBy);
-            let data = `data-threadusername="${DOMHelpers.escapeStringForAttribute(thread.createdBy.name)}"`;
-
-            let userLink = new DOMAppender(`<a href="${href}" class="author" ${data}>`, '</a>');
+            let userLink = new DOMAppender(`<a class="author" ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}>`, '</a>');
             title.append(userLink);
             userLink.appendString(thread.createdBy.name);
         }

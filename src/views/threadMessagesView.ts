@@ -40,15 +40,14 @@ export module ThreadMessagesView {
             let user = new DOMAppender('<span class="author">', '</span>');
             element.append(user);
 
-            let data = `data-threadusername="${DOMHelpers.escapeStringForAttribute(message.createdBy.name)}"`;
-            let userLink = new DOMAppender(`<a href="${Pages.getThreadsOfUserUrlFull(message.createdBy)}" ${data}>`, '</a>');
+            let userLink = new DOMAppender(`<a ${UsersView.getThreadsOfUserLinkContent(message.createdBy)}>`, '</a>');
             user.append(userLink);
             userLink.appendString(message.createdBy.name);
 
             let threadTitle = DOMHelpers.escapeStringForAttribute(message.parentThread.name);
 
             let href = Pages.getThreadMessagesOfThreadUrlFull(message.parentThread);
-            data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(message.parentThread.id)}"`;
+            let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(message.parentThread.id)}"`;
             let threadLink = new DOMAppender(`<a href="${href}" class="recent-message-thread-link" title="${threadTitle}" ${data}>`, '</a>');
             element.append(threadLink);
             threadLink.appendString(message.parentThread.name);

@@ -243,9 +243,12 @@ export module Views {
         ev.preventDefault();
     }
 
+    export const UserThreadsData = 'data-threadusername';
+    export const UserMessagesData = 'data-threadmessageusername';
+
     function threadsOfUserLinkClicked(ev: Event) {
 
-        const userName = (ev.target as HTMLElement).getAttribute('data-threadusername');
+        const userName = (ev.target as HTMLElement).getAttribute(UserThreadsData);
 
         new ThreadsPage().displayForUser(userName);
 
@@ -254,7 +257,7 @@ export module Views {
 
     function threadMessagesOfUserLinkClicked(ev: Event) {
 
-        const userName = (ev.target as HTMLElement).getAttribute('data-threadmessageusername');
+        const userName = (ev.target as HTMLElement).getAttribute(UserMessagesData);
 
         new ThreadMessagesPage().displayForUser(userName);
 
@@ -304,7 +307,7 @@ export module Views {
 
     export function setupThreadsOfUsersLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll('[data-threadusername]');
+        let links = element.querySelectorAll(`[${UserThreadsData}]`);
 
         for (let i = 0; i < links.length; ++i) {
 
@@ -315,7 +318,7 @@ export module Views {
 
     export function setupThreadMessagesOfUsersLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll('[data-threadmessageusername]');
+        let links = element.querySelectorAll(`[${UserMessagesData}]`);
 
         for (let i = 0; i < links.length; ++i) {
 
