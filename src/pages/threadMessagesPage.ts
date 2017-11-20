@@ -198,6 +198,8 @@ export class ThreadMessagesPage implements Pages.Page {
             setActive = 'UsersPageLink';
         }
 
+        title = Views.addPageNumber(title, this.pageNumber);
+
         MasterPage.goTo(Pages.appendToUrl(url, {
             sortOrder: this.sortOrder,
             pageNumber: this.pageNumber

@@ -385,4 +385,13 @@ export module Views {
             }
         }, 100);
     }
+
+    export function addPageNumber(title: string, pageNumber: number): string {
+
+        if (pageNumber > 0) {
+
+            title += ` – Page ${pageNumber + 1}`;
+        }
+        return title;
+    }
 }

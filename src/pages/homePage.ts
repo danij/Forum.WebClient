@@ -141,11 +141,13 @@ export class HomePage implements Pages.Page {
 
     private refreshUrl() {
 
+        let title = Views.addPageNumber(this.category.name, this.pageNumber);
+
         MasterPage.goTo(Pages.appendToUrl(Pages.getCategoryUrl(this.category.id, this.category.name), {
             orderBy: this.orderBy,
             sortOrder: this.sortOrder,
             pageNumber: this.pageNumber
-        }), this.category.name);
+        }), title);
 
         document.getElementById('HomePageLink').classList.add('uk-active');
     }

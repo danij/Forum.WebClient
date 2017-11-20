@@ -114,11 +114,13 @@ export class UsersPage implements Pages.Page {
 
     private refreshUrl() {
 
+        let title = Views.addPageNumber('Users', this.pageNumber);
+
         MasterPage.goTo( Pages.appendToUrl('users', {
             orderBy: this.orderBy,
             sortOrder: this.sortOrder,
             pageNumber: this.pageNumber
-        }), 'Users');
+        }), title);
         document.getElementById('UsersPageLink').classList.add('uk-active');
     }
 }

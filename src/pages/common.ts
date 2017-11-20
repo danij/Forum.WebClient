@@ -3,7 +3,6 @@ import {TagRepository} from "../services/tagRepository";
 import {UserRepository} from "../services/userRepository";
 import {CategoryRepository} from "../services/categoryRepository";
 import {ThreadRepository} from "../services/threadRepository";
-import {ThreadMessageRepository} from "../services/threadMessageRepository";
 
 export module Pages {
 

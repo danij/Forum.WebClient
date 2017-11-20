@@ -193,6 +193,8 @@ export class ThreadsPage implements Pages.Page {
             title = 'Threads added by ' + this.userName;
         }
 
+        title = Views.addPageNumber(title, this.pageNumber);
+
         MasterPage.goTo(Pages.appendToUrl(url, {
             orderBy: this.orderBy,
             sortOrder: this.sortOrder,
