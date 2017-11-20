@@ -162,7 +162,7 @@ export module TagsView {
                 const latestMessage = tag.latestMessage;
 
                 latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
-                latestMessageColumn.append(UsersView.createAuthorSmallWithColon(latestMessage.createdBy));
+                latestMessageColumn.append(UsersView.createAuthorSmall(latestMessage.createdBy));
 
                 let threadTitle = latestMessage.threadName || 'unknown';
 

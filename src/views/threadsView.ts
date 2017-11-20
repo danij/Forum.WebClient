@@ -183,7 +183,7 @@ export module ThreadsView {
 
                 latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
-                let authorElement = UsersView.createAuthorSmallWithColon(latestMessage.createdBy);
+                let authorElement = UsersView.createAuthorSmall(latestMessage.createdBy);
                 latestMessageColumn.append(authorElement);
 
                 let recentMessageTime = $('<span class="uk-text-meta"></span>');
@@ -196,7 +196,7 @@ export module ThreadsView {
                 let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id);
                 let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(latestMessage.id)}"`;
 
-                let messageLink = $(`<a class="recent-message-link" href="${href}" uk-tooltip ${data}></a>`);
+                let messageLink = $(`<a class="recent-message-link" href="${href}" ${data}></a>`);
                 messageLink.text(messageContent);
                 messageLink.attr('title', messageContent);
                 latestMessageColumn.appendElement(messageLink[0]);

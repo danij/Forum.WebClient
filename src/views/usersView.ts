@@ -61,15 +61,6 @@ export module UsersView {
         return element;
     }
 
-    export function createAuthorSmallWithColon(user: UserRepository.User): DOMAppender {
-
-        let element = createAuthorSmall(user);
-
-        element.appendRaw(':&nbsp;');
-
-        return element;
-    }
-
     export function createUserDropdown(user: UserRepository.User, classString?: string,
                                        position: string = 'bottom-right'): DOMAppender {
 
