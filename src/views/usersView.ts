@@ -115,7 +115,7 @@ export module UsersView {
             '</li>').replace('{receivedDownVotes}', DisplayHelpers.intToString(user.receivedDownVotes)));
 
         return Views.createDropdown(user.name, content, {
-            mode: 'hover',
+            mode: 'click',
             pos: position,
         }, classString);
     }
