@@ -8,34 +8,39 @@ export module ViewsExtra {
 
     export function init() {
 
-        remarkable = new Remarkable({
+        try {
+            remarkable = new Remarkable({
 
-            html: false,
-            xhtmlOut: true,
-            linkify: true,
-            linkTarget: '_blank',
-            typographer: true,
-            quotes: '“”‘’',
-            highlight: highlightCode
-        });
+                html: false,
+                xhtmlOut: true,
+                linkify: true,
+                linkTarget: '_blank',
+                typographer: true,
+                quotes: '“”‘’',
+                highlight: highlightCode
+            });
+        }
+        catch(ex) { }
 
-        MathJax.Hub.Config({
+        try {
+            MathJax.Hub.Config({
 
-            extensions: ["tex2jax.js"],
-            jax: ["input/TeX", "output/HTML-CSS"],
-            tex2jax: {
-                inlineMath: [['$', '$'], ["\\(", "\\)"]],
-                displayMath: [['$$', '$$'], ["\\[", "\\]"]],
-                processEscapes: true
-            },
-            "HTML-CSS": {availableFonts: ["TeX"]}
-        });
+                extensions: ["tex2jax.js"],
+                jax: ["input/TeX", "output/HTML-CSS"],
+                tex2jax: {
+                    inlineMath: [['$', '$'], ["\\(", "\\)"]],
+                    displayMath: [['$$', '$$'], ["\\[", "\\]"]],
+                    processEscapes: true
+                },
+                "HTML-CSS": {availableFonts: ["TeX"]}
+            });
+        }
+        catch(ex) { }
     }
 
     function highlightCode(value: string, language: string): string {
 
         try {
-
             if (language && language.length) {
 
                 return hljs.highlight(language, value).value;
@@ -53,11 +58,20 @@ export module ViewsExtra {
 
     export function expandContent(content: string): string {
 
-        return remarkable.render(content);
+        try {
+            return remarkable.render(content);
+        }
+        catch(ex) {
+
+            return 'Error while rendering';
+        }
     }
 
     export function refreshMath(element: HTMLElement): void {
 
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
+        try {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
+        }
+        catch(ex) {}
     }
 }
