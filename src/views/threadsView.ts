@@ -334,7 +334,7 @@ export module ThreadsView {
             }
             else {
 
-                details.appendString('<none> · ');
+                details.appendRaw('<span class="uk-text-warning">&lt;none&gt;</span> · ');
             }
             details.appendRaw(`${DisplayHelpers.intToString(thread.visited)} total views · `);
             details.appendRaw(`<a href="subscribed">${DisplayHelpers.intToString(thread.subscribedUsersCount)} subscribed users</a>`);
