@@ -130,6 +130,12 @@ export module ThreadMessagesView {
 
         let result = new DOMAppender('<div class="uk-container uk-container-expand">', '</div>');
 
+        if (messages.length < 1) {
+
+            result.appendRaw('<span class="uk-text-warning">No messages found</span>');
+            return result.toElement();
+        }
+
         for (let i = 0; i < messages.length; ++i) {
 
             const message = messages[i];

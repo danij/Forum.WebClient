@@ -17,6 +17,12 @@ export module CategoriesView {
         let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
         tableContainer.append(table);
 
+        if (categories.length < 1) {
+
+            table.appendRaw('<span class="uk-text-warning">No categories found</span>');
+            return tableContainer.toElement();
+        }
+
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
             '        <th class="uk-table-expand">Category</th>\n' +

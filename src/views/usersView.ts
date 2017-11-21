@@ -198,7 +198,7 @@ export module UsersView {
             }
         }
         else {
-            usersListGrid.appendRaw('<h3>No users found</h3>');
+            usersListGrid.appendRaw('<span class="uk-text-warning">No users found</span>');
         }
 
         let result = usersListGrid.toElement();

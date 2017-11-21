@@ -83,6 +83,11 @@ export module ThreadsView {
 
     export function createThreadsTable(threads: ThreadRepository.Thread[]): HTMLElement {
 
+        if (threads.length < 1) {
+
+            return DOMHelpers.parseHTML('<span class="uk-text-warning">No threads found</span>');
+        }
+
         let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
 
         let tableHeader = '<thead>\n' +

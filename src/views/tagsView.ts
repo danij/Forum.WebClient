@@ -52,22 +52,15 @@ export module TagsView {
 
     export function createTagsTable(tags: TagRepository.Tag[]): HTMLElement {
 
-        // let tagsListGrid = new DOMAppender('<div class="uk-grid-match uk-text-center" uk-grid>', '</div>');
-        //
-        // for (let tag of tags)
-        // {
-        //     if (null == tag) continue;
-        //
-        //     tagsListGrid.append(createTagInList(tag));
-        // }
-        //
-        // let result = tagsListGrid.toElement();
-        // Views.setupThreadsWithTagsLinks(result);
-        // return result;
-
         let tableContainer = new DOMAppender('<div class="tags-table">', '</div>');
         let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
         tableContainer.append(table);
+
+        if (tags.length < 1) {
+
+            table.appendRaw('<span class="uk-text-warning">No tags found</span>');
+            return tableContainer.toElement();
+        }
 
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
