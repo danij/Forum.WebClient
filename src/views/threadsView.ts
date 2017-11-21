@@ -186,25 +186,28 @@ export module ThreadsView {
 
                 const latestMessage = thread.latestMessage;
 
-                latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
+                if (latestMessage) {
 
-                let authorElement = UsersView.createAuthorSmall(latestMessage.createdBy);
-                latestMessageColumn.append(authorElement);
+                    latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
-                let recentMessageTime = $('<span class="uk-text-meta"></span>');
+                    let authorElement = UsersView.createAuthorSmall(latestMessage.createdBy);
+                    latestMessageColumn.append(authorElement);
 
-                recentMessageTime.text(DisplayHelpers.getDateTime(latestMessage.created));
-                authorElement.appendElement(recentMessageTime[0]);
+                    let recentMessageTime = $('<span class="uk-text-meta"></span>');
 
-                let messageContent = latestMessage.content || 'empty';
+                    recentMessageTime.text(DisplayHelpers.getDateTime(latestMessage.created));
+                    authorElement.appendElement(recentMessageTime[0]);
 
-                let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id);
-                let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(latestMessage.id)}"`;
+                    let messageContent = latestMessage.content || 'empty';
 
-                let messageLink = $(`<a class="recent-message-link" href="${href}" ${data}></a>`);
-                messageLink.text(messageContent);
-                messageLink.attr('title', messageContent);
-                latestMessageColumn.appendElement(messageLink[0]);
+                    let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id);
+                    let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(latestMessage.id)}"`;
+
+                    let messageLink = $(`<a class="recent-message-link" href="${href}" ${data}></a>`);
+                    messageLink.text(messageContent);
+                    messageLink.attr('title', messageContent);
+                    latestMessageColumn.appendElement(messageLink[0]);
+                }
             }
         }
 

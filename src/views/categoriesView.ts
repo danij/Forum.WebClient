@@ -117,39 +117,42 @@ export module CategoriesView {
 
                 const latestMessage = category.latestMessage;
 
-                latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
-                latestMessageColumn.append(UsersView.createAuthorSmall(latestMessage.createdBy));
+                if (latestMessage) {
 
-                let threadTitle = latestMessage.threadName || 'unknown';
+                    latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
+                    latestMessageColumn.append(UsersView.createAuthorSmall(latestMessage.createdBy));
 
-                let href = Pages.getThreadMessagesOfThreadUrlFull({
-                    id: latestMessage.threadId,
-                    name: latestMessage.threadName
-                } as ThreadRepository.Thread);
+                    let threadTitle = latestMessage.threadName || 'unknown';
 
-                let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(latestMessage.threadId)}"`;
+                    let href = Pages.getThreadMessagesOfThreadUrlFull({
+                        id: latestMessage.threadId,
+                        name: latestMessage.threadName
+                    } as ThreadRepository.Thread);
 
-                let threadTitleElement = $(`<a class="recent-message-thread-link" href="${href}" ${data}></a>`);
-                threadTitleElement.text(threadTitle);
-                threadTitleElement.attr('title', threadTitle);
-                latestMessageColumn.appendElement(threadTitleElement[0]);
+                    let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(latestMessage.threadId)}"`;
 
-                let recentMessageTime = new DOMAppender('<div class="recent-message-time uk-text-meta">', '</div>');
-                latestMessageColumn.append(recentMessageTime);
+                    let threadTitleElement = $(`<a class="recent-message-thread-link" href="${href}" ${data}></a>`);
+                    threadTitleElement.text(threadTitle);
+                    threadTitleElement.attr('title', threadTitle);
+                    latestMessageColumn.appendElement(threadTitleElement[0]);
 
-                let recentMessageTimeContent = document.createElement('span');
-                recentMessageTimeContent.innerText = DisplayHelpers.getDateTime(latestMessage.created);
-                recentMessageTime.appendElement(recentMessageTimeContent);
+                    let recentMessageTime = new DOMAppender('<div class="recent-message-time uk-text-meta">', '</div>');
+                    latestMessageColumn.append(recentMessageTime);
 
-                let messageContent = latestMessage.content || 'empty';
+                    let recentMessageTimeContent = document.createElement('span');
+                    recentMessageTimeContent.innerText = DisplayHelpers.getDateTime(latestMessage.created);
+                    recentMessageTime.appendElement(recentMessageTimeContent);
 
-                href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id);
-                data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(latestMessage.id)}"`;
+                    let messageContent = latestMessage.content || 'empty';
 
-                let messageLink = $(`<a class="recent-message-link" href="${href}" ${data}></a>`);
-                messageLink.text(messageContent);
-                messageLink.attr('title', messageContent);
-                latestMessageColumn.appendElement(messageLink[0]);
+                    href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id);
+                    data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(latestMessage.id)}"`;
+
+                    let messageLink = $(`<a class="recent-message-link" href="${href}" ${data}></a>`);
+                    messageLink.text(messageContent);
+                    messageLink.attr('title', messageContent);
+                    latestMessageColumn.appendElement(messageLink[0]);
+                }
             }
         }
 
