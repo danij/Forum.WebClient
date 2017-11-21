@@ -106,6 +106,12 @@ export module Views {
                                             onPageNumberChange: Views.PageNumberChangeCallback) {
 
         let result = $('<div></div>');
+
+        if (info.totalCount < 1) {
+
+            return result[0];
+        }
+
         let container = $('<ul class="uk-pagination uk-flex-center uk-margin-remove-left uk-margin-remove-top uk-margin-remove-bottom" uk-margin></ul>');
         result.append(container);
 
