@@ -279,7 +279,11 @@ export module Views {
 
     function threadMessagesOfThreadLinkClicked(ev: Event) {
 
-        const threadId = (ev.target as HTMLElement).getAttribute('data-threadmessagethreadid');
+        let element = ev.target as HTMLElement;
+        while ('a' != element.tagName.toLowerCase()) {
+            element = element.parentElement;
+        }
+        const threadId = element.getAttribute('data-threadmessagethreadid');
 
         new ThreadMessagesPage().displayForThread(threadId);
 
