@@ -250,9 +250,18 @@ export module Views {
     export const UserThreadsData = 'data-threadusername';
     export const UserMessagesData = 'data-threadmessageusername';
 
+    function getLink(ev: Event): HTMLAnchorElement {
+
+        let element = ev.target as HTMLElement;
+        while ('a' != element.tagName.toLowerCase()) {
+            element = element.parentElement;
+        }
+        return element as HTMLAnchorElement;
+    }
+
     function threadsWithTagLinkClicked(ev: Event) {
 
-        const tagName = (ev.target as HTMLElement).getAttribute(ThreadsWithTagData);
+        const tagName = getLink(ev).getAttribute(ThreadsWithTagData);
 
         new ThreadsPage().displayForTag(tagName);
 
@@ -261,7 +270,7 @@ export module Views {
 
     function threadsOfUserLinkClicked(ev: Event) {
 
-        const userName = (ev.target as HTMLElement).getAttribute(UserThreadsData);
+        const userName = getLink(ev).getAttribute(UserThreadsData);
 
         new ThreadsPage().displayForUser(userName);
 
@@ -270,7 +279,7 @@ export module Views {
 
     function threadMessagesOfUserLinkClicked(ev: Event) {
 
-        const userName = (ev.target as HTMLElement).getAttribute(UserMessagesData);
+        const userName = getLink(ev).getAttribute(UserMessagesData);
 
         new ThreadMessagesPage().displayForUser(userName);
 
@@ -279,11 +288,7 @@ export module Views {
 
     function threadMessagesOfThreadLinkClicked(ev: Event) {
 
-        let element = ev.target as HTMLElement;
-        while ('a' != element.tagName.toLowerCase()) {
-            element = element.parentElement;
-        }
-        const threadId = element.getAttribute('data-threadmessagethreadid');
+        const threadId = getLink(ev).getAttribute('data-threadmessagethreadid');
 
         new ThreadMessagesPage().displayForThread(threadId);
 
@@ -292,7 +297,7 @@ export module Views {
 
     function threadMessagesOfParentThreadLinkClicked(ev: Event) {
 
-        const threadMessageId = (ev.target as HTMLElement).getAttribute('data-threadmessagemessageid');
+        const threadMessageId = getLink(ev).getAttribute('data-threadmessagemessageid');
 
         new ThreadMessagesPage().displayForThreadMessage(threadMessageId);
 
@@ -301,7 +306,7 @@ export module Views {
 
     function categoryLinkClicked(ev: Event) {
 
-        const link = ev.target as HTMLElement;
+        const link = getLink(ev);
 
         const categoryId = link.getAttribute('data-categoryid');
         const categoryName = link.getAttribute('data-categoryname') || '';
