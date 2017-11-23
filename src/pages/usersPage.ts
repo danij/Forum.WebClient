@@ -29,7 +29,8 @@ export class UsersPage implements Pages.Page {
             let elements = UsersView.createUsersPageContent(userCollection, {
                     orderBy: this.orderBy,
                     sortOrder: this.sortOrder
-                }, (value: number) => this.onPageNumberChange(value));
+                }, (value: number) => this.onPageNumberChange(value),
+                (pageNumber: number) => this.getLinkForPage(pageNumber));
 
             this.setupSortControls(elements.sortControls);
 
@@ -73,12 +74,14 @@ export class UsersPage implements Pages.Page {
             if (null == userCollection) return null;
 
             let newTopPaginationControl = Views.createPaginationControl(userCollection,
-                (value: number) => this.onPageNumberChange(value));
+                (value: number) => this.onPageNumberChange(value),
+                (pageNumber: number) => this.getLinkForPage(pageNumber));
             $(this.topPaginationControl).replaceWith(newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
             let newBottomPaginationControl = Views.createPaginationControl(userCollection,
-                (value: number) => this.onPageNumberChange(value));
+                (value: number) => this.onPageNumberChange(value),
+                (pageNumber: number) => this.getLinkForPage(pageNumber));
             $(this.bottomPaginationControl).replaceWith(newBottomPaginationControl);
             this.bottomPaginationControl = newBottomPaginationControl;
 
@@ -112,15 +115,20 @@ export class UsersPage implements Pages.Page {
         this.refreshList();
     }
 
+    private getLinkForPage(pageNumber: number): string {
+
+        return Pages.appendToUrl('users', {
+            orderBy: this.orderBy,
+            sortOrder: this.sortOrder,
+            pageNumber: pageNumber
+        });
+    }
+
     private refreshUrl() {
 
         let title = Views.addPageNumber('Users', this.pageNumber);
 
-        MasterPage.goTo( Pages.appendToUrl('users', {
-            orderBy: this.orderBy,
-            sortOrder: this.sortOrder,
-            pageNumber: this.pageNumber
-        }), title);
+        MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
         document.getElementById('UsersPageLink').classList.add('uk-active');
     }
 }

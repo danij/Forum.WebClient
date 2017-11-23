@@ -51,7 +51,8 @@ export class HomePage implements Pages.Page {
                 let threadElements = ThreadsView.createThreadsPageContent(threadCollection, {
                     orderBy: this.orderBy,
                     sortOrder: this.sortOrder,
-                }, (value: number) => this.onPageNumberChange(value));
+                }, (value: number) => this.onPageNumberChange(value),
+                    (pageNumber: number) => this.getLinkForPage(pageNumber));
 
                 this.setupSortControls(threadElements.sortControls);
 
@@ -70,7 +71,12 @@ export class HomePage implements Pages.Page {
         const category = Pages.getCategory(url);
         if (category) {
 
-            new HomePage().displayCategory(category.id, category.name);
+            let page = new HomePage();
+            page.orderBy = Pages.getOrderBy(url) || page.orderBy;
+            page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
+            page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
+
+            page.displayCategory(category.id, category.name);
         }
         else {
 
@@ -126,12 +132,14 @@ export class HomePage implements Pages.Page {
             if (null == threadCollection) return;
 
             let newTopPaginationControl = Views.createPaginationControl(threadCollection,
-                (value: number) => this.onPageNumberChange(value));
+                (value: number) => this.onPageNumberChange(value),
+                (pageNumber: number) => this.getLinkForPage(pageNumber));
             $(this.topPaginationControl).replaceWith(newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
             let newBottomPaginationControl = Views.createPaginationControl(threadCollection,
-                (value: number) => this.onPageNumberChange(value));
+                (value: number) => this.onPageNumberChange(value),
+                (pageNumber: number) => this.getLinkForPage(pageNumber));
             $(this.bottomPaginationControl).replaceWith(newBottomPaginationControl);
             this.bottomPaginationControl = newBottomPaginationControl;
 
@@ -139,17 +147,21 @@ export class HomePage implements Pages.Page {
         });
     }
 
+    private getLinkForPage(pageNumber: number): string {
+
+        return Pages.appendToUrl(Pages.getCategoryUrl(this.category.id, this.category.name), {
+            orderBy: this.orderBy,
+            sortOrder: this.sortOrder,
+            pageNumber: pageNumber
+        });
+    }
+
     private refreshUrl() {
 
         let title = Views.addPageNumber(this.category.name, this.pageNumber);
 
-        MasterPage.goTo(Pages.appendToUrl(Pages.getCategoryUrl(this.category.id, this.category.name), {
-            orderBy: this.orderBy,
-            sortOrder: this.sortOrder,
-            pageNumber: this.pageNumber
-        }), title);
+        MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
 
         document.getElementById('HomePageLink').classList.add('uk-active');
     }
-
 }

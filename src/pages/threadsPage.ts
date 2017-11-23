@@ -48,7 +48,8 @@ export class ThreadsPage implements Pages.Page {
                 sortOrder: this.sortOrder,
                 tag: this.tag,
                 user: this.user
-            }, (value: number) => this.onPageNumberChange(value));
+            }, (value: number) => this.onPageNumberChange(value),
+                (pageNumber: number) => this.getLinkForPage(pageNumber));
 
             this.setupSortControls(elements.sortControls);
 
@@ -138,12 +139,14 @@ export class ThreadsPage implements Pages.Page {
             if (null == threadCollection) return;
 
             let newTopPaginationControl = Views.createPaginationControl(threadCollection,
-                (value: number) => this.onPageNumberChange(value));
+                (value: number) => this.onPageNumberChange(value),
+                (pageNumber: number) => this.getLinkForPage(pageNumber));
             $(this.topPaginationControl).replaceWith(newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
             let newBottomPaginationControl = Views.createPaginationControl(threadCollection,
-                (value: number) => this.onPageNumberChange(value));
+                (value: number) => this.onPageNumberChange(value),
+                (pageNumber: number) => this.getLinkForPage(pageNumber));
             $(this.bottomPaginationControl).replaceWith(newBottomPaginationControl);
             this.bottomPaginationControl = newBottomPaginationControl;
 
@@ -177,29 +180,43 @@ export class ThreadsPage implements Pages.Page {
         this.refreshList();
     }
 
-    private refreshUrl() {
+
+    private getLinkForPage(pageNumber: number): string {
 
         let url = 'threads';
-        let title = 'Threads';
 
         if (this.tagName && this.tagName.length) {
 
             url = Pages.getThreadsWithTagUrlByName(this.tagName);
-            title = `Threads tagged with ${this.tagName}`;
         }
         else if (this.userName && this.userName.length) {
 
             url = Pages.getThreadsOfUserUrl(this.userName);
+        }
+
+        return Pages.appendToUrl(url, {
+            orderBy: this.orderBy,
+            sortOrder: this.sortOrder,
+            pageNumber: pageNumber
+        });
+    }
+
+    private refreshUrl() {
+
+        let title = 'Threads';
+
+        if (this.tagName && this.tagName.length) {
+
+            title = `Threads tagged with ${this.tagName}`;
+        }
+        else if (this.userName && this.userName.length) {
+
             title = 'Threads added by ' + this.userName;
         }
 
         title = Views.addPageNumber(title, this.pageNumber);
 
-        MasterPage.goTo(Pages.appendToUrl(url, {
-            orderBy: this.orderBy,
-            sortOrder: this.sortOrder,
-            pageNumber: this.pageNumber
-        }), title);
+        MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
         document.getElementById('ThreadsPageLink').classList.add('uk-active');
     }
 }

@@ -140,7 +140,8 @@ export module UsersView {
 
     export function createUsersPageContent(collection: UserRepository.UserCollection,
                                            info: Views.SortInfo,
-                                           onPageNumberChange: Views.PageNumberChangeCallback) {
+                                           onPageNumberChange: Views.PageNumberChangeCallback,
+                                           getLinkForPage: Views.GetLinkForPageCallback) {
 
         collection = collection || UserRepository.defaultUserCollection();
 
@@ -149,14 +150,14 @@ export module UsersView {
         let resultList = $("<div></div>");
 
         resultList.append(result.sortControls = createUserListSortControls(info));
-        resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange));
+        resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
         let usersList = $('<div class="users-list"></div>');
         resultList.append(usersList);
 
         usersList.append(createUserListContent(collection.users));
 
-        resultList.append(result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange));
+        resultList.append(result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
         result.list = resultList[0];
         return result;

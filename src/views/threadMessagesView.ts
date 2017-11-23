@@ -75,6 +75,7 @@ export module ThreadMessagesView {
     export function createThreadMessagesPageContent(collection: ThreadMessageRepository.ThreadMessageCollection,
                                                     info: ThreadMessagePageDisplayInfo,
                                                     onPageNumberChange: Views.PageNumberChangeCallback,
+                                                    getLinkForPage: Views.GetLinkForPageCallback,
                                                     thread: ThreadRepository.Thread): ThreadMessagesPageContent {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCollection();
@@ -93,14 +94,16 @@ export module ThreadMessagesView {
             resultList.appendChild(result.sortControls = createThreadMessageListSortControls(info));
         }
 
-        resultList.appendChild(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange));
+        resultList.appendChild(result.paginationTop =
+            Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
         let listContainer = document.createElement('div');
         listContainer.classList.add('thread-message-list');
         listContainer.appendChild(createThreadMessageList(collection, thread));
         resultList.appendChild(listContainer);
 
-        resultList.appendChild(result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange));
+        resultList.appendChild(result.paginationBottom =
+            Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
         result.list = resultList;
         return result;

@@ -28,7 +28,8 @@ export module ThreadsView {
 
     export function createThreadsPageContent(collection: ThreadRepository.ThreadCollection,
                                              info: ThreadPageDisplayInfo,
-                                             onPageNumberChange: Views.PageNumberChangeCallback) {
+                                             onPageNumberChange: Views.PageNumberChangeCallback,
+                                             getLinkForPage: Views.GetLinkForPageCallback) {
 
         collection = collection || ThreadRepository.defaultThreadCollection();
 
@@ -46,13 +47,13 @@ export module ThreadsView {
         }
 
         resultList.append(result.sortControls = createThreadListSortControls(info));
-        resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange));
+        resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
         let tableContainer = $('<div class="threads-table"></div>');
         resultList.append(tableContainer);
         tableContainer.append(createThreadsTable(collection.threads));
 
-        resultList.append(result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange));
+        resultList.append(result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
         result.list = resultList[0];
         return result;

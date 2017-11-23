@@ -5,6 +5,7 @@ import {DisplayHelpers} from "../helpers/displayHelpers";
 import {HomePage} from "../pages/homePage";
 import {ThreadMessagesPage} from "../pages/threadMessagesPage";
 import {ViewsExtra} from "./extra";
+import {Pages} from "../pages/common";
 
 export module Views {
 
@@ -101,9 +102,11 @@ export module Views {
     }
 
     export declare type PageNumberChangeCallback = (value: number) => void;
+    export declare type GetLinkForPageCallback = (value: number) => string;
 
     export function createPaginationControl(info: CommonEntities.PaginationInfo,
-                                            onPageNumberChange: Views.PageNumberChangeCallback) {
+                                            onPageNumberChange: PageNumberChangeCallback,
+                                            getLinkForPage: GetLinkForPageCallback) {
 
         let result = $('<div></div>');
 
@@ -139,7 +142,7 @@ export module Views {
             let listElement = $('<li></li>');
             container.append(listElement[0]);
 
-            let link = $(`<a>${pageNumber + 1}</a>`);
+            let link = $(`<a href="${Pages.getUrl(getLinkForPage(pageNumber))}">${pageNumber + 1}</a>`);
             listElement.append(link);
             link.on('click', pageClickCallback);
 
@@ -219,7 +222,7 @@ export module Views {
 
         if (info.page < (pageCount - 1)) {
 
-            let next = $('<li><a href="#"><span uk-pagination-next></span></a></li>');
+            let next = $('<li><a><span uk-pagination-next></span></a></li>');
             container.append(next);
             next.on('click', (e) => {
 
