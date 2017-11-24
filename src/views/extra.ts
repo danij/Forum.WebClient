@@ -20,7 +20,8 @@ export module ViewsExtra {
                 highlight: highlightCode
             });
         }
-        catch(ex) { }
+        catch (ex) {
+        }
 
         try {
             MathJax.Hub.Config({
@@ -35,7 +36,8 @@ export module ViewsExtra {
                 "HTML-CSS": {availableFonts: ["TeX"]}
             });
         }
-        catch(ex) { }
+        catch (ex) {
+        }
     }
 
     function highlightCode(value: string, language: string): string {
@@ -61,7 +63,7 @@ export module ViewsExtra {
         try {
             return remarkable.render(content);
         }
-        catch(ex) {
+        catch (ex) {
 
             return 'Error while rendering';
         }
@@ -69,9 +71,12 @@ export module ViewsExtra {
 
     export function refreshMath(element: HTMLElement): void {
 
-        try {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
-        }
-        catch(ex) {}
+        setTimeout(() => {
+            try {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
+            }
+            catch (ex) {
+            }
+        }, 100);
     }
 }

@@ -210,6 +210,8 @@ export module MasterPage {
 
             panel.innerHTML = '';
             panel.appendChild(ThreadsView.createRecentThreadsView(value.threads || []));
+
+            ViewsExtra.refreshMath(panel);
         });
     }
 
@@ -221,6 +223,8 @@ export module MasterPage {
 
             panel.innerHTML = '';
             panel.appendChild(ThreadMessagesView.createRecentThreadMessagesView(value.messages || []));
+
+            ViewsExtra.refreshMath(panel);
         });
     }
 }
