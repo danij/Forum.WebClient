@@ -62,7 +62,7 @@ export module CategoriesView {
                 if (category.children && category.children.length) {
 
                     let childCategoryElement = new DOMAppender('<span class="category-children uk-text-small">', '</span>');
-                    nameColumn.appendRaw(' ');
+                    nameColumn.appendRaw('<span class="uk-text-meta">Subcategories:</span> ');
                     nameColumn.append(childCategoryElement);
 
                     for (let i = 0; i < category.children.length; ++i) {
