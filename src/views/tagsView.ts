@@ -93,7 +93,7 @@ export module TagsView {
                 if (tag.categories && tag.categories.length) {
 
                     let categoryElement = new DOMAppender('<span class="category-children uk-text-small">', '</span>');
-                    nameColumn.appendRaw(' ');
+                    nameColumn.appendRaw('<span class="uk-text-meta">Referenced by:</span> ');
                     nameColumn.append(categoryElement);
 
                     for (let i = 0; i < tag.categories.length; ++i) {
