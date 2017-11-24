@@ -98,6 +98,14 @@ html {
     right: @recent-messages-width + 3*@recent-messages-padding;
     .vertical-fill-page();
 
+    &.recent-threads-content-hidden {
+        left: 10px;
+    }
+
+    &.recent-messages-content-hidden {
+        right: 40px;
+    }
+
     .uk-container {
         padding-left: 30px;
         padding-right: 10px; //10px is specified as extra at the right

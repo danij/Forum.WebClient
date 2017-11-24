@@ -169,6 +169,8 @@ export module MasterPage {
 
         let toggle = document.getElementById(elementId);
         let toggleListItem = toggle.parentElement;
+        let pageContentContainer = document.getElementById('pageContentContainer');
+        let classForPageContentContainer = destinationClass + '-hidden';
 
         toggle.addEventListener('click', (ev) => {
 
@@ -178,11 +180,13 @@ export module MasterPage {
 
                 panel.classList.add('uk-hidden');
                 toggleListItem.classList.remove('uk-active');
+                pageContentContainer.classList.add(classForPageContentContainer);
             }
             else {
 
                 panel.classList.remove('uk-hidden');
                 toggleListItem.classList.add('uk-active');
+                pageContentContainer.classList.remove(classForPageContentContainer);
             }
         });
     }
