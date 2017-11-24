@@ -167,7 +167,10 @@ export class ThreadMessagesPage implements Pages.Page {
             this.bottomPaginationControl = newBottomPaginationControl;
 
             return ThreadMessagesView.createThreadMessageList(messageCollection, this.thread);
-        });
+        }).then(() => {
+
+            Views.scrollToTop();
+        })
     }
 
     private setupSortControls(controls: HTMLElement): void {
