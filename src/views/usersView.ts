@@ -210,9 +210,9 @@ export module UsersView {
         return result;
     }
 
-    export function createUserNameElement(user: UserRepository.User): DOMAppender {
+    export function createUserNameElement(user: UserRepository.User, extraClass: string = ''): DOMAppender {
 
-        let result = new DOMAppender('<div class="username uk-text-small">', '</div>');
+        let result = new DOMAppender(`<div class="username uk-text-small ${extraClass}">`, '</div>');
         result.appendString(user.name);
 
         return result;

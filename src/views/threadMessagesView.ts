@@ -163,13 +163,14 @@ export module ThreadMessagesView {
 
                     userContainer.append(UsersView.createUserLogoForList(author));
 
-                    let usernameElement = UsersView.createUserNameElement(author);
-
                     const messageThread = message.parentThread || thread;
+                    let extraClass = '';
+
                     if (messageThread && messageThread.createdBy && messageThread.createdBy.id === author.id) {
 
-                        usernameElement.appendRaw('<span class="thread-author" uk-tooltip title="Thread Author">✍</span>');
+                        extraClass = 'user-is-thread-author';
                     }
+                    let usernameElement = UsersView.createUserNameElement(author, extraClass);
 
                     userContainer.append(usernameElement);
 
