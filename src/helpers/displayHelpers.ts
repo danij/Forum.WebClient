@@ -69,7 +69,7 @@ export module DisplayHelpers {
             offsetString = '+' + offsetString;
         }
 
-        return `${dateString} ${timeString}${offsetString}`;
+        return `${dateString} ${timeString}`;//'${offsetString}`;
     }
 
     export function getShortDate(epochTime: number): string {

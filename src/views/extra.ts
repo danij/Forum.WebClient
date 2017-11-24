@@ -22,24 +22,6 @@ export module ViewsExtra {
         }
         catch (ex) {
         }
-
-        try {
-            MathJax.Hub.Config({
-
-                extensions: ["tex2jax.js"],
-                jax: ["input/TeX", "output/HTML-CSS"],
-                tex2jax: {
-                    inlineMath: [['$', '$'], ["\\(", "\\)"]],
-                    displayMath: [['$$', '$$'], ["\\[", "\\]"]],
-                    processEscapes: true,
-                    processClass: ".*",
-                    ignoreClass: "no-math"
-                },
-                "HTML-CSS": {availableFonts: ["TeX"]}
-            });
-        }
-        catch (ex) {
-        }
     }
 
     function highlightCode(value: string, language: string): string {
