@@ -32,8 +32,8 @@ export module ViewsExtra {
                     inlineMath: [['$', '$'], ["\\(", "\\)"]],
                     displayMath: [['$$', '$$'], ["\\[", "\\]"]],
                     processEscapes: true,
-                    processClass: "render-math",
-                    ignoreClass: ".*"
+                    processClass: ".*",
+                    ignoreClass: "no-math"
                 },
                 "HTML-CSS": {availableFonts: ["TeX"]}
             });

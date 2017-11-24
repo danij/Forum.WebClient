@@ -150,7 +150,7 @@ export module TagsView {
 
                     let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(latestMessage.threadId)}"`;
 
-                    let threadTitleElement = $(`<a class="recent-message-thread-link render-math" href="${href}" ${data}></a>`);
+                    let threadTitleElement = $(`<a class="recent-message-thread-link" href="${href}" ${data}></a>`);
                     threadTitleElement.text(threadTitle);
                     threadTitleElement.attr('title', threadTitle);
                     latestMessageColumn.appendElement(threadTitleElement[0]);
@@ -167,7 +167,7 @@ export module TagsView {
                     href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id);
                     data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(latestMessage.id)}"`;
 
-                    let messageLink = $(`<a class="recent-message-link" href="${href}" ${data}></a>`);
+                    let messageLink = $(`<a class="recent-message-link no-math" href="${href}" ${data}></a>`);
                     messageLink.text(messageContent);
                     messageLink.attr('title', messageContent);
                     latestMessageColumn.appendElement(messageLink[0]);
@@ -177,6 +177,7 @@ export module TagsView {
 
         let result = tableContainer.toElement();
 
+        Views.setupCategoryLinks(result);
         Views.setupThreadsWithTagsLinks(result);
         Views.setupThreadMessagesOfThreadsLinks(result);
         Views.setupThreadMessagesOfMessageParentThreadLinks(result);
