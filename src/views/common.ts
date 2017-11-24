@@ -164,7 +164,7 @@ export module Views {
                 const pageNumber = parseInt(prompt("Please enter the page number:")) || 0;
                 if (pageNumber >= 1) {
 
-                    onPageNumberChange(pageNumber);
+                    onPageNumberChange(pageNumber - 1);
                 }
             });
         }
