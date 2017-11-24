@@ -144,6 +144,9 @@ export class HomePage implements Pages.Page {
             this.bottomPaginationControl = newBottomPaginationControl;
 
             return ThreadsView.createThreadsTable(threadCollection.threads);
+        }).then(() => {
+
+            Views.scrollToTop();
         });
     }
 

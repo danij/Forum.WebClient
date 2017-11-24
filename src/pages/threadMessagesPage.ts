@@ -78,6 +78,10 @@ export class ThreadMessagesPage implements Pages.Page {
 
                 Views.scrollContainerToId(jumpToId);
             }
+            else {
+
+                Views.scrollToTop();
+            }
         })
     }
 

@@ -63,6 +63,9 @@ export class TagsPage implements Pages.Page {
             if (null == tagCollection) return null;
 
             return TagsView.createTagsTable(tagCollection.tags);
+        }).then(() => {
+
+            Views.scrollToTop();
         });
     }
 
