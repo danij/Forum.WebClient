@@ -161,8 +161,11 @@ export module Views {
 
             span.on('click', () => {
 
-                const pageNumber = (parseInt(prompt("Please enter the page number:")) || 1) - 1;
-                onPageNumberChange(pageNumber);
+                const pageNumber = parseInt(prompt("Please enter the page number:")) || 0;
+                if (pageNumber >= 1) {
+
+                    onPageNumberChange(pageNumber);
+                }
             });
         }
 
