@@ -189,7 +189,7 @@ export module UsersView {
 
     export function createUserListContent(users: UserRepository.User[]): HTMLElement {
 
-        let usersListGrid = new DOMAppender('<div class="uk-grid-match uk-text-center" uk-grid>', '</div>');
+        let usersListGrid = new DOMAppender('<div class="uk-grid-match uk-text-center uk-flex uk-flex-center" uk-grid>', '</div>');
 
         if (users && users.length) {
             for (let user of users) {
