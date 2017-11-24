@@ -31,7 +31,9 @@ export module ViewsExtra {
                 tex2jax: {
                     inlineMath: [['$', '$'], ["\\(", "\\)"]],
                     displayMath: [['$$', '$$'], ["\\[", "\\]"]],
-                    processEscapes: true
+                    processEscapes: true,
+                    processClass: "render-math",
+                    ignoreClass: ".*"
                 },
                 "HTML-CSS": {availableFonts: ["TeX"]}
             });

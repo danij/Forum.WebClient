@@ -49,7 +49,7 @@ export module ThreadMessagesView {
 
             let href = Pages.getThreadMessagesOfThreadUrlFull(message.parentThread);
             let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(message.parentThread.id)}"`;
-            let threadLink = new DOMAppender(`<a href="${href}" class="recent-message-thread-link" title="${threadTitle}" ${data}>`, '</a>');
+            let threadLink = new DOMAppender(`<a href="${href}" class="recent-message-thread-link render-math" title="${threadTitle}" ${data}>`, '</a>');
             element.append(threadLink);
             threadLink.appendString(message.parentThread.name);
 
