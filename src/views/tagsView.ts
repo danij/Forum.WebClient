@@ -245,16 +245,42 @@ export module TagsView {
 
     export function createTagPageHeader(tag: TagRepository.Tag): HTMLElement {
 
-        return DOMHelpers.parseHTML(('<div class="uk-grid-small tag-page-header">\n' +
-            '    <div class="uk-display-inline-block">\n' +
-            '        <span class="uk-badge uk-icon" uk-icon="icon: tag">{tagName}</span>\n' +
-            '    </div>\n' +
-            '    <span>{threadCount} threads</span>\n' +
-            '    <span>{messageCount} messages</span>\n' +
-            '</div>')
-                .replace('{tagName}', DOMHelpers.escapeStringForContent(tag.name))
-                .replace('{threadCount}', DisplayHelpers.intToString(tag.threadCount))
-                .replace('{messageCount}', DisplayHelpers.intToString(tag.messageCount))
-        );
+        let container = new DOMAppender('<div class="uk-grid-small tag-page-header">', '</div>');
+
+        container.appendRaw(('<div class="uk-display-inline-block">\n' +
+            '    <span class="uk-badge uk-icon" uk-icon="icon: tag">{tagName}</span>\n' +
+            '</div>').replace('{tagName}', DOMHelpers.escapeStringForContent(tag.name)));
+
+        container.appendRaw('<span>{threadCount} threads</span>'
+            .replace('{threadCount}', DisplayHelpers.intToString(tag.threadCount)));
+
+        container.appendRaw('<span>{messageCount} messages</span>'
+            .replace('{messageCount}', DisplayHelpers.intToString(tag.messageCount)));
+
+        container.appendRaw('<span class="uk-text-meta">Referenced by: </span>');
+        if (tag.categories && tag.categories.length) {
+
+            for (let i = 0; i < tag.categories.length; ++i) {
+
+                const category = tag.categories[i];
+
+                let element = new DOMAppender('<a href="' +
+                    Pages.getCategoryFullUrl(category) +
+                    '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
+                    DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
+                container.append(element);
+                element.appendString(category.name);
+
+                if (i < (tag.categories.length - 1)) {
+                    container.appendRaw(', ');
+                }
+            }
+        }
+
+        let element = container.toElement();
+
+        Views.setupCategoryLinks(element);
+
+        return element;
     }
 }
