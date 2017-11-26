@@ -205,7 +205,13 @@ export module ThreadMessagesView {
 
                 if (message.lastUpdated && message.lastUpdated.at) {
 
-                    messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning">Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
+                    let reason = (message.lastUpdated.reason || '').trim();
+                    if (reason.length < 1) {
+                        reason = '<no reason>';
+                    }
+                    const title = message.lastUpdated.userName + ': ' + reason;
+
+                    messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning" title="${DOMHelpers.escapeStringForAttribute(title)}" uk-tooltip>Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
                 }
                 if (message.ip && message.ip.length) {
 
