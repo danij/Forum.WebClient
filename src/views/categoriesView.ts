@@ -6,10 +6,17 @@ import {DOMHelpers} from "../helpers/domHelpers";
 import {Views} from "./common";
 import {Pages} from "../pages/common";
 import {ThreadRepository} from "../services/threadRepository";
+import {PageActions} from "../pages/action";
+import {Privileges} from "../services/privileges";
+import {EditViews} from "./edit";
 
 export module CategoriesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
+    import ICategoryCallback = PageActions.ICategoryCallback;
+    import ICategoryPrivileges = Privileges.ICategoryPrivileges;
+    import reloadIfOk = EditViews.reloadPageIfOk;
+    import doIfOk = EditViews.doIfOk;
 
     export function createCategoriesTable(categories: CategoryRepository.Category[]): HTMLElement {
 
@@ -62,12 +69,10 @@ export module CategoriesView {
                 if (category.children && category.children.length) {
 
                     let childCategoryElement = new DOMAppender('<span class="category-children uk-text-small">', '</span>');
-                    if (category.description && category.description.length)
-                    {
+                    if (category.description && category.description.length) {
                         nameColumn.appendRaw('<span class="uk-text-meta"> · Subcategories:</span> ');
                     }
-                    else
-                    {
+                    else {
                         nameColumn.appendRaw('<span class="uk-text-meta">Subcategories:</span> ');
                     }
                     nameColumn.append(childCategoryElement);
@@ -175,7 +180,9 @@ export module CategoriesView {
         return result;
     }
 
-    export function createCategoryHeader(category: CategoryRepository.Category): HTMLElement {
+    export function createCategoryHeader(category: CategoryRepository.Category,
+                                         callback: ICategoryCallback,
+                                         privileges: ICategoryPrivileges): HTMLElement {
 
         let result = document.createElement('div');
         result.classList.add('categories-list-header');
@@ -216,16 +223,54 @@ export module CategoriesView {
         //add the current element also
         let element = document.createElement('li');
         breadcrumbsList.appendChild(element);
-        element.appendChild(document.createTextNode(category.name));
 
-        if (category.description && category.description.length) {
+        let nameElement = document.createElement('span');
+        nameElement.innerText = category.name;
 
-            let descriptionElement = document.createElement('span');
-            result.appendChild(descriptionElement);
+        if (privileges.canEditCategoryName(category.id)) {
 
-            descriptionElement.appendChild(document.createTextNode(category.description));
-            descriptionElement.classList.add('uk-text-meta');
+            let link = EditViews.createEditLink('Edit category name');
+            element.appendChild(link);
+            link.addEventListener('click', () => {
+
+                const name = EditViews.getInput('Edit category name', category.name);
+                if (name && name.length && (name != category.name)) {
+
+                    doIfOk(callback.editCategoryName(category.id, name), () => {
+
+                        nameElement.innerText = category.name = name;
+                    });
+                }
+            });
         }
+
+        element.appendChild(nameElement);
+
+        let descriptionContainer = document.createElement('span');
+        result.appendChild(descriptionContainer);
+
+        let descriptionElement = document.createElement('span');
+        descriptionElement.innerText = category.description || '';
+        descriptionElement.classList.add('uk-text-meta');
+
+        if (privileges.canEditCategoryDescription(category.id)) {
+
+            let link = EditViews.createEditLink('Edit category description');
+            descriptionContainer.appendChild(link);
+            link.addEventListener('click', () => {
+
+                const description = EditViews.getInput('Edit category description', category.description);
+                if (description && description.length && (description != category.description)) {
+
+                    doIfOk(callback.editCategoryDescription(category.id, description), () => {
+
+                        descriptionElement.innerText = category.description = description;
+                    });
+                }
+            });
+        }
+
+        descriptionContainer.appendChild(descriptionElement);
 
         if (category.tags && category.tags.length) {
 
@@ -236,14 +281,45 @@ export module CategoriesView {
             }
         }
 
+        if (privileges.canDeleteCategory(category.id)) {
+
+            let deleteLink = EditViews.createDeleteLink('Delete category');
+            result.appendChild(deleteLink);
+
+            deleteLink.addEventListener('click', () => {
+
+                if (EditViews.confirm('Are you sure you want to delete this category?')) {
+
+                    EditViews.goToHomePageIfOk(callback.deleteCategory(category.id));
+                }
+            });
+        }
+
+        return result;
+    }
+
+    export function createRootCategoriesDisplay(categories: CategoryRepository.Category[],
+                                                callback: ICategoryCallback,
+                                                privileges: ICategoryPrivileges): HTMLElement {
+
+        let result = document.createElement('div');
+        result.appendChild(createCategoriesTable(categories));
+
+        if (privileges.canAddNewRootCategory()) {
+
+            result.appendChild(createAddNewRootCategoryElement(callback));
+        }
+
         return result;
     }
 
     export function createCategoryDisplay(category: CategoryRepository.Category,
-                                          threadList: HTMLElement): HTMLElement {
+                                          threadList: HTMLElement,
+                                          callback: ICategoryCallback,
+                                          privileges: ICategoryPrivileges): HTMLElement {
 
         let result = document.createElement('div');
-        result.appendChild(createCategoryHeader(category));
+        result.appendChild(createCategoryHeader(category, callback, privileges));
 
         let separatorNeeded = false;
 
@@ -253,6 +329,11 @@ export module CategoriesView {
             separatorNeeded = true;
         }
 
+        if (privileges.canAddNewSubCategory(category.id)) {
+
+            result.appendChild(createAddNewSubCategoryElement(category.id, callback));
+        }
+
         if (threadList) {
 
             if (separatorNeeded) {
@@ -260,12 +341,41 @@ export module CategoriesView {
                 result.appendChild(separator);
 
                 separator.classList.add('uk-divider-icon');
-                separator.classList.add('divider-margin');
             }
 
             result.appendChild(threadList);
         }
 
         return result;
+    }
+
+    function createAddNewRootCategoryElement(callback: ICategoryCallback): HTMLElement {
+
+        let button = EditViews.createAddNewButton('Add Root Category');
+
+        button.addEventListener('click', () => {
+
+            const name = EditViews.getInput('Enter the new category name');
+            if (name.length < 1) return;
+
+            reloadIfOk(callback.createRootCategory(name));
+        });
+
+        return EditViews.wrapAddElements(button);
+    }
+
+    function createAddNewSubCategoryElement(parentId: string, callback: ICategoryCallback): HTMLElement {
+
+        let button = EditViews.createAddNewButton('Add Sub Category');
+
+        button.addEventListener('click', () => {
+
+            const name = EditViews.getInput('Enter the new sub category name');
+            if (name.length < 1) return;
+
+            reloadIfOk(callback.createSubCategory(parentId, name));
+        });
+
+        return EditViews.wrapAddElements(button);
     }
 }

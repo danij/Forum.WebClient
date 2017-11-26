@@ -28,6 +28,11 @@ export module Pages {
 
     declare const masterPageConfig: MasterPageConfig;
 
+    export function getHomeUrl(): string {
+
+        return masterPageConfig.baseUri;
+    }
+
     export function getUrl(relative: string): string {
 
         return `${masterPageConfig.baseUri}/${relative}`;
