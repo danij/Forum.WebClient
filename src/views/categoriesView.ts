@@ -55,14 +55,21 @@ export module CategoriesView {
                 nameLink.appendString(' ' + category.name);
                 nameColumn.appendRaw('<br/>');
 
-                let description = new DOMAppender('<span class="category-description uk-text-meta">', '</span>');
+                let description = new DOMAppender('<span class="category-description">', '</span>');
                 nameColumn.append(description);
                 description.appendString(category.description);
 
                 if (category.children && category.children.length) {
 
                     let childCategoryElement = new DOMAppender('<span class="category-children uk-text-small">', '</span>');
-                    nameColumn.appendRaw('<span class="uk-text-meta">Subcategories:</span> ');
+                    if (category.description && category.description.length)
+                    {
+                        nameColumn.appendRaw('<span class="uk-text-meta"> · Subcategories:</span> ');
+                    }
+                    else
+                    {
+                        nameColumn.appendRaw('<span class="uk-text-meta">Subcategories:</span> ');
+                    }
                     nameColumn.append(childCategoryElement);
 
                     for (let i = 0; i < category.children.length; ++i) {
