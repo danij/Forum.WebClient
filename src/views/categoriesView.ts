@@ -288,7 +288,7 @@ export module CategoriesView {
 
             deleteLink.addEventListener('click', () => {
 
-                if (EditViews.confirm('Are you sure you want to delete this category?')) {
+                if (EditViews.confirm(`Are you sure you want to delete the following category: ${category.name}?`)) {
 
                     EditViews.goToHomePageIfOk(callback.deleteCategory(category.id));
                 }
