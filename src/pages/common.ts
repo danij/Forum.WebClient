@@ -13,6 +13,8 @@ export module Pages {
 
     export function changePage(handler: () => Promise<HTMLElement>): Promise<void> {
 
+        Views.hideOpenModals();
+
         return Views.changeContent(document.getElementById('pageContentContainer'), handler).then(() => {
 
             Views.scrollToTop();

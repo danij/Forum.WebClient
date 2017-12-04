@@ -11,6 +11,8 @@ export module Views {
 
     import DOMAppender = DOMHelpers.DOMAppender;
 
+    declare var UIkit: any;
+
     interface DisplayConfig {
 
         pageNumbersBefore: number,
@@ -417,5 +419,15 @@ export module Views {
             title += ` – Page ${pageNumber + 1}`;
         }
         return title;
+    }
+
+    export function hideOpenModals(): void {
+
+        const modals = document.querySelectorAll('.uk-modal.uk-open');
+        for (let i = 0; i < modals.length; ++i) {
+
+            const modal = modals.item(i);
+            UIkit.modal(modal).hide();
+        }
     }
 }

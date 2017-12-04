@@ -158,37 +158,9 @@ export module MasterPage {
 
         updateRecentThreads();
         setInterval(updateRecentThreads, Views.DisplayConfig.updateRecentThreadsEveryMilliSeconds);
-        setupToggle('RecentThreadsToggle', 'recent-threads-content');
 
         updateRecentThreadMessages();
         setInterval(updateRecentThreadMessages, Views.DisplayConfig.updateRecentThreadMessagesEveryMilliSeconds);
-        setupToggle('RecentThreadMessagesToggle', 'recent-messages-content');
-    }
-
-    function setupToggle(elementId: string, destinationClass: string): void {
-
-        let toggle = document.getElementById(elementId);
-        let toggleListItem = toggle.parentElement;
-        let pageContentContainer = document.getElementById('pageContentContainer');
-        let classForPageContentContainer = destinationClass + '-hidden';
-
-        toggle.addEventListener('click', (ev) => {
-
-            let panel = document.getElementsByClassName(destinationClass)[0] as HTMLElement;
-
-            if ($(panel).is(':visible')) {
-
-                panel.classList.add('uk-hidden');
-                toggleListItem.classList.remove('uk-active');
-                pageContentContainer.classList.add(classForPageContentContainer);
-            }
-            else {
-
-                panel.classList.remove('uk-hidden');
-                toggleListItem.classList.add('uk-active');
-                pageContentContainer.classList.remove(classForPageContentContainer);
-            }
-        });
     }
 
     function updateStatistics(): void {

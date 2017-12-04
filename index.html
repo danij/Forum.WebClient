@@ -37,7 +37,7 @@ MathJax.Hub.Config({
 <div class="uk-navbar-container" uk-navbar>
     <div class="uk-navbar-left">
         <ul class="uk-navbar-nav">
-            <li class="uk-text-center uk-active"><a id="RecentThreadsToggle">
+            <li class="uk-text-center uk-active"><a uk-toggle="target: #recent-threads-modal">
                 <div>Recent
                     <div class="uk-navbar-subtitle">Threads</div>
                 </div>
@@ -109,7 +109,7 @@ MathJax.Hub.Config({
     </div>
     <div class="uk-navbar-right">
         <ul class="uk-navbar-nav">
-            <li class="uk-text-center uk-active"><a id="RecentThreadMessagesToggle">
+            <li class="uk-text-center uk-active"><a uk-toggle="target: #recent-thread-messages-modal">
                 <div>Recent
                     <div class="uk-navbar-subtitle">Messages</div>
                 </div>
@@ -118,13 +118,23 @@ MathJax.Hub.Config({
     </div>
 </div>
 
-<div class="recent-threads-content uk-box-shadow-small">
-</div>
-
 <div id="pageContentContainer" class="page-content">
 </div>
 
-<div class="recent-messages-content uk-box-shadow-small">
+<div id="recent-threads-modal" uk-modal>
+    <div class="uk-modal-dialog uk-margin-auto-vertical uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Recent Threads</h2>
+        <div class="recent-threads-content"></div>
+    </div>
+</div>
+
+<div id="recent-thread-messages-modal" uk-modal>
+    <div class="uk-modal-dialog uk-margin-auto-vertical uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Recent Messages</h2>
+        <div class="recent-messages-content"></div>
+    </div>
 </div>
 
 <div class="page-footer">

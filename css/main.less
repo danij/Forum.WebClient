@@ -57,33 +57,7 @@ html {
 }
 
 @page-header-size: 80px;
-@recent-threads-width: 250px;
-@recent-threads-padding: 10px;
-@recent-messages-width: 250px;
-@recent-messages-padding: 10px;
 @page-footer-size: 23px;
-
-.recent-threads-content {
-    position: absolute;
-    top: @page-header-size;
-    left: 0;
-    width: @recent-threads-width;
-    overflow-y: auto;
-    padding: @recent-threads-padding;
-    .vertical-fill-page(10px);
-    font-size: 0.875rem;
-}
-
-.recent-messages-content {
-    position: absolute;
-    top: @page-header-size;
-    right: 0;
-    width: @recent-messages-width;
-    overflow-y: auto;
-    padding: @recent-messages-padding;
-    .vertical-fill-page(10px);
-    font-size: 0.875rem;
-}
 
 .vertical-fill-page(@extra-bottom-space: 0px) {
     position: absolute;
@@ -94,17 +68,12 @@ html {
 }
 
 .page-content {
-    left: @recent-threads-width + 2*@recent-threads-padding;
-    right: @recent-messages-width + 3*@recent-messages-padding;
     .vertical-fill-page();
 
-    &.recent-threads-content-hidden {
-        left: 10px;
-    }
-
-    &.recent-messages-content-hidden {
-        right: 40px;
-    }
+    width: 100%;
+    padding-left: 10%;
+    padding-right: 10%;
+    box-sizing: border-box;
 
     .uk-container {
         padding-left: 30px;
@@ -344,106 +313,123 @@ html {
     z-index: 100;
 }
 
-.recent-threads-content {
-    .thread-vote {
-        padding: 1px;
-        font-size: 0.75rem;
-        min-width: 20px;
-        display: inline-block;
-        text-align: center;
-
-        &.up-vote {
-            color: white;
-            background-color: @up-vote-color;
-        }
-        &.neutral-vote {
-            color: white;
-            background-color: @neutral-vote-color;
-        }
-        &.down-vote {
-            color: white;
-            background-color: @down-vote-color;
-        }
-    }
-
-    .recent-thread {
-        padding-bottom: 10px;
-
-        &:not(:last-child) {
-            border-bottom: solid 1px #E5E5E5;
-            margin-bottom: 10px;
-        }
-
-        .thread-vote {
-            float: left;
-        }
-
-        .author {
-            float: left;
-            margin-left: 5px;
-            margin-right: 5px;
-            font-variant-numeric: oldstyle-nums;
-        }
-
-        a.recent-thread-link {
-            color: black;
-            font-size: 0.80rem;
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-height: 20px;
-        }
-    }
-}
-
-.recent-messages-content {
-    .recent-message {
-        padding-bottom: 10px;
-
-        &:not(:last-child) {
-            border-bottom: solid 1px #E5E5E5;
-            margin-bottom: 10px;
-        }
-
-        .author {
-            float: left;
-            display: block;
-            margin-right: 5px;
-        }
-
-        a.recent-message-link {
-            display: block;
-            text-decoration: none;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            color: black;
-            font-size: 0.80rem;
-            max-height: 20px;
-        }
-
-        a.recent-message-thread-link {
-            display: block;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            color: black;
-        }
-    }
-}
-
 .uk-card {
     padding-left: 0;
     padding-right: 0;
 }
 
 .uk-modal-dialog {
-    max-height: 75%;
+    max-height: 90%;
     overflow: auto;
 }
 
-#flags-modal {
+#recent-threads-modal .uk-modal-dialog {
+    min-width: 50%;
+    height: 90%;
+
+    .recent-threads-content {
+
+        width: 100%;
+
+        .thread-vote {
+            padding: 0;
+            margin-right: 10px;
+            min-width: 30px;
+            display: inline-block;
+            text-align: center;
+
+            &.up-vote {
+                color: white;
+                background-color: @up-vote-color;
+            }
+            &.neutral-vote {
+                color: white;
+                background-color: @neutral-vote-color;
+            }
+            &.down-vote {
+                color: white;
+                background-color: @down-vote-color;
+            }
+        }
+
+        .recent-thread {
+            padding-bottom: 10px;
+
+            &:not(:last-child) {
+                border-bottom: solid 1px #E5E5E5;
+                margin-bottom: 10px;
+            }
+
+            .thread-vote {
+                float: left;
+            }
+
+            .author {
+                float: right;
+                margin-left: 5px;
+                margin-right: 5px;
+                font-variant-numeric: oldstyle-nums;
+            }
+
+            a.recent-thread-link {
+                color: black;
+                font-size: 0.80rem;
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                max-height: 30px;
+            }
+        }
+    }
+}
+
+#recent-thread-messages-modal .uk-modal-dialog {
+    min-width: 50%;
+    height: 90%;
+
+    .recent-messages-content {
+        width: 100%;
+
+        .recent-message {
+            padding-bottom: 10px;
+
+            &:not(:last-child) {
+                border-bottom: solid 1px #E5E5E5;
+                margin-bottom: 10px;
+            }
+
+            .author {
+                float: right;
+                display: block;
+                margin-right: 5px;
+                margin-left: 5px;
+            }
+
+            a.recent-message-link {
+                display: block;
+                text-decoration: none;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                color: black;
+                max-height: 70px;
+            }
+
+            a.recent-message-thread-link {
+                display: block;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                color: #8D8D8D;
+            }
+        }
+    }
+
+}
+
+
+    #flags-modal {
 
     .flag-message {
         padding-top: 0;
