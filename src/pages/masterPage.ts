@@ -19,6 +19,8 @@ export module MasterPage {
     let originalTitle: string;
     let linkElements: HTMLElement[];
     let goBackInProgress: boolean = false;
+    let recentThreadsLatestValue: string = '';
+    let recentThreadMessagesLatestValue: string = '';
 
     export function bootstrap(): void {
 
@@ -182,25 +184,66 @@ export module MasterPage {
 
         ThreadRepository.getThreads(request).then(value => {
 
+            value.threads = value.threads || [];
+            let latestValue = calculateRecentThreadsLatestValue(value.threads);
+            if (latestValue == recentThreadsLatestValue) return;
+
+            recentThreadsLatestValue = latestValue;
+
             let panel = document.getElementsByClassName('recent-threads-content')[0] as HTMLElement;
 
             panel.innerHTML = '';
-            panel.appendChild(ThreadsView.createRecentThreadsView(value.threads || []));
+            panel.appendChild(ThreadsView.createRecentThreadsView(value.threads));
 
             ViewsExtra.refreshMath(panel);
         });
+    }
+
+    function calculateRecentThreadsLatestValue(threads: ThreadRepository.Thread[]) {
+
+        let result = [];
+        for (let thread of threads) {
+
+            result.push(thread.id);
+            result.push(thread.createdBy.id);
+            result.push(thread.voteScore);
+            result.push(thread.name);
+        }
+
+        return result.join('-');
     }
 
     function updateRecentThreadMessages(): void {
 
         ThreadMessageRepository.getLatestThreadMessages().then(value => {
 
+            value.messages = value.messages || [];
+            let latestValue = calculateRecentThreadMessagesLatestValue(value.messages);
+            if (latestValue == recentThreadMessagesLatestValue) return;
+
+            recentThreadMessagesLatestValue = latestValue;
+
             let panel = document.getElementsByClassName('recent-messages-content')[0] as HTMLElement;
 
             panel.innerHTML = '';
-            panel.appendChild(ThreadMessagesView.createRecentThreadMessagesView(value.messages || []));
+            panel.appendChild(ThreadMessagesView.createRecentThreadMessagesView(value.messages));
 
             ViewsExtra.refreshMath(panel);
         });
+    }
+
+    function calculateRecentThreadMessagesLatestValue(messages: ThreadMessageRepository.ThreadMessage[]) {
+
+        let result = [];
+        for (let message of messages) {
+
+            result.push(message.id);
+            result.push(message.content);
+            result.push(message.parentThread.id);
+            result.push(message.parentThread.name);
+            result.push(message.createdBy.id);
+        }
+
+        return result.join('-');
     }
 }
