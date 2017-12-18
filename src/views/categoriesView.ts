@@ -18,7 +18,9 @@ export module CategoriesView {
     import reloadIfOk = EditViews.reloadPageIfOk;
     import doIfOk = EditViews.doIfOk;
 
-    export function createCategoriesTable(categories: CategoryRepository.Category[]): HTMLElement {
+    export function createCategoriesTable(categories: CategoryRepository.Category[],
+                                          callback: ICategoryCallback,
+                                          privileges: ICategoryPrivileges): HTMLElement {
 
         let tableContainer = new DOMAppender('<div class="categories-table">', '</div>');
         let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
@@ -52,7 +54,21 @@ export module CategoriesView {
                 let nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
                 row.append(nameColumn);
 
-                nameColumn.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: folder">', '</span>'));
+                if (privileges.canEditCategoryDisplayOrder(category.id)) {
+
+                    const attributes = {
+                        'data-category-id': category.id,
+                        'data-category-display-order': category.displayOrder.toString()
+                    };
+                    const dataAttribute = DOMHelpers.concatAttributes(attributes);
+                    const link = new DOMAppender(`<a class="editDisplayOrderLink" ${dataAttribute}>`, '</a>');
+                    nameColumn.append(link);
+                    link.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: move" uk-tooltip title="Edit category display order">', '</span>'))
+                }
+                else {
+
+                    nameColumn.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: folder">', '</span>'));
+                }
 
                 let nameLink = new DOMAppender('<a class="uk-button uk-button-text" href="' +
                     Pages.getCategoryFullUrl(category) +
@@ -176,6 +192,8 @@ export module CategoriesView {
         Views.setupThreadMessagesOfThreadsLinks(result);
         Views.setupThreadMessagesOfMessageParentThreadLinks(result);
         Views.setupCategoryLinks(result);
+
+        setupEditCategoryDisplayCategories(result, callback);
 
         return result;
     }
@@ -303,7 +321,7 @@ export module CategoriesView {
                                                 privileges: ICategoryPrivileges): HTMLElement {
 
         let result = document.createElement('div');
-        result.appendChild(createCategoriesTable(categories));
+        result.appendChild(createCategoriesTable(categories, callback, privileges));
 
         if (privileges.canAddNewRootCategory()) {
 
@@ -325,7 +343,7 @@ export module CategoriesView {
 
         if (category.children && category.children.length) {
 
-            result.appendChild(createCategoriesTable(category.children));
+            result.appendChild(createCategoriesTable(category.children, callback, privileges));
             separatorNeeded = true;
         }
 
@@ -377,5 +395,29 @@ export module CategoriesView {
         });
 
         return EditViews.wrapAddElements(button);
+    }
+
+    function setupEditCategoryDisplayCategories(container: HTMLElement, callback: ICategoryCallback): void {
+
+        let button = EditViews.createAddNewButton('Add Sub Category');
+
+        const eventHandler = (ev: Event) => {
+
+            const link = Views.getLink(ev);
+            const categoryId = link.getAttribute('data-category-id');
+            const categoryDisplayOrder = link.getAttribute('data-category-display-order');
+
+            const newValue = parseInt(EditViews.getInput('Edit category display order', categoryDisplayOrder));
+            if (newValue && (newValue.toString() != categoryDisplayOrder)) {
+
+                reloadIfOk(callback.editCategoryDisplayOrder(categoryId, newValue));
+            }
+        };
+
+        const elements = container.getElementsByClassName('editDisplayOrderLink');
+        for (let i = 0; i < elements.length; ++i) {
+
+            elements[i].addEventListener('click', (ev) => eventHandler(ev));
+        }
     }
 }

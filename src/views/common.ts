@@ -255,7 +255,7 @@ export module Views {
     export const UserThreadsData = 'data-threadusername';
     export const UserMessagesData = 'data-threadmessageusername';
 
-    function getLink(ev: Event): HTMLAnchorElement {
+    export function getLink(ev: Event): HTMLAnchorElement {
 
         let element = ev.target as HTMLElement;
         while ('a' != element.tagName.toLowerCase()) {

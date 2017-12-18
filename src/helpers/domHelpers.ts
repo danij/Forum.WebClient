@@ -58,8 +58,7 @@ export module DOMHelpers {
         let firstQuote = html.indexOf('"');
         let lastQuote = html.lastIndexOf('"');
 
-        let result = html.substring(firstQuote + 1, lastQuote);
-        return result;
+        return html.substring(firstQuote + 1, lastQuote);
     }
 
     export function parseHTML(html: string): HTMLElement {
@@ -67,5 +66,14 @@ export module DOMHelpers {
         let element = document.createElement('template');
         element.innerHTML = html;
         return element.content.firstChild as HTMLElement;
+    }
+
+    export function concatAttributes(values: object): string {
+
+        return Object.keys(values).map(key => {
+
+            return `${key}="${escapeStringForAttribute(values[key])}"`;
+
+        }).join(' ');
     }
 }
