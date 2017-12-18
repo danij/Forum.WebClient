@@ -56,28 +56,36 @@ export module EditViews {
         return result;
     }
 
-    export function createEditLink(tooltip): HTMLAnchorElement {
+    export function createEditLink(tooltip: string, icon: string = 'file-edit'): HTMLAnchorElement {
 
         let result = document.createElement('a');
 
-        result.classList.add('uk-icon');
-        result.classList.add('edit-link');
-        result.setAttribute('uk-icon', 'icon: file-edit');
-        result.setAttribute('uk-tooltip', '');
-        result.setAttribute('title', tooltip);
+        let span = document.createElement('span');
+
+        span.classList.add('uk-icon');
+        span.classList.add('edit-link');
+        span.setAttribute('uk-icon', 'icon: ' + icon);
+        span.setAttribute('uk-tooltip', '');
+        span.setAttribute('title', tooltip);
+
+        result.appendChild(span);
 
         return result;
     }
 
-    export function createDeleteLink(tooltip): HTMLAnchorElement {
+    export function createDeleteLink(tooltip: string): HTMLAnchorElement {
 
         let result = document.createElement('a');
 
-        result.classList.add('uk-icon');
-        result.classList.add('uk-float-right');
-        result.setAttribute('uk-icon', 'icon: trash');
-        result.setAttribute('uk-tooltip', '');
-        result.setAttribute('title', tooltip);
+        let span = document.createElement('span');
+
+        span.classList.add('uk-icon');
+        span.classList.add('uk-float-right');
+        span.setAttribute('uk-icon', 'icon: trash');
+        span.setAttribute('uk-tooltip', '');
+        span.setAttribute('title', tooltip);
+
+        result.appendChild(span);
 
         return result;
     }
