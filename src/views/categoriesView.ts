@@ -290,6 +290,21 @@ export module CategoriesView {
 
         descriptionContainer.appendChild(descriptionElement);
 
+        if (privileges.canEditCategoryTags(category.id)) {
+
+            let link = EditViews.createEditLink('Edit category tags', 'tag');
+            descriptionContainer.appendChild(link);
+            link.addEventListener('click', async () => {
+
+                const allTags = await callback.getAllTags();
+                TagsView.showSelectTagsDialog(category.tags, allTags,
+                    (added: string[], removed: string[]) => {
+
+                    callback.editCategoryTags(category.id, added, removed);
+                });
+            });
+        }
+
         if (category.tags && category.tags.length) {
 
             for (let tag of category.tags) {

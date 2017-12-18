@@ -7,6 +7,7 @@ import {ThreadRepository} from "../services/threadRepository";
 import {Views} from "../views/common";
 import {PageActions} from "./action";
 import {Privileges} from '../services/privileges';
+import {TagRepository} from "../services/tagRepository";
 
 /**
  * The home page displays the root categories
@@ -204,5 +205,15 @@ export class HomePage implements Pages.Page, PageActions.ICategoryCallback {
     editCategoryParent(id: string, newParentId: string): Promise<boolean> {
 
         return Promise.resolve(true);
+    }
+
+    editCategoryTags(id: string, addTagIds: string[], removeTagIds: string[]): Promise<boolean> {
+
+        return Promise.resolve(true);
+    }
+
+    getAllTags(): Promise<TagRepository.Tag[]> {
+
+        return TagRepository.getTagsCached();
     }
 }

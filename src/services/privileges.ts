@@ -15,6 +15,8 @@ export module Privileges {
         canEditCategoryDisplayOrder(id: string): Promise<boolean>;
 
         canEditCategoryParent(id: string): Promise<boolean>;
+
+        canEditCategoryTags(id: string): Promise<boolean>;
     }
 
     export class CategoryPrivilegesAllowAll implements ICategoryPrivileges {
@@ -44,6 +46,10 @@ export module Privileges {
         }
 
         canEditCategoryParent(id: string): Promise<boolean> {
+            return Promise.resolve(true);
+        }
+
+        canEditCategoryTags(id: string): Promise<boolean> {
             return Promise.resolve(true);
         }
     }

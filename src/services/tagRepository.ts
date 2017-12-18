@@ -37,6 +37,15 @@ export module TagRepository {
         return result;
     }
 
+    export async function getTagsCached(): Promise<Tag[]> {
+
+        if (latestTags) {
+
+            return latestTags.slice();
+        }
+        return (await getTags(null)).tags.slice();
+    }
+
     export async function getTag(name: string): Promise<Tag> {
 
         if (null == latestTags) await getTags(null);

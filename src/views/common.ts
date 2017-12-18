@@ -412,6 +412,11 @@ export module Views {
         return title;
     }
 
+    export function showModal(element: HTMLElement): void {
+
+        UIkit.modal(element).show();
+    }
+
     export function hideOpenModals(): void {
 
         const modals = document.querySelectorAll('.uk-modal.uk-open');

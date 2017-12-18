@@ -283,4 +283,69 @@ export module TagsView {
 
         return element;
     }
+
+    export function showSelectTagsDialog(currentTags: TagRepository.Tag[], allTags: TagRepository.Tag[],
+                                         onSave: (added: string[], removed: string[]) => void): void {
+
+        allTags.sort((first: TagRepository.Tag, second: TagRepository.Tag) => {
+
+            return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
+        });
+
+        let modal = document.getElementById('select-tags-modal');
+        Views.showModal(modal);
+
+        let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
+        let selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
+
+        let previousTagIds = new Set();
+        for (let tag of currentTags) {
+
+            previousTagIds.add(tag.id);
+        }
+
+        saveButton = DOMHelpers.removeEventListeners(saveButton);
+        saveButton.addEventListener('click', (ev) => {
+
+            let selected = selectElement.selectedOptions;
+            let added = [], removed = [];
+
+            for (let i = 0; i < selected.length; ++i) {
+
+                const id = selected[i].getAttribute('value');
+
+                if (previousTagIds.has(id)) {
+
+                    previousTagIds.delete(id);
+                }
+                else {
+                    added.push(id);
+                }
+            }
+            previousTagIds.forEach((value) => {
+
+                removed.push(value);
+            });
+
+            onSave(added, removed);
+        });
+
+        selectElement.innerHTML = '';
+
+        for (let tag of allTags) {
+
+            let option = document.createElement('option');
+            option.setAttribute('value', tag.id);
+            option.innerText = tag.name;
+
+            if (currentTags.find((value) => {
+                    return value.id == tag.id;
+                })) {
+
+                option.setAttribute('selected', '');
+            }
+
+            selectElement.appendChild(option);
+        }
+    }
 }

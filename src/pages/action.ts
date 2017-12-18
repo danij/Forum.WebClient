@@ -1,3 +1,5 @@
+import {TagRepository} from "../services/tagRepository";
+
 export module PageActions {
 
     export interface ICategoryCallback {
@@ -15,5 +17,9 @@ export module PageActions {
         editCategoryDisplayOrder(id: string, newDisplayOrder: number): Promise<boolean>;
 
         editCategoryParent(id: string, newParentId: string): Promise<boolean>;
+
+        editCategoryTags(id: string, addTagIds: string[], removeTagIds: string[]): Promise<boolean>;
+
+        getAllTags(): Promise<TagRepository.Tag[]>;
     }
 }
