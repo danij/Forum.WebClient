@@ -76,4 +76,13 @@ export module DOMHelpers {
 
         }).join(' ');
     }
+
+    export function getLink(ev: Event): HTMLAnchorElement {
+
+        let element = ev.target as HTMLElement;
+        while ('a' != element.tagName.toLowerCase()) {
+            element = element.parentElement;
+        }
+        return element as HTMLAnchorElement;
+    }
 }

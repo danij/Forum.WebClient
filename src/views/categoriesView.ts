@@ -403,7 +403,7 @@ export module CategoriesView {
 
         const eventHandler = (ev: Event) => {
 
-            const link = Views.getLink(ev);
+            const link = DOMHelpers.getLink(ev);
             const categoryId = link.getAttribute('data-category-id');
             const categoryDisplayOrder = link.getAttribute('data-category-display-order');
 
