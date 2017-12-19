@@ -54,11 +54,6 @@ export module Privileges {
         }
     }
 
-    export function getCategoryPrivileges(): ICategoryPrivileges {
-
-        return new CategoryPrivilegesAllowAll();
-    }
-
     export interface ITagPrivileges {
 
         canAddNewTag(): Promise<boolean>;
@@ -81,6 +76,11 @@ export module Privileges {
         canEditTagName(id: string): Promise<boolean> {
             return Promise.resolve(true);
         }
+    }
+
+    export function getCategoryPrivileges(): ICategoryPrivileges {
+
+        return new CategoryPrivilegesAllowAll();
     }
 
     export function getTagPrivileges(): ITagPrivileges {
