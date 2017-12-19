@@ -7,10 +7,14 @@ import {DOMHelpers} from "../helpers/domHelpers";
 import {TagRepository} from "../services/tagRepository";
 import {UserRepository} from "../services/userRepository";
 import {Pages} from "../pages/common";
+import {Privileges} from "../services/privileges";
+import {PageActions} from "../pages/action";
 
 export module ThreadsView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
+    import ITagPrivileges = Privileges.ITagPrivileges;
+    import ITagCallback = PageActions.ITagCallback;
 
     export class ThreadsPageContent {
 
@@ -29,7 +33,9 @@ export module ThreadsView {
     export function createThreadsPageContent(collection: ThreadRepository.ThreadCollection,
                                              info: ThreadPageDisplayInfo,
                                              onPageNumberChange: Views.PageNumberChangeCallback,
-                                             getLinkForPage: Views.GetLinkForPageCallback) {
+                                             getLinkForPage: Views.GetLinkForPageCallback,
+                                             tagCallback: ITagCallback,
+                                             tagPrivileges: ITagPrivileges) {
 
         collection = collection || ThreadRepository.defaultThreadCollection();
 
@@ -39,7 +45,7 @@ export module ThreadsView {
 
         if (info.tag) {
 
-            resultList.append(TagsView.createTagPageHeader(info.tag));
+            resultList.append(TagsView.createTagPageHeader(info.tag, tagCallback, tagPrivileges));
         }
         else if (info.user) {
 

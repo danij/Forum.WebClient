@@ -34,6 +34,11 @@ export module EditViews {
         doIfOk(promise, () => location.href = Pages.getHomeUrl());
     }
 
+    export function goToTagsPageIfOk(promise: Promise<boolean>) {
+
+        doIfOk(promise, () => location.href = Pages.getUrl('tags'));
+    }
+
     export function createAddNewButton(title): HTMLButtonElement {
 
         let result = document.createElement('button') as HTMLButtonElement;

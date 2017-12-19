@@ -58,4 +58,33 @@ export module Privileges {
 
         return new CategoryPrivilegesAllowAll();
     }
+
+    export interface ITagPrivileges {
+
+        canAddNewTag(): Promise<boolean>;
+
+        canDeleteTag(id: string): Promise<boolean>;
+
+        canEditTagName(id: string): Promise<boolean>;
+    }
+
+    export class TagPrivilegesAllowAll implements ITagPrivileges {
+
+        canAddNewTag(): Promise<boolean> {
+            return Promise.resolve(true);
+        }
+
+        canDeleteTag(id: string): Promise<boolean> {
+            return Promise.resolve(true);
+        }
+
+        canEditTagName(id: string): Promise<boolean> {
+            return Promise.resolve(true);
+        }
+    }
+
+    export function getTagPrivileges(): ITagPrivileges {
+
+        return new TagPrivilegesAllowAll();
+    }
 }

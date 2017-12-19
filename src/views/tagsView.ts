@@ -5,10 +5,15 @@ import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
 import {UsersView} from "./usersView";
 import {ThreadRepository} from "../services/threadRepository";
+import {PageActions} from "../pages/action";
+import {Privileges} from "../services/privileges";
+import {EditViews} from "./edit";
 
 export module TagsView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
+    import ITagCallback = PageActions.ITagCallback;
+    import ITagPrivileges = Privileges.ITagPrivileges;
 
     export function createTagElement(tag: TagRepository.Tag): DOMAppender {
 
@@ -34,19 +39,33 @@ export module TagsView {
         list: HTMLElement
     }
 
-    export function createTagsPageContent(tags: TagRepository.Tag[], info: Views.SortInfo): TagsPageContent {
+    export function createTagsPageContent(tags: TagRepository.Tag[], info: Views.SortInfo,
+                                          callback: ITagCallback,
+                                          privileges: ITagPrivileges): TagsPageContent {
 
         let result = new TagsPageContent();
 
-        let resultList = $("<div></div>");
+        let resultList = document.createElement("div");
 
-        resultList.append(result.sortControls = createTagListSortControls(info));
+        resultList.appendChild(result.sortControls = createTagListSortControls(info));
 
-        let tagsList = $('<div class="tags-list"></div>');
-        resultList.append(tagsList);
-        tagsList.append(this.createTagsTable(tags));
+        if (privileges.canAddNewTag()) {
 
-        result.list = resultList[0];
+            resultList.appendChild(createAddNewTagElement(callback));
+        }
+
+        let tagsList = document.createElement('div');
+        resultList.appendChild(tagsList);
+
+        tagsList.classList.add('tags-list');
+        tagsList.appendChild(this.createTagsTable(tags));
+
+        if (privileges.canAddNewTag()) {
+
+            resultList.appendChild(createAddNewTagElement(callback));
+        }
+
+        result.list = resultList;
         return result;
     }
 
@@ -243,45 +262,88 @@ export module TagsView {
         return result;
     }
 
-    export function createTagPageHeader(tag: TagRepository.Tag): HTMLElement {
+    export function createTagPageHeader(tag: TagRepository.Tag,
+                                        callback: ITagCallback,
+                                        privileges: ITagPrivileges): HTMLElement {
 
-        let container = new DOMAppender('<div class="uk-grid-small tag-page-header">', '</div>');
+        let container = document.createElement('div');
+        container.classList.add('uk-grid-small', 'tag-page-header');
 
-        container.appendRaw(('<div class="uk-display-inline-block">\n' +
-            '    <span class="uk-badge uk-icon" uk-icon="icon: tag">{tagName}</span>\n' +
-            '</div>').replace('{tagName}', DOMHelpers.escapeStringForContent(tag.name)));
+        let badge = document.createElement('span');
 
-        container.appendRaw('<span>{threadCount} threads</span>'
-            .replace('{threadCount}', DisplayHelpers.intToString(tag.threadCount)));
+        if (privileges.canEditTagName(tag.id)) {
 
-        container.appendRaw('<span>{messageCount} messages</span>'
-            .replace('{messageCount}', DisplayHelpers.intToString(tag.messageCount)));
+            let link = EditViews.createEditLink('Edit tag name');
+            container.appendChild(link);
+            link.addEventListener('click', () => {
 
-        container.appendRaw('<span class="uk-text-meta">Referenced by: </span>');
+                const name = EditViews.getInput('Edit tag name', tag.name);
+                if (name && name.length && (name != tag.name)) {
+
+                    EditViews.doIfOk(callback.editTagName(tag.id, name), () => {
+
+                        badge.innerText = tag.name = name;
+                    });
+                }
+            });
+        }
+
+        let badgeContainer = document.createElement('div');
+        container.appendChild(badgeContainer);
+        badgeContainer.classList.add('uk-display-inline-block');
+
+        badgeContainer.appendChild(badge);
+        badge.classList.add('uk-badge', 'uk-icon');
+        badge.setAttribute('uk-icon', 'icon: tag');
+        badge.innerText = tag.name;
+
+        let threadCount = document.createElement('span');
+        container.appendChild(threadCount);
+        threadCount.innerText = `${tag.threadCount} threads`;
+
+        let messageCount = document.createElement('span');
+        container.appendChild(messageCount);
+        messageCount.innerText = `${tag.messageCount} threads`;
+
+        container.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Referenced by: </span>'));
+
         if (tag.categories && tag.categories.length) {
 
             for (let i = 0; i < tag.categories.length; ++i) {
 
                 const category = tag.categories[i];
 
-                let element = new DOMAppender('<a href="' +
-                    Pages.getCategoryFullUrl(category) +
-                    '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
-                    DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
-                container.append(element);
-                element.appendString(category.name);
+                let element = document.createElement('a');
+                container.appendChild(element);
+
+                element.setAttribute('href', Pages.getCategoryFullUrl(category));
+                element.setAttribute('data-categoryid', category.id);
+                element.setAttribute('data-categoryname', category.name);
+                element.innerText = category.name;
 
                 if (i < (tag.categories.length - 1)) {
-                    container.appendRaw(', ');
+                    container.appendChild(document.createTextNode(', '));
                 }
             }
         }
 
-        let element = container.toElement();
+        if (privileges.canDeleteTag(tag.id)) {
 
-        Views.setupCategoryLinks(element);
+            let deleteLink = EditViews.createDeleteLink('Delete tag');
+            container.appendChild(deleteLink);
 
-        return element;
+            deleteLink.addEventListener('click', () => {
+
+                if (EditViews.confirm(`Are you sure you want to delete the following tag: ${tag.name}?`)) {
+
+                    EditViews.goToTagsPageIfOk(callback.deleteTag(tag.id));
+                }
+            });
+        }
+
+        Views.setupCategoryLinks(container);
+
+        return container;
     }
 
     export function showSelectTagsDialog(currentTags: TagRepository.Tag[], allTags: TagRepository.Tag[],
@@ -347,5 +409,21 @@ export module TagsView {
 
             selectElement.appendChild(option);
         }
+    }
+
+
+    function createAddNewTagElement(callback: ITagCallback): HTMLElement {
+
+        let button = EditViews.createAddNewButton('Add Tag');
+
+        button.addEventListener('click', () => {
+
+            const name = EditViews.getInput('Enter the new tag name');
+            if (name.length < 1) return;
+
+            EditViews.reloadPageIfOk(callback.createRootTag(name));
+        });
+
+        return EditViews.wrapAddElements(button);
     }
 }

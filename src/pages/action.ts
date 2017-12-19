@@ -22,4 +22,13 @@ export module PageActions {
 
         getAllTags(): Promise<TagRepository.Tag[]>;
     }
+
+    export interface ITagCallback {
+
+        createRootTag(name: string): Promise<boolean>;
+
+        deleteTag(id: string): Promise<boolean>;
+
+        editTagName(id: string, newName: string): Promise<boolean>;
+    }
 }

@@ -8,6 +8,7 @@ import {Views} from "../views/common";
 import {PageActions} from "./action";
 import {Privileges} from '../services/privileges';
 import {TagRepository} from "../services/tagRepository";
+import {Callbacks} from "./callbacks";
 
 /**
  * The home page displays the root categories
@@ -55,7 +56,8 @@ export class HomePage implements Pages.Page, PageActions.ICategoryCallback {
                     orderBy: this.orderBy,
                     sortOrder: this.sortOrder,
                 }, (value: number) => this.onPageNumberChange(value),
-                    (pageNumber: number) => this.getLinkForPage(pageNumber));
+                    (pageNumber: number) => this.getLinkForPage(pageNumber),
+                    Callbacks.getTagCallback(), Privileges.getTagPrivileges());
 
                 this.setupSortControls(threadElements.sortControls);
 

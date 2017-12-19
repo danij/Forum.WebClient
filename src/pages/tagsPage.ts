@@ -3,7 +3,8 @@ import {TagRepository} from "../services/tagRepository";
 import {TagsView} from "../views/tagsView";
 import {Views} from "../views/common";
 import {MasterPage} from "./masterPage";
-
+import {Privileges} from "../services/privileges";
+import {Callbacks} from "./callbacks";
 
 /**
  * Displays a list of all tags with custom sorting
@@ -25,7 +26,7 @@ export class TagsPage implements Pages.Page {
             let elements = TagsView.createTagsPageContent(tagCollection.tags, {
                 orderBy: this.orderBy,
                 sortOrder: this.sortOrder
-            });
+            }, Callbacks.getTagCallback(), Privileges.getTagPrivileges());
 
             this.setupSortControls(elements.sortControls);
 
