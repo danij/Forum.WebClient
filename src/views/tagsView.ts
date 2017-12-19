@@ -226,42 +226,6 @@ export module TagsView {
             '</div>')[0];
     }
 
-    function createTagInList(tag: TagRepository.Tag): DOMAppender {
-
-        let result = new DOMAppender('<div>', '</div>');
-
-        let card = new DOMAppender('<div class="uk-card uk-card-default uk-card-body">', '</div>');
-        result.append(card);
-
-        let wrapper = new DOMAppender('<div class="tag-in-list">', '</div>');
-        card.append(wrapper);
-
-        wrapper.append(createTagElement(tag));
-
-        wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a ' + getThreadsWithTagLinkContent(tag) + '>Threads</a></div>\n' +
-            '    <div class="uk-float-right">{nrOfThreads}</div>\n' +
-            '    <div class="uk-clearfix"></div>\n' +
-            '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount)));
-
-        wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left">Messages</div>\n' +
-            '    <div class="uk-float-right">{nrOfMessages}</div>\n' +
-            '    <div class="uk-clearfix"></div>\n' +
-            '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(tag.messageCount)));
-
-        wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left">Added</div>\n' +
-            '    <div class="uk-float-right min-date">\n' +
-            '        <span>{Added}</span>\n' +
-            '    </div>\n' +
-            '    <div class="uk-clearfix"></div>\n' +
-            '</div>')
-            .replace('{Added}', DisplayHelpers.getDateTime(tag.created)));
-
-        return result;
-    }
-
     export function createTagPageHeader(tag: TagRepository.Tag,
                                         callback: ITagCallback,
                                         privileges: ITagPrivileges): HTMLElement {
