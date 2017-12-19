@@ -245,6 +245,33 @@ export module CategoriesView {
         let nameElement = document.createElement('span');
         nameElement.innerText = category.name;
 
+        if (privileges.canEditCategoryParent(category.id)) {
+
+            let link = EditViews.createEditLink('Edit category parent', 'git-branch');
+            element.appendChild(link);
+            link.addEventListener('click', async () => {
+
+                const allCategories = await CategoryRepository.getAllCategoriesAsTree();
+
+                let parentId = category.parentId;
+                if (category.parent) {
+
+                    parentId = category.parent.id;
+                }
+                else {
+
+                    parentId = category.parentId;
+                }
+                parentId = parentId || CategoryRepository.EmptyCategoryId;
+
+                showSelectCategoryParentDialog(allCategories, parentId, (newParentId) => {
+
+                    reloadIfOk(callback.editCategoryParent(category.id, newParentId));
+                });
+            });
+
+        }
+
         if (privileges.canEditCategoryName(category.id)) {
 
             let link = EditViews.createEditLink('Edit category name');
@@ -436,5 +463,71 @@ export module CategoriesView {
 
             elements[i].addEventListener('click', (ev) => eventHandler(ev));
         }
+    }
+
+    function showSelectCategoryParentDialog(allCategories: CategoryRepository.Category[], currentParentId: string,
+                                            onSave: (newParentId: string) => void): void {
+
+        let modal = document.getElementById('select-category-parent-modal');
+        Views.showModal(modal);
+
+        let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
+        let form = modal.getElementsByTagName('form')[0] as HTMLFormElement;
+
+        saveButton = DOMHelpers.removeEventListeners(saveButton);
+        saveButton.addEventListener('click', (ev) => {
+
+            const selectedRadio = document.querySelector('input[name="categoryParentId"]:checked') as HTMLInputElement;
+            if (selectedRadio && selectedRadio.value) {
+
+                onSave(selectedRadio.value);
+            }
+        });
+
+        form.innerHTML = '';
+
+        let list = document.createElement('ul');
+        list.classList.add('uk-list');
+        form.appendChild(list);
+
+        function addCategory(category: CategoryRepository.Category, level: number) {
+
+            let row = document.createElement('li');
+            list.appendChild(row);
+            row.classList.add(`level${level}`);
+
+            let input = document.createElement('input');
+            row.appendChild(input);
+
+            input.setAttribute('type', 'radio');
+            input.setAttribute('name', 'categoryParentId');
+            input.setAttribute('id', 'categoryParentId-' + category.id);
+            input.setAttribute('value', category.id);
+
+            if (category.id == currentParentId) {
+                input.setAttribute('checked', '');
+            }
+            input.classList.add('uk-radio');
+
+            let label = document.createElement('label');
+            row.appendChild(label);
+
+            label.setAttribute('for', 'categoryParentId-' + category.id);
+            label.innerText = category.name;
+
+            for (let child of (category.children || [])) {
+                addCategory(child, level + 1);
+            }
+        }
+
+        let rootCategory = {
+
+            id: CategoryRepository.EmptyCategoryId,
+            name: 'Root',
+            children: allCategories
+
+        } as CategoryRepository.Category;
+
+        addCategory(rootCategory, 0);
     }
 }
