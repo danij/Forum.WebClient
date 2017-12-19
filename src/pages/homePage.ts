@@ -5,15 +5,13 @@ import {MasterPage} from "./masterPage";
 import {ThreadsView} from "../views/threadsView";
 import {ThreadRepository} from "../services/threadRepository";
 import {Views} from "../views/common";
-import {PageActions} from "./action";
 import {Privileges} from '../services/privileges';
-import {TagRepository} from "../services/tagRepository";
 import {Callbacks} from "./callbacks";
 
 /**
  * The home page displays the root categories
  */
-export class HomePage implements Pages.Page, PageActions.ICategoryCallback {
+export class HomePage implements Pages.Page {
 
     private pageNumber: number = 0;
     private orderBy: string = 'name';
@@ -33,7 +31,8 @@ export class HomePage implements Pages.Page, PageActions.ICategoryCallback {
             let categories = await Pages.getOrShowError(CategoryRepository.getRootCategories());
             if (null == categories) return;
 
-            return CategoriesView.createRootCategoriesDisplay(categories, this, Privileges.getCategoryPrivileges());
+            return CategoriesView.createRootCategoriesDisplay(categories, Callbacks.getCategoryCallback(),
+                Privileges.getCategoryPrivileges());
         });
     }
 
@@ -67,7 +66,7 @@ export class HomePage implements Pages.Page, PageActions.ICategoryCallback {
                 threadList = threadElements.list;
             }
 
-            return CategoriesView.createCategoryDisplay(this.category, threadList, this,
+            return CategoriesView.createCategoryDisplay(this.category, threadList, Callbacks.getCategoryCallback(),
                 Privileges.getCategoryPrivileges());
         });
     }
@@ -172,50 +171,5 @@ export class HomePage implements Pages.Page, PageActions.ICategoryCallback {
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
 
         document.getElementById('HomePageLink').classList.add('uk-active');
-    }
-
-    createRootCategory(name: string): Promise<boolean> {
-
-        return Promise.resolve(true);
-    }
-
-    createSubCategory(parentId: string, name: string): Promise<boolean> {
-
-        return Promise.resolve(true);
-    }
-
-    deleteCategory(id: string): Promise<boolean> {
-
-        return Promise.resolve(true);
-    }
-
-    editCategoryName(id: string, newName: string): Promise<boolean> {
-
-        return Promise.resolve(true);
-    }
-
-    editCategoryDescription(id: string, newDescription: string): Promise<boolean> {
-
-        return Promise.resolve(true);
-    }
-
-    editCategoryDisplayOrder(id: string, newDisplayOrder: number): Promise<boolean> {
-
-        return Promise.resolve(true);
-    }
-
-    editCategoryParent(id: string, newParentId: string): Promise<boolean> {
-
-        return Promise.resolve(true);
-    }
-
-    editCategoryTags(id: string, addTagIds: string[], removeTagIds: string[]): Promise<boolean> {
-
-        return Promise.resolve(true);
-    }
-
-    getAllTags(): Promise<TagRepository.Tag[]> {
-
-        return TagRepository.getTagsCached();
     }
 }
