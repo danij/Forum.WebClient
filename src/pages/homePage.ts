@@ -6,7 +6,7 @@ import {ThreadsView} from "../views/threadsView";
 import {ThreadRepository} from "../services/threadRepository";
 import {Views} from "../views/common";
 import {Privileges} from '../services/privileges';
-import {Callbacks} from "./callbacks";
+import {PageActions} from "./action";
 
 /**
  * The home page displays the root categories
@@ -31,7 +31,7 @@ export class HomePage implements Pages.Page {
             let categories = await Pages.getOrShowError(CategoryRepository.getRootCategories());
             if (null == categories) return;
 
-            return CategoriesView.createRootCategoriesDisplay(categories, Callbacks.getCategoryCallback(),
+            return CategoriesView.createRootCategoriesDisplay(categories, PageActions.getCategoryCallback(),
                 Privileges.getCategoryPrivileges());
         });
     }
@@ -56,7 +56,7 @@ export class HomePage implements Pages.Page {
                     sortOrder: this.sortOrder,
                 }, (value: number) => this.onPageNumberChange(value),
                     (pageNumber: number) => this.getLinkForPage(pageNumber),
-                    Callbacks.getTagCallback(), Privileges.getTagPrivileges());
+                    PageActions.getTagCallback(), Privileges.getTagPrivileges());
 
                 this.setupSortControls(threadElements.sortControls);
 
@@ -66,7 +66,7 @@ export class HomePage implements Pages.Page {
                 threadList = threadElements.list;
             }
 
-            return CategoriesView.createCategoryDisplay(this.category, threadList, Callbacks.getCategoryCallback(),
+            return CategoriesView.createCategoryDisplay(this.category, threadList, PageActions.getCategoryCallback(),
                 Privileges.getCategoryPrivileges());
         });
     }

@@ -5,8 +5,8 @@ import {Views} from "../views/common";
 import {MasterPage} from "./masterPage";
 import {TagRepository} from "../services/tagRepository";
 import {UserRepository} from "../services/userRepository";
-import {Callbacks} from "./callbacks";
 import {Privileges} from "../services/privileges";
+import {PageActions} from "./action";
 
 /**
  * Displays a list of threads with pagination and custom sorting
@@ -51,7 +51,7 @@ export class ThreadsPage implements Pages.Page {
                 user: this.user
             }, (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber),
-                Callbacks.getTagCallback(), Privileges.getTagPrivileges());
+                PageActions.getTagCallback(), Privileges.getTagPrivileges());
 
             this.setupSortControls(elements.sortControls);
 

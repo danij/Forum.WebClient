@@ -78,6 +78,47 @@ export module Privileges {
         }
     }
 
+    export interface IThreadPrivileges {
+
+        canAddNewThread(): Promise<boolean>;
+
+        canDeleteThread(id: string): Promise<boolean>;
+
+        canEditThreadName(id: string): Promise<boolean>;
+
+        canEditThreadPinDisplayOrder(id: string): Promise<boolean>;
+
+        canEditThreadTags(id: string): Promise<boolean>;
+    }
+
+    export class ThreadPrivilegesAllowAll implements IThreadPrivileges {
+
+        canAddNewThread(): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canDeleteThread(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canEditThreadName(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canEditThreadPinDisplayOrder(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canEditThreadTags(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+    }
+
     export function getCategoryPrivileges(): ICategoryPrivileges {
 
         return new CategoryPrivilegesAllowAll();
@@ -86,5 +127,10 @@ export module Privileges {
     export function getTagPrivileges(): ITagPrivileges {
 
         return new TagPrivilegesAllowAll();
+    }
+
+    export function getThreadPrivileges(): IThreadPrivileges {
+
+        return new ThreadPrivilegesAllowAll();
     }
 }
