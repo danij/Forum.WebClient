@@ -174,6 +174,18 @@ export module Pages {
         return extra + result;
     }
 
+    function encodeURIComponentMax(url: string, maxSize: number) : string {
+
+        const ellipsis = '...';
+        maxSize = Math.max(ellipsis.length, maxSize);
+        if (url.length > maxSize) {
+            url = url.substr(0, maxSize - ellipsis.length) + ellipsis;
+        }
+        return encodeURIComponent(url);
+    }
+
+    const maxNameSizeInUrl: number = 128;
+
     export function getThreadsWithTagUrlFull(tag: TagRepository.Tag): string {
 
         return getUrl(getThreadsWithTagUrlByName(tag.name));
@@ -211,7 +223,7 @@ export module Pages {
 
     export function getThreadMessagesOfThreadUrl(id: string, name: string): string {
 
-        return `thread_messages/thread/${encodeURIComponent(name)}/${encodeURIComponent(id)}`;
+        return `thread_messages/thread/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
     }
 
     export function getThreadMessagesOfMessageParentThreadUrlFull(messageId: string): string {
@@ -231,6 +243,6 @@ export module Pages {
 
     export function getCategoryUrl(id: string, name: string): string {
 
-        return `category/${encodeURIComponent(name)}/${encodeURIComponent(id)}`;
+        return `category/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
     }
 }
