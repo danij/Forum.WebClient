@@ -78,14 +78,16 @@ export module EditViews {
         return result;
     }
 
-    export function createDeleteLink(tooltip: string): HTMLAnchorElement {
+    export function createDeleteLink(tooltip: string, classes: string = 'uk-float-right'): HTMLAnchorElement {
 
         let result = document.createElement('a');
 
         let span = document.createElement('span');
 
         span.classList.add('uk-icon');
-        span.classList.add('uk-float-right');
+        if (classes) {
+            span.classList.add(...classes.trim().split(' '));
+        }
         span.setAttribute('uk-icon', 'icon: trash');
         span.setAttribute('uk-tooltip', '');
         span.setAttribute('title', tooltip);

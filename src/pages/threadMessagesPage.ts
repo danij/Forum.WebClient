@@ -5,6 +5,8 @@ import {MasterPage} from "./masterPage";
 import {UserRepository} from "../services/userRepository";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "../views/threadMessagesView";
+import {Privileges} from "../services/privileges";
+import {PageActions} from "./action";
 
 /**
  * Displays a list of thread messages with pagination and custom sorting
@@ -63,7 +65,7 @@ export class ThreadMessagesPage implements Pages.Page {
                 user: this.user
             }, (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber),
-                this.thread);
+                this.thread, PageActions.getThreadCallback(), Privileges.getThreadPrivileges());
 
             this.setupSortControls(elements.sortControls);
 

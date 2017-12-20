@@ -452,7 +452,7 @@ export module CategoriesView {
             const categoryDisplayOrder = link.getAttribute('data-category-display-order');
 
             const newValue = parseInt(EditViews.getInput('Edit category display order', categoryDisplayOrder));
-            if (newValue && (newValue.toString() != categoryDisplayOrder)) {
+            if ((newValue >= 0) && (newValue.toString() != categoryDisplayOrder)) {
 
                 reloadIfOk(callback.editCategoryDisplayOrder(categoryId, newValue));
             }

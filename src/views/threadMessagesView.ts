@@ -8,10 +8,14 @@ import {ThreadsView} from "./threadsView";
 import {UsersView} from "./usersView";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {ViewsExtra} from "./extra";
+import {Privileges} from "../services/privileges";
+import {PageActions} from "../pages/action";
 
 export module ThreadMessagesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
+    import IThreadPrivileges = Privileges.IThreadPrivileges;
+    import IThreadCallback = PageActions.IThreadCallback;
 
     export class ThreadMessagesPageContent {
 
@@ -76,7 +80,9 @@ export module ThreadMessagesView {
                                                     info: ThreadMessagePageDisplayInfo,
                                                     onPageNumberChange: Views.PageNumberChangeCallback,
                                                     getLinkForPage: Views.GetLinkForPageCallback,
-                                                    thread: ThreadRepository.Thread): ThreadMessagesPageContent {
+                                                    thread: ThreadRepository.Thread,
+                                                    threadCallback: IThreadCallback,
+                                                    threadPrivileges: IThreadPrivileges): ThreadMessagesPageContent {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCollection();
 
@@ -86,7 +92,7 @@ export module ThreadMessagesView {
 
         if (info.thread) {
 
-            resultList.appendChild(ThreadsView.createThreadPageHeader(info.thread));
+            resultList.appendChild(ThreadsView.createThreadPageHeader(info.thread, threadCallback, threadPrivileges));
         }
         else if (info.user) {
 

@@ -25,6 +25,8 @@ export module ThreadRepository {
         visited: number;
         voteScore: number;
         pinned: boolean;
+        pinDisplayOrder: number;
+        subscribed: boolean;
         privileges: string[];
     }
 

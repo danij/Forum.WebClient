@@ -9,12 +9,18 @@ import {UserRepository} from "../services/userRepository";
 import {Pages} from "../pages/common";
 import {Privileges} from "../services/privileges";
 import {PageActions} from "../pages/action";
+import {EditViews} from "./edit";
+import {ViewsExtra} from "./extra";
 
 export module ThreadsView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import ITagPrivileges = Privileges.ITagPrivileges;
     import ITagCallback = PageActions.ITagCallback;
+    import IThreadPrivileges = Privileges.IThreadPrivileges;
+    import IThreadCallback = PageActions.IThreadCallback;
+    import refreshMath = ViewsExtra.refreshMath;
+    import reloadPageIfOk = EditViews.reloadPageIfOk;
 
     export class ThreadsPageContent {
 
@@ -280,79 +286,180 @@ export module ThreadsView {
         return resultElement;
     }
 
-    export function createThreadPageHeader(thread: ThreadRepository.Thread): HTMLElement {
+    export function createThreadPageHeader(thread: ThreadRepository.Thread,
+                                           callback: IThreadCallback,
+                                           privileges: IThreadPrivileges): HTMLElement {
 
-        let result = new DOMAppender('<div class="uk-container uk-container-expand thread-header">', '</div>');
+        let element = document.createElement('div');
+        element.classList.add('uk-container', 'uk-container-expand', 'thread-header');
 
-        let card = new DOMAppender('<div class="uk-card uk-card-body">', '</div>');
-        result.append(card);
+        let card = document.createElement('div');
+        element.appendChild(card);
+        card.classList.add('uk-card', 'uk-card-body');
 
         {
         /* append to card:
-    <div class="thread-actions">
-        <button class="uk-button uk-button-primary uk-button-small">Subscribe</button>
-        <a uk-icon="icon: file-edit" href="editThreadTitle" title="Edit thread title" uk-tooltip></a>
-        <a uk-icon="icon: tag" href="editThreadTags" title="Edit thread tags" uk-tooltip></a>
         <a uk-icon="icon: settings" href="editThreadPrivileges" title="Edit thread access" uk-tooltip
            uk-toggle="target: #privileges-modal"></a>
-        <a uk-icon="icon: trash" href="deleteThread" title="Delete thread" uk-tooltip></a>
-    </div>
         */
-        }
-        {
-            let title = new DOMAppender(' <div class="uk-align-left thread-title">', '</div>');
-            card.append(title);
+            let actions = document.createElement('div');
+            card.appendChild(actions);
+            actions.classList.add('thread-actions');
 
-            let threadTitle = new DOMAppender('<span class="uk-logo">', '</span>');
-            title.append(threadTitle);
-            threadTitle.appendString(thread.name);
-            title.appendRaw(' ');
+            let subscribeToThread = document.createElement('button');
+            actions.appendChild(subscribeToThread);
+            subscribeToThread.classList.add('uk-button', 'uk-button-primary', 'uk-button-small');
+            subscribeToThread.innerText = 'Subscribe';
 
-            let userLink = new DOMAppender(`<a class="author" ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}>`, '</a>');
-            title.append(userLink);
-            userLink.appendString(thread.createdBy.name);
+            actions.appendChild(document.createTextNode(' '));
+
+            let unSubscribeFromThread = document.createElement('button');
+            actions.appendChild(unSubscribeFromThread);
+            unSubscribeFromThread.classList.add('uk-button', 'uk-button-danger', 'uk-button-small');
+            unSubscribeFromThread.innerText = 'Unsubscribe';
+
+            actions.appendChild(document.createTextNode(' '));
+
+            DOMHelpers.hide(thread.subscribed ? subscribeToThread : unSubscribeFromThread);
+
+            subscribeToThread.addEventListener('click', async () => {
+
+                if (await callback.subscribeToThread(thread.id)) {
+
+                    DOMHelpers.hide(subscribeToThread);
+                    DOMHelpers.unHide(unSubscribeFromThread);
+                }
+            });
+            unSubscribeFromThread.addEventListener('click', async () => {
+
+                if (await callback.unSubscribeFromThread(thread.id)) {
+
+                    DOMHelpers.hide(unSubscribeFromThread);
+                    DOMHelpers.unHide(subscribeToThread);
+                }
+            });
+
+            if (privileges.canDeleteThread(thread.id)) {
+
+                let deleteLink = EditViews.createDeleteLink('Delete thread', '');
+                actions.appendChild(deleteLink);
+
+                deleteLink.addEventListener('click', () => {
+
+                    if (EditViews.confirm(`Are you sure you want to delete the following thread: ${thread.name}?`)) {
+
+                        EditViews.goToHomePageIfOk(callback.deleteThread(thread.id));
+                    }
+                });
+            }
         }
         {
-            card.appendRaw('<div class="uk-clearfix"></div>');
+            let title = document.createElement('div');
+            card.appendChild(title);
+            title.classList.add('uk-align-left', 'thread-title');
+
+            if (privileges.canEditThreadPinDisplayOrder(thread.id)) {
+                let link = EditViews.createEditLink('Edit thread display order when pinned', 'star');
+                title.appendChild(link);
+                link.addEventListener('click', () => {
+
+                    const newValue = parseInt(EditViews.getInput('Edit thread display order when pinned', (thread.pinDisplayOrder || 0).toString()));
+
+                    if ((newValue >= 0) && (newValue != thread.pinDisplayOrder)) {
+
+                        thread.pinDisplayOrder = newValue;
+                        callback.editThreadPinDisplayOrder(thread.id, newValue);
+                    }
+                });
+            }
+
+            let threadTitle = document.createElement('span');
+            if (privileges.canEditThreadName(thread.id)) {
+                let link = EditViews.createEditLink('Edit thread name');
+                title.appendChild(link);
+                link.addEventListener('click', () => {
+
+                    const name = EditViews.getInput('Edit thread name', thread.name);
+                    if (name && name.length && (name != thread.name)) {
+
+                        EditViews.doIfOk(callback.editThreadName(thread.id, name), () => {
+
+                            threadTitle.innerText = thread.name = name;
+                            refreshMath(threadTitle);
+                        });
+                    }
+                });
+
+            }
+            title.appendChild(threadTitle);
+            threadTitle.classList.add('uk-logo');
+
+            threadTitle.innerText = thread.name;
+            title.appendChild(document.createTextNode(' '));
+
+            let userLink = DOMHelpers.parseHTML(`<a class="author" ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}></a>`);
+            title.appendChild(userLink);
+            userLink.innerText = thread.createdBy.name;
         }
         {
-            let details = new DOMAppender('<div class="thread-details uk-align-left">', '</div>');
-            card.append(details);
+            card.appendChild(DOMHelpers.parseHTML('<div class="uk-clearfix"></div>'));
+        }
+        {
+            let details = document.createElement('div');
+            card.appendChild(details);
+            details.classList.add('thread-details', 'uk-align-left');
+
+            if (privileges.canEditThreadTags(thread.id)) {
+
+                let link = EditViews.createEditLink('Edit thread tags', 'tag');
+                details.appendChild(link);
+                link.addEventListener('click', async () => {
+
+                    const allTags = await callback.getAllTags();
+                    TagsView.showSelectTagsDialog(thread.tags, allTags,
+                        (added: string[], removed: string[]) => {
+
+                            reloadPageIfOk(callback.editThreadTags(thread.id, added, removed));
+                        });
+                });
+            }
 
             if (thread.tags && thread.tags.length){
 
                 for (let tag of thread.tags) {
 
-                    details.append(TagsView.createTagElement(tag));
-                    details.appendRaw(' ');
+                    details.appendChild(TagsView.createTagElement(tag).toElement());
+                    details.appendChild(document.createTextNode(' '));
                 }
             }
 
-            details.appendRaw('<span>Displayed under: </span>');
+            details.appendChild(DOMHelpers.parseHTML('<span>Displayed under: </span>'));
             if (thread.categories && thread.categories.length) {
 
                 for (let category of thread.categories) {
 
-                    let element = new DOMAppender('<a href="' +
+                    let element = DOMHelpers.parseHTML('<a href="' +
                         Pages.getCategoryFullUrl(category) +
                         '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
-                        DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
-                    details.append(element);
-                    element.appendString(category.name);
-                    details.appendRaw(' · ');
+                        DOMHelpers.escapeStringForAttribute(category.name) + '"></a>');
+                    details.appendChild(element);
+                    element.innerText = category.name;
+                    details.appendChild(document.createTextNode(' · '));
                 }
             }
             else {
 
-                details.appendRaw('<span class="uk-text-warning">&lt;none&gt;</span> · ');
+                details.appendChild(DOMHelpers.parseHTML('<span class="uk-text-warning">&lt;none&gt;</span> · '));
             }
-            details.appendRaw(`${DisplayHelpers.intToString(thread.visited)} total views · `);
-            details.appendRaw(`<a href="subscribed">${DisplayHelpers.intToString(thread.subscribedUsersCount)} subscribed users</a>`);
+            details.appendChild(document.createTextNode(`${DisplayHelpers.intToString(thread.visited)} total views · `));
+
+            let subscribedUsersLink = document.createElement('a');
+            details.appendChild(subscribedUsersLink);
+            subscribedUsersLink.innerText = `${DisplayHelpers.intToString(thread.subscribedUsersCount)} subscribed users`;
         }
         {
-            card.appendRaw('<div class="uk-clearfix"></div>');
+            card.appendChild(DOMHelpers.parseHTML('<div class="uk-clearfix"></div>'));
         }
-        let element = result.toElement();
 
         Views.setupThreadsWithTagsLinks(element);
         Views.setupThreadsOfUsersLinks(element);

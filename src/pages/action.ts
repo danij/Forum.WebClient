@@ -43,6 +43,12 @@ export module PageActions {
         editThreadPinDisplayOrder(id: string, pinDisplayOrder: number): Promise<boolean>;
 
         editThreadTags(id: string, addTagIds: string[], removeTagIds: string[]): Promise<boolean>;
+
+        subscribeToThread(id: string): Promise<boolean>;
+
+        unSubscribeFromThread(id: string): Promise<boolean>;
+
+        getAllTags(): Promise<TagRepository.Tag[]>;
     }
 
     class CategoryCallback implements ICategoryCallback {
@@ -136,6 +142,21 @@ export module PageActions {
         editThreadTags(id: string, addTagIds: string[], removeTagIds: string[]): Promise<boolean> {
 
             return Promise.resolve(true);
+        }
+
+        subscribeToThread(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        unSubscribeFromThread(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        getAllTags(): Promise<TagRepository.Tag[]> {
+
+            return TagRepository.getTagsCached();
         }
     }
 

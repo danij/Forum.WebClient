@@ -93,4 +93,14 @@ export module DOMHelpers {
 
         return newElement;
     }
+
+    export function hide(element: HTMLElement): void {
+
+        element.classList.add('uk-hidden');
+    }
+
+    export function unHide(element: HTMLElement): void {
+
+        element.classList.remove('uk-hidden');
+    }
 }
