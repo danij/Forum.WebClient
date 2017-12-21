@@ -129,9 +129,8 @@ export module ThreadsView {
                 let nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
                 row.append(nameColumn);
 
-                const iconClass = thread.visitedSinceLastChange ? 'uk-icon' : 'uk-icon-button';
                 const icon = thread.pinned ? 'star' : 'forward';
-                nameColumn.append(new DOMAppender(`<span class="${iconClass}" uk-icon="icon: ${icon}">`, '</span>'));
+                nameColumn.append(new DOMAppender(`<span class="uk-icon" uk-icon="icon: ${icon}">`, '</span>'));
 
                 let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
                 let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
@@ -142,6 +141,11 @@ export module ThreadsView {
 
                 let details = new DOMAppender('<div class="thread-tags">', '</div>');
                 nameColumn.append(details);
+
+                if ( ! thread.visitedSinceLastChange) {
+
+                    details.appendRaw('<span class="uk-icon new-content" uk-icon="icon: commenting" title="Thread contains new content" uk-tooltip></span>');
+                }
 
                 if (thread.voteScore < 0) {
                     details.appendRaw(`<span class="uk-label score-down">− ${DisplayHelpers.intToString(Math.abs(thread.voteScore))}</span>`);
