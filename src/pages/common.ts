@@ -45,10 +45,10 @@ export module Pages {
         try {
             return await promise;
         }
-        catch (e) {
+        catch (ex) {
 
             UIkit.notification({
-                message: 'An error has occurred: ' + e.message,
+                message: 'An error has occurred: ' + ex.message,
                 status: 'primary',
                 timeout: 3000
             });

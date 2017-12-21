@@ -29,34 +29,34 @@ export module MasterPage {
 
         let homePageLink = document.getElementById('HomePageLink');
         linkElements.push(homePageLink);
-        homePageLink.addEventListener('click', (e) => {
+        homePageLink.addEventListener('click', (ev) => {
 
             new HomePage().display();
-            e.preventDefault();
+            ev.preventDefault();
         });
 
         let tagsPageLink = document.getElementById('TagsPageLink');
         linkElements.push(tagsPageLink);
-        tagsPageLink.addEventListener('click', (e) => {
+        tagsPageLink.addEventListener('click', (ev) => {
 
             new TagsPage().display();
-            e.preventDefault();
+            ev.preventDefault();
         });
 
         let threadsPageLink = document.getElementById('ThreadsPageLink');
         linkElements.push(threadsPageLink);
-        threadsPageLink.addEventListener('click', (e) => {
+        threadsPageLink.addEventListener('click', (ev) => {
 
             new ThreadsPage().display();
-            e.preventDefault();
+            ev.preventDefault();
         });
 
         let usersPageLink = document.getElementById('UsersPageLink');
         linkElements.push(usersPageLink);
-        usersPageLink.addEventListener('click', (e) => {
+        usersPageLink.addEventListener('click', (ev) => {
 
             new UsersPage().display();
-            e.preventDefault();
+            ev.preventDefault();
         });
 
         ViewsExtra.init();
