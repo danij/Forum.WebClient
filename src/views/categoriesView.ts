@@ -328,7 +328,7 @@ export module CategoriesView {
                 TagsView.showSelectTagsDialog(category.tags, allTags,
                     (added: string[], removed: string[]) => {
 
-                    callback.editCategoryTags(category.id, added, removed);
+                    reloadIfOk(callback.editCategoryTags(category.id, added, removed));
                 });
             });
         }
@@ -441,8 +441,6 @@ export module CategoriesView {
     }
 
     function setupEditCategoryDisplayCategories(container: HTMLElement, callback: ICategoryCallback): void {
-
-        let button = EditViews.createAddNewButton('Add Sub Category');
 
         const eventHandler = (ev: Event) => {
 

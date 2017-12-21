@@ -56,4 +56,4 @@ module.exports = {
             // {test: require.resolve('uikit/dist/js/uikit.min'), loader: 'expose-loader?UIkit!expose-loader?$'}
         ]
     }
-}
+};

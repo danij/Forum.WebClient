@@ -53,23 +53,8 @@ export module DisplayHelpers {
         const timeString = [date.getHours(), date.getMinutes(), date.getSeconds()]
             .map(v => padPositiveWithZeros(v, 2))
             .join(':');
-        const offset = -date.getTimezoneOffset();
-        let offsetString = '';
 
-        if (0 == (offset % 60)) {
-
-            offsetString += Math.floor(offset / 60);
-        }
-        else {
-
-            offsetString += (offset / 60).toFixed(1);
-        }
-        if (offset > 0) {
-
-            offsetString = '+' + offsetString;
-        }
-
-        return `${dateString} ${timeString}`;//'${offsetString}`;
+        return `${dateString} ${timeString}`;
     }
 
     export function getShortDate(epochTime: number): string {

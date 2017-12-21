@@ -5,7 +5,6 @@ import {UsersPage} from "./usersPage";
 import {Pages} from "./common";
 import {Views} from "../views/common";
 import {StatisticsRepository} from "../services/statisticsRepository";
-import {DisplayHelpers} from "../helpers/displayHelpers";
 import {ThreadRepository} from "../services/threadRepository";
 import {ThreadsView} from "../views/threadsView";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
@@ -117,7 +116,6 @@ export module MasterPage {
         return originalTitle;
     }
 
-    declare type LoadPageFn = (url: string) => boolean;
     declare const masterPageConfig: Pages.MasterPageConfig;
 
     function loadCurrentPage(): void {

@@ -91,7 +91,7 @@ export module UsersView {
 
         content.appendRaw('<li class="uk-nav-header">Activity</li>');
         content.appendRaw(('<li>\n' +
-            '<span href="MyThreads" class="align-left">\n' +
+            '<span class="align-left">\n' +
             '    <span>Joined</span>\n' +
             '</span>\n' +
             '    <span class="uk-badge align-right">{joined}</span>\n' +
@@ -100,7 +100,7 @@ export module UsersView {
             .replace('{joined}', DisplayHelpers.getDateTime(user.created)));
 
         content.appendRaw(('<li>\n' +
-            '<span href="MyMessages" class="align-left">\n' +
+            '<span class="align-left">\n' +
             '    <span>Last seen</span>\n' +
             '</span>\n' +
             '    <span class="uk-badge align-right">{lastSeen}</span>\n' +
@@ -110,14 +110,14 @@ export module UsersView {
 
         content.appendRaw('<li class="uk-nav-header">Feedback Received</li>');
         content.appendRaw(('<li>\n' +
-            '<span href="MyMessages" class="align-left">\n' +
+            '<span class="align-left">\n' +
             '    <span>Up votes</span>\n' +
             '</span>\n' +
             '    <span class="uk-badge align-right">{receivedUpVotes}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{receivedUpVotes}', DisplayHelpers.intToString(user.receivedUpVotes)));
         content.appendRaw(('<li>\n' +
-            '<span href="MyMessages" class="align-left">\n' +
+            '<span class="align-left">\n' +
             '    <span>Down votes</span>\n' +
             '</span>\n' +
             '    <span class="uk-badge align-right">{receivedDownVotes}</span>\n' +

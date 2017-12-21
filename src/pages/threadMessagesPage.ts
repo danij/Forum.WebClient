@@ -56,7 +56,7 @@ export class ThreadMessagesPage implements Pages.Page {
             let messageCollection: ThreadMessageRepository.ThreadMessageCollection =
                 this.thread
                     ? this.thread as ThreadMessageRepository.ThreadMessageCollection
-                    : await this.getThreadMessagesOfUser(this.user);
+                    : await this.getThreadMessagesOfUser();
             if (null == messageCollection) return;
 
             let elements = ThreadMessagesView.createThreadMessagesPageContent(messageCollection, {
@@ -138,7 +138,7 @@ export class ThreadMessagesPage implements Pages.Page {
         return Pages.getOrShowError(UserRepository.getUserByName(this.userName));
     }
 
-    private async getThreadMessagesOfUser(user: UserRepository.User): Promise<ThreadMessageRepository.ThreadMessageCollection> {
+    private async getThreadMessagesOfUser(): Promise<ThreadMessageRepository.ThreadMessageCollection> {
 
         return (await Pages.getOrShowError(ThreadMessageRepository.getThreadMessagesOfUser(this.user, {
             page: this.pageNumber,
@@ -153,7 +153,7 @@ export class ThreadMessagesPage implements Pages.Page {
             let messageCollection: ThreadMessageRepository.ThreadMessageCollection =
                 this.thread
                     ? await this.getCurrentThread()
-                    : await this.getThreadMessagesOfUser(this.user);
+                    : await this.getThreadMessagesOfUser();
 
             if (null == messageCollection) return;
 
@@ -225,7 +225,6 @@ export class ThreadMessagesPage implements Pages.Page {
 
     private refreshUrl() {
 
-        let url = 'thread_messages';
         let title = 'Thread Messages';
         let setActive = 'ThreadsPageLink';
 
