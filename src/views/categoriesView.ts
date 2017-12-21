@@ -478,6 +478,8 @@ export module CategoriesView {
         saveButton = DOMHelpers.removeEventListeners(saveButton);
         saveButton.addEventListener('click', (ev) => {
 
+            ev.preventDefault();
+
             const selectedRadio = document.querySelector('input[name="categoryParentId"]:checked') as HTMLInputElement;
             if (selectedRadio && selectedRadio.value) {
 

@@ -334,6 +334,8 @@ export module TagsView {
         saveButton = DOMHelpers.removeEventListeners(saveButton);
         saveButton.addEventListener('click', (ev) => {
 
+            ev.preventDefault();
+
             let selected = selectElement.selectedOptions;
             let added = [], removed = [];
 

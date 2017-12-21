@@ -129,15 +129,15 @@ export module Views {
             container.appendChild(previous);
             previous.addEventListener('click', (ev) => {
 
-                onPageNumberChange(info.page - 1);
                 ev.preventDefault();
+                onPageNumberChange(info.page - 1);
             });
         }
 
         function pageClickCallback(ev) {
 
-            onPageNumberChange(parseInt((ev.target as HTMLAnchorElement).text) - 1);
             ev.preventDefault();
+            onPageNumberChange(parseInt((ev.target as HTMLAnchorElement).text) - 1);
         }
 
         function addPageLink(pageNumber: number) {
@@ -237,8 +237,8 @@ export module Views {
             container.appendChild(next);
             next.addEventListener('click', (ev) => {
 
-                onPageNumberChange(info.page + 1);
                 ev.preventDefault();
+                onPageNumberChange(info.page + 1);
             });
         }
 
@@ -266,50 +266,52 @@ export module Views {
 
     function threadsWithTagLinkClicked(ev: Event) {
 
+        ev.preventDefault();
+
         const tagName = DOMHelpers.getLink(ev).getAttribute(ThreadsWithTagData);
 
         new ThreadsPage().displayForTag(tagName);
-
-        ev.preventDefault();
     }
 
     function threadsOfUserLinkClicked(ev: Event) {
 
+        ev.preventDefault();
+
         const userName = DOMHelpers.getLink(ev).getAttribute(UserThreadsData);
 
         new ThreadsPage().displayForUser(userName);
-
-        ev.preventDefault();
     }
 
     function threadMessagesOfUserLinkClicked(ev: Event) {
 
+        ev.preventDefault();
+
         const userName = DOMHelpers.getLink(ev).getAttribute(UserMessagesData);
 
         new ThreadMessagesPage().displayForUser(userName);
-
-        ev.preventDefault();
     }
 
     function threadMessagesOfThreadLinkClicked(ev: Event) {
 
+        ev.preventDefault();
+
         const threadId = DOMHelpers.getLink(ev).getAttribute('data-threadmessagethreadid');
 
         new ThreadMessagesPage().displayForThread(threadId);
-
-        ev.preventDefault();
     }
 
     function threadMessagesOfParentThreadLinkClicked(ev: Event) {
 
+        ev.preventDefault();
+
         const threadMessageId = DOMHelpers.getLink(ev).getAttribute('data-threadmessagemessageid');
 
         new ThreadMessagesPage().displayForThreadMessage(threadMessageId);
-
-        ev.preventDefault();
     }
 
     function categoryLinkClicked(ev: Event) {
+
+        ev.preventDefault();
 
         const link = DOMHelpers.getLink(ev);
 
@@ -317,8 +319,6 @@ export module Views {
         const categoryName = link.getAttribute('data-categoryname') || '';
 
         new HomePage().displayCategory(categoryId, categoryName);
-
-        ev.preventDefault();
     }
 
     export function setupThreadsWithTagsLinks(element: HTMLElement): void {

@@ -31,32 +31,32 @@ export module MasterPage {
         linkElements.push(homePageLink);
         homePageLink.addEventListener('click', (ev) => {
 
-            new HomePage().display();
             ev.preventDefault();
+            new HomePage().display();
         });
 
         let tagsPageLink = document.getElementById('TagsPageLink');
         linkElements.push(tagsPageLink);
         tagsPageLink.addEventListener('click', (ev) => {
 
-            new TagsPage().display();
             ev.preventDefault();
+            new TagsPage().display();
         });
 
         let threadsPageLink = document.getElementById('ThreadsPageLink');
         linkElements.push(threadsPageLink);
         threadsPageLink.addEventListener('click', (ev) => {
 
-            new ThreadsPage().display();
             ev.preventDefault();
+            new ThreadsPage().display();
         });
 
         let usersPageLink = document.getElementById('UsersPageLink');
         linkElements.push(usersPageLink);
         usersPageLink.addEventListener('click', (ev) => {
 
-            new UsersPage().display();
             ev.preventDefault();
+            new UsersPage().display();
         });
 
         ViewsExtra.init();
