@@ -7,6 +7,7 @@ import {ThreadRepository} from "../services/threadRepository";
 import {Views} from "../views/common";
 import {Privileges} from '../services/privileges';
 import {PageActions} from "./action";
+import {DOMHelpers} from "../helpers/domHelpers";
 
 /**
  * The home page displays the root categories
@@ -104,21 +105,29 @@ export class HomePage implements Pages.Page {
 
     private setupSortControls(controls: HTMLElement): void {
 
-        let elements = $(controls);
+        let radioElements = controls.querySelectorAll('input[type=radio]');
 
-        elements.find('input[type=radio]').on('change', (e) => {
+        for (let i = 0; i < radioElements.length; ++i) {
 
-            this.orderBy = (e.target as HTMLInputElement).value;
-            this.refreshUrl();
-            this.refreshList();
-        });
+            radioElements[i].addEventListener('change', (ev) => {
 
-        elements.find("select[name='sortOrder']").on('change', (e) => {
+                this.orderBy = (ev.target as HTMLInputElement).value;
+                this.refreshUrl();
+                this.refreshList();
+            });
+        }
 
-            this.sortOrder = (e.target as HTMLSelectElement).value;
-            this.refreshUrl();
-            this.refreshList();
-        });
+        let selectElements = controls.querySelectorAll("select[name='sortOrder']");
+
+        for (let i = 0; i < selectElements.length; ++i) {
+
+            selectElements[i].addEventListener('change', (ev) => {
+
+                this.sortOrder = (ev.target as HTMLSelectElement).value;
+                this.refreshUrl();
+                this.refreshList();
+            });
+        }
     }
 
     private onPageNumberChange(newPageNumber: number): void {
@@ -130,7 +139,7 @@ export class HomePage implements Pages.Page {
 
     private refreshList(): void {
 
-        Views.changeContent($('.threads-table')[0], async () => {
+        Views.changeContent(document.getElementsByClassName('threads-table')[0] as HTMLElement, async () => {
 
             let threadCollection = await this.getCategoryThreads(this.category);
 
@@ -139,13 +148,13 @@ export class HomePage implements Pages.Page {
             let newTopPaginationControl = Views.createPaginationControl(threadCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
-            $(this.topPaginationControl).replaceWith(newTopPaginationControl);
+            DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
             let newBottomPaginationControl = Views.createPaginationControl(threadCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
-            $(this.bottomPaginationControl).replaceWith(newBottomPaginationControl);
+            DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
             this.bottomPaginationControl = newBottomPaginationControl;
 
             return ThreadsView.createThreadsTable(threadCollection.threads);

@@ -47,33 +47,36 @@ export module ThreadsView {
 
         let result = new ThreadsPageContent();
 
-        let resultList = $("<div></div>");
+        let resultList = document.createElement('div');
 
         if (info.tag) {
 
-            resultList.append(TagsView.createTagPageHeader(info.tag, tagCallback, tagPrivileges));
+            resultList.appendChild(TagsView.createTagPageHeader(info.tag, tagCallback, tagPrivileges));
         }
         else if (info.user) {
 
-            resultList.append(UsersView.createUserPageHeader(info.user));
+            resultList.appendChild(UsersView.createUserPageHeader(info.user));
         }
 
-        resultList.append(result.sortControls = createThreadListSortControls(info));
-        resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+        resultList.appendChild(result.sortControls = createThreadListSortControls(info));
+        resultList.appendChild(
+            result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        let tableContainer = $('<div class="threads-table"></div>');
-        resultList.append(tableContainer);
-        tableContainer.append(createThreadsTable(collection.threads));
+        let tableContainer = document.createElement('div');
+        resultList.appendChild(tableContainer);
+        tableContainer.classList.add('threads-table');
+        tableContainer.appendChild(createThreadsTable(collection.threads));
 
-        resultList.append(result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+        resultList.appendChild(
+            result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        result.list = resultList[0];
+        result.list = resultList;
         return result;
     }
 
     function createThreadListSortControls(info: Views.SortInfo): HTMLElement {
 
-        return $('<div class="threads-list-header">\n' +
+        return DOMHelpers.parseHTML('<div class="threads-list-header">\n' +
             '    <form>\n' +
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="order-by">\n' +
@@ -91,7 +94,7 @@ export module ThreadsView {
             '            </div>\n' +
             '        </div>\n' +
             '    </form>\n' +
-            '</div>')[0];
+            '</div>');
     }
 
     export function createThreadsTable(threads: ThreadRepository.Thread[]): HTMLElement {
@@ -206,20 +209,20 @@ export module ThreadsView {
                     let authorElement = UsersView.createAuthorSmall(latestMessage.createdBy);
                     latestMessageColumn.append(authorElement);
 
-                    let recentMessageTime = $('<span class="uk-text-meta"></span>');
-
-                    recentMessageTime.text(DisplayHelpers.getDateTime(latestMessage.created));
-                    authorElement.appendElement(recentMessageTime[0]);
+                    let recentMessageTime = document.createElement('span');
+                    recentMessageTime.classList.add('uk-text-meta');
+                    recentMessageTime.innerText = DisplayHelpers.getDateTime(latestMessage.created);
+                    authorElement.appendElement(recentMessageTime);
 
                     let messageContent = latestMessage.content || 'empty';
 
-                    let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id);
-                    let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(latestMessage.id)}"`;
-
-                    let messageLink = $(`<a class="recent-message-link" href="${href}" ${data}></a>`);
-                    messageLink.text(messageContent);
-                    messageLink.attr('title', messageContent);
-                    latestMessageColumn.appendElement(messageLink[0]);
+                    let messageLink = document.createElement('a');
+                    messageLink.classList.add('recent-message-link');
+                    messageLink.setAttribute('title', messageContent);
+                    messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
+                    messageLink.setAttribute('data-threadmessagemessageid', latestMessage.id);
+                    messageLink.innerText = messageContent;
+                    latestMessageColumn.appendElement(messageLink);
                 }
             }
         }

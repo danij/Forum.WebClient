@@ -7,6 +7,7 @@ import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "../views/threadMessagesView";
 import {Privileges} from "../services/privileges";
 import {PageActions} from "./action";
+import {DOMHelpers} from "../helpers/domHelpers";
 
 /**
  * Displays a list of thread messages with pagination and custom sorting
@@ -147,7 +148,7 @@ export class ThreadMessagesPage implements Pages.Page {
 
     private refreshList(): void {
 
-        Views.changeContent($('#pageContentContainer .thread-message-list')[0], async () => {
+        Views.changeContent(document.querySelector('#pageContentContainer .thread-message-list'), async () => {
 
             let messageCollection: ThreadMessageRepository.ThreadMessageCollection =
                 this.thread
@@ -159,13 +160,14 @@ export class ThreadMessagesPage implements Pages.Page {
             let newTopPaginationControl = Views.createPaginationControl(messageCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
-            $(this.topPaginationControl).replaceWith(newTopPaginationControl);
+
+            DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
             let newBottomPaginationControl = Views.createPaginationControl(messageCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
-            $(this.bottomPaginationControl).replaceWith(newBottomPaginationControl);
+            DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
             this.bottomPaginationControl = newBottomPaginationControl;
 
             return ThreadMessagesView.createThreadMessageList(messageCollection, this.thread);
@@ -177,14 +179,20 @@ export class ThreadMessagesPage implements Pages.Page {
 
     private setupSortControls(controls: HTMLElement): void {
 
-        let elements = $(controls);
+        if (controls) {
 
-        elements.find("select[name='sortOrder']").on('change', (e) => {
+            let elements = controls.querySelectorAll("select[name='sortOrder']");
 
-            this.sortOrder = (e.target as HTMLSelectElement).value;
-            this.refreshUrl();
-            this.refreshList();
-        });
+            for (let i = 0; i < elements.length; ++i) {
+
+                elements[i].addEventListener('change', (ev) => {
+
+                    this.sortOrder = (ev.target as HTMLSelectElement).value;
+                    this.refreshUrl();
+                    this.refreshList();
+                });
+            }
+        }
     }
 
     private onPageNumberChange(newPageNumber: number): void {

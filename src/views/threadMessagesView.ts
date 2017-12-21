@@ -117,7 +117,7 @@ export module ThreadMessagesView {
 
     function createThreadMessageListSortControls(info: Views.SortInfo): HTMLElement {
 
-        return $('<div class="thread-messages-list-header uk-flex uk-flex-center">\n' +
+        return DOMHelpers.parseHTML('<div class="thread-messages-list-header uk-flex uk-flex-center">\n' +
             '    <form>\n' +
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="uk-float-right">\n' +
@@ -128,9 +128,8 @@ export module ThreadMessagesView {
             '            </div>\n' +
             '        </div>\n' +
             '    </form>\n' +
-            '</div>')[0];
+            '</div>');
     }
-
 
     export function createThreadMessageList(collection: ThreadMessageRepository.ThreadMessageCollection,
                                             thread?: ThreadRepository.Thread): HTMLElement {

@@ -157,12 +157,13 @@ export module CategoriesView {
                         name: latestMessage.threadName
                     } as ThreadRepository.Thread);
 
-                    let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(latestMessage.threadId)}"`;
-
-                    let threadTitleElement = $(`<a class="recent-message-thread-link" href="${href}" ${data}></a>`);
-                    threadTitleElement.text(threadTitle);
-                    threadTitleElement.attr('title', threadTitle);
-                    latestMessageColumn.appendElement(threadTitleElement[0]);
+                    let threadTitleElement = document.createElement('a');
+                    threadTitleElement.classList.add('recent-message-thread-link');
+                    threadTitleElement.setAttribute('href', href);
+                    threadTitleElement.setAttribute('title', threadTitle);
+                    threadTitleElement.setAttribute('data-threadmessagethreadid', latestMessage.threadId);
+                    threadTitleElement.innerText = threadTitle;
+                    latestMessageColumn.appendElement(threadTitleElement);
 
                     let recentMessageTime = new DOMAppender('<div class="recent-message-time uk-text-meta">', '</div>');
                     latestMessageColumn.append(recentMessageTime);
@@ -173,13 +174,13 @@ export module CategoriesView {
 
                     let messageContent = latestMessage.content || 'empty';
 
-                    href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id);
-                    data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(latestMessage.id)}"`;
-
-                    let messageLink = $(`<a class="recent-message-link no-math" href="${href}" ${data}></a>`);
-                    messageLink.text(messageContent);
-                    messageLink.attr('title', messageContent);
-                    latestMessageColumn.appendElement(messageLink[0]);
+                    let messageLink = document.createElement('a');
+                    messageLink.classList.add('recent-message-link', 'no-math');
+                    messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
+                    messageLink.setAttribute('title', messageContent);
+                    messageLink.setAttribute('data-threadmessagemessageid', latestMessage.id);
+                    messageLink.innerText = messageContent;
+                    latestMessageColumn.appendElement(messageLink);
                 }
             }
         }

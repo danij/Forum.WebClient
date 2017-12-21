@@ -110,58 +110,64 @@ export module Views {
                                             onPageNumberChange: PageNumberChangeCallback,
                                             getLinkForPage: GetLinkForPageCallback) {
 
-        let result = $('<div></div>');
+        let result = document.createElement('div');
 
         if (info.totalCount < 1) {
 
             return result[0];
         }
 
-        let container = $('<ul class="uk-pagination uk-flex-center uk-margin-remove-left uk-margin-remove-top uk-margin-remove-bottom" uk-margin></ul>');
-        result.append(container);
+        let container = DOMHelpers.parseHTML(
+            '<ul class="uk-pagination uk-flex-center uk-margin-remove-left uk-margin-remove-top uk-margin-remove-bottom" uk-margin></ul>');
+        result.appendChild(container);
 
         let pageCount = CommonEntities.getPageCount(info);
 
         if (info.page > 0) {
 
-            let previous = $('<li><a><span uk-pagination-previous></span></a></li>');
-            container.append(previous);
-            previous.on('click', (e) => {
+            let previous = DOMHelpers.parseHTML('<li><a><span uk-pagination-previous></span></a></li>');
+            container.appendChild(previous);
+            previous.addEventListener('click', (ev) => {
 
                 onPageNumberChange(info.page - 1);
-                e.preventDefault();
+                ev.preventDefault();
             });
         }
 
-        function pageClickCallback(e) {
+        function pageClickCallback(ev) {
 
-            onPageNumberChange(parseInt((e.target as HTMLAnchorElement).text) - 1);
-            e.preventDefault();
+            onPageNumberChange(parseInt((ev.target as HTMLAnchorElement).text) - 1);
+            ev.preventDefault();
         }
 
         function addPageLink(pageNumber: number) {
 
-            let listElement = $('<li></li>');
-            container.append(listElement[0]);
+            let listElement = document.createElement('li');
+            container.appendChild(listElement);
 
-            let link = $(`<a href="${Pages.getUrl(getLinkForPage(pageNumber))}">${pageNumber + 1}</a>`);
-            listElement.append(link);
-            link.on('click', pageClickCallback);
+            let link = document.createElement('a');
+            listElement.appendChild(link);
+            link.setAttribute('href', Pages.getUrl(getLinkForPage(pageNumber)));
+            link.innerText = `${pageNumber + 1}`;
+
+            link.addEventListener('click', pageClickCallback);
 
             if (pageNumber == info.page) {
-                link.addClass('uk-text-bold');
+                link.classList.add('uk-text-bold');
             }
         }
 
         function addEllipsis(): void {
 
-            let listElement = $('<li class="pointer-cursor"></li>');
-            container.append(listElement[0]);
+            let listElement = document.createElement('li');
+            container.appendChild(listElement);
+            listElement.classList.add('pointer-cursor');
 
-            let span = $('<span>...</span>');
-            listElement.append(span);
+            let span = document.createElement('span');
+            listElement.appendChild(span);
+            span.innerText = '...';
 
-            span.on('click', () => {
+            span.addEventListener('click', () => {
 
                 const pageNumber = parseInt(prompt("Please enter the page number:")) || 0;
                 if (pageNumber >= 1) {
@@ -227,26 +233,29 @@ export module Views {
 
         if (info.page < (pageCount - 1)) {
 
-            let next = $('<li><a><span uk-pagination-next></span></a></li>');
-            container.append(next);
-            next.on('click', (e) => {
+            let next = DOMHelpers.parseHTML('<li><a><span uk-pagination-next></span></a></li>');
+            container.appendChild(next);
+            next.addEventListener('click', (ev) => {
 
                 onPageNumberChange(info.page + 1);
-                e.preventDefault();
+                ev.preventDefault();
             });
         }
 
-        result.append($(`<span class="uk-flex uk-flex-center uk-text-meta pagination-total">${DisplayHelpers.intToString(info.totalCount)} total</span>`));
+        let total = document.createElement('span');
+        result.appendChild(total);
+        total.classList.add('uk-flex', 'uk-flex-center', 'uk-text-meta', 'pagination-total');
+        total.innerText = `${DisplayHelpers.intToString(info.totalCount)} total`;
 
-        return result[0];
+        return result;
     }
 
-    export function createOrderByLabel(value: string, title: string, info: SortInfo) {
+    export function createOrderByLabel(value: string, title: string, info: SortInfo): string {
 
         return `                <label><input class="uk-radio" type="radio" name="orderBy" value="${value}" ${value == info.orderBy ? 'checked' : ''}> ${title}</label>\n`;
     }
 
-    export function createSortOrderOption(value: string, title: string, info: SortInfo) {
+    export function createSortOrderOption(value: string, title: string, info: SortInfo): string {
 
         return `                    <option value="${value}" ${value == info.sortOrder ? 'selected' : ''}>${title}</option>\n`;
     }

@@ -46,7 +46,9 @@ export module DOMHelpers {
 
     export function escapeStringForContent(value: string): string {
 
-        return $('<div></div>').text(value).html();
+        let element = document.createElement('div');
+        element.innerText = value;
+        return element.innerHTML;
     }
 
     export function escapeStringForAttribute(value: string): string {
@@ -102,5 +104,10 @@ export module DOMHelpers {
     export function unHide(element: HTMLElement): void {
 
         element.classList.remove('uk-hidden');
+    }
+
+    export function replaceElementWith(element: HTMLElement, replaceWith: HTMLElement): void {
+
+        element.parentNode.replaceChild(replaceWith, element);
     }
 }

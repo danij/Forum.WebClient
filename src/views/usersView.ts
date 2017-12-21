@@ -147,25 +147,28 @@ export module UsersView {
 
         let result = new UsersPageContent();
 
-        let resultList = $("<div></div>");
+        let resultList = document.createElement('div');
 
-        resultList.append(result.sortControls = createUserListSortControls(info));
-        resultList.append(result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+        resultList.appendChild(result.sortControls = createUserListSortControls(info));
+        resultList.appendChild(
+            result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        let usersList = $('<div class="users-list"></div>');
-        resultList.append(usersList);
+        let usersList = document.createElement('div');
+        resultList.appendChild(usersList);
+        usersList.classList.add('users-list');
 
-        usersList.append(createUserListContent(collection.users));
+        usersList.appendChild(createUserListContent(collection.users));
 
-        resultList.append(result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+        resultList.appendChild(
+            result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        result.list = resultList[0];
+        result.list = resultList;
         return result;
     }
 
     function createUserListSortControls(info: Views.SortInfo): HTMLElement {
 
-        return $('<div class="users-list-header">\n' +
+        return DOMHelpers.parseHTML('<div class="users-list-header">\n' +
             '    <form>\n' +
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="order-by">\n' +
@@ -184,7 +187,7 @@ export module UsersView {
             '            </div>\n' +
             '        </div>\n' +
             '    </form>\n' +
-            '</div>')[0];
+            '</div>');
     }
 
     export function createUserListContent(users: UserRepository.User[]): HTMLElement {

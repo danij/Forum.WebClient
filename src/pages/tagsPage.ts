@@ -57,7 +57,7 @@ export class TagsPage implements Pages.Page {
 
     private refreshList(): void {
 
-        Views.changeContent($('#pageContentContainer .tags-list')[0], async () => {
+        Views.changeContent(document.querySelector('#pageContentContainer .tags-list'), async () => {
 
             let tagCollection = await this.getAllTags();
 
@@ -72,21 +72,29 @@ export class TagsPage implements Pages.Page {
 
     private setupSortControls(controls: HTMLElement): void {
 
-        let elements = $(controls);
+        let radioElements = controls.querySelectorAll('input[type=radio]');
 
-        elements.find('input[type=radio]').on('change', (e) => {
+        for (let i = 0; i < radioElements.length; ++i) {
 
-            this.orderBy = (e.target as HTMLInputElement).value;
-            this.refreshUrl();
-            this.refreshList();
-        });
+            radioElements[i].addEventListener('change', (ev) => {
 
-        elements.find("select[name='sortOrder']").on('change', (e) => {
+                this.orderBy = (ev.target as HTMLInputElement).value;
+                this.refreshUrl();
+                this.refreshList();
+            });
+        }
 
-            this.sortOrder = (e.target as HTMLSelectElement).value;
-            this.refreshUrl();
-            this.refreshList();
-        });
+        let selectElements = controls.querySelectorAll("select[name='sortOrder']");
+
+        for (let i = 0; i < selectElements.length; ++i) {
+
+            selectElements[i].addEventListener('change', (ev) => {
+
+                this.sortOrder = (ev.target as HTMLSelectElement).value;
+                this.refreshUrl();
+                this.refreshList();
+            });
+        }
     }
 
     private refreshUrl() {
