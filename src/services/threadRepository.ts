@@ -26,7 +26,7 @@ export module ThreadRepository {
         voteScore: number;
         pinned: boolean;
         pinDisplayOrder: number;
-        subscribed: boolean;
+        subscribedToThread: boolean;
         privileges: string[];
     }
 

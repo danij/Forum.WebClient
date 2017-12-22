@@ -327,7 +327,7 @@ export module ThreadsView {
 
             actions.appendChild(document.createTextNode(' '));
 
-            DOMHelpers.hide(thread.subscribed ? subscribeToThread : unSubscribeFromThread);
+            DOMHelpers.hide(thread.subscribedToThread ? subscribeToThread : unSubscribeFromThread);
 
             subscribeToThread.addEventListener('click', async () => {
 
