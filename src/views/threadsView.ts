@@ -135,7 +135,7 @@ export module ThreadsView {
                 let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
                 let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
 
-                let threadLink = new DOMAppender(`<a class="uk-button uk-button-text" href="${href}" ${data}>`, '</a>');
+                let threadLink = new DOMAppender(`<a class="uk-button uk-button-text thread-name" href="${href}" ${data}>`, '</a>');
                 nameColumn.append(threadLink);
                 threadLink.appendString(' ' + thread.name);
 
