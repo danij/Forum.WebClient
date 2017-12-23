@@ -664,11 +664,28 @@ html {
     }
 
     .thread-created-header {
-        min-width: 160px;
+        min-width: 80px;
+    }
+
+    .pinned-icon {
+        display: block;
+        float: left;
+        margin-left: -40px;
+        margin-top: 16px;
+    }
+
+    .thread-name {
+        font-size: 1.25rem;
+        line-height: 1.25;
+        margin-left: -5px;
+        text-align: left;
+    }
+
+    .already-visited {
+        color: #551A8B;
     }
 
     .thread-tags {
-        margin-left: 25px;
     }
 
     .uk-icon-button {
@@ -826,6 +843,11 @@ html {
     background: @up-vote-color;
 }
 
+.score-neutral {
+    color: white;
+    background: @neutral-vote-color;
+}
+
 .score-down {
     color: white;
     background: @down-vote-color;
@@ -975,9 +997,4 @@ html {
     li.level10 {
         padding-left: 200px;
     }
-}
-
-.thread-name {
-    font-size: 1.25rem;
-    line-height: 1.25;
 }

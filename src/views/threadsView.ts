@@ -129,29 +129,27 @@ export module ThreadsView {
                 let nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
                 row.append(nameColumn);
 
-                const icon = thread.pinned ? 'star' : 'forward';
-                nameColumn.append(new DOMAppender(`<span class="uk-icon" uk-icon="icon: ${icon}">`, '</span>'));
+                if (thread.pinned) {
+                    nameColumn.append(new DOMAppender(`<span class="uk-icon pinned-icon" uk-icon="icon: star; ratio: 1.5" title="Thread is pinned" uk-tooltip>`, '</span>'));
+                }
 
                 let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
                 let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
 
-                let threadLink = new DOMAppender(`<a class="uk-button uk-button-text thread-name" href="${href}" ${data}>`, '</a>');
+                const visitedClass =thread.visitedSinceLastChange ? 'already-visited' : '';
+
+                let threadLink = new DOMAppender(`<a class="uk-button uk-button-text thread-name ${visitedClass}" href="${href}" ${data}>`, '</a>');
                 nameColumn.append(threadLink);
                 threadLink.appendString(' ' + thread.name);
 
                 let details = new DOMAppender('<div class="thread-tags">', '</div>');
                 nameColumn.append(details);
 
-                if ( ! thread.visitedSinceLastChange) {
-
-                    details.appendRaw('<span class="uk-icon new-content" uk-icon="icon: commenting" title="Thread contains new content" uk-tooltip></span>');
-                }
-
                 if (thread.voteScore < 0) {
                     details.appendRaw(`<span class="uk-label score-down">− ${DisplayHelpers.intToString(Math.abs(thread.voteScore))}</span>`);
                 }
                 else if (thread.voteScore == 0) {
-                    details.appendRaw(`<span class="uk-label score-up">0</span>`);
+                    details.appendRaw(`<span class="uk-label score-neutral">0</span>`);
                 }
                 else {
                     details.appendRaw(`<span class="uk-label score-up">+ ${DisplayHelpers.intToString(thread.voteScore)}</span>`);
@@ -170,7 +168,6 @@ export module ThreadsView {
                 let createdColumn = new DOMAppender('<td class="thread-created uk-text-center uk-table-shrink">', '</td>');
                 row.append(createdColumn);
 
-                createdColumn.append(UsersView.createUserLogoSmall(thread.createdBy));
                 createdColumn.append(UsersView.createAuthorSmall(thread.createdBy));
 
                 createdColumn.appendRaw(('<div class="thread-message-time uk-text-meta">\n' +
