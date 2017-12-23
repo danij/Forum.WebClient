@@ -152,12 +152,49 @@ export module ThreadMessagesView {
             let messageContainer = new DOMAppender('<div class="uk-card uk-card-body discussion-thread-message">', '</div>');
             result.append(messageContainer);
 
-            {
+            const showParentThreadName = message.parentThread && message.parentThread.name && message.parentThread.name.length;
+
+            if (showParentThreadName) {
+
+                let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
+                let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+                let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
+
+                let link = new DOMAppender(`<a id="${id}" href="${href}" ${data}>`, '</a>');
+                link.appendString(message.parentThread.name);
+
+                let container = new DOMAppender('<div class="message-parent-thread uk-card-badge">', '</div>');
+                container.append(link);
+                messageContainer.append(container);
+            }
+            else {
+
                 const number = collection.page * collection.pageSize + i + 1;
                 let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
                 let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
                 messageContainer.appendRaw(`<div class="message-number uk-text-meta"><a id="${id}" href="${href}" ${data}>#${DisplayHelpers.intToString(number)}</a></div>`);
+            }
+            {
+                const extraClass = showParentThreadName ? 'right' : '';
+                let messageDetailsContainer = new DOMAppender(`<div class="uk-card-badge message-time-container ${extraClass}">`, '</div>');
+                messageContainer.append(messageDetailsContainer);
+                messageDetailsContainer.appendRaw(`<span class="message-time">${DisplayHelpers.getDateTime(message.created)} </span>`);
+
+                if (message.lastUpdated && message.lastUpdated.at) {
+
+                    let reason = (message.lastUpdated.reason || '').trim();
+                    if (reason.length < 1) {
+                        reason = '<no reason>';
+                    }
+                    const title = message.lastUpdated.userName + ': ' + reason;
+
+                    messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning" title="${DOMHelpers.escapeStringForAttribute(title)}" uk-tooltip>Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
+                }
+                if (message.ip && message.ip.length) {
+
+                    messageDetailsContainer.appendRaw(`<samp>${DOMHelpers.escapeStringForContent(message.ip)}</samp>`);
+                }
             }
             {
                 let author = message.createdBy;
@@ -201,27 +238,6 @@ export module ThreadMessagesView {
 
                     authorContainer.appendRaw(`<div class="uk-text-center uk-float-left message-up-vote"><span class="uk-label" title="Up vote message" uk-tooltip>&plus; ${upVotesNr}</span></div>`);
                     authorContainer.appendRaw(`<div class="uk-text-center uk-float-right message-down-vote"><span class="uk-label" title="Down vote message" uk-tooltip>&minus; ${downVotesNr}</span></div>`);
-                }
-            }
-            {
-                let messageDetailsContainer = new DOMAppender('<div class="uk-card-badge message-time-container">', '</div>');
-                messageContainer.append(messageDetailsContainer);
-
-                messageDetailsContainer.appendRaw(`<span class="message-time">${DisplayHelpers.getDateTime(message.created)} </span>`);
-
-                if (message.lastUpdated && message.lastUpdated.at) {
-
-                    let reason = (message.lastUpdated.reason || '').trim();
-                    if (reason.length < 1) {
-                        reason = '<no reason>';
-                    }
-                    const title = message.lastUpdated.userName + ': ' + reason;
-
-                    messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning" title="${DOMHelpers.escapeStringForAttribute(title)}" uk-tooltip>Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
-                }
-                if (message.ip && message.ip.length) {
-
-                    messageDetailsContainer.appendRaw(`<samp>${DOMHelpers.escapeStringForContent(message.ip)}</samp>`);
                 }
             }
             {

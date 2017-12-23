@@ -188,11 +188,22 @@ html {
     .text-avatar-mixin(@avatar-size, 0.75);
 }
 
+.message-parent-thread {
+    font-size: 1.25rem;
+    left: 0;
+    top: 0;
+}
+
 .message-time-container {
-    margin-top: -24px;
+    margin-top: -24px !important;
     left: 0;
     right: 0;
     text-align: center;
+
+    &.right {
+        left: inherit;
+        text-align: right;
+    }
 }
 
 .message-time {
