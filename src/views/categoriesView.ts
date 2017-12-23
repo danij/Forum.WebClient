@@ -207,6 +207,20 @@ export module CategoriesView {
         let result = document.createElement('div');
         result.classList.add('categories-list-header');
 
+        if (privileges.canDeleteCategory(category.id)) {
+
+            let deleteLink = EditViews.createDeleteLink('Delete category');
+            result.appendChild(deleteLink);
+
+            deleteLink.addEventListener('click', () => {
+
+                if (EditViews.confirm(`Are you sure you want to delete the following category: ${category.name}?`)) {
+
+                    EditViews.goToHomePageIfOk(callback.deleteCategory(category.id));
+                }
+            });
+        }
+
         let breadcrumbsList = document.createElement('ul');
         result.appendChild(breadcrumbsList);
         breadcrumbsList.classList.add('uk-breadcrumb');
@@ -294,7 +308,8 @@ export module CategoriesView {
         element.appendChild(nameElement);
 
         let descriptionContainer = document.createElement('span');
-        result.appendChild(descriptionContainer);
+        element.appendChild(descriptionContainer);
+        descriptionContainer.classList.add('category-description');
 
         let descriptionElement = document.createElement('span');
         descriptionElement.innerText = category.description || '';
@@ -322,7 +337,7 @@ export module CategoriesView {
         if (privileges.canEditCategoryTags(category.id)) {
 
             let link = EditViews.createEditLink('Edit category tags', 'tag');
-            descriptionContainer.appendChild(link);
+            result.appendChild(link);
             link.addEventListener('click', async () => {
 
                 const allTags = await callback.getAllTags();
@@ -341,20 +356,6 @@ export module CategoriesView {
                 result.appendChild(TagsView.createTagElement(tag).toElement());
                 result.appendChild(document.createTextNode(' '));
             }
-        }
-
-        if (privileges.canDeleteCategory(category.id)) {
-
-            let deleteLink = EditViews.createDeleteLink('Delete category');
-            result.appendChild(deleteLink);
-
-            deleteLink.addEventListener('click', () => {
-
-                if (EditViews.confirm(`Are you sure you want to delete the following category: ${category.name}?`)) {
-
-                    EditViews.goToHomePageIfOk(callback.deleteCategory(category.id));
-                }
-            });
         }
 
         return result;
