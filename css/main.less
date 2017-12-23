@@ -76,12 +76,12 @@ html {
     box-sizing: border-box;
 
     .uk-container {
-        padding-left: 30px;
-        padding-right: 10px; //10px is specified as extra at the right
+        padding-left: 0;
+        padding-right: 0;
     }
 
     .uk-pagination {
-        margin-left: 30px;
+        margin-left: -30px !important;
     }
 }
 
@@ -510,16 +510,15 @@ html {
 }
 
 .users-list-header, .tags-list-header {
-    margin-left: 15px;
-    padding: 10px;
+    padding: 10px 0 10px 0;
 
     .order-by {
-        padding-top: 8.5px;
+        padding: 8.5px 0 0 15px;
     }
 }
 
 .users-list {
-    padding: 20px;
+    padding: 20px 0 20px 0;
     position: relative;
 
     .uk-card-body {
@@ -557,19 +556,17 @@ html {
 }
 
 .categories-list-header, .threads-list-header {
-    margin-left: 15px;
-    padding: 10px;
+    padding: 10px 0 10px 0;
 
     .order-by {
-        padding-top: 8.5px;
+        padding: 8.5px 0 0 15px;
     }
 }
 
 @latest-message-in-table-width: 280px;
 
 .categories-table {
-    margin-left: 15px;
-    padding: 10px 10px 0 10px;
+    padding: 10px 0 0 0;
 
     th:first-child, td:first-child {
         padding-left: 0;
@@ -666,9 +663,6 @@ html {
 }
 
 .threads-table {
-    margin-left: 15px;
-    padding: 10px 10px 0 10px;
-
     th:first-child, td:first-child {
         padding-left: 0;
     }
@@ -826,8 +820,6 @@ html {
 }
 
 .pagination-total {
-
-    padding-left: 20px;
 }
 
 .divider-margin {
@@ -854,7 +846,6 @@ html {
 
 .tag-page-header {
     margin-top: 10px;
-    margin-left: 10px;
 }
 
 .fix-content-margin {
@@ -879,9 +870,6 @@ html {
 }
 
 .tags-table {
-    margin-left: 15px;
-    padding: 10px 10px 0 10px;
-
     th:first-child, td:first-child {
         padding-left: 0;
     }
