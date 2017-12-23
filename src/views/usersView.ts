@@ -67,6 +67,12 @@ export module UsersView {
             DOMHelpers.escapeStringForAttribute(user.name) + '"';
     }
 
+    export function getSubscribedThreadsOfUserLinkContent(user: UserRepository.User): string {
+
+        return 'href="' + Pages.getSubscribedThreadsOfUserUrlFull(user) + '" ' + Views.UserSubscribedThreadsData + '="' +
+            DOMHelpers.escapeStringForAttribute(user.name) + '"';
+    }
+
     export function getMessagesOfUserLinkContent(user: UserRepository.User): string {
 
         return 'href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" ' + Views.UserMessagesData + '="' +
@@ -88,6 +94,12 @@ export module UsersView {
             '    <span class="uk-badge align-right">{nrOfMessages}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));
+
+        content.appendRaw(('<li>\n' +
+            '    <a class="align-left" ' + getSubscribedThreadsOfUserLinkContent(user) + '>Subscribed Threads</a>\n' +
+            '    <span class="uk-badge align-right">{nrOfSubscribedThreads}</span>\n' +
+            '    <div class="uk-clearfix"></div>\n' +
+            '</li>').replace('{nrOfSubscribedThreads}', DisplayHelpers.intToString(user.subscribedThreadCount)));
 
         content.appendRaw('<li class="uk-nav-header">Activity</li>');
         content.appendRaw(('<li>\n' +
@@ -208,6 +220,7 @@ export module UsersView {
         let result = usersListGrid.toElement();
 
         Views.setupThreadsOfUsersLinks(result);
+        Views.setupSubscribedThreadsOfUsersLinks(result);
         Views.setupThreadMessagesOfUsersLinks(result);
 
         return result;
@@ -255,6 +268,12 @@ export module UsersView {
             '    <div class="uk-float-right">{nrOfMessages}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));
+
+        wrapper.appendRaw(('<div>\n' +
+            '    <div class="uk-float-left"><a ' + getSubscribedThreadsOfUserLinkContent(user) + '>Subscribed</a></div>\n' +
+            '    <div class="uk-float-right">{nrOfSubscribedThreads}</div>\n' +
+            '    <div class="uk-clearfix"></div>\n' +
+            '</div>').replace('{nrOfSubscribedThreads}', DisplayHelpers.intToString(user.subscribedThreadCount)));
 
         wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left">Joined</div>\n' +
@@ -310,12 +329,19 @@ export module UsersView {
 
         let threadsLink = '<a ' + getThreadsOfUserLinkContent(user) + '>threads</a>';
         let threadMessagesLink = '<a ' + getMessagesOfUserLinkContent(user) + '>messages</a>';
+        let subscribedThreadsLink = '<a ' + getSubscribedThreadsOfUserLinkContent(user) + '>subscribed threads</a>';
 
         result.appendRaw(('<div>\n' +
-            `    <p>{threadCount} ${threadsLink} · {messageCount} ${threadMessagesLink} <span class="uk-label score-up">+ {upVotes}</span> <span class="uk-label score-down">− {downVotes}</span></p>\n` +
-            '    <p>Joined <span class="uk-text-meta">{joined}</span> · Last seen <span class="uk-text-meta">{lastSeen}</span></p>\n' +
+            `    <p>{threadCount} ${threadsLink}` +
+            ` · {messageCount} ${threadMessagesLink}` +
+            ` · {subscribedThreadCount} ${subscribedThreadsLink}` +
+            ` <span class="uk-label score-up">+ {upVotes}</span>` +
+            ` <span class="uk-label score-down">− {downVotes}</span></p>\n` +
+            '    <p>Joined <span class="uk-text-meta">{joined}</span>' +
+            ' · Last seen <span class="uk-text-meta">{lastSeen}</span></p>\n' +
             '</div>')
             .replace('{threadCount}', DisplayHelpers.intToString(user.threadCount))
+            .replace('{subscribedThreadCount}', DisplayHelpers.intToString(user.subscribedThreadCount))
             .replace('{messageCount}', DisplayHelpers.intToString(user.messageCount))
             .replace('{joined}', DisplayHelpers.getDateTime(user.created))
             .replace('{lastSeen}', DisplayHelpers.getDateTime(user.lastSeen))
@@ -336,6 +362,7 @@ export module UsersView {
         let resultElement = result.toElement();
 
         Views.setupThreadsOfUsersLinks(resultElement);
+        Views.setupSubscribedThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfUsersLinks(resultElement);
 
         return resultElement;

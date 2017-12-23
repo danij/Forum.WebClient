@@ -101,6 +101,25 @@ export module ThreadRepository {
         return result;
     }
 
+    export async function getSubscribedThreadsOfUser(user: UserRepository.User, request: GetThreadsRequest): Promise<ThreadCollection> {
+
+        let result = await RequestHandler.get({
+            path: 'threads/subscribed/user/' + encodeURIComponent(user.id),
+            query: request
+        }) as ThreadCollection;
+
+        if (result.threads && result.threads.length) {
+
+            for (let thread of result.threads) {
+
+                //createdBy might not be populated when querying threads of a user
+                thread.createdBy = thread.createdBy || user;
+            }
+        }
+
+        return result;
+    }
+
     export async function getThreadsOfCategory(category: CategoryRepository.Category,
                                                request: GetThreadsRequest): Promise<ThreadCollection> {
 

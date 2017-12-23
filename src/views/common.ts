@@ -262,6 +262,7 @@ export module Views {
 
     export const ThreadsWithTagData = 'data-tagname';
     export const UserThreadsData = 'data-threadusername';
+    export const UserSubscribedThreadsData = 'data-subscribedthreadusername';
     export const UserMessagesData = 'data-threadmessageusername';
 
     function threadsWithTagLinkClicked(ev: Event) {
@@ -280,6 +281,15 @@ export module Views {
         const userName = DOMHelpers.getLink(ev).getAttribute(UserThreadsData);
 
         new ThreadsPage().displayForUser(userName);
+    }
+
+    function subscribedThreadsOfUserLinkClicked(ev: Event) {
+
+        ev.preventDefault();
+
+        const userName = DOMHelpers.getLink(ev).getAttribute(UserSubscribedThreadsData);
+
+        new ThreadsPage().displaySubscribedByUser(userName);
     }
 
     function threadMessagesOfUserLinkClicked(ev: Event) {
@@ -340,6 +350,17 @@ export module Views {
 
             let link = links.item(i);
             link.addEventListener('click', threadsOfUserLinkClicked);
+        }
+    }
+
+    export function setupSubscribedThreadsOfUsersLinks(element: HTMLElement): void {
+
+        let links = element.querySelectorAll(`[${UserSubscribedThreadsData}]`);
+
+        for (let i = 0; i < links.length; ++i) {
+
+            let link = links.item(i);
+            link.addEventListener('click', subscribedThreadsOfUserLinkClicked);
         }
     }
 

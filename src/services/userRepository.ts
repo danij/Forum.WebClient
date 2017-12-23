@@ -15,6 +15,7 @@ export module UserRepository {
         lastSeen: number;
         threadCount: number;
         messageCount: number;
+        subscribedThreadCount: number;
         receivedUpVotes: number;
         receivedDownVotes: number;
     }

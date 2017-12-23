@@ -236,6 +236,7 @@ export module ThreadsView {
         Views.setupCategoryLinks(result);
         Views.setupThreadsWithTagsLinks(result);
         Views.setupThreadsOfUsersLinks(result);
+        Views.setupSubscribedThreadsOfUsersLinks(result);
         Views.setupThreadMessagesOfUsersLinks(result);
         Views.setupThreadMessagesOfThreadsLinks(result);
         Views.setupThreadMessagesOfMessageParentThreadLinks(result);
@@ -287,6 +288,7 @@ export module ThreadsView {
         let resultElement = result.toElement();
 
         Views.setupThreadsOfUsersLinks(resultElement);
+        Views.setupSubscribedThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfThreadsLinks(resultElement);
         Views.setupThreadMessagesOfMessageParentThreadLinks(resultElement);
 
@@ -470,6 +472,7 @@ export module ThreadsView {
 
         Views.setupThreadsWithTagsLinks(element);
         Views.setupThreadsOfUsersLinks(element);
+        Views.setupSubscribedThreadsOfUsersLinks(element);
         Views.setupCategoryLinks(element);
 
         return element;

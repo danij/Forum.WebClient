@@ -69,6 +69,7 @@ export module Pages {
     const threadIdRegex = /\/thread\/([^/]+)\/([^/]+)/;
     const threadMessageIdRegex = /\/message\/([^/]+)/;
     const userNameRegex = /\/user\/([^/]+)/;
+    const subscribedByUserNameRegex = /\/subscribed_by_user\/([^/]+)/;
     const categoryRootRegex = /^[\/]?category\/([^/]+)\/([^/]+)/;
 
     export function getOrderBy(url: string): string {
@@ -141,6 +142,16 @@ export module Pages {
         return null;
     }
 
+    export function getSubscribedByUserName(url: string): string {
+
+        let match = url.match(subscribedByUserNameRegex);
+        if (match && match.length) {
+
+            return decodeURIComponent(match[1]);
+        }
+        return null;
+    }
+
     export function getCategory(url: string): IdNamePair {
 
         let match = url.match(categoryRootRegex);
@@ -201,9 +212,19 @@ export module Pages {
         return getUrl(getThreadsOfUserUrl(user.name));
     }
 
+    export function getSubscribedThreadsOfUserUrlFull(user: UserRepository.User): string {
+
+        return getUrl(getSubscribedThreadsOfUserUrl(user.name));
+    }
+
     export function getThreadsOfUserUrl(name: string): string {
 
         return `threads/user/${encodeURIComponent(name)}`;
+    }
+
+    export function getSubscribedThreadsOfUserUrl(name: string): string {
+
+        return `threads/subscribed_by_user/${encodeURIComponent(name)}`;
     }
 
     export function getThreadMessagesOfUserUrlFull(user: UserRepository.User): string {

@@ -22,7 +22,9 @@ export class ThreadsPage implements Pages.Page {
     private tagName: string = null;
     private tag: TagRepository.Tag = null;
     private userName: string = null;
+    private subscribedByUserName: string = null;
     private user: UserRepository.User = null;
+    private subscribedByUser: UserRepository.User = null;
 
     display(): void {
 
@@ -37,20 +39,22 @@ export class ThreadsPage implements Pages.Page {
             }
             else if (this.userName && this.userName.length) {
 
-                this.user = await this.getCurrentUser();
+                this.user = await this.getUser(this.userName);
+            }
+            else if (this.subscribedByUserName && this.subscribedByUserName.length) {
+
+                this.subscribedByUser = await this.getUser(this.subscribedByUserName);
             }
 
-            let threadCollection = await (this.tag
-                ? this.getThreadsWithTag(this.tag)
-                : (this.user ? this.getThreadsOfUser(this.user) : this.getAllThreads()));
+            let threadCollection = await this.getThreadCollection();
             if (null == threadCollection) return;
 
             let elements = ThreadsView.createThreadsPageContent(threadCollection, {
-                orderBy: this.orderBy,
-                sortOrder: this.sortOrder,
-                tag: this.tag,
-                user: this.user
-            }, (value: number) => this.onPageNumberChange(value),
+                    orderBy: this.orderBy,
+                    sortOrder: this.sortOrder,
+                    tag: this.tag,
+                    user: this.user
+                }, (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber),
                 PageActions.getTagCallback(), Privileges.getTagPrivileges());
 
@@ -78,6 +82,15 @@ export class ThreadsPage implements Pages.Page {
         this.display();
     }
 
+    displaySubscribedByUser(userName: string): void {
+
+        if (userName && userName.length) {
+
+            this.subscribedByUserName = userName;
+        }
+        this.display();
+    }
+
     static loadPage(url: string): boolean {
 
         if (url.indexOf('threads/') != 0) return false;
@@ -89,9 +102,21 @@ export class ThreadsPage implements Pages.Page {
         page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
         page.tagName = Pages.getTagName(url);
         page.userName = Pages.getUserName(url);
+        page.subscribedByUserName = Pages.getSubscribedByUserName(url);
 
         page.display();
         return true;
+    }
+
+    private getThreadCollection(): Promise<ThreadRepository.ThreadCollection> {
+
+        return this.tag
+            ? this.getThreadsWithTag(this.tag)
+            : (this.user
+                ? this.getThreadsOfUser(this.user)
+                : (this.subscribedByUser
+                    ? this.getSubscribedThreadsOfUser(this.subscribedByUser)
+                    : this.getAllThreads()));
     }
 
     private getAllThreads(): Promise<ThreadRepository.ThreadCollection> {
@@ -121,23 +146,30 @@ export class ThreadsPage implements Pages.Page {
         } as ThreadRepository.GetThreadsRequest));
     }
 
+    private getSubscribedThreadsOfUser(user: UserRepository.User): Promise<ThreadRepository.ThreadCollection> {
+
+        return Pages.getOrShowError(ThreadRepository.getSubscribedThreadsOfUser(user, {
+            page: this.pageNumber,
+            orderBy: this.orderBy,
+            sort: this.sortOrder
+        } as ThreadRepository.GetThreadsRequest));
+    }
+
     private getCurrentTag(): Promise<TagRepository.Tag> {
 
         return Pages.getOrShowError(TagRepository.getTag(this.tagName));
     }
 
-    private getCurrentUser(): Promise<UserRepository.User> {
+    private getUser(userName: string): Promise<UserRepository.User> {
 
-        return Pages.getOrShowError(UserRepository.getUserByName(this.userName));
+        return Pages.getOrShowError(UserRepository.getUserByName(userName));
     }
 
     private refreshList(): void {
 
         Views.changeContent(document.querySelector('#pageContentContainer .threads-table'), async () => {
 
-            let threadCollection = await (this.tag
-                ? this.getThreadsWithTag(this.tag)
-                : (this.user ? this.getThreadsOfUser(this.user) : this.getAllThreads()));
+            let threadCollection = await this.getThreadCollection();
 
             if (null == threadCollection) return;
 
@@ -207,6 +239,10 @@ export class ThreadsPage implements Pages.Page {
 
             url = Pages.getThreadsOfUserUrl(this.userName);
         }
+        else if (this.subscribedByUserName && this.subscribedByUserName.length) {
+
+            url = Pages.getSubscribedThreadsOfUserUrl(this.subscribedByUserName);
+        }
 
         return Pages.appendToUrl(url, {
             orderBy: this.orderBy,
@@ -226,6 +262,10 @@ export class ThreadsPage implements Pages.Page {
         else if (this.userName && this.userName.length) {
 
             title = 'Threads added by ' + this.userName;
+        }
+        else if (this.subscribedByUserName && this.subscribedByUserName.length) {
+
+            title = 'Threads subscribed to by ' + this.subscribedByUserName;
         }
 
         title = Views.addPageNumber(title, this.pageNumber);

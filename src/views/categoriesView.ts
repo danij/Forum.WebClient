@@ -189,6 +189,7 @@ export module CategoriesView {
 
         Views.setupThreadsWithTagsLinks(result);
         Views.setupThreadsOfUsersLinks(result);
+        Views.setupSubscribedThreadsOfUsersLinks(result);
         Views.setupThreadMessagesOfUsersLinks(result);
         Views.setupThreadMessagesOfThreadsLinks(result);
         Views.setupThreadMessagesOfMessageParentThreadLinks(result);

@@ -69,6 +69,7 @@ export module ThreadMessagesView {
         let resultElement = result.toElement();
 
         Views.setupThreadsOfUsersLinks(resultElement);
+        Views.setupSubscribedThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfThreadsLinks(resultElement);
         Views.setupThreadMessagesOfMessageParentThreadLinks(resultElement);
@@ -250,6 +251,7 @@ export module ThreadMessagesView {
 
         adjustMessageContent(element);
         Views.setupThreadsOfUsersLinks(element);
+        Views.setupSubscribedThreadsOfUsersLinks(element);
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
