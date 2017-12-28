@@ -61,6 +61,8 @@ export module Privileges {
         canDeleteTag(id: string): Promise<boolean>;
 
         canEditTagName(id: string): Promise<boolean>;
+
+        canMergeTags(id: string): Promise<boolean>;
     }
 
     export class TagPrivilegesAllowAll implements ITagPrivileges {
@@ -74,6 +76,10 @@ export module Privileges {
         }
 
         canEditTagName(id: string): Promise<boolean> {
+            return Promise.resolve(true);
+        }
+
+        canMergeTags(id: string): Promise<boolean> {
             return Promise.resolve(true);
         }
     }

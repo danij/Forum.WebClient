@@ -30,6 +30,10 @@ export module PageActions {
         deleteTag(id: string): Promise<boolean>;
 
         editTagName(id: string, newName: string): Promise<boolean>;
+
+        mergeTags(sourceId: string, destinationId: string): Promise<boolean>;
+
+        getAllTags(): Promise<TagRepository.Tag[]>;
     }
 
     export interface IThreadCallback {
@@ -114,6 +118,16 @@ export module PageActions {
         editTagName(id: string, newName: string): Promise<boolean> {
 
             return Promise.resolve(true);
+        }
+
+        mergeTags(sourceId: string, destinationId: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        getAllTags(): Promise<TagRepository.Tag[]> {
+
+            return TagRepository.getTagsCached();
         }
     }
 

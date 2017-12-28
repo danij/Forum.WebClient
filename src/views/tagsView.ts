@@ -262,6 +262,20 @@ export module TagsView {
         badge.setAttribute('uk-icon', 'icon: tag');
         badge.innerText = tag.name;
 
+        if (privileges.canMergeTags(tag.id)) {
+
+            let link = EditViews.createEditLink('Merge tags', 'git-fork');
+            container.appendChild(link);
+            link.addEventListener('click', async () => {
+
+                const allTags = await callback.getAllTags();
+                TagsView.showSelectSingleTagDialog(allTags, (selected: string) => {
+
+                    EditViews.goToTagsPageIfOk(callback.mergeTags(tag.id, selected));
+                });
+            });
+        }
+
         let threadCount = document.createElement('span');
         container.appendChild(threadCount);
         threadCount.innerText = `${tag.threadCount} threads`;
@@ -378,6 +392,43 @@ export module TagsView {
         }
     }
 
+    export function showSelectSingleTagDialog(allTags: TagRepository.Tag[], onSave: (selected: string) => void): void {
+
+        allTags.sort((first: TagRepository.Tag, second: TagRepository.Tag) => {
+
+            return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
+        });
+
+        let modal = document.getElementById('select-single-tag-modal');
+        Views.showModal(modal);
+
+        let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
+        let selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
+
+        saveButton = DOMHelpers.removeEventListeners(saveButton);
+        saveButton.addEventListener('click', (ev) => {
+
+            ev.preventDefault();
+
+            let selected = selectElement.selectedOptions;
+            if (selected.length) {
+
+                const id = selected[0].getAttribute('value');
+                onSave(id);
+            }
+        });
+
+        selectElement.innerHTML = '';
+
+        for (let tag of allTags) {
+
+            let option = document.createElement('option');
+            option.setAttribute('value', tag.id);
+            option.innerText = tag.name;
+
+            selectElement.appendChild(option);
+        }
+    }
 
     function createAddNewTagElement(callback: ITagCallback): HTMLElement {
 
