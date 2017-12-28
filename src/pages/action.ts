@@ -1,5 +1,6 @@
 import {TagRepository} from "../services/tagRepository";
 import {ThreadRepository} from "../services/threadRepository";
+import {UserRepository} from "../services/userRepository";
 
 export module PageActions {
 
@@ -56,6 +57,8 @@ export module PageActions {
         mergeThreads(sourceId: string, destinationId: string): Promise<boolean>;
 
         searchThreadsByName(name: string): Promise<ThreadRepository.Thread[]>;
+
+        getSubscribedUsers(id: string): Promise<UserRepository.User[]>;
 
         getAllTags(): Promise<TagRepository.Tag[]>;
     }
@@ -187,6 +190,11 @@ export module PageActions {
             catch {
                 return [];
             }
+        }
+
+        getSubscribedUsers(id: string): Promise<UserRepository.User[]> {
+
+            return UserRepository.getUsersSubscribedToThread(id);
         }
 
         getAllTags(): Promise<TagRepository.Tag[]> {

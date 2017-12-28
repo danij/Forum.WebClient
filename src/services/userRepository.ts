@@ -61,4 +61,18 @@ export module UserRepository {
             path: 'users/name/' + encodeURIComponent(name)
         }) as SingleUser).user;
     }
+
+    export async function getUsersSubscribedToThread(threadId: string): Promise<User[]> {
+
+        let collection = (await RequestHandler.get({
+            path: 'users/subscribed/thread/' + encodeURIComponent(threadId)
+        }) as UserCollection);
+
+        collection.users = collection.users || [];
+        collection.users.sort((first, second) => {
+
+            return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
+        });
+        return collection.users;
+    }
 }

@@ -477,6 +477,11 @@ export module ThreadsView {
             let subscribedUsersLink = document.createElement('a');
             details.appendChild(subscribedUsersLink);
             subscribedUsersLink.innerText = `${DisplayHelpers.intToString(thread.subscribedUsersCount)} subscribed users`;
+            subscribedUsersLink.addEventListener('click', (ev) => {
+
+                ev.preventDefault();
+                showSubscribedUsers(thread.id, callback);
+            })
         }
         {
             card.appendChild(DOMHelpers.parseHTML('<div class="uk-clearfix"></div>'));
@@ -546,5 +551,19 @@ export module ThreadsView {
 
             }, 200);
         });
+    }
+
+    async function showSubscribedUsers(threadId: string, callback: IThreadCallback) {
+
+        let modal = document.getElementById('subscribed-users-modal');
+        let content = modal.getElementsByClassName('subscribed-users-content')[0];
+
+        content.innerHTML = '';
+
+        Views.showModal(modal);
+
+        const users = await callback.getSubscribedUsers(threadId);
+
+        content.appendChild(UsersView.createUserListContent(users));
     }
 }
