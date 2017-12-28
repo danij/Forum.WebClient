@@ -66,6 +66,12 @@ export module ThreadRepository {
         sort: string;
     }
 
+    interface ThreadSearchResult {
+
+        index: number;
+        pageSize: number;
+    }
+
     export async function getThreads(request: GetThreadsRequest): Promise<ThreadCollection> {
 
         return await RequestHandler.get({
@@ -135,6 +141,27 @@ export module ThreadRepository {
             path: 'threads/id/' + encodeURIComponent(id),
             query: request
         }) as ThreadWithMessagesResponse;
+    }
+
+    export async function searchThreadsByName(name: string): Promise<Thread[]> {
+
+        if (name && name.length) {
+
+            let searchResult = await RequestHandler.get({
+                path: 'threads/search/' + encodeURIComponent(name),
+                query: {}
+            }) as ThreadSearchResult;
+            const pageNumber = Math.floor(searchResult.index / searchResult.pageSize);
+            const firstIndexInPage = pageNumber * searchResult.pageSize;
+
+            let collection = await getThreads({
+                page: pageNumber,
+                orderBy: 'name',
+                sort: 'ascending'
+            });
+            return collection.threads;
+        }
+        return Promise.resolve([]);
     }
 
     function appendPinnedThreadCollection(collection: PinnedThreadCollection): ThreadCollection {

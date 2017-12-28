@@ -95,6 +95,8 @@ export module Privileges {
         canEditThreadPinDisplayOrder(id: string): Promise<boolean>;
 
         canEditThreadTags(id: string): Promise<boolean>;
+
+        canMergeThreads(id: string): Promise<boolean>;
     }
 
     export class ThreadPrivilegesAllowAll implements IThreadPrivileges {
@@ -120,6 +122,11 @@ export module Privileges {
         }
 
         canEditThreadTags(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canMergeThreads(id: string): Promise<boolean> {
 
             return Promise.resolve(true);
         }

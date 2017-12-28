@@ -88,9 +88,9 @@ export module DOMHelpers {
         return element as HTMLAnchorElement;
     }
 
-    export function removeEventListeners(element: HTMLElement): HTMLElement {
+    export function removeEventListeners<T extends HTMLElement>(element: T): T {
 
-        let newElement = element.cloneNode(true) as HTMLElement;
+        let newElement = element.cloneNode(true) as T;
         element.parentNode.replaceChild(newElement, element);
 
         return newElement;

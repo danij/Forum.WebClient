@@ -11,6 +11,7 @@ import {Privileges} from "../services/privileges";
 import {PageActions} from "../pages/action";
 import {EditViews} from "./edit";
 import {ViewsExtra} from "./extra";
+import {ThreadMessagesPage} from "../pages/threadMessagesPage";
 
 export module ThreadsView {
 
@@ -345,6 +346,20 @@ export module ThreadsView {
                 }
             });
 
+            if (privileges.canMergeThreads(thread.id)) {
+
+                let link = EditViews.createEditLink('Merge threads', 'git-fork', []);
+                actions.appendChild(link);
+                link.addEventListener('click', async () => {
+
+                    showSelectSingleThreadDialog(callback, async (selected: string) => {
+
+                        await callback.mergeThreads(thread.id, selected);
+                        new ThreadMessagesPage().displayForThread(selected);
+                    });
+                });
+            }
+
             if (privileges.canDeleteThread(thread.id)) {
 
                 let deleteLink = EditViews.createDeleteLink('Delete thread', '');
@@ -473,5 +488,63 @@ export module ThreadsView {
         Views.setupCategoryLinks(element);
 
         return element;
+    }
+
+    function showSelectSingleThreadDialog(callback: IThreadCallback, onSave: (selected: string) => void): void {
+
+        let modal = document.getElementById('select-single-thread-modal');
+        Views.showModal(modal);
+
+        let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
+        let searchByNameElement = document.getElementById('searchThreadByName') as HTMLInputElement;
+        let selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
+        let selectedIdElement = document.getElementById('selectedThreadId') as HTMLInputElement;
+
+        saveButton = DOMHelpers.removeEventListeners(saveButton);
+        saveButton.addEventListener('click', (ev) => {
+
+            ev.preventDefault();
+
+            let selectedId = selectedIdElement.value.trim();
+            if (selectedId.length) {
+
+                onSave(selectedId);
+            }
+        });
+
+        let searchTimeout: number;
+
+        searchByNameElement.addEventListener('keyup', () => {
+
+            if (searchTimeout) {
+
+                clearTimeout(searchTimeout);
+            }
+            searchTimeout = setTimeout(async () => {
+
+                selectElement.innerHTML = '';
+                selectElement = DOMHelpers.removeEventListeners(selectElement);
+
+                const threads = await callback.searchThreadsByName(searchByNameElement.value);
+                for (const thread of threads) {
+
+                    let option = document.createElement('option');
+                    option.setAttribute('value', thread.id);
+                    option.innerText = thread.name;
+                    option.setAttribute('title', thread.createdBy.name + ' @ ' + DisplayHelpers.getDateTime(thread.created));
+
+                    selectElement.appendChild(option);
+                }
+
+                selectElement.addEventListener('change', () => {
+
+                    if (selectElement.selectedOptions && selectElement.selectedOptions.length) {
+
+                        selectedIdElement.value = selectElement.selectedOptions[0].value;
+                    }
+                });
+
+            }, 200);
+        });
     }
 }

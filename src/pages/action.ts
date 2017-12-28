@@ -1,4 +1,5 @@
 import {TagRepository} from "../services/tagRepository";
+import {ThreadRepository} from "../services/threadRepository";
 
 export module PageActions {
 
@@ -51,6 +52,10 @@ export module PageActions {
         subscribeToThread(id: string): Promise<boolean>;
 
         unSubscribeFromThread(id: string): Promise<boolean>;
+
+        mergeThreads(sourceId: string, destinationId: string): Promise<boolean>;
+
+        searchThreadsByName(name: string): Promise<ThreadRepository.Thread[]>;
 
         getAllTags(): Promise<TagRepository.Tag[]>;
     }
@@ -166,6 +171,22 @@ export module PageActions {
         unSubscribeFromThread(id: string): Promise<boolean> {
 
             return Promise.resolve(true);
+        }
+
+        mergeThreads(sourceId: string, destinationId: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        async searchThreadsByName(name: string): Promise<ThreadRepository.Thread[]> {
+
+            try {
+
+                return await ThreadRepository.searchThreadsByName(name);
+            }
+            catch {
+                return [];
+            }
         }
 
         getAllTags(): Promise<TagRepository.Tag[]> {

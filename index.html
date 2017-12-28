@@ -194,6 +194,40 @@ MathJax.Hub.Config({
     </div>
 </div>
 
+<div id="select-single-thread-modal" uk-modal>
+    <div class="uk-modal-dialog uk-margin-auto-vertical">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Select Thread</h2>
+        </div>
+        <div class="uk-modal-body">
+            <form class="uk-form-stacked">
+                <div>
+                    <label class="uk-form-label" for="searchThreadByName">Search thread by name:</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" id="searchThreadByName" />
+                    </div>
+                </div>
+                <div class="uk-margin">
+                    <select class="uk-select" size="7">
+                    </select>
+                </div>
+                <div>
+                    <label class="uk-form-label" for="selectedThreadId">Selected thread id:</label>
+                    <div class="uk-form-controls">
+                        <input class="uk-input" id="selectedThreadId" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="uk-modal-footer uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            <button class="uk-button uk-button-primary uk-modal-close" type="button">Save</button>
+        </div>
+    </div>
+</div>
+
+
 <div class="page-footer">
     <span class="uk-text-meta">&copy; 2017
         &middot; <a href="#">Terms of Service</a>

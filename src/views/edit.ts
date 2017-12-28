@@ -61,14 +61,21 @@ export module EditViews {
         return result;
     }
 
-    export function createEditLink(tooltip: string, icon: string = 'file-edit'): HTMLAnchorElement {
+    export function createEditLink(tooltip: string, icon: string = 'file-edit',
+                                   classes: string[] = ['edit-link']): HTMLAnchorElement {
 
         let result = document.createElement('a');
 
         let span = document.createElement('span');
 
         span.classList.add('uk-icon');
-        span.classList.add('edit-link');
+        if (classes && classes.length) {
+
+            for (let cls of classes) {
+
+                span.classList.add(cls);
+            }
+        }
         span.setAttribute('uk-icon', 'icon: ' + icon);
         span.setAttribute('uk-tooltip', '');
         span.setAttribute('title', tooltip);
