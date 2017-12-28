@@ -63,6 +63,21 @@ export module PageActions {
         getAllTags(): Promise<TagRepository.Tag[]>;
     }
 
+    export interface IUserCallback {
+
+        editUserName(id: string, newName: string): Promise<boolean>;
+
+        editUserTitle(id: string, newTitle: string): Promise<boolean>;
+
+        editUserSignature(id: string, newSignature: string): Promise<boolean>;
+
+        deleteUserLogo(id: string): Promise<boolean>;
+
+        uploadUserLogo(id: string): Promise<boolean>;
+
+        deleteUser(id: string): Promise<boolean>;
+    }
+
     class CategoryCallback implements ICategoryCallback {
 
         createRootCategory(name: string): Promise<boolean> {
@@ -203,6 +218,39 @@ export module PageActions {
         }
     }
 
+    class UserCallback implements IUserCallback {
+
+        editUserName(id: string, newName: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        editUserTitle(id: string, newTitle: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        editUserSignature(id: string, newSignature: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        deleteUserLogo(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        uploadUserLogo(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        deleteUser(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+    }
+
     export function getCategoryCallback(): ICategoryCallback {
 
         return new CategoryCallback();
@@ -216,5 +264,10 @@ export module PageActions {
     export function getThreadCallback(): IThreadCallback {
 
         return new ThreadCallback();
+    }
+
+    export function getUserCallback(): IUserCallback {
+
+        return new UserCallback();
     }
 }

@@ -65,8 +65,9 @@ export class ThreadMessagesPage implements Pages.Page {
                 thread: this.thread,
                 user: this.user
             }, (value: number) => this.onPageNumberChange(value),
-                (pageNumber: number) => this.getLinkForPage(pageNumber),
-                this.thread, PageActions.getThreadCallback(), Privileges.getThreadPrivileges());
+                (pageNumber: number) => this.getLinkForPage(pageNumber), this.thread,
+                PageActions.getThreadCallback(), Privileges.getThreadPrivileges(),
+                PageActions.getUserCallback(), Privileges.getUserPrivileges());
 
             this.setupSortControls(elements.sortControls);
 

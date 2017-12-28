@@ -16,6 +16,8 @@ export module ThreadMessagesView {
     import DOMAppender = DOMHelpers.DOMAppender;
     import IThreadPrivileges = Privileges.IThreadPrivileges;
     import IThreadCallback = PageActions.IThreadCallback;
+    import IUserPrivileges = Privileges.IUserPrivileges;
+    import IUserCallback = PageActions.IUserCallback;
 
     export class ThreadMessagesPageContent {
 
@@ -83,7 +85,9 @@ export module ThreadMessagesView {
                                                     getLinkForPage: Views.GetLinkForPageCallback,
                                                     thread: ThreadRepository.Thread,
                                                     threadCallback: IThreadCallback,
-                                                    threadPrivileges: IThreadPrivileges): ThreadMessagesPageContent {
+                                                    threadPrivileges: IThreadPrivileges,
+                                                    userCallback: IUserCallback,
+                                                    userPrivileges: IUserPrivileges): ThreadMessagesPageContent {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCollection();
 
@@ -97,7 +101,7 @@ export module ThreadMessagesView {
         }
         else if (info.user) {
 
-            resultList.appendChild(UsersView.createUserPageHeader(info.user));
+            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges));
             resultList.appendChild(result.sortControls = createThreadMessageListSortControls(info));
         }
 

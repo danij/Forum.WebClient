@@ -56,7 +56,8 @@ export class ThreadsPage implements Pages.Page {
                     user: this.user || this.subscribedByUser
                 }, (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber),
-                PageActions.getTagCallback(), Privileges.getTagPrivileges());
+                PageActions.getTagCallback(), Privileges.getTagPrivileges(),
+                PageActions.getUserCallback(), Privileges.getUserPrivileges());
 
             this.setupSortControls(elements.sortControls);
 

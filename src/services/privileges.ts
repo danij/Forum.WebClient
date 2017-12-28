@@ -19,7 +19,7 @@ export module Privileges {
         canEditCategoryTags(id: string): Promise<boolean>;
     }
 
-    export class CategoryPrivilegesAllowAll implements ICategoryPrivileges {
+    class CategoryPrivilegesAllowAll implements ICategoryPrivileges {
 
         canAddNewRootCategory(): Promise<boolean> {
             return Promise.resolve(true);
@@ -65,7 +65,7 @@ export module Privileges {
         canMergeTags(id: string): Promise<boolean>;
     }
 
-    export class TagPrivilegesAllowAll implements ITagPrivileges {
+    class TagPrivilegesAllowAll implements ITagPrivileges {
 
         canAddNewTag(): Promise<boolean> {
             return Promise.resolve(true);
@@ -99,7 +99,7 @@ export module Privileges {
         canMergeThreads(id: string): Promise<boolean>;
     }
 
-    export class ThreadPrivilegesAllowAll implements IThreadPrivileges {
+    class ThreadPrivilegesAllowAll implements IThreadPrivileges {
 
         canAddNewThread(): Promise<boolean> {
 
@@ -132,6 +132,47 @@ export module Privileges {
         }
     }
 
+    export interface IUserPrivileges {
+
+        canEditUserName(id: string): Promise<boolean>;
+
+        canEditUserTitle(id: string): Promise<boolean>;
+
+        canEditUserSignature(id: string): Promise<boolean>;
+
+        canEditUserLogo(id: string): Promise<boolean>;
+
+        canDeleteUser(id: string): Promise<boolean>;
+    }
+
+    class UserPrivilegesAllowAll implements IUserPrivileges {
+
+        canEditUserName(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canEditUserTitle(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canEditUserSignature(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canEditUserLogo(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canDeleteUser(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+    }
+
     export function getCategoryPrivileges(): ICategoryPrivileges {
 
         return new CategoryPrivilegesAllowAll();
@@ -145,5 +186,10 @@ export module Privileges {
     export function getThreadPrivileges(): IThreadPrivileges {
 
         return new ThreadPrivilegesAllowAll();
+    }
+
+    export function getUserPrivileges(): IUserPrivileges {
+
+        return new UserPrivilegesAllowAll();
     }
 }

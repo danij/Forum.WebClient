@@ -22,6 +22,8 @@ export module ThreadsView {
     import IThreadCallback = PageActions.IThreadCallback;
     import refreshMath = ViewsExtra.refreshMath;
     import reloadPageIfOk = EditViews.reloadPageIfOk;
+    import IUserCallback = PageActions.IUserCallback;
+    import IUserPrivileges = Privileges.IUserPrivileges;
 
     export class ThreadsPageContent {
 
@@ -31,18 +33,14 @@ export module ThreadsView {
         list: HTMLElement
     }
 
-    export interface ThreadPageDisplayInfo extends Views.SortInfo {
-
-        tag?: TagRepository.Tag,
-        user?: UserRepository.User
-    }
-
     export function createThreadsPageContent(collection: ThreadRepository.ThreadCollection,
                                              info: ThreadPageDisplayInfo,
                                              onPageNumberChange: Views.PageNumberChangeCallback,
                                              getLinkForPage: Views.GetLinkForPageCallback,
                                              tagCallback: ITagCallback,
-                                             tagPrivileges: ITagPrivileges) {
+                                             tagPrivileges: ITagPrivileges,
+                                             userCallback: IUserCallback,
+                                             userPrivileges: IUserPrivileges) {
 
         collection = collection || ThreadRepository.defaultThreadCollection();
 
@@ -56,7 +54,7 @@ export module ThreadsView {
         }
         else if (info.user) {
 
-            resultList.appendChild(UsersView.createUserPageHeader(info.user));
+            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges));
         }
 
         resultList.appendChild(result.sortControls = createThreadListSortControls(info));
@@ -73,6 +71,12 @@ export module ThreadsView {
 
         result.list = resultList;
         return result;
+    }
+
+    export interface ThreadPageDisplayInfo extends Views.SortInfo {
+
+        tag?: TagRepository.Tag,
+        user?: UserRepository.User
     }
 
     function createThreadListSortControls(info: Views.SortInfo): HTMLElement {

@@ -3,10 +3,17 @@ import {DisplayHelpers} from "../helpers/displayHelpers";
 import {Views} from "./common";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
+import {PageActions} from "../pages/action";
+import {Privileges} from "../services/privileges";
+import {EditViews} from "./edit";
+import {UsersPage} from "../pages/usersPage";
 
 export module UsersView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
+    import IUserCallback = PageActions.IUserCallback;
+    import IUserPrivileges = Privileges.IUserPrivileges;
+    import reloadPageIfOk = EditViews.reloadPageIfOk;
 
     function getUserLogoColor(id: string): string {
 
@@ -308,7 +315,9 @@ export module UsersView {
         return result;
     }
 
-    export function createUserPageHeader(user: UserRepository.User): HTMLElement {
+    export function createUserPageHeader(user: UserRepository.User,
+                                         callback: IUserCallback,
+                                         privileges: IUserPrivileges): HTMLElement {
 
         let result = new DOMAppender('<div class="user-header">', '</div>');
         let left = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
@@ -338,7 +347,8 @@ export module UsersView {
             ` <span class="uk-label score-up">+ {upVotes}</span>` +
             ` <span class="uk-label score-down">− {downVotes}</span></p>\n` +
             '    <p>Joined <span class="uk-text-meta">{joined}</span>' +
-            ' · Last seen <span class="uk-text-meta">{lastSeen}</span></p>\n' +
+            ' · Last seen <span class="uk-text-meta">{lastSeen}</span>\n' +
+            ' · Signature: <span class="uk-text-meta">{signature}</span></p>\n' +
             '</div>')
             .replace('{threadCount}', DisplayHelpers.intToString(user.threadCount))
             .replace('{subscribedThreadCount}', DisplayHelpers.intToString(user.subscribedThreadCount))
@@ -347,16 +357,48 @@ export module UsersView {
             .replace('{lastSeen}', DisplayHelpers.getDateTime(user.lastSeen))
             .replace('{upVotes}', DisplayHelpers.intToString(user.receivedUpVotes))
             .replace('{downVotes}', DisplayHelpers.intToString(user.receivedDownVotes))
+            .replace('{signature}', (user.signature && user.signature.length) ? user.signature : '–')
         );
+        {
+            let editContent = [];
 
-        if (user.info && user.info.length) {
+            if (privileges.canEditUserName(user.id)) {
 
-            let info = new DOMAppender('<div class="uk-text-primary uk-text-small">', '</div>');
-            result.append(info);
+                editContent.push('<a class="edit-user-name-link">Edit name</a>');
+            }
+            if (privileges.canEditUserTitle(user.id)) {
 
-            info.appendString(user.info);
+                editContent.push('<a class="edit-user-title-link">Edit title</a>');
+            }
+            if (privileges.canEditUserSignature(user.id)) {
+
+                editContent.push('<a class="edit-user-signature-link">Edit signature</a>');
+            }
+            if (privileges.canEditUserLogo(user.id)) {
+
+                editContent.push('<a class="clear-user-logo-link">Remove logo</a>');
+                editContent.push('<a class="edit-user-logo-link">Upload new logo</a>');
+            }
+            if (privileges.canDeleteUser(user.id)) {
+
+                editContent.push('<a class="delete-user-link"><span class="uk-icon" uk-icon="icon: trash"></span></a>');
+            }
+
+            if (user.info && user.info.length) {
+
+                let info = new DOMAppender('<div class="uk-text-primary uk-text-small">', '</div>');
+                result.append(info);
+
+                info.appendString(user.info);
+            }
+
+            if (editContent.length) {
+
+                let editParagraph = new DOMAppender('<p>', '<p>');
+                result.append(editParagraph);
+                editParagraph.appendRaw(editContent.join(' · '));
+            }
         }
-
         result.appendRaw('<div class="uk-clearfix"></div>');
 
         let resultElement = result.toElement();
@@ -364,6 +406,58 @@ export module UsersView {
         Views.setupThreadsOfUsersLinks(resultElement);
         Views.setupSubscribedThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfUsersLinks(resultElement);
+
+        resultElement.getElementsByClassName('edit-user-name-link')[0].addEventListener('click', (ev) =>{
+
+            ev.preventDefault();
+            const name = EditViews.getInput('Edit user name', user.name);
+            if (name && name.length && (name != user.name)) {
+
+                reloadPageIfOk(callback.editUserName(user.id, name));
+            }
+        });
+        resultElement.getElementsByClassName('edit-user-title-link')[0].addEventListener('click', (ev) =>{
+
+            ev.preventDefault();
+            const title = EditViews.getInput('Edit user title', user.title);
+            if (title && title.length && (title != user.title)) {
+
+                reloadPageIfOk(callback.editUserTitle(user.id, title));
+            }
+        });
+        resultElement.getElementsByClassName('edit-user-signature-link')[0].addEventListener('click', (ev) =>{
+
+            ev.preventDefault();
+            const signature = EditViews.getInput('Edit user signature', user.signature);
+            if (signature && signature.length && (signature != user.signature)) {
+
+                reloadPageIfOk(callback.editUserSignature(user.id, signature));
+            }
+        });
+        resultElement.getElementsByClassName('clear-user-logo-link')[0].addEventListener('click', (ev) =>{
+
+            ev.preventDefault();
+            if (EditViews.confirm('Are you sure you want to delete ' + user.name + "'s logo?")) {
+
+                reloadPageIfOk(callback.deleteUserLogo(user.id));
+            }
+        });
+        resultElement.getElementsByClassName('edit-user-logo-link')[0].addEventListener('click', (ev) =>{
+
+            ev.preventDefault();
+            //TODO
+        });
+        resultElement.getElementsByClassName('delete-user-link')[0].addEventListener('click', async (ev) =>{
+
+            ev.preventDefault();
+            if (EditViews.confirm('Are you sure you want to delete the user "' + user.name + '"?')) {
+
+                if (await callback.deleteUser(user.id)) {
+
+                    (new UsersPage).display();
+                }
+            }
+        });
 
         return resultElement;
     }
