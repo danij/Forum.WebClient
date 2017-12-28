@@ -47,11 +47,7 @@ export module Pages {
         }
         catch (ex) {
 
-            UIkit.notification({
-                message: 'An error has occurred: ' + ex.message,
-                status: 'primary',
-                timeout: 3000
-            });
+            Views.showPrimaryNotification('An error has occurred: ' + ex.message);
             return null;
         }
     }

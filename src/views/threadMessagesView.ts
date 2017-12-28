@@ -10,6 +10,8 @@ import {DisplayHelpers} from "../helpers/displayHelpers";
 import {ViewsExtra} from "./extra";
 import {Privileges} from "../services/privileges";
 import {PageActions} from "../pages/action";
+import {EditViews} from "./edit";
+import {ThreadMessagesPage} from "../pages/threadMessagesPage";
 
 export module ThreadMessagesView {
 
@@ -18,6 +20,9 @@ export module ThreadMessagesView {
     import IThreadCallback = PageActions.IThreadCallback;
     import IUserPrivileges = Privileges.IUserPrivileges;
     import IUserCallback = PageActions.IUserCallback;
+    import IThreadMessageCallback = PageActions.IThreadMessageCallback;
+    import IThreadMessagePrivileges = Privileges.IThreadMessagePrivileges;
+    import reloadPageIfOk = EditViews.reloadPageIfOk;
 
     export class ThreadMessagesPageContent {
 
@@ -86,6 +91,8 @@ export module ThreadMessagesView {
                                                     thread: ThreadRepository.Thread,
                                                     threadCallback: IThreadCallback,
                                                     threadPrivileges: IThreadPrivileges,
+                                                    threadMessageCallback: IThreadMessageCallback,
+                                                    threadMessagePrivileges: IThreadMessagePrivileges,
                                                     userCallback: IUserCallback,
                                                     userPrivileges: IUserPrivileges): ThreadMessagesPageContent {
 
@@ -110,7 +117,8 @@ export module ThreadMessagesView {
 
         let listContainer = document.createElement('div');
         listContainer.classList.add('thread-message-list');
-        listContainer.appendChild(createThreadMessageList(collection, thread));
+        listContainer.appendChild(createThreadMessageList(collection, threadMessageCallback, threadMessagePrivileges,
+            threadCallback, threadPrivileges, thread));
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
@@ -137,6 +145,10 @@ export module ThreadMessagesView {
     }
 
     export function createThreadMessageList(collection: ThreadMessageRepository.ThreadMessageCollection,
+                                            callback: IThreadMessageCallback,
+                                            privileges: IThreadMessagePrivileges,
+                                            threadCallback: IThreadCallback,
+                                            threadPrivileges: IThreadPrivileges,
                                             thread?: ThreadRepository.Thread): HTMLElement {
 
         const messages = collection.messages || [];
@@ -245,15 +257,27 @@ export module ThreadMessagesView {
                 }
             }
             {
-                /*
-        <div class="message-actions">
-            <a uk-icon="icon: file-edit" href="editMessage" title="Edit message content" uk-tooltip></a>
-            <a uk-icon="icon: move" href="moveMessage" title="Move to different thread" uk-tooltip></a>
-            <a uk-icon="icon: trash" href="deleteMessage" title="Delete message" uk-tooltip></a>
-            <a uk-icon="icon: warning" href="commentMessage" title="Flag & comment" uk-tooltip></a>
-            <a uk-icon="icon: commenting" href="quoteMessage" title="Quote content" uk-tooltip></a>
-        </div>
-                 */
+                let actions = new DOMAppender('<div class="message-actions">', '</div>');
+                messageContainer.append(actions);
+                let messageId = DOMHelpers.escapeStringForAttribute(message.id);
+
+                if (privileges.canEditThreadMessageContent(message.id)) {
+
+                    actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}" uk-tooltip></a>`);
+                }
+                if (privileges.canMoveThreadMessage(message.id)) {
+
+                    actions.appendRaw(`<a uk-icon="icon: move" class="move-thread-message-link" title="Move to different thread" data-message-id="${messageId}" uk-tooltip></a>`);
+                }
+                if (privileges.canDeleteThreadMessage(message.id)) {
+
+                    actions.appendRaw(`<a uk-icon="icon: trash" class="delete-thread-message-link" title="Delete message" data-message-id="${messageId}" uk-tooltip></a>`);
+                }
+                if (privileges.canCommentThreadMessage(message.id)) {
+
+                    actions.appendRaw(`<a uk-icon="icon: warning" class="comment-thread-message-link" title="Flag & comment" data-message-id="${messageId}" uk-tooltip></a>`);
+                }
+                actions.appendRaw(`<a uk-icon="icon: commenting" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}" uk-tooltip></a>`);
             }
             {
                 let content = new DOMAppender('<div class="message-content">', '</div>');
@@ -274,6 +298,43 @@ export module ThreadMessagesView {
         Views.setupSubscribedThreadsOfUsersLinks(element);
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
+
+        element.getElementsByClassName('move-thread-message-link')[0].addEventListener('click', async (ev) => {
+
+            ev.preventDefault();
+            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+
+            ThreadsView.showSelectSingleThreadDialog(threadCallback, async (selected: string) => {
+
+                reloadPageIfOk(callback.moveThreadMessage(messageId, selected));
+            });
+        });
+
+        element.getElementsByClassName('delete-thread-message-link')[0].addEventListener('click', async (ev) => {
+
+            ev.preventDefault();
+            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+
+            if (EditViews.confirm('Are you sure you want to delete the selected message?')) {
+
+                reloadPageIfOk(callback.deleteThreadMessage(messageId));
+            }
+        });
+
+        element.getElementsByClassName('comment-thread-message-link')[0].addEventListener('click', async (ev) => {
+
+            ev.preventDefault();
+            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+
+            const comment = EditViews.getInput('Please enter a comment for the selected message');
+            if (comment && comment.length) {
+
+                if (await callback.commentThreadMessage(messageId, comment)) {
+
+                    Views.showPrimaryNotification('Comment sent!');
+                }
+            }
+        });
 
         return element;
     }

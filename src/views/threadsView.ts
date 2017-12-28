@@ -500,7 +500,7 @@ export module ThreadsView {
         return element;
     }
 
-    function showSelectSingleThreadDialog(callback: IThreadCallback, onSave: (selected: string) => void): void {
+    export function showSelectSingleThreadDialog(callback: IThreadCallback, onSave: (selected: string) => void): void {
 
         let modal = document.getElementById('select-single-thread-modal');
         Views.showModal(modal);
@@ -509,6 +509,10 @@ export module ThreadsView {
         let searchByNameElement = document.getElementById('searchThreadByName') as HTMLInputElement;
         let selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
         let selectedIdElement = document.getElementById('selectedThreadId') as HTMLInputElement;
+
+        searchByNameElement.value = '';
+        selectElement.innerHTML = '';
+        selectedIdElement.value = '';
 
         saveButton = DOMHelpers.removeEventListeners(saveButton);
         saveButton.addEventListener('click', (ev) => {

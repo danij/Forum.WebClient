@@ -132,6 +132,47 @@ export module Privileges {
         }
     }
 
+    export interface IThreadMessagePrivileges {
+
+        canEditThreadMessageContent(id: string): Promise<boolean>;
+
+        canMoveThreadMessage(id: string): Promise<boolean>;
+
+        canDeleteThreadMessage(id: string): Promise<boolean>;
+
+        canCommentThreadMessage(id: string): Promise<boolean>;
+
+        canSolveThreadMessageComment(id: string): Promise<boolean>;
+    }
+
+    class ThreadMessagePrivilegesAllowAll implements IThreadMessagePrivileges {
+
+        canEditThreadMessageContent(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canMoveThreadMessage(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canDeleteThreadMessage(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canCommentThreadMessage(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canSolveThreadMessageComment(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+    }
+
     export interface IUserPrivileges {
 
         canEditUserName(id: string): Promise<boolean>;
@@ -186,6 +227,11 @@ export module Privileges {
     export function getThreadPrivileges(): IThreadPrivileges {
 
         return new ThreadPrivilegesAllowAll();
+    }
+
+    export function getThreadMessagePrivileges(): IThreadMessagePrivileges {
+
+        return new ThreadMessagePrivilegesAllowAll();
     }
 
     export function getUserPrivileges(): IUserPrivileges {

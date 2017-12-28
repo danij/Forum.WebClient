@@ -63,6 +63,19 @@ export module PageActions {
         getAllTags(): Promise<TagRepository.Tag[]>;
     }
 
+    export interface IThreadMessageCallback {
+
+        editThreadMessageContent(id: string): Promise<boolean>;
+
+        moveThreadMessage(id: string, targetThreadId: string): Promise<boolean>;
+
+        deleteThreadMessage(id: string): Promise<boolean>;
+
+        commentThreadMessage(id: string, comment: string): Promise<boolean>;
+
+        solveThreadMessageComment(id: string): Promise<boolean>;
+    }
+
     export interface IUserCallback {
 
         editUserName(id: string, newName: string): Promise<boolean>;
@@ -218,6 +231,34 @@ export module PageActions {
         }
     }
 
+    class ThreadMessageCallback implements IThreadMessageCallback {
+
+        editThreadMessageContent(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        moveThreadMessage(id: string, targetThreadId: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        deleteThreadMessage(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        commentThreadMessage(id: string, comment: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        solveThreadMessageComment(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+    }
+
     class UserCallback implements IUserCallback {
 
         editUserName(id: string, newName: string): Promise<boolean> {
@@ -264,6 +305,11 @@ export module PageActions {
     export function getThreadCallback(): IThreadCallback {
 
         return new ThreadCallback();
+    }
+
+    export function getThreadMessageCallback(): IThreadMessageCallback {
+
+        return new ThreadMessageCallback();
     }
 
     export function getUserCallback(): IUserCallback {

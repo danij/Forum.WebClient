@@ -456,4 +456,13 @@ export module Views {
             UIkit.modal(modal).hide();
         }
     }
+
+    export function showPrimaryNotification(message: string, timeout: number = 3000): void {
+
+        UIkit.notification({
+            message: message,
+            status: 'primary',
+            timeout: timeout
+        });
+    }
 }
