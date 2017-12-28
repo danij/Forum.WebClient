@@ -53,7 +53,7 @@ export class ThreadsPage implements Pages.Page {
                     orderBy: this.orderBy,
                     sortOrder: this.sortOrder,
                     tag: this.tag,
-                    user: this.user
+                    user: this.user || this.subscribedByUser
                 }, (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber),
                 PageActions.getTagCallback(), Privileges.getTagPrivileges());
