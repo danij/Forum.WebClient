@@ -358,8 +358,9 @@ export module ThreadsView {
 
                     showSelectSingleThreadDialog(callback, async (selected: string) => {
 
-                        await callback.mergeThreads(thread.id, selected);
-                        new ThreadMessagesPage().displayForThread(selected);
+                        if (await callback.mergeThreads(thread.id, selected)) {
+                            new ThreadMessagesPage().displayForThread(selected);
+                        }
                     });
                 });
             }
