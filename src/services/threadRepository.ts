@@ -154,12 +154,38 @@ export module ThreadRepository {
             const pageNumber = Math.floor(searchResult.index / searchResult.pageSize);
             const firstIndexInPage = pageNumber * searchResult.pageSize;
 
-            let collection = await getThreads({
-                page: pageNumber,
-                orderBy: 'name',
-                sort: 'ascending'
-            });
-            return collection.threads;
+            let collectionPromises: Promise<ThreadCollection>[] = [
+
+                getThreads({
+                    page: pageNumber,
+                    orderBy: 'name',
+                    sort: 'ascending'
+                })
+            ];
+
+            if (pageNumber != firstIndexInPage) {
+
+                collectionPromises.push(getThreads({
+                    page: pageNumber + 1,
+                    orderBy: 'name',
+                    sort: 'ascending'
+                }));
+            } else {
+
+                collectionPromises.push(Promise.resolve(defaultThreadCollection()));
+            }
+
+            const collections = await Promise.all(collectionPromises);
+
+            let threads = collections[0].threads.slice(searchResult.index - firstIndexInPage);
+
+            let remaining = searchResult.pageSize - threads.length;
+            if (remaining > 0) {
+
+                threads = threads.concat(collections[1].threads.slice(0, remaining));
+            }
+
+            return threads;
         }
         return Promise.resolve([]);
     }
