@@ -278,11 +278,11 @@ export module TagsView {
 
         let threadCount = document.createElement('span');
         container.appendChild(threadCount);
-        threadCount.innerText = `${tag.threadCount} threads`;
+        threadCount.innerText = `${DisplayHelpers.intToString(tag.threadCount)} threads`;
 
         let messageCount = document.createElement('span');
         container.appendChild(messageCount);
-        messageCount.innerText = `${tag.messageCount} threads`;
+        messageCount.innerText = `${DisplayHelpers.intToString(tag.messageCount)} messages`;
 
         container.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Referenced by: </span>'));
 
