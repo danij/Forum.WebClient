@@ -30,6 +30,11 @@ export module UserRepository {
         user: User;
     }
 
+    interface OnlineUserCollection {
+
+        online_users: User[];
+    }
+
     export function defaultUserCollection(): UserCollection {
 
         return {
@@ -74,5 +79,12 @@ export module UserRepository {
             return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
         });
         return collection.users;
+    }
+
+    export async function getOnlineUsers(): Promise<User[]> {
+
+        return (await RequestHandler.get({
+            path: 'users/online',
+        }) as OnlineUserCollection).online_users || [];
     }
 }

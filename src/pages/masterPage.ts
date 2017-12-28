@@ -12,6 +12,7 @@ import {ThreadMessagesView} from "../views/threadMessagesView";
 import {ThreadMessagesPage} from "./threadMessagesPage";
 import {MasterView} from "../views/masterView";
 import {ViewsExtra} from "../views/extra";
+import {UserRepository} from "../services/userRepository";
 
 export module MasterPage {
 
@@ -170,6 +171,11 @@ export module MasterPage {
             let span = document.getElementById('entityCount');
             span.innerText = MasterView.getStatisticsText(value);
         });
+        UserRepository.getOnlineUsers().then(users => {
+
+            let link = document.getElementById('usersOnline') as HTMLAnchorElement;
+            MasterView.showOnlineUsers(link, users || []);
+        })
     }
 
     function updateRecentThreads(): void {
