@@ -310,7 +310,7 @@ export module UsersView {
 
     export function createUserPageHeader(user: UserRepository.User): HTMLElement {
 
-        let result = new DOMAppender('<div class="fix-content-margin user-header">', '</div>');
+        let result = new DOMAppender('<div class="user-header">', '</div>');
         let left = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
         result.append(left);
 
