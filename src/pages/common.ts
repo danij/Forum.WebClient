@@ -48,7 +48,7 @@ export module Pages {
         catch (ex) {
 
             Views.showPrimaryNotification('An error has occurred: ' + ex.message);
-            return null;
+            throw ex;
         }
     }
 
