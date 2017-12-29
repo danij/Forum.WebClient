@@ -30,7 +30,7 @@ export module PageActions {
 
     export interface ITagCallback {
 
-        createRootTag(name: string): Promise<boolean>;
+        createTag(name: string): Promise<boolean>;
 
         deleteTag(id: string): Promise<boolean>;
 
@@ -151,24 +151,24 @@ export module PageActions {
 
     class TagCallback implements ITagCallback {
 
-        createRootTag(name: string): Promise<boolean> {
+        async createTag(name: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(TagRepository.addNewTag(name));
         }
 
-        deleteTag(id: string): Promise<boolean> {
+        async deleteTag(id: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(TagRepository.deleteTag(id));
         }
 
-        editTagName(id: string, newName: string): Promise<boolean> {
+        async editTagName(id: string, newName: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(TagRepository.editTagName(id, newName));
         }
 
-        mergeTags(sourceId: string, destinationId: string): Promise<boolean> {
+        async mergeTags(sourceId: string, destinationId: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(TagRepository.mergeTags(sourceId, destinationId));
         }
 
         getAllTags(): Promise<TagRepository.Tag[]> {

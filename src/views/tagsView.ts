@@ -439,7 +439,7 @@ export module TagsView {
             const name = EditViews.getInput('Enter the new tag name');
             if (name.length < 1) return;
 
-            EditViews.reloadPageIfOk(callback.createRootTag(name));
+            EditViews.reloadPageIfOk(callback.createTag(name));
         });
 
         return EditViews.wrapAddElements(button);

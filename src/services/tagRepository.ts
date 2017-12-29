@@ -52,4 +52,34 @@ export module TagRepository {
 
         return latestTags.find(t => name.toLowerCase() === t.name.toLowerCase()) || null;
     }
+
+    export async function addNewTag(name: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'tags/',
+            stringData: name
+        });
+    }
+
+    export async function deleteTag(tagId: string): Promise<void> {
+
+        await RequestHandler.requestDelete({
+            path: 'tags/' + encodeURIComponent(tagId)
+        });
+    }
+
+    export async function editTagName(tagId: string, newName: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'tags/name/' + encodeURIComponent(tagId),
+            stringData: newName
+        });
+    }
+
+    export async function mergeTags(sourceTagId: string, destinationTagId: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'tags/merge/' + encodeURIComponent(sourceTagId) + '/' + encodeURIComponent(destinationTagId)
+        });
+    }
 }
