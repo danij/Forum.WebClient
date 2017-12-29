@@ -307,7 +307,7 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
-        element.getElementsByClassName('show-thread-message-comments')[0].addEventListener('click', async (ev) => {
+        DOMHelpers.addEventListeners(element, 'show-thread-message-comments', 'click', async (ev) => {
 
             ev.preventDefault();
             let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
@@ -315,7 +315,7 @@ export module ThreadMessagesView {
             showThreadMessageComments(messageId, callback);
         });
 
-        element.getElementsByClassName('move-thread-message-link')[0].addEventListener('click', async (ev) => {
+        DOMHelpers.addEventListeners(element, 'move-thread-message-link', 'click', async (ev) => {
 
             ev.preventDefault();
             let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
@@ -326,7 +326,7 @@ export module ThreadMessagesView {
             });
         });
 
-        element.getElementsByClassName('delete-thread-message-link')[0].addEventListener('click', async (ev) => {
+        DOMHelpers.addEventListeners(element, 'delete-thread-message-link', 'click', async (ev) => {
 
             ev.preventDefault();
             let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
@@ -337,7 +337,7 @@ export module ThreadMessagesView {
             }
         });
 
-        element.getElementsByClassName('comment-thread-message-link')[0].addEventListener('click', async (ev) => {
+        DOMHelpers.addEventListeners(element, 'comment-thread-message-link', 'click', async (ev) => {
 
             ev.preventDefault();
             let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');

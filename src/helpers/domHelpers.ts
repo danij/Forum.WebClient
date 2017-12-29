@@ -110,4 +110,14 @@ export module DOMHelpers {
 
         element.parentNode.replaceChild(replaceWith, element);
     }
+
+    export function addEventListeners(element: HTMLElement, className: string, eventType: string,
+                                      handler: (ev: Event) => void): void {
+
+        let elements = element.getElementsByClassName(className);
+        for (let i = 0; i < elements.length; ++i) {
+
+            elements[i].addEventListener(eventType, handler);
+        }
+    }
 }
