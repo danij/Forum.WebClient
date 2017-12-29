@@ -35,13 +35,22 @@ export module UsersView {
         return `rgb(${r % 224}, ${g % 224}, ${b % 224})`;
     }
 
+    function getUserLogoInitial(name: string): string {
+
+        if (name == '<anonymous>') {
+
+            return '?';
+        }
+        return name[0];
+    }
+
     export function createUserLogoSmall(user: UserRepository.User, position: string = 'bottom-right'): DOMAppender {
 
         let container = new DOMAppender('<div>', '</div>');
 
         let element = new DOMAppender(`<div class="author-logo pointer-cursor" style="color: ${getUserLogoColor(user.id)}">`, '</div>');
         container.append(element);
-        element.appendString(user.name[0]);
+        element.appendString(getUserLogoInitial(user.name));
 
         let dropdown = createUserDropdown(user, 'user-info', position);
         container.append(dropdown);
@@ -52,7 +61,7 @@ export module UsersView {
     export function createUserLogoForList(user: UserRepository.User): DOMAppender {
 
         let element = new DOMAppender(`<div class="text-avatar" style="color: ${getUserLogoColor(user.id)}">`, '</div>');
-        element.appendString(user.name[0]);
+        element.appendString(getUserLogoInitial(user.name));
 
         return element;
     }
