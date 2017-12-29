@@ -116,7 +116,7 @@ export module Views {
 
         if (info.totalCount < 1) {
 
-            return result[0];
+            return result;
         }
 
         let container = DOMHelpers.parseHTML(
