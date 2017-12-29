@@ -160,6 +160,7 @@ export module EditViews {
         private updateContent(text: string): void {
 
             this.resultContainer.innerHTML = ViewsExtra.expandContent(text);
+            ViewsExtra.adjustMessageContent(this.resultContainer.parentNode as HTMLElement);
             ViewsExtra.refreshMath(this.resultContainer);
         }
     }

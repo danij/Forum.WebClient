@@ -63,4 +63,21 @@ export module ViewsExtra {
             }
         }, 100);
     }
+
+    export function adjustMessageContent(container: HTMLElement): void {
+
+        let contentElements = container.querySelectorAll('.message-content');
+
+        for (let i = 0; i < contentElements.length; ++i) {
+
+            let element = contentElements[i];
+
+            let tables = element.querySelectorAll('table');
+            for (let ti = 0; ti < tables.length; ++ti) {
+
+                let table = tables[ti];
+                table.classList.add('uk-table', 'uk-table-small', 'uk-table-striped');
+            }
+        }
+    }
 }
