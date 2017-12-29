@@ -119,4 +119,12 @@ export module ThreadMessageRepository {
             }
         }) as ThreadMessageCommentCollection;
     }
+
+    export async function addThreadMessage(threadId: string, content: string): Promise<string> {
+
+        return (await RequestHandler.post({
+            path: 'thread_messages/' + encodeURIComponent(threadId),
+            stringData: content
+        })).id || '';
+    }
 }

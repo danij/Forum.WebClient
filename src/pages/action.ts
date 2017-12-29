@@ -184,39 +184,42 @@ export module PageActions {
             return Promise.resolve(true);
         }
 
-        deleteThread(id: string): Promise<boolean> {
+        async deleteThread(id: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadRepository.deleteThread(id));
         }
 
-        editThreadName(id: string, newName: string): Promise<boolean> {
+        async editThreadName(id: string, newName: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadRepository.editThreadName(id, newName));
         }
 
-        editThreadPinDisplayOrder(id: string, pinDisplayOrder: number): Promise<boolean> {
+        async editThreadPinDisplayOrder(id: string, newPinDisplayOrder: number): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadRepository.editThreadPinDisplayOrder(id, newPinDisplayOrder));
         }
 
-        editThreadTags(id: string, addTagIds: string[], removeTagIds: string[]): Promise<boolean> {
+        async editThreadTags(id: string, addTagIds: string[], removeTagIds: string[]): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(Promise.all(
+                (addTagIds || []).map((tagId) => ThreadRepository.addTagToThread(id, tagId))
+                    .concat((removeTagIds || []).map((tagId) => ThreadRepository.removeTagFromThread(id, tagId)))
+            ));
         }
 
-        subscribeToThread(id: string): Promise<boolean> {
+        async subscribeToThread(id: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadRepository.subscribeToThread(id));
         }
 
-        unSubscribeFromThread(id: string): Promise<boolean> {
+        async unSubscribeFromThread(id: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadRepository.unSubscribeFromThread(id));
         }
 
-        mergeThreads(sourceId: string, destinationId: string): Promise<boolean> {
+        async mergeThreads(sourceId: string, destinationId: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadRepository.mergeThreads(sourceId, destinationId));
         }
 
         async searchThreadsByName(name: string): Promise<ThreadRepository.Thread[]> {
@@ -235,9 +238,9 @@ export module PageActions {
             return UserRepository.getUsersSubscribedToThread(id);
         }
 
-        addThreadMessage(id: string, content: string): Promise<string> {
+        async addThreadMessage(id: string, content: string): Promise<string> {
 
-            return Promise.resolve('');
+            return await Pages.getOrShowError(ThreadMessageRepository.addThreadMessage(id, content.trim()));
         }
 
         getAllTags(): Promise<TagRepository.Tag[]> {

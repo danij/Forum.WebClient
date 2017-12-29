@@ -212,4 +212,62 @@ export module ThreadRepository {
 
         return collection;
     }
+
+    export async function deleteThread(threadId: string): Promise<void> {
+
+        await RequestHandler.requestDelete({
+            path: 'threads/' + encodeURIComponent(threadId)
+        });
+    }
+
+    export async function editThreadName(threadId: string, newName: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'threads/name/' + encodeURIComponent(threadId),
+            stringData: newName
+        });
+    }
+
+    export async function editThreadPinDisplayOrder(threadId: string, newDisplayOrder: number): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'threads/pindisplayorder/' + encodeURIComponent(threadId),
+            stringData: newDisplayOrder.toString()
+        });
+    }
+
+    export async function addTagToThread(threadId: string, tagId: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'threads/tag/' + encodeURIComponent(threadId) + '/' + encodeURIComponent(tagId)
+        });
+    }
+
+    export async function removeTagFromThread(threadId: string, tagId: string): Promise<void> {
+
+        await RequestHandler.requestDelete({
+            path: 'threads/tag/' + encodeURIComponent(threadId) + '/' + encodeURIComponent(tagId)
+        });
+    }
+
+    export async function subscribeToThread(threadId: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'threads/subscribe/' + encodeURIComponent(threadId)
+        });
+    }
+
+    export async function unSubscribeFromThread(threadId: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'threads/unsubscribe/' + encodeURIComponent(threadId)
+        });
+    }
+
+    export async function mergeThreads(sourceThreadId: string, destinationThreadId: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'threads/merge/' + encodeURIComponent(sourceThreadId) + '/' + encodeURIComponent(destinationThreadId)
+        });
+    }
 }
