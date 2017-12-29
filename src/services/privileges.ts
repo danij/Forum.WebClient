@@ -97,6 +97,8 @@ export module Privileges {
         canEditThreadTags(id: string): Promise<boolean>;
 
         canMergeThreads(id: string): Promise<boolean>;
+
+        canAddNewThreadMessage(id: string): Promise<boolean>;
     }
 
     class ThreadPrivilegesAllowAll implements IThreadPrivileges {
@@ -127,6 +129,11 @@ export module Privileges {
         }
 
         canMergeThreads(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canAddNewThreadMessage(id: string): Promise<boolean> {
 
             return Promise.resolve(true);
         }

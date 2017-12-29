@@ -61,6 +61,8 @@ export module PageActions {
 
         getSubscribedUsers(id: string): Promise<UserRepository.User[]>;
 
+        addThreadMessage(id: string, content: string): Promise<string>;
+
         getAllTags(): Promise<TagRepository.Tag[]>;
     }
 
@@ -226,6 +228,11 @@ export module PageActions {
         getSubscribedUsers(id: string): Promise<UserRepository.User[]> {
 
             return UserRepository.getUsersSubscribedToThread(id);
+        }
+
+        addThreadMessage(id: string, content: string): Promise<string> {
+
+            return Promise.resolve('');
         }
 
         getAllTags(): Promise<TagRepository.Tag[]> {

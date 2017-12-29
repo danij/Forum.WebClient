@@ -1,5 +1,7 @@
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
+import {ViewsExtra} from "./extra";
+import {Views} from "./common";
 
 export module EditViews {
 
@@ -102,5 +104,55 @@ export module EditViews {
         result.appendChild(span);
 
         return result;
+    }
+
+    export class EditControl {
+
+        private textArea: HTMLTextAreaElement;
+        private resultContainer: HTMLDivElement;
+
+        constructor(container: HTMLElement) {
+
+            this.textArea = document.createElement('textarea');
+            this.textArea.classList.add('uk-textarea');
+
+            this.resultContainer = document.createElement('div');
+            this.resultContainer.classList.add('edit-preview', 'message-content');
+
+            let grid = document.createElement('div');
+            container.appendChild(grid);
+            grid.classList.add('uk-grid');
+            grid.setAttribute('uk-grid', '');
+
+            grid.appendChild(this.textArea);
+            grid.appendChild(this.resultContainer);
+
+            this.setupEvents();
+        }
+
+        getText(): string {
+
+            return this.textArea.value;
+        }
+
+        private setupEvents(): void {
+
+            let previousText = '';
+            setInterval(() => {
+
+                let currentText = this.getText();
+                if (currentText != previousText) {
+
+                    previousText = currentText;
+                    this.updateContent(currentText);
+                }
+            }, Views.DisplayConfig.renderNewMessageEveryMilliseconds);
+        }
+
+        private updateContent(text: string): void {
+
+            this.resultContainer.innerHTML = ViewsExtra.expandContent(text);
+            ViewsExtra.refreshMath(this.resultContainer);
+        }
     }
 }

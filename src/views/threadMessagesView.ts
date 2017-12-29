@@ -29,7 +29,7 @@ export module ThreadMessagesView {
         sortControls: HTMLElement;
         paginationTop: HTMLElement;
         paginationBottom: HTMLElement;
-        list: HTMLElement
+        list: HTMLElement;
     }
 
     export interface ThreadMessagePageDisplayInfo extends Views.SortInfo {
@@ -124,7 +124,10 @@ export module ThreadMessagesView {
         resultList.appendChild(result.paginationBottom =
             Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
+        resultList.appendChild(createNewThreadMessageControl(thread.id, threadCallback, threadPrivileges));
+
         result.list = resultList;
+
         return result;
     }
 
@@ -453,5 +456,44 @@ export module ThreadMessagesView {
         }
 
         content.appendChild(result);
+    }
+
+    function createNewThreadMessageControl(threadId: string,
+                                           callback: IThreadCallback, privileges: IThreadPrivileges): HTMLElement {
+
+        let result = document.createElement('div');
+        result.classList.add('reply-container');
+
+        let editControl: EditViews.EditControl;
+
+        if (privileges.canAddNewThreadMessage(threadId)) {
+
+            editControl = new EditViews.EditControl(result);
+
+            let button = document.createElement('button');
+            result.appendChild(button);
+            button.classList.add('uk-button', 'uk-button-primary', 'uk-align-center');
+            button.innerText = 'Add new message';
+
+            button.addEventListener('click', async (ev) => {
+
+                ev.preventDefault();
+                let text = editControl.getText();
+                if (text.trim().length < 1) return;
+
+                let newMessageId = await callback.addThreadMessage(threadId, text);
+                if (newMessageId) {
+
+                    (new ThreadMessagesPage()).displayForThreadMessage(newMessageId);
+                }
+            })
+        }
+        else {
+
+            result.appendChild(DOMHelpers.parseHTML('<span class="uk-align-center uk-text-center uk-alert">Insufficient privileges to add a new message to this thread.</span>'));
+            editControl = new EditViews.EditControl(result);
+        }
+
+        return result;
     }
 }

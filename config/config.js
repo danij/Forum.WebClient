@@ -13,7 +13,8 @@ window.displayConfig = {
     showSpinnerAfterMilliSeconds: 1000,
     updateStatisticsEveryMilliSeconds: 60000,
     updateRecentThreadsEveryMilliSeconds: 60000,
-    updateRecentThreadMessagesEveryMilliSeconds: 30000
+    updateRecentThreadMessagesEveryMilliSeconds: 30000,
+    renderNewMessageEveryMilliseconds: 2000
 };
 
 window.masterPageConfig = {
