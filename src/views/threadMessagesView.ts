@@ -38,6 +38,12 @@ export module ThreadMessagesView {
         user?: UserRepository.User
     }
 
+    interface MessageEditControl {
+
+        element: HTMLElement;
+        editControl: EditViews.EditControl;
+    }
+
     export function createRecentThreadMessagesView(messages: ThreadMessageRepository.ThreadMessage[]): HTMLElement {
 
         let result = new DOMAppender('<div>', '</div>');
@@ -115,16 +121,26 @@ export module ThreadMessagesView {
         resultList.appendChild(result.paginationTop =
             Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
+        let editControl = thread ? createNewThreadMessageControl(thread.id, threadCallback, threadPrivileges) : null;
+
+        let quoteCallback = thread ? (messageToQuote) => {
+
+            editControl.editControl.insertQuote(messageToQuote);
+        } : null;
+
         let listContainer = document.createElement('div');
         listContainer.classList.add('thread-message-list');
         listContainer.appendChild(createThreadMessageList(collection, threadMessageCallback, threadMessagePrivileges,
-            threadCallback, threadPrivileges, thread));
+            threadCallback, threadPrivileges, thread, quoteCallback));
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
             Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        resultList.appendChild(createNewThreadMessageControl(thread.id, threadCallback, threadPrivileges));
+        if (editControl) {
+
+            resultList.appendChild(editControl.element);
+        }
 
         result.list = resultList;
 
@@ -152,7 +168,8 @@ export module ThreadMessagesView {
                                             privileges: IThreadMessagePrivileges,
                                             threadCallback: IThreadCallback,
                                             threadPrivileges: IThreadPrivileges,
-                                            thread?: ThreadRepository.Thread): HTMLElement {
+                                            thread?: ThreadRepository.Thread,
+                                            quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): HTMLElement {
 
         const messages = collection.messages || [];
 
@@ -164,9 +181,12 @@ export module ThreadMessagesView {
             return result.toElement();
         }
 
+        let messagesById = {};
+
         for (let i = 0; i < messages.length; ++i) {
 
             const message = messages[i];
+            messagesById[message.id] = message;
 
             let messageContainer = new DOMAppender('<div class="uk-card uk-card-body discussion-thread-message">', '</div>');
             result.append(messageContainer);
@@ -288,7 +308,9 @@ export module ThreadMessagesView {
 
                     actions.appendRaw(`<a uk-icon="icon: warning" class="comment-thread-message-link" title="Flag & comment" data-message-id="${messageId}" uk-tooltip></a>`);
                 }
-                actions.appendRaw(`<a uk-icon="icon: commenting" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}" uk-tooltip></a>`);
+                if (quoteCallback) {
+                    actions.appendRaw(`<a uk-icon="icon: commenting" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}" uk-tooltip></a>`);
+                }
             }
             {
                 let content = new DOMAppender('<div class="message-content">', '</div>');
@@ -353,6 +375,15 @@ export module ThreadMessagesView {
                     Views.showPrimaryNotification('Comment sent!');
                 }
             }
+        });
+
+        DOMHelpers.addEventListeners(element, 'quote-thread-message-link', 'click', (ev) => {
+
+            ev.preventDefault();
+            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            let message = messagesById[messageId];
+
+            quoteCallback(message);
         });
 
         return element;
@@ -459,7 +490,7 @@ export module ThreadMessagesView {
     }
 
     function createNewThreadMessageControl(threadId: string,
-                                           callback: IThreadCallback, privileges: IThreadPrivileges): HTMLElement {
+                                           callback: IThreadCallback, privileges: IThreadPrivileges): MessageEditControl {
 
         let result = document.createElement('div');
         result.classList.add('reply-container');
@@ -494,6 +525,10 @@ export module ThreadMessagesView {
             editControl = new EditViews.EditControl(result);
         }
 
-        return result;
+        return {
+
+            element: result,
+            editControl: editControl
+        } as MessageEditControl;
     }
 }

@@ -2,6 +2,8 @@ import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
 import {ViewsExtra} from "./extra";
 import {Views} from "./common";
+import {ThreadMessageRepository} from "../services/threadMessageRepository";
+import {DisplayHelpers} from "../helpers/displayHelpers";
 
 export module EditViews {
 
@@ -133,6 +135,12 @@ export module EditViews {
         getText(): string {
 
             return this.textArea.value;
+        }
+
+        insertQuote(message: ThreadMessageRepository.ThreadMessage): void {
+
+            let quotedContent = message.content.split(/\n/).map((line) => `> ${line}`).join('\n');
+            this.textArea.value += `**${message.createdBy.name} @ ${DisplayHelpers.getDateTime(message.created)}**\n${quotedContent}\n\n`;
         }
 
         private setupEvents(): void {
