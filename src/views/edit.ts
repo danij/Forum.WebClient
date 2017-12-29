@@ -113,10 +113,11 @@ export module EditViews {
         private textArea: HTMLTextAreaElement;
         private resultContainer: HTMLDivElement;
 
-        constructor(container: HTMLElement) {
+        constructor(container: HTMLElement, initialText: string = '') {
 
             this.textArea = document.createElement('textarea');
             this.textArea.classList.add('uk-textarea');
+            this.textArea.value = initialText;
 
             this.resultContainer = document.createElement('div');
             this.resultContainer.classList.add('edit-preview', 'message-content');

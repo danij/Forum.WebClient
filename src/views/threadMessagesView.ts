@@ -330,6 +330,21 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
+        DOMHelpers.addEventListeners(element, 'edit-thread-message-content-link', 'click', async (ev) => {
+
+            ev.preventDefault();
+            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            let message = messagesById[messageId];
+
+            showEditThreadMessageDialog(message.content, async (text: string) => {
+
+                if (await callback.editThreadMessageContent(messageId, text)) {
+
+                    new ThreadMessagesPage().displayForThreadMessage(messageId);
+                }
+            });
+        });
+
         DOMHelpers.addEventListeners(element, 'show-thread-message-comments', 'click', async (ev) => {
 
             ev.preventDefault();
@@ -511,5 +526,31 @@ export module ThreadMessagesView {
             element: result,
             editControl: editControl
         } as MessageEditControl;
+    }
+
+    export function showEditThreadMessageDialog(initialText: string, onSave: (text: string) => void): void {
+
+        let modal = document.getElementById('edit-thread-message-modal');
+        Views.showModal(modal);
+
+        let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
+        let container = modal.getElementsByClassName('uk-modal-body')[0] as HTMLElement;
+
+        container.innerHTML = '';
+
+        let editControl = new EditViews.EditControl(container, initialText);
+
+        saveButton = DOMHelpers.removeEventListeners(saveButton);
+        saveButton.addEventListener('click', (ev) => {
+
+            ev.preventDefault();
+
+            let currentText = editControl.getText();
+
+            if (currentText.length && (currentText != initialText)) {
+
+                onSave(currentText);
+            }
+        });
     }
 }

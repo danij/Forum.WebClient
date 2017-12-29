@@ -68,7 +68,7 @@ export module PageActions {
 
     export interface IThreadMessageCallback {
 
-        editThreadMessageContent(id: string): Promise<boolean>;
+        editThreadMessageContent(id: string, newContent: string): Promise<boolean>;
 
         moveThreadMessage(id: string, targetThreadId: string): Promise<boolean>;
 
@@ -243,7 +243,7 @@ export module PageActions {
 
     class ThreadMessageCallback implements IThreadMessageCallback {
 
-        editThreadMessageContent(id: string): Promise<boolean> {
+        editThreadMessageContent(id: string, newContent: string): Promise<boolean> {
 
             return Promise.resolve(true);
         }
