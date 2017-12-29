@@ -40,6 +40,11 @@ export module Pages {
         return `${masterPageConfig.baseUri}/${relative}`;
     }
 
+    function showError(message: string): void {
+
+        Views.showPrimaryNotification('An error has occurred: ' + message);
+    }
+
     export async function getOrShowError<T>(promise: Promise<T>): Promise<T> {
 
         try {
@@ -47,8 +52,21 @@ export module Pages {
         }
         catch (ex) {
 
-            Views.showPrimaryNotification('An error has occurred: ' + ex.message);
+            showError(ex.message);
             throw ex;
+        }
+    }
+
+    export async function trueOrShowErrorAndFalse<T>(promise: Promise<T>): Promise<boolean> {
+
+        try {
+            await promise;
+            return true;
+        }
+        catch (ex) {
+
+            showError(ex.message);
+            return false;
         }
     }
 

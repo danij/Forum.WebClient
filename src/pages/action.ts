@@ -2,6 +2,8 @@ import {TagRepository} from "../services/tagRepository";
 import {ThreadRepository} from "../services/threadRepository";
 import {UserRepository} from "../services/userRepository";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
+import {CategoryRepository} from "../services/categoryRepository";
+import {Pages} from "./common";
 
 export module PageActions {
 
@@ -98,44 +100,47 @@ export module PageActions {
 
     class CategoryCallback implements ICategoryCallback {
 
-        createRootCategory(name: string): Promise<boolean> {
+        async createRootCategory(name: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(CategoryRepository.addNewCategory(name));
         }
 
-        createSubCategory(parentId: string, name: string): Promise<boolean> {
+        async createSubCategory(parentId: string, name: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(CategoryRepository.addNewCategory(name, parentId));
         }
 
-        deleteCategory(id: string): Promise<boolean> {
+        async deleteCategory(id: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(CategoryRepository.deleteCategory(id));
         }
 
-        editCategoryName(id: string, newName: string): Promise<boolean> {
+        async editCategoryName(id: string, newName: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(CategoryRepository.editCategoryName(id, newName));
         }
 
-        editCategoryDescription(id: string, newDescription: string): Promise<boolean> {
+        async editCategoryDescription(id: string, newDescription: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(CategoryRepository.editCategoryDescription(id, newDescription));
         }
 
-        editCategoryDisplayOrder(id: string, newDisplayOrder: number): Promise<boolean> {
+        async editCategoryDisplayOrder(id: string, newDisplayOrder: number): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(CategoryRepository.editCategoryDisplayOrder(id, newDisplayOrder));
         }
 
-        editCategoryParent(id: string, newParentId: string): Promise<boolean> {
+        async editCategoryParent(id: string, newParentId: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(CategoryRepository.editCategoryParent(id, newParentId));
         }
 
-        editCategoryTags(id: string, addTagIds: string[], removeTagIds: string[]): Promise<boolean> {
+        async editCategoryTags(id: string, addTagIds: string[], removeTagIds: string[]): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(Promise.all(
+                (addTagIds || []).map((tagId) => CategoryRepository.addTagToCategory(id, tagId))
+                    .concat((removeTagIds || []).map((tagId) => CategoryRepository.removeTagFromCategory(id, tagId)))
+            ));
         }
 
         getAllTags(): Promise<TagRepository.Tag[]> {

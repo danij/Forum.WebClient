@@ -113,5 +113,65 @@ export module CategoryRepository {
 
         return categories;
     }
-}
 
+    export async function addNewCategory(name: string, parentCategoryId?: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'categories/' + encodeURIComponent(parentCategoryId || ''),
+            stringData: name
+        });
+    }
+
+    export async function deleteCategory(categoryId?: string): Promise<void> {
+
+        await RequestHandler.requestDelete({
+            path: 'categories/' + encodeURIComponent(categoryId)
+        });
+    }
+
+    export async function editCategoryName(categoryId: string, newName: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'categories/name/' + encodeURIComponent(categoryId),
+            stringData: newName
+        });
+    }
+
+    export async function editCategoryDescription(categoryId: string, newDescription: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'categories/description/' + encodeURIComponent(categoryId),
+            stringData: newDescription
+        });
+    }
+
+    export async function editCategoryDisplayOrder(categoryId: string, newDisplayOrder: number): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'categories/displayorder/' + encodeURIComponent(categoryId),
+            stringData: newDisplayOrder.toString()
+        });
+    }
+
+    export async function editCategoryParent(categoryId: string, newParentId: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'categories/parent/' + encodeURIComponent(categoryId),
+            stringData: newParentId
+        });
+    }
+
+    export async function addTagToCategory(categoryId: string, tagId: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'categories/tag/' + encodeURIComponent(categoryId) + '/' + encodeURIComponent(tagId)
+        });
+    }
+
+    export async function removeTagFromCategory(categoryId: string, tagId: string): Promise<void> {
+
+        await RequestHandler.requestDelete({
+            path: 'categories/tag/' + encodeURIComponent(categoryId) + '/' + encodeURIComponent(tagId)
+        });
+    }
+}
