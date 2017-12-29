@@ -30,6 +30,7 @@ export module ThreadMessagesView {
         paginationTop: HTMLElement;
         paginationBottom: HTMLElement;
         list: HTMLElement;
+        editControl: EditViews.EditControl;
     }
 
     export interface ThreadMessagePageDisplayInfo extends Views.SortInfo {
@@ -100,7 +101,8 @@ export module ThreadMessagesView {
                                                     threadMessageCallback: IThreadMessageCallback,
                                                     threadMessagePrivileges: IThreadMessagePrivileges,
                                                     userCallback: IUserCallback,
-                                                    userPrivileges: IUserPrivileges): ThreadMessagesPageContent {
+                                                    userPrivileges: IUserPrivileges,
+                                                    quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): ThreadMessagesPageContent {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCollection();
 
@@ -123,11 +125,6 @@ export module ThreadMessagesView {
 
         let editControl = thread ? createNewThreadMessageControl(thread.id, threadCallback, threadPrivileges) : null;
 
-        let quoteCallback = thread ? (messageToQuote) => {
-
-            editControl.editControl.insertQuote(messageToQuote);
-        } : null;
-
         let listContainer = document.createElement('div');
         listContainer.classList.add('thread-message-list');
         listContainer.appendChild(createThreadMessageList(collection, threadMessageCallback, threadMessagePrivileges,
@@ -140,6 +137,7 @@ export module ThreadMessagesView {
         if (editControl) {
 
             resultList.appendChild(editControl.element);
+            result.editControl = editControl.editControl;
         }
 
         result.list = resultList;

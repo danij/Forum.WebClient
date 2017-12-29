@@ -8,6 +8,7 @@ import {ThreadMessagesView} from "../views/threadMessagesView";
 import {Privileges} from "../services/privileges";
 import {PageActions} from "./action";
 import {DOMHelpers} from "../helpers/domHelpers";
+import {EditViews} from "../views/edit";
 
 /**
  * Displays a list of thread messages with pagination and custom sorting
@@ -19,6 +20,7 @@ export class ThreadMessagesPage implements Pages.Page {
 
     private topPaginationControl: HTMLElement;
     private bottomPaginationControl: HTMLElement;
+    private editControl: EditViews.EditControl;
 
     private threadId: string = null;
     private thread: ThreadRepository.ThreadWithMessages = null;
@@ -68,12 +70,14 @@ export class ThreadMessagesPage implements Pages.Page {
                 (pageNumber: number) => this.getLinkForPage(pageNumber), this.thread,
                 PageActions.getThreadCallback(), Privileges.getThreadPrivileges(),
                 PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
-                PageActions.getUserCallback(), Privileges.getUserPrivileges());
+                PageActions.getUserCallback(), Privileges.getUserPrivileges(),
+                this.thread ? (message) => this.quoteCallback(message) : null);
 
             this.setupSortControls(elements.sortControls);
 
             this.topPaginationControl = elements.paginationTop;
             this.bottomPaginationControl = elements.paginationBottom;
+            this.editControl = elements.editControl;
 
             return elements.list;
 
@@ -88,6 +92,14 @@ export class ThreadMessagesPage implements Pages.Page {
                 Views.scrollToTop();
             }
         })
+    }
+
+    private quoteCallback(message: ThreadMessageRepository.ThreadMessage): void {
+
+        if (this.editControl && message) {
+
+            this.editControl.insertQuote(message);
+        }
     }
 
     displayForThread(threadId: string): void {
@@ -175,7 +187,7 @@ export class ThreadMessagesPage implements Pages.Page {
             return ThreadMessagesView.createThreadMessageList(messageCollection,
                 PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
                 PageActions.getThreadCallback(), Privileges.getThreadPrivileges(),
-                this.thread);
+                this.thread, (message) => this.quoteCallback(message));
         }).then(() => {
 
             Views.scrollToTop();
