@@ -375,7 +375,7 @@ export module ThreadMessagesView {
     async function showThreadMessageComments(messageId: string, callback: IThreadMessageCallback): Promise<void> {
 
         let modal = document.getElementById('thread-message-comments-modal');
-        let content = modal.getElementsByClassName('message-comments-content')[0];
+        let content = modal.getElementsByClassName('message-comments-container')[0];
 
         content.innerHTML = '';
 
