@@ -211,6 +211,14 @@ export module ThreadMessagesView {
 
                     messageDetailsContainer.appendRaw(`<samp>${DOMHelpers.escapeStringForContent(message.ip)}</samp>`);
                 }
+                if (message.commentsCount > 0) {
+
+                    const total = DisplayHelpers.intToString(message.commentsCount);
+                    const totalNoun = (1 == message.commentsCount) ? 'flag' : 'flags';
+                    const unsolved = DisplayHelpers.intToString(message.commentsCount - message.solvedCommentsCount);
+                    const text = `<span uk-icon="icon: warning"></span> ${total} ${totalNoun} (${unsolved} unsolved) <span uk-icon="icon: warning"></span>`;
+                    messageDetailsContainer.appendRaw(`<a class="show-thread-message-comments" data-message-id="${message.id}">${text}</a>`);
+                }
             }
             {
                 let author = message.createdBy;
@@ -299,6 +307,14 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
+        element.getElementsByClassName('show-thread-message-comments')[0].addEventListener('click', async (ev) => {
+
+            ev.preventDefault();
+            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+
+            showThreadMessageComments(messageId, callback);
+        });
+
         element.getElementsByClassName('move-thread-message-link')[0].addEventListener('click', async (ev) => {
 
             ev.preventDefault();
@@ -339,7 +355,7 @@ export module ThreadMessagesView {
         return element;
     }
 
-    function adjustMessageContent(container: HTMLElement): void{
+    function adjustMessageContent(container: HTMLElement): void {
 
         let contentElements = container.querySelectorAll('.message-content');
 
@@ -354,5 +370,88 @@ export module ThreadMessagesView {
                 table.classList.add('uk-table', 'uk-table-small', 'uk-table-striped');
             }
         }
+    }
+
+    async function showThreadMessageComments(messageId: string, callback: IThreadMessageCallback): Promise<void> {
+
+        let modal = document.getElementById('thread-message-comments-modal');
+        let content = modal.getElementsByClassName('message-comments-content')[0];
+
+        content.innerHTML = '';
+
+        Views.showModal(modal);
+
+        let appender = new DOMAppender('<div>', '</div>');
+
+        let comments = await callback.getCommentsOfThreadMssage(messageId) || [];
+
+        const solvedCommentSpan = '<span class="uk-icon-button uk-float-right" uk-icon="check" title="Already solved" uk-tooltip></span>';
+
+        //TODO: handle multiple pages
+        for (let i = 0; i < comments.length; ++i) {
+
+            const comment = comments[i];
+
+            let card = new DOMAppender('<div class="uk-card uk-card-body message-comments-content">', '</div>');
+            appender.append(card);
+
+            let author = new DOMAppender('<div class="message-comment-author uk-float-left">', '</div>');
+            card.append(author);
+            author.append(UsersView.createUserLogoSmall(comment.createdBy, 'bottom-left'));
+
+            let content = new DOMAppender('<div class="comment-content">', '</div>');
+            card.append(content);
+
+            let contentDiv = new DOMAppender('<div>', '</div>');
+            content.append(contentDiv);
+
+            let time = new DOMAppender('<span class="message-time">', '</span>');
+            contentDiv.append(time);
+            time.appendString(DisplayHelpers.getDateTime(comment.created));
+
+            let ip = new DOMAppender('<samp>', '</samp>');
+            contentDiv.append(ip);
+            ip.appendString(comment.ip);
+
+            if (comment.solved) {
+
+                contentDiv.appendRaw(solvedCommentSpan);
+            }
+            else {
+
+                let data = `data-comment-id="${DOMHelpers.escapeStringForAttribute(comment.id)}"`;
+                contentDiv.appendRaw(`<a class="solve-message-comment-link uk-float-right" ${data} title="Set comment to solved" uk-tooltip><span class="uk-icon" uk-icon="check"></span></a>`);
+            }
+
+            let paragraph = new DOMAppender('<p>', '</p>');
+            contentDiv.append(paragraph);
+            paragraph.appendString(comment.content);
+
+            if (i < (comments.length - 1)) {
+
+                appender.appendRaw(' <hr class="uk-divider-icon" />');
+            }
+        }
+
+        let result = appender.toElement();
+
+        let links = result.getElementsByClassName('solve-message-comment-link');
+        for (let i = 0; i < links.length; ++i) {
+
+            let link = links[i];
+            link.addEventListener('click', async (ev) => {
+
+                ev.preventDefault();
+                let link = DOMHelpers.getLink(ev);
+                const commentId = link.getAttribute('data-comment-id');
+
+                if (await callback.solveThreadMessageComment(commentId)) {
+
+                    DOMHelpers.replaceElementWith(link, DOMHelpers.parseHTML(solvedCommentSpan));
+                }
+            });
+        }
+
+        content.appendChild(result);
     }
 }

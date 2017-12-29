@@ -119,6 +119,11 @@ html {
     margin-bottom: 10px;
 }
 
+.message-comment-author {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
 .message-author, .user-in-list {
     .username {
         font-weight: bold;
@@ -435,14 +440,14 @@ html {
     }
 }
 
-#flags-modal {
+#thread-message-comments-modal {
 
-    .flag-message {
+    .message-comments-content {
         padding-top: 0;
         padding-bottom: 0;
     }
 
-    .flag-content {
+    .comment-content {
         p {
             margin-bottom: 0;
         }
@@ -723,16 +728,6 @@ html {
     }
 
     .thread-created {
-        .author-logo {
-            .text-avatar-mixin(@avatar-size, 0.5);
-            float: left;
-            margin-right: 10px;
-        }
-
-        .author {
-            display: block;
-            font-variant-numeric: oldstyle-nums;
-        }
     }
 
     .thread-statistics {
@@ -1012,4 +1007,15 @@ html {
     li.level10 {
         padding-left: 200px;
     }
+}
+
+.author-logo {
+    .text-avatar-mixin(@avatar-size, 0.5);
+    float: left;
+    margin-right: 10px;
+}
+
+.author {
+    display: block;
+    font-variant-numeric: oldstyle-nums;
 }

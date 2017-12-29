@@ -1,6 +1,7 @@
 import {TagRepository} from "../services/tagRepository";
 import {ThreadRepository} from "../services/threadRepository";
 import {UserRepository} from "../services/userRepository";
+import {ThreadMessageRepository} from "../services/threadMessageRepository";
 
 export module PageActions {
 
@@ -72,6 +73,8 @@ export module PageActions {
         deleteThreadMessage(id: string): Promise<boolean>;
 
         commentThreadMessage(id: string, comment: string): Promise<boolean>;
+
+        getCommentsOfThreadMssage(id: string): Promise<ThreadMessageRepository.ThreadMessageComment[]>;
 
         solveThreadMessageComment(id: string): Promise<boolean>;
     }
@@ -256,6 +259,11 @@ export module PageActions {
         solveThreadMessageComment(id: string): Promise<boolean> {
 
             return Promise.resolve(true);
+        }
+
+        async getCommentsOfThreadMssage(id: string): Promise<ThreadMessageRepository.ThreadMessageComment[]> {
+
+            return (await ThreadMessageRepository.getThreadMessageComments(id)).message_comments;
         }
     }
 

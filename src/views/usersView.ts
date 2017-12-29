@@ -35,7 +35,7 @@ export module UsersView {
         return `rgb(${r % 224}, ${g % 224}, ${b % 224})`;
     }
 
-    export function createUserLogoSmall(user: UserRepository.User): DOMAppender {
+    export function createUserLogoSmall(user: UserRepository.User, position: string = 'bottom-right'): DOMAppender {
 
         let container = new DOMAppender('<div>', '</div>');
 
@@ -43,7 +43,7 @@ export module UsersView {
         container.append(element);
         element.appendString(user.name[0]);
 
-        let dropdown = createUserDropdown(user, 'user-info');
+        let dropdown = createUserDropdown(user, 'user-info', position);
         container.append(dropdown);
 
         return container;

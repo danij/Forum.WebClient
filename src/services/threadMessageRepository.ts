@@ -65,6 +65,21 @@ export module ThreadMessageRepository {
         sort: string;
     }
 
+    export interface ThreadMessageComment {
+
+        id: string;
+        created: number;
+        solved: boolean;
+        content: string;
+        ip: string;
+        createdBy: UserRepository.User
+    }
+
+    export interface ThreadMessageCommentCollection extends CommonEntities.PaginationInfo {
+
+        message_comments: ThreadMessageComment[];
+    }
+
     export async function getLatestThreadMessages() : Promise<ThreadMessageCollection> {
 
         return await RequestHandler.get({
@@ -92,5 +107,16 @@ export module ThreadMessageRepository {
         return await RequestHandler.get({
             path: 'thread_messages/rank/' + encodeURIComponent(threadMessageId)
         }) as ThreadMessageRankInfo;
+    }
+
+    export async function getThreadMessageComments(messageId: string) : Promise<ThreadMessageCommentCollection> {
+
+        return await RequestHandler.get({
+            path: 'thread_messages/comments/' + encodeURIComponent(messageId),
+            query: {
+                'page': 0,
+                'sort': 'descending'
+            }
+        }) as ThreadMessageCommentCollection;
     }
 }
