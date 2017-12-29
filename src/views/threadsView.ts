@@ -558,7 +558,7 @@ export module ThreadsView {
                     }
                 });
 
-            }, 200);
+            }, Views.DisplayConfig.searchThreadWaitMilliseconds);
         });
     }
 

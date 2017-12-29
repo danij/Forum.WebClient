@@ -14,6 +14,7 @@ window.displayConfig = {
     updateStatisticsEveryMilliSeconds: 60000,
     updateRecentThreadsEveryMilliSeconds: 60000,
     updateRecentThreadMessagesEveryMilliSeconds: 30000,
+    searchThreadWaitMilliseconds: 100,
     renderNewMessageEveryMilliseconds: 2000
 };
 

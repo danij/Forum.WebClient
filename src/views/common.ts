@@ -22,6 +22,7 @@ export module Views {
         updateStatisticsEveryMilliSeconds: number;
         updateRecentThreadsEveryMilliSeconds: number;
         updateRecentThreadMessagesEveryMilliSeconds: number;
+        searchThreadWaitMilliseconds: number;
         renderNewMessageEveryMilliseconds: number;
     }
 
