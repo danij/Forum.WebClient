@@ -92,4 +92,50 @@ export module UserRepository {
             path: 'users/online',
         }) as OnlineUserCollection).online_users || [];
     }
+
+    export async function editUserName(userId: string, newName: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'users/name/' + encodeURIComponent(userId),
+            stringData: newName
+        });
+    }
+
+    export async function editUserInfo(userId: string, newInfo: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'users/info/' + encodeURIComponent(userId),
+            stringData: newInfo
+        });
+    }
+
+    export async function editUserTitle(userId: string, newTitle: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'users/title/' + encodeURIComponent(userId),
+            stringData: newTitle
+        });
+    }
+
+    export async function editUserSignature(userId: string, newSignature: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'users/signature/' + encodeURIComponent(userId),
+            stringData: newSignature
+        });
+    }
+
+    export async function deleteUserLogo(userId: string): Promise<void> {
+
+        await RequestHandler.requestDelete({
+            path: 'users/logo/' + encodeURIComponent(userId)
+        });
+    }
+
+    export async function deleteUser(userId: string): Promise<void> {
+
+        await RequestHandler.requestDelete({
+            path: 'users/' + encodeURIComponent(userId)
+        });
+    }
 }

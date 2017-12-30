@@ -87,6 +87,8 @@ export module PageActions {
 
         editUserName(id: string, newName: string): Promise<boolean>;
 
+        editUserInfo(id: string, newTitle: string): Promise<boolean>;
+
         editUserTitle(id: string, newTitle: string): Promise<boolean>;
 
         editUserSignature(id: string, newSignature: string): Promise<boolean>;
@@ -285,24 +287,29 @@ export module PageActions {
 
     class UserCallback implements IUserCallback {
 
-        editUserName(id: string, newName: string): Promise<boolean> {
+        async editUserName(id: string, newName: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(UserRepository.editUserName(id, newName.trim()));
         }
 
-        editUserTitle(id: string, newTitle: string): Promise<boolean> {
+        async editUserInfo(id: string, newInfo: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(UserRepository.editUserInfo(id, newInfo.trim()));
         }
 
-        editUserSignature(id: string, newSignature: string): Promise<boolean> {
+        async editUserTitle(id: string, newTitle: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(UserRepository.editUserTitle(id, newTitle.trim()));
         }
 
-        deleteUserLogo(id: string): Promise<boolean> {
+        async editUserSignature(id: string, newSignature: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(UserRepository.editUserSignature(id, newSignature.trim()));
+        }
+
+        async deleteUserLogo(id: string): Promise<boolean> {
+
+            return await Pages.trueOrShowErrorAndFalse(UserRepository.deleteUserLogo(id));
         }
 
         uploadUserLogo(id: string): Promise<boolean> {
@@ -310,9 +317,9 @@ export module PageActions {
             return Promise.resolve(true);
         }
 
-        deleteUser(id: string): Promise<boolean> {
+        async deleteUser(id: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(UserRepository.deleteUser(id));
         }
     }
 

@@ -7,6 +7,7 @@ import {PageActions} from "../pages/action";
 import {Privileges} from "../services/privileges";
 import {EditViews} from "./edit";
 import {UsersPage} from "../pages/usersPage";
+import {ThreadsPage} from "../pages/threadsPage";
 
 export module UsersView {
 
@@ -366,14 +367,27 @@ export module UsersView {
             .replace('{lastSeen}', DisplayHelpers.getDateTime(user.lastSeen))
             .replace('{upVotes}', DisplayHelpers.intToString(user.receivedUpVotes))
             .replace('{downVotes}', DisplayHelpers.intToString(user.receivedDownVotes))
-            .replace('{signature}', (user.signature && user.signature.length) ? user.signature : '–')
+            .replace('{signature}', (user.signature && user.signature.length)
+                ? DOMHelpers.escapeStringForContent(user.signature)
+                : '–')
         );
+        if (user.info && user.info.length) {
+
+            let info = new DOMAppender('<div class="uk-text-primary uk-text-small">', '</div>');
+            result.append(info);
+
+            info.appendString(user.info);
+        }
         {
             let editContent = [];
 
             if (privileges.canEditUserName(user.id)) {
 
                 editContent.push('<a class="edit-user-name-link">Edit name</a>');
+            }
+            if (privileges.canEditUserInfo(user.id)) {
+
+                editContent.push('<a class="edit-user-info-link">Edit info</a>');
             }
             if (privileges.canEditUserTitle(user.id)) {
 
@@ -393,14 +407,6 @@ export module UsersView {
                 editContent.push('<a class="delete-user-link"><span class="uk-icon" uk-icon="icon: trash"></span></a>');
             }
 
-            if (user.info && user.info.length) {
-
-                let info = new DOMAppender('<div class="uk-text-primary uk-text-small">', '</div>');
-                result.append(info);
-
-                info.appendString(user.info);
-            }
-
             if (editContent.length) {
 
                 let editParagraph = new DOMAppender('<p>', '<p>');
@@ -416,13 +422,16 @@ export module UsersView {
         Views.setupSubscribedThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfUsersLinks(resultElement);
 
-        resultElement.getElementsByClassName('edit-user-name-link')[0].addEventListener('click', (ev) =>{
+        resultElement.getElementsByClassName('edit-user-name-link')[0].addEventListener('click', async (ev) =>{
 
             ev.preventDefault();
             const name = EditViews.getInput('Edit user name', user.name);
             if (name && name.length && (name != user.name)) {
 
-                reloadPageIfOk(callback.editUserName(user.id, name));
+                if (await callback.editUserName(user.id, name)) {
+
+                    new ThreadsPage().displayForUser(name);
+                }
             }
         });
         resultElement.getElementsByClassName('edit-user-title-link')[0].addEventListener('click', (ev) =>{
@@ -432,6 +441,15 @@ export module UsersView {
             if (title && title.length && (title != user.title)) {
 
                 reloadPageIfOk(callback.editUserTitle(user.id, title));
+            }
+        });
+        resultElement.getElementsByClassName('edit-user-info-link')[0].addEventListener('click', (ev) =>{
+
+            ev.preventDefault();
+            const info = EditViews.getInput('Edit user info', user.info);
+            if (info && info.length && (info != user.title)) {
+
+                reloadPageIfOk(callback.editUserInfo(user.id, info));
             }
         });
         resultElement.getElementsByClassName('edit-user-signature-link')[0].addEventListener('click', (ev) =>{

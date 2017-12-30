@@ -184,6 +184,8 @@ export module Privileges {
 
         canEditUserName(id: string): Promise<boolean>;
 
+        canEditUserInfo(id: string): Promise<boolean>;
+
         canEditUserTitle(id: string): Promise<boolean>;
 
         canEditUserSignature(id: string): Promise<boolean>;
@@ -196,6 +198,11 @@ export module Privileges {
     class UserPrivilegesAllowAll implements IUserPrivileges {
 
         canEditUserName(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canEditUserInfo(id: string): Promise<boolean> {
 
             return Promise.resolve(true);
         }
