@@ -25,6 +25,14 @@ export module TagRepository {
         sort: string;
     }
 
+    export function sortByName(tags: Tag[]): void {
+
+        tags.sort((first, second) => {
+
+            return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
+        });
+    }
+
     let latestTags: Tag[];
 
     export async function getTags(request: GetTagsRequest): Promise<TagCollection> {

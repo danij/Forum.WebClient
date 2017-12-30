@@ -9,6 +9,7 @@ import {ThreadRepository} from "../services/threadRepository";
 import {PageActions} from "../pages/action";
 import {Privileges} from "../services/privileges";
 import {EditViews} from "./edit";
+import {TagRepository} from "../services/tagRepository";
 
 export module CategoriesView {
 
@@ -351,6 +352,7 @@ export module CategoriesView {
 
         if (category.tags && category.tags.length) {
 
+            TagRepository.sortByName(category.tags);
             for (let tag of category.tags) {
 
                 result.appendChild(TagsView.createTagElement(tag).toElement());

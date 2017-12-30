@@ -328,10 +328,7 @@ export module TagsView {
     export function showSelectTagsDialog(currentTags: TagRepository.Tag[], allTags: TagRepository.Tag[],
                                          onSave: (added: string[], removed: string[]) => void): void {
 
-        allTags.sort((first: TagRepository.Tag, second: TagRepository.Tag) => {
-
-            return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
-        });
+        TagRepository.sortByName(allTags);
 
         let modal = document.getElementById('select-tags-modal');
         Views.showModal(modal);
@@ -394,10 +391,7 @@ export module TagsView {
 
     export function showSelectSingleTagDialog(allTags: TagRepository.Tag[], onSave: (selected: string) => void): void {
 
-        allTags.sort((first: TagRepository.Tag, second: TagRepository.Tag) => {
-
-            return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
-        });
+        TagRepository.sortByName(allTags);
 
         let modal = document.getElementById('select-single-tag-modal');
         Views.showModal(modal);

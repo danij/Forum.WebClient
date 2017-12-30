@@ -452,6 +452,7 @@ export module ThreadsView {
 
             if (thread.tags && thread.tags.length){
 
+                TagRepository.sortByName(thread.tags);
                 for (let tag of thread.tags) {
 
                     details.appendChild(TagsView.createTagElement(tag).toElement());
