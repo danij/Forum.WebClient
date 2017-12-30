@@ -70,7 +70,7 @@ export module PageActions {
 
     export interface IThreadMessageCallback {
 
-        editThreadMessageContent(id: string, newContent: string): Promise<boolean>;
+        editThreadMessageContent(id: string, newContent: string, changeReason: string): Promise<boolean>;
 
         moveThreadMessage(id: string, targetThreadId: string): Promise<boolean>;
 
@@ -251,9 +251,10 @@ export module PageActions {
 
     class ThreadMessageCallback implements IThreadMessageCallback {
 
-        async editThreadMessageContent(id: string, newContent: string): Promise<boolean> {
+        async editThreadMessageContent(id: string, newContent: string, changeReason: string): Promise<boolean> {
 
-            return await Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.editThreadMessageContent(id, newContent.trim()));
+            return await Pages.trueOrShowErrorAndFalse(
+                ThreadMessageRepository.editThreadMessageContent(id, newContent.trim(), changeReason.trim()));
         }
 
         async moveThreadMessage(id: string, targetThreadId: string): Promise<boolean> {

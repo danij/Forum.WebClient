@@ -336,9 +336,9 @@ export module ThreadMessagesView {
             let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
             let message = messagesById[messageId];
 
-            showEditThreadMessageDialog(message.content, async (text: string) => {
+            showEditThreadMessageDialog(message.content, async (text: string, changeReason: string) => {
 
-                if (await callback.editThreadMessageContent(messageId, text)) {
+                if (await callback.editThreadMessageContent(messageId, text, changeReason)) {
 
                     new ThreadMessagesPage().displayForThreadMessage(messageId);
                 }
@@ -528,15 +528,18 @@ export module ThreadMessagesView {
         } as MessageEditControl;
     }
 
-    export function showEditThreadMessageDialog(initialText: string, onSave: (text: string) => void): void {
+    export function showEditThreadMessageDialog(initialText: string,
+                                                onSave: (text: string, changeReason: string) => void): void {
 
         let modal = document.getElementById('edit-thread-message-modal');
         Views.showModal(modal);
 
         let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
         let container = modal.getElementsByClassName('uk-modal-body')[0] as HTMLElement;
+        let changeReasonInput = modal.getElementsByClassName('change-reason-input')[0] as HTMLInputElement;
 
         container.innerHTML = '';
+        changeReasonInput.value = '';
 
         let editControl = new EditViews.EditControl(container, initialText);
 
@@ -549,7 +552,7 @@ export module ThreadMessagesView {
 
             if (currentText.length && (currentText != initialText)) {
 
-                onSave(currentText);
+                onSave(currentText, changeReasonInput.value);
             }
         });
     }

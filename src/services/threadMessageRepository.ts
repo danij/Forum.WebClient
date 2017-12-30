@@ -128,10 +128,10 @@ export module ThreadMessageRepository {
         })).id || '';
     }
 
-    export async function editThreadMessageContent(messageId: string, newContent: string): Promise<void> {
+    export async function editThreadMessageContent(messageId: string, newContent: string, changeReason: string): Promise<void> {
 
         await RequestHandler.put({
-            path: 'thread_messages/content/' + encodeURIComponent(messageId),
+            path: 'thread_messages/content/' + encodeURIComponent(messageId) + '/' + encodeURIComponent(changeReason),
             stringData: newContent
         });
     }
