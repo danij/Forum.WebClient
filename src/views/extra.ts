@@ -79,5 +79,12 @@ export module ViewsExtra {
                 table.classList.add('uk-table', 'uk-table-small', 'uk-table-striped');
             }
         }
+
+        let links = container.getElementsByTagName('a');
+        for (let i = 0; i < links.length; ++i) {
+
+            let link = links[i];
+            link.setAttribute('rel', 'nofollow');
+        }
     }
 }
