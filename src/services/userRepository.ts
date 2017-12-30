@@ -52,6 +52,14 @@ export module UserRepository {
         sort: string;
     }
 
+    export function sortByName(users: User[]): void {
+
+        users.sort((first, second) => {
+
+            return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
+        });
+    }
+
     export async function getUsers(request: GetUsersRequest): Promise<UserCollection> {
 
         return await RequestHandler.get({
@@ -74,10 +82,7 @@ export module UserRepository {
         }) as UserCollection);
 
         collection.users = collection.users || [];
-        collection.users.sort((first, second) => {
-
-            return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
-        });
+        UserRepository.sortByName(collection.users);
         return collection.users;
     }
 
