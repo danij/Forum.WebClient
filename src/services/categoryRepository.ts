@@ -45,14 +45,14 @@ export module CategoryRepository {
 
     export async function getRootCategories(): Promise<Category[]> {
 
-        return sortChildCategories((await RequestHandler.get({
+        return sortCategories((await RequestHandler.get({
             path: 'categories/root'
         }) as CategoryCollection).categories);
     }
 
     export async function getAllCategories(): Promise<Category[]> {
 
-        return sortChildCategories((await RequestHandler.get({
+        return sortCategories((await RequestHandler.get({
             path: 'categories/'
         }) as CategoryCollection).categories);
     }
@@ -89,7 +89,7 @@ export module CategoryRepository {
             path: 'category/' + encodeURIComponent(id)
         }) as SingleCategory).category;
 
-        sortChildCategories(result.children);
+        sortCategories(result.children);
 
         return result;
     }
@@ -99,15 +99,16 @@ export module CategoryRepository {
         return Math.sign(first.displayOrder - second.displayOrder);
     }
 
-    function sortChildCategories(categories: Category[]): Category[] {
+    function sortCategories(categories: Category[]): Category[] {
 
         if (null == categories) return null;
+        categories.sort(compareCategoriesByDisplayOrder);
 
         for (let category of categories) {
 
             if (category.children && category.children.length) {
 
-                category.children.sort(compareCategoriesByDisplayOrder);
+                sortCategories(category.children);
             }
         }
 
