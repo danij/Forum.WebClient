@@ -90,6 +90,9 @@ export module DOMHelpers {
 
     export function removeEventListeners<T extends HTMLElement>(element: T): T {
 
+        if (null == element.parentNode) {
+            return element;
+        }
         let newElement = element.cloneNode(true) as T;
         element.parentNode.replaceChild(newElement, element);
 
