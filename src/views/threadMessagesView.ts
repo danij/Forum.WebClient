@@ -226,7 +226,7 @@ export module ThreadMessagesView {
                     }
                     const title = message.lastUpdated.userName + ': ' + reason;
 
-                    messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning" title="${DOMHelpers.escapeStringForAttribute(title)}" uk-tooltip>Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
+                    messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning" title="${DOMHelpers.escapeStringForAttribute(title)}">Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
                 }
                 if (message.ip && message.ip.length) {
 
@@ -413,7 +413,7 @@ export module ThreadMessagesView {
 
         let appender = new DOMAppender('<div>', '</div>');
 
-        let comments = await callback.getCommentsOfThreadMssage(messageId) || [];
+        let comments = await callback.getCommentsOfThreadMessage(messageId) || [];
 
         const solvedCommentSpan = '<span class="uk-icon-button uk-float-right" uk-icon="check" title="Already solved" uk-tooltip></span>';
 

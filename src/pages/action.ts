@@ -78,7 +78,7 @@ export module PageActions {
 
         commentThreadMessage(id: string, comment: string): Promise<boolean>;
 
-        getCommentsOfThreadMssage(id: string): Promise<ThreadMessageRepository.ThreadMessageComment[]>;
+        getCommentsOfThreadMessage(id: string): Promise<ThreadMessageRepository.ThreadMessageComment[]>;
 
         solveThreadMessageComment(id: string): Promise<boolean>;
     }
@@ -251,32 +251,32 @@ export module PageActions {
 
     class ThreadMessageCallback implements IThreadMessageCallback {
 
-        editThreadMessageContent(id: string, newContent: string): Promise<boolean> {
+        async editThreadMessageContent(id: string, newContent: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.editThreadMessageContent(id, newContent.trim()));
         }
 
-        moveThreadMessage(id: string, targetThreadId: string): Promise<boolean> {
+        async moveThreadMessage(id: string, targetThreadId: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.moveThreadMessage(id, targetThreadId));
         }
 
-        deleteThreadMessage(id: string): Promise<boolean> {
+        async deleteThreadMessage(id: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.deleteThreadMessage(id));
         }
 
-        commentThreadMessage(id: string, comment: string): Promise<boolean> {
+        async commentThreadMessage(id: string, comment: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.commentThreadMessage(id, comment.trim()));
         }
 
-        solveThreadMessageComment(id: string): Promise<boolean> {
+        async solveThreadMessageComment(id: string): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.solveCommentOfThreadMessage(id));
         }
 
-        async getCommentsOfThreadMssage(id: string): Promise<ThreadMessageRepository.ThreadMessageComment[]> {
+        async getCommentsOfThreadMessage(id: string): Promise<ThreadMessageRepository.ThreadMessageComment[]> {
 
             return (await ThreadMessageRepository.getThreadMessageComments(id)).message_comments;
         }

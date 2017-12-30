@@ -127,4 +127,41 @@ export module ThreadMessageRepository {
             stringData: content
         })).id || '';
     }
+
+    export async function editThreadMessageContent(messageId: string, newContent: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'thread_messages/content/' + encodeURIComponent(messageId),
+            stringData: newContent
+        });
+    }
+
+    export async function moveThreadMessage(messageId: string, targetThreadId: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'thread_messages/move/' + encodeURIComponent(messageId) + '/' + encodeURIComponent(targetThreadId)
+        });
+    }
+
+    export async function deleteThreadMessage(messageId: string): Promise<void> {
+
+        await RequestHandler.requestDelete({
+            path: 'thread_messages/' + encodeURIComponent(messageId)
+        });
+    }
+
+    export async function commentThreadMessage(messageId: string, comment: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'thread_messages/comment/' + encodeURIComponent(messageId),
+            stringData: comment
+        });
+    }
+
+    export async function solveCommentOfThreadMessage(commentId: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'thread_messages/comment/solved/' + encodeURIComponent(commentId),
+        });
+    }
 }
