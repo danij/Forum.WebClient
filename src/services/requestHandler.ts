@@ -73,7 +73,11 @@ export module RequestHandler {
 
                     let content = parseContent(xmlHttp.responseText);
 
-                    if ((null == content) || content.status) {
+                    if (null == content) {
+
+                        reject(new Error("No content received"));
+                    }
+                    else if (content.status) {
 
                         reject(new Error(getStatusCode(content.status)));
                     }
