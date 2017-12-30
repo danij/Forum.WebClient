@@ -8,6 +8,7 @@ import {Privileges} from "../services/privileges";
 import {EditViews} from "./edit";
 import {UsersPage} from "../pages/usersPage";
 import {ThreadsPage} from "../pages/threadsPage";
+import {ViewsExtra} from "./extra";
 
 export module UsersView {
 
@@ -373,7 +374,7 @@ export module UsersView {
         );
         if (user.info && user.info.length) {
 
-            let info = new DOMAppender('<div class="uk-text-primary uk-text-small">', '</div>');
+            let info = new DOMAppender('<div class="uk-text-primary uk-text-small render-style">', '</div>');
             result.append(info);
 
             info.appendString(user.info);
@@ -421,6 +422,12 @@ export module UsersView {
         Views.setupThreadsOfUsersLinks(resultElement);
         Views.setupSubscribedThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfUsersLinks(resultElement);
+
+        let toRender = resultElement.getElementsByClassName('render-style');
+        for (let i = 0; i < toRender.length; ++i) {
+
+            ViewsExtra.expandAndAdjust(toRender[i] as HTMLElement);
+        }
 
         resultElement.getElementsByClassName('edit-user-name-link')[0].addEventListener('click', async (ev) =>{
 

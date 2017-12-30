@@ -87,4 +87,10 @@ export module ViewsExtra {
             link.setAttribute('rel', 'nofollow');
         }
     }
+
+    export function expandAndAdjust(container: HTMLElement): void {
+
+        container.innerHTML = expandContent(container.innerText);
+        adjustMessageContent(container);
+    }
 }
