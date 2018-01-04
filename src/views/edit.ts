@@ -141,7 +141,7 @@ export module EditViews {
         insertQuote(message: ThreadMessageRepository.ThreadMessage): void {
 
             let quotedContent = message.content.split(/\n/).map((line) => `> ${line}`).join('\n');
-            this.textArea.value += `###### _${message.createdBy.name} @ ${DisplayHelpers.getDateTime(message.created)}_\n${quotedContent}\n\n`;
+            this.textArea.value += `|_${message.createdBy.name} @ ${DisplayHelpers.getDateTime(message.created)}_|\n|:-:|\n${quotedContent}\n\n`;
         }
 
         private setupEvents(): void {
