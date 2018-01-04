@@ -127,7 +127,12 @@ export module EditViews {
             grid.classList.add('uk-grid');
             grid.setAttribute('uk-grid', '');
 
-            grid.appendChild(this.textArea);
+            let textAreaContainer = document.createElement('div');
+            textAreaContainer.classList.add('edit-control-container');
+            textAreaContainer.appendChild(this.createEditControls());
+            textAreaContainer.appendChild(this.textArea);
+
+            grid.appendChild(textAreaContainer);
             grid.appendChild(this.resultContainer);
 
             this.setupEvents();
@@ -163,6 +168,145 @@ export module EditViews {
             this.resultContainer.innerHTML = ViewsExtra.expandContent(text);
             ViewsExtra.adjustMessageContent(this.resultContainer.parentNode as HTMLElement);
             ViewsExtra.refreshMath(this.resultContainer);
+        }
+
+        private createEditControls(): HTMLElement {
+
+            let list = document.createElement('ul');
+            list.classList.add('uk-iconnav');
+
+            let actions = [
+                {icon: 'bold', title: 'Make selection bold', callback: () => this.addBold()},
+                {icon: 'italic', title: 'Make selection italic', callback: () => this.addItalic()},
+                {icon: 'code', title: 'Make selection monospace', callback: () => this.addMonospace()},
+                {icon: 'strikethrough', title: 'Make selection strikethrough', callback: () => this.addStrikeThrough()},
+                null,
+                {icon: 'list', title: 'Add list', callback: () => this.addList()},
+                {icon: 'table', title: 'Add table', callback: () => this.addTable()},
+                {icon: 'minus', title: 'Add horizontal rule', callback: () => this.addHorizontalRule()},
+                null,
+                {icon: 'link', title: 'Add link', callback: () => this.addLink()},
+                {icon: 'image', title: 'Add image', callback: () => this.addImage()}
+            ];
+
+            for (let action of actions) {
+
+                let listElement = document.createElement('li');
+                list.appendChild(listElement);
+
+                if (action) {
+
+                    let link = document.createElement('a');
+                    listElement.appendChild(link);
+
+                    link.setAttribute('uk-icon', `icon: ${action.icon}`);
+                    link.setAttribute('title', action.title);
+                    link.setAttribute('uk-tooltip', '');
+                    link.addEventListener('click', (ev) => {
+
+                        ev.preventDefault();
+                        action.callback();
+                    });
+                }
+            }
+
+            return list;
+        }
+
+        private addBold(): void {
+
+            this.replaceTextAtCurrentPosition((value) => `**${value}**`);
+        }
+
+        private addItalic(): void {
+
+            this.replaceTextAtCurrentPosition((value) => `*${value}*`);
+        }
+
+        private addMonospace(): void {
+
+            this.replaceTextAtCurrentPosition((value) => `\`${value}\``);
+        }
+
+        private addStrikeThrough(): void {
+
+            this.replaceTextAtCurrentPosition((value) => `~~${value}~~`);
+        }
+
+        private addList(): void {
+
+            this.addTextAtCurrentPosition('\n' +
+                '* Item 1\n' +
+                '* Item 2\n' +
+                '* Item 3\n\n');
+        }
+
+        private addTable(): void {
+
+            this.addTextAtCurrentPosition('\n' +
+                '|Col 1|Col 2|Col 3|\n' +
+                '|:-|:-:|-:|\n' +
+                '|1|2|3|\n' +
+                '|aa|bb|cc|\n\n');
+        }
+
+        private addHorizontalRule(): void {
+
+            this.addTextAtCurrentPosition('\n\n---\n\n');
+        }
+
+        private addLink(): void {
+
+            let link = getInput('Please enter the link to add');
+            if (link) {
+
+                let title = getInput('Please enter the title for the link');
+
+                if (title) {
+
+                    this.addTextAtCurrentPosition(`[${title}](${link})`);
+                }
+                else {
+
+                    this.addTextAtCurrentPosition(link);
+                }
+            }
+        }
+
+        private addImage(): void {
+
+            let link = getInput('Please enter the link to the image');
+            if (link) {
+
+                let title = getInput('Please enter the image title');
+                let altText = title || link;
+
+                if (title) {
+
+                    this.addTextAtCurrentPosition(`![${altText}](${link} "${title}")`);
+                } else {
+
+                    this.addTextAtCurrentPosition(`![${altText}](${link})`);
+                }
+            }
+        }
+
+        private replaceTextAtCurrentPosition(replaceFn: (value: string) => string): void {
+
+            let selectionStart = this.textArea.selectionStart;
+            let selectionEnd = this.textArea.selectionEnd;
+            let currentSelection = this.textArea.value.substring(selectionStart, selectionEnd);
+
+            let replacement = replaceFn(currentSelection);
+
+            this.textArea.value = this.textArea.value.substr(0, selectionStart) + replacement +
+                this.textArea.value.substring(selectionEnd);
+        }
+
+        private addTextAtCurrentPosition(value: string): void {
+
+            this.textArea.value = this.textArea.value.substr(0, this.textArea.selectionStart) +
+                value + this.textArea.value.substring(this.textArea.selectionStart);
         }
     }
 }

@@ -477,9 +477,12 @@ html {
         .uk-grid {
             margin-left: 0;
 
-            textarea {
-                min-height: 200px;
-                padding-left: 10px;
+            .edit-control-container {
+                width: 100%;
+
+                textarea {
+                    min-height: 200px;
+                }
             }
 
             .uk-grid-margin {
@@ -530,14 +533,19 @@ html {
         margin-left: 0;
     }
 
-    textarea {
-        width: 48%;
-        min-height: 100px;
-        padding-left: 10px;
-    }
-
     .edit-preview {
         width: 48%;
+    }
+}
+
+.edit-control-container {
+    width: 48%;
+    padding-left: 0;
+
+    textarea {
+        width: 100%;
+        min-height: 100px;
+        margin-top: 10px;
     }
 }
 
