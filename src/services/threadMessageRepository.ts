@@ -112,11 +112,7 @@ export module ThreadMessageRepository {
     export async function getThreadMessageComments(messageId: string) : Promise<ThreadMessageCommentCollection> {
 
         return await RequestHandler.get({
-            path: 'thread_messages/comments/' + encodeURIComponent(messageId),
-            query: {
-                'page': 0,
-                'sort': 'descending'
-            }
+            path: 'thread_messages/comments/' + encodeURIComponent(messageId)
         }) as ThreadMessageCommentCollection;
     }
 
