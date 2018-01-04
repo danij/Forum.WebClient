@@ -1,7 +1,7 @@
 //configuration data
 window.serviceConfig = {
 
-    uri: "http://dani.forum:8080/forum/api",
+    uri: "http://dani.forum:8080/api",
     responsePrefix: "while(1);"
 };
 
@@ -20,5 +20,5 @@ window.displayConfig = {
 
 window.masterPageConfig = {
 
-    baseUri: "http://dani.forum:8080/forum"
+    baseUri: "http://dani.forum:8080/"
 };
