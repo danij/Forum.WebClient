@@ -30,6 +30,11 @@ export module Pages {
 
     declare const masterPageConfig: MasterPageConfig;
 
+    while (masterPageConfig.baseUri.endsWith('/')) {
+
+        masterPageConfig.baseUri = masterPageConfig.baseUri.substr(0, masterPageConfig.baseUri.length - 1);
+    }
+
     export function getHomeUrl(): string {
 
         return masterPageConfig.baseUri;
