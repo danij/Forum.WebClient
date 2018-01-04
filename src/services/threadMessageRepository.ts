@@ -80,6 +80,12 @@ export module ThreadMessageRepository {
         message_comments: ThreadMessageComment[];
     }
 
+    export class GetThreadMessageCommentsRequest {
+
+        page: number;
+        sort: string;
+    }
+
     export async function getLatestThreadMessages() : Promise<ThreadMessageCollection> {
 
         return await RequestHandler.get({
@@ -113,6 +119,23 @@ export module ThreadMessageRepository {
 
         return await RequestHandler.get({
             path: 'thread_messages/comments/' + encodeURIComponent(messageId)
+        }) as ThreadMessageCommentCollection;
+    }
+
+    export async function getAllThreadMessageComments(request: GetThreadMessageCommentsRequest) : Promise<ThreadMessageCommentCollection> {
+
+        return await RequestHandler.get({
+            path: 'thread_messages/allcomments',
+            query: request
+        }) as ThreadMessageCommentCollection;
+    }
+
+    export async function getThreadMessageCommentsWrittenByUser(userId: string,
+                                                                request: GetThreadMessageCommentsRequest) : Promise<ThreadMessageCommentCollection> {
+
+        return await RequestHandler.get({
+            path: 'thread_messages/comments/user/' + encodeURIComponent(userId),
+            query: request
         }) as ThreadMessageCommentCollection;
     }
 

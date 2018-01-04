@@ -13,6 +13,7 @@ import {ThreadMessagesPage} from "./threadMessagesPage";
 import {MasterView} from "../views/masterView";
 import {ViewsExtra} from "../views/extra";
 import {UserRepository} from "../services/userRepository";
+import {ThreadMessageCommentsPage} from "./threadMessageCommentsPage";
 
 export module MasterPage {
 
@@ -54,6 +55,14 @@ export module MasterPage {
         let usersPageLink = document.getElementById('UsersPageLink');
         linkElements.push(usersPageLink);
         usersPageLink.addEventListener('click', (ev) => {
+
+            ev.preventDefault();
+            new UsersPage().display();
+        });
+
+        let threadMessageCommentsPageLink = document.getElementById('CommentsPageLink');
+        linkElements.push(threadMessageCommentsPageLink);
+        threadMessageCommentsPageLink.addEventListener('click', (ev) => {
 
             ev.preventDefault();
             new UsersPage().display();
@@ -127,7 +136,8 @@ export module MasterPage {
             TagsPage.loadPage,
             ThreadsPage.loadPage,
             ThreadMessagesPage.loadPage,
-            UsersPage.loadPage
+            UsersPage.loadPage,
+            ThreadMessageCommentsPage.loadPage
         ];
 
         let location = window.location.toString().toLowerCase().replace(/\\/g, '/');

@@ -246,6 +246,11 @@ export module Pages {
         return `threads/subscribed_by_user/${encodeURIComponent(name)}`;
     }
 
+    export function getThreadMessageCommentsWrittenByUserUrl(name: string): string {
+
+        return `thread_message_comments/user/${encodeURIComponent(name)}`;
+    }
+
     export function getThreadMessagesOfUserUrlFull(user: UserRepository.User): string {
 
         return getUrl(getThreadMessagesOfUserUrl(user.name));

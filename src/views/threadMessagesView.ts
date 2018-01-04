@@ -4,7 +4,6 @@ import {Pages} from "../pages/common";
 import {Views} from "./common";
 import {ThreadRepository} from "../services/threadRepository";
 import {UserRepository} from "../services/userRepository";
-import {ThreadsView} from "./threadsView";
 import {UsersView} from "./usersView";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {ViewsExtra} from "./extra";
@@ -12,6 +11,7 @@ import {Privileges} from "../services/privileges";
 import {PageActions} from "../pages/action";
 import {EditViews} from "./edit";
 import {ThreadMessagesPage} from "../pages/threadMessagesPage";
+import {ThreadsView} from "./threadsView";
 
 export module ThreadMessagesView {
 
@@ -43,6 +43,11 @@ export module ThreadMessagesView {
 
         element: HTMLElement;
         editControl: EditViews.EditControl;
+    }
+
+    export interface CommentsPageDisplayInfo extends Views.SortInfo {
+
+        user?: UserRepository.User
     }
 
     export function createRecentThreadMessagesView(messages: ThreadMessageRepository.ThreadMessage[]): HTMLElement {
@@ -555,5 +560,20 @@ export module ThreadMessagesView {
                 onSave(currentText, changeReasonInput.value);
             }
         });
+    }
+
+    export function createCommentsPageContent(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
+                                              info: CommentsPageDisplayInfo,
+                                              onPageNumberChange: Views.PageNumberChangeCallback,
+                                              getLinkForPage: Views.GetLinkForPageCallback,
+                                              callback: IThreadMessageCallback,
+                                              privileges: IThreadMessagePrivileges) {
+
+        return null;
+    }
+
+    export function createCommentsList(comments: ThreadMessageRepository.ThreadMessageComment[]): HTMLElement {
+
+        return null
     }
 }
