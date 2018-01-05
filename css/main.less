@@ -445,27 +445,35 @@ html {
     }
 }
 
+.message-comments-container {
+    min-height: 500px;
+}
+
+.message-comments-content {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.comment-content {
+    p {
+        margin: 0;
+    }
+}
+
 #thread-message-comments-modal {
-
-    .message-comments-container {
-        min-height: 500px;
-    }
-
-    .message-comments-content {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-
-    .comment-content {
-        p {
-            margin-bottom: 0;
-        }
-    }
-
     .uk-divider-icon {
         margin-top: 10px;
         margin-bottom: 10px;
     }
+}
+
+.message-comment-above-message {
+
+    border: solid 1px #CFCFCF;
+    background-color: #EFEFEF;
+    background: linear-gradient(90deg, #EFEFEF 0%, #FFFFFF 100%);
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
 #edit-thread-message-modal .uk-modal-dialog {

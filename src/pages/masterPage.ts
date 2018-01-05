@@ -65,7 +65,7 @@ export module MasterPage {
         threadMessageCommentsPageLink.addEventListener('click', (ev) => {
 
             ev.preventDefault();
-            new UsersPage().display();
+            new ThreadMessageCommentsPage().display();
         });
 
         ViewsExtra.init();

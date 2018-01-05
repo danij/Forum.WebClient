@@ -12,6 +12,7 @@ import {PageActions} from "../pages/action";
 import {EditViews} from "./edit";
 import {ThreadMessagesPage} from "../pages/threadMessagesPage";
 import {ThreadsView} from "./threadsView";
+import {CommonEntities} from "../services/commonEntities";
 
 export module ThreadMessagesView {
 
@@ -31,6 +32,14 @@ export module ThreadMessagesView {
         paginationBottom: HTMLElement;
         list: HTMLElement;
         editControl: EditViews.EditControl;
+    }
+
+    export class ThreadMessageCommentsPageContent {
+
+        sortControls: HTMLElement;
+        paginationTop: HTMLElement;
+        paginationBottom: HTMLElement;
+        list: HTMLElement;
     }
 
     export interface ThreadMessagePageDisplayInfo extends Views.SortInfo {
@@ -194,132 +203,14 @@ export module ThreadMessagesView {
             let messageContainer = new DOMAppender('<div class="uk-card uk-card-body discussion-thread-message">', '</div>');
             result.append(messageContainer);
 
-            const showParentThreadName = message.parentThread && message.parentThread.name && message.parentThread.name.length;
+            const showParentThreadName = (message.parentThread && message.parentThread.name
+                && message.parentThread.name.length) ? true : false;
 
-            if (showParentThreadName) {
-
-                let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
-                let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-                let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
-
-                let link = new DOMAppender(`<a id="${id}" href="${href}" ${data}>`, '</a>');
-                link.appendString(message.parentThread.name);
-
-                let container = new DOMAppender('<div class="message-parent-thread uk-card-badge">', '</div>');
-                container.append(link);
-                messageContainer.append(container);
-            }
-            else {
-
-                const number = collection.page * collection.pageSize + i + 1;
-                let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
-                let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-                let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
-                messageContainer.appendRaw(`<div class="message-number uk-text-meta"><a id="${id}" href="${href}" ${data}>#${DisplayHelpers.intToString(number)}</a></div>`);
-            }
-            {
-                const extraClass = showParentThreadName ? 'right' : '';
-                let messageDetailsContainer = new DOMAppender(`<div class="uk-card-badge message-time-container ${extraClass}">`, '</div>');
-                messageContainer.append(messageDetailsContainer);
-                messageDetailsContainer.appendRaw(`<span class="message-time">${DisplayHelpers.getDateTime(message.created)} </span>`);
-
-                if (message.lastUpdated && message.lastUpdated.at) {
-
-                    let reason = (message.lastUpdated.reason || '').trim();
-                    if (reason.length < 1) {
-                        reason = '<no reason>';
-                    }
-                    const title = message.lastUpdated.userName + ': ' + reason;
-
-                    messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning" title="${DOMHelpers.escapeStringForAttribute(title)}">Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
-                }
-                if (message.ip && message.ip.length) {
-
-                    messageDetailsContainer.appendRaw(`<samp>${DOMHelpers.escapeStringForContent(message.ip)}</samp>`);
-                }
-                if (message.commentsCount > 0) {
-
-                    const total = DisplayHelpers.intToString(message.commentsCount);
-                    const totalNoun = (1 == message.commentsCount) ? 'flag' : 'flags';
-                    const unsolved = DisplayHelpers.intToString(message.commentsCount - message.solvedCommentsCount);
-                    const text = `<span uk-icon="icon: warning"></span> ${total} ${totalNoun} (${unsolved} unsolved) <span uk-icon="icon: warning"></span>`;
-                    messageDetailsContainer.appendRaw(`<a class="show-thread-message-comments" data-message-id="${message.id}">${text}</a>`);
-                }
-            }
-            {
-                let author = message.createdBy;
-                let authorContainer = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
-                messageContainer.append(authorContainer);
-                {
-                    let userContainer = new DOMAppender('<div class="pointer-cursor">', '</div>');
-                    authorContainer.append(userContainer);
-
-                    userContainer.append(UsersView.createUserLogoForList(author));
-
-                    const messageThread = message.parentThread || thread;
-                    let extraClass = '';
-
-                    if (messageThread && messageThread.createdBy && messageThread.createdBy.id === author.id) {
-
-                        extraClass = 'user-is-thread-author';
-                    }
-                    let usernameElement = UsersView.createUserNameElement(author, extraClass);
-
-                    userContainer.append(usernameElement);
-
-                    userContainer.append(UsersView.createUserTitleElement(author));
-                }
-                {
-                    authorContainer.append(UsersView.createUserDropdown(author, 'user-info', 'bottom-left'));
-                }
-                {
-                    author.signature = author.signature || '';
-
-                    let signatureContainer = new DOMAppender('<div class="uk-text-center uk-float-left message-signature">', '</div>');
-                    authorContainer.append(signatureContainer);
-
-                    let signature = new DOMAppender('<span title="User signature" uk-tooltip>', '</span>');
-                    signatureContainer.append(signature);
-                    signature.appendString(author.signature);
-                }
-                {
-                    let upVotesNr = DisplayHelpers.intToString((message.upVotes || []).length);
-                    let downVotesNr = DisplayHelpers.intToString((message.downVotes || []).length);
-
-                    authorContainer.appendRaw(`<div class="uk-text-center uk-float-left message-up-vote"><span class="uk-label" title="Up vote message" uk-tooltip>&plus; ${upVotesNr}</span></div>`);
-                    authorContainer.appendRaw(`<div class="uk-text-center uk-float-right message-down-vote"><span class="uk-label" title="Down vote message" uk-tooltip>&minus; ${downVotesNr}</span></div>`);
-                }
-            }
-            {
-                let actions = new DOMAppender('<div class="message-actions">', '</div>');
-                messageContainer.append(actions);
-                let messageId = DOMHelpers.escapeStringForAttribute(message.id);
-
-                if (privileges.canEditThreadMessageContent(message.id)) {
-
-                    actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}" uk-tooltip></a>`);
-                }
-                if (privileges.canMoveThreadMessage(message.id)) {
-
-                    actions.appendRaw(`<a uk-icon="icon: move" class="move-thread-message-link" title="Move to different thread" data-message-id="${messageId}" uk-tooltip></a>`);
-                }
-                if (privileges.canDeleteThreadMessage(message.id)) {
-
-                    actions.appendRaw(`<a uk-icon="icon: trash" class="delete-thread-message-link" title="Delete message" data-message-id="${messageId}" uk-tooltip></a>`);
-                }
-                if (privileges.canCommentThreadMessage(message.id)) {
-
-                    actions.appendRaw(`<a uk-icon="icon: warning" class="comment-thread-message-link" title="Flag & comment" data-message-id="${messageId}" uk-tooltip></a>`);
-                }
-                if (quoteCallback) {
-                    actions.appendRaw(`<a uk-icon="icon: commenting" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}" uk-tooltip></a>`);
-                }
-            }
-            {
-                let content = new DOMAppender('<div class="message-content">', '</div>');
-                messageContainer.append(content);
-                content.appendRaw(ViewsExtra.expandContent(message.content));
-            }
+            createThreadMessageHeader(messageContainer, message, collection, i, showParentThreadName);
+            messageContainer.append(createThreadMessageDetails(message, showParentThreadName));
+            messageContainer.append(createThreadMessageAuthor(message, thread));
+            messageContainer.append(createThreadMessageActionLinks(message, privileges, quoteCallback));
+            messageContainer.append(createThreadMessageContent(message));
 
             if (i < (messages.length - 1)) {
 
@@ -334,6 +225,157 @@ export module ThreadMessagesView {
         Views.setupSubscribedThreadsOfUsersLinks(element);
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
+
+        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, quoteCallback);
+
+        return element;
+    }
+
+    function createThreadMessageHeader(messageContainer: DOMAppender, message: ThreadMessageRepository.ThreadMessage,
+                                       collection: CommonEntities.PaginationInfo, i: number, showParentThreadName: boolean): void {
+
+        if (showParentThreadName) {
+
+            let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
+            let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+            let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
+
+            let link = new DOMAppender(`<a id="${id}" href="${href}" ${data}>`, '</a>');
+            link.appendString(message.parentThread.name);
+
+            let container = new DOMAppender('<div class="message-parent-thread uk-card-badge">', '</div>');
+            container.append(link);
+            messageContainer.append(container);
+        }
+        else {
+
+            const number = collection.page * collection.pageSize + i + 1;
+            let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
+            let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+            let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
+            messageContainer.appendRaw(`<div class="message-number uk-text-meta"><a id="${id}" href="${href}" ${data}>#${DisplayHelpers.intToString(number)}</a></div>`);
+        }
+    }
+
+    function createThreadMessageDetails(message: ThreadMessageRepository.ThreadMessage, showParentThreadName: boolean) {
+
+        const extraClass = showParentThreadName ? 'right' : '';
+        let messageDetailsContainer = new DOMAppender(`<div class="uk-card-badge message-time-container ${extraClass}">`, '</div>');
+        messageDetailsContainer.appendRaw(`<span class="message-time">${DisplayHelpers.getDateTime(message.created)} </span>`);
+
+        if (message.lastUpdated && message.lastUpdated.at) {
+
+            let reason = (message.lastUpdated.reason || '').trim();
+            if (reason.length < 1) {
+                reason = '<no reason>';
+            }
+            const title = message.lastUpdated.userName + ': ' + reason;
+
+            messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning" title="${DOMHelpers.escapeStringForAttribute(title)}">Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
+        }
+        if (message.ip && message.ip.length) {
+
+            messageDetailsContainer.appendRaw(`<samp>${DOMHelpers.escapeStringForContent(message.ip)}</samp>`);
+        }
+        if (message.commentsCount > 0) {
+
+            const total = DisplayHelpers.intToString(message.commentsCount);
+            const totalNoun = (1 == message.commentsCount) ? 'flag' : 'flags';
+            const unsolved = DisplayHelpers.intToString(message.commentsCount - message.solvedCommentsCount);
+            const text = `<span uk-icon="icon: warning"></span> ${total} ${totalNoun} (${unsolved} unsolved) <span uk-icon="icon: warning"></span>`;
+            messageDetailsContainer.appendRaw(`<a class="show-thread-message-comments" data-message-id="${message.id}">${text}</a>`);
+        }
+
+        return messageDetailsContainer;
+    }
+
+    function createThreadMessageAuthor(message: ThreadMessageRepository.ThreadMessage,
+                                       thread: ThreadRepository.Thread): DOMAppender {
+
+        let author = message.createdBy;
+        let authorContainer = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
+        {
+            let userContainer = new DOMAppender('<div class="pointer-cursor">', '</div>');
+            authorContainer.append(userContainer);
+
+            userContainer.append(UsersView.createUserLogoForList(author));
+
+            const messageThread = message.parentThread || thread;
+            let extraClass = '';
+
+            if (messageThread && messageThread.createdBy && messageThread.createdBy.id === author.id) {
+
+                extraClass = 'user-is-thread-author';
+            }
+            let usernameElement = UsersView.createUserNameElement(author, extraClass);
+
+            userContainer.append(usernameElement);
+
+            userContainer.append(UsersView.createUserTitleElement(author));
+        }
+        {
+            authorContainer.append(UsersView.createUserDropdown(author, 'user-info', 'bottom-left'));
+        }
+        {
+            author.signature = author.signature || '';
+
+            let signatureContainer = new DOMAppender('<div class="uk-text-center uk-float-left message-signature">', '</div>');
+            authorContainer.append(signatureContainer);
+
+            let signature = new DOMAppender('<span title="User signature" uk-tooltip>', '</span>');
+            signatureContainer.append(signature);
+            signature.appendString(author.signature);
+        }
+        {
+            let upVotesNr = DisplayHelpers.intToString((message.upVotes || []).length);
+            let downVotesNr = DisplayHelpers.intToString((message.downVotes || []).length);
+
+            authorContainer.appendRaw(`<div class="uk-text-center uk-float-left message-up-vote"><span class="uk-label" title="Up vote message" uk-tooltip>&plus; ${upVotesNr}</span></div>`);
+            authorContainer.appendRaw(`<div class="uk-text-center uk-float-right message-down-vote"><span class="uk-label" title="Down vote message" uk-tooltip>&minus; ${downVotesNr}</span></div>`);
+        }
+
+        return authorContainer;
+    }
+
+    function createThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
+
+        let content = new DOMAppender('<div class="message-content">', '</div>');
+        content.appendRaw(ViewsExtra.expandContent(message.content));
+        return content;
+    }
+
+    function createThreadMessageActionLinks(message: ThreadMessageRepository.ThreadMessage,
+                                            privileges: IThreadMessagePrivileges,
+                                            quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): DOMAppender {
+
+        let actions = new DOMAppender('<div class="message-actions">', '</div>');
+        let messageId = DOMHelpers.escapeStringForAttribute(message.id);
+
+        if (privileges.canEditThreadMessageContent(message.id)) {
+
+            actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}" uk-tooltip></a>`);
+        }
+        if (privileges.canMoveThreadMessage(message.id)) {
+
+            actions.appendRaw(`<a uk-icon="icon: move" class="move-thread-message-link" title="Move to different thread" data-message-id="${messageId}" uk-tooltip></a>`);
+        }
+        if (privileges.canDeleteThreadMessage(message.id)) {
+
+            actions.appendRaw(`<a uk-icon="icon: trash" class="delete-thread-message-link" title="Delete message" data-message-id="${messageId}" uk-tooltip></a>`);
+        }
+        if (privileges.canCommentThreadMessage(message.id)) {
+
+            actions.appendRaw(`<a uk-icon="icon: warning" class="comment-thread-message-link" title="Flag & comment" data-message-id="${messageId}" uk-tooltip></a>`);
+        }
+        if (quoteCallback) {
+            actions.appendRaw(`<a uk-icon="icon: commenting" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}" uk-tooltip></a>`);
+        }
+        return actions;
+    }
+
+    function setupThreadMessageActionEvents(element: HTMLElement, messagesById, callback: IThreadMessageCallback,
+                                            threadCallback: IThreadCallback,
+                                            quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void) {
 
         DOMHelpers.addEventListeners(element, 'edit-thread-message-content-link', 'click', async (ev) => {
 
@@ -403,9 +445,9 @@ export module ThreadMessagesView {
 
             quoteCallback(message);
         });
-
-        return element;
     }
+
+    const solvedCommentSpan = '<span class="uk-icon-button uk-float-right" uk-icon="check" title="Already solved" uk-tooltip></span>';
 
     async function showThreadMessageComments(messageId: string, callback: IThreadMessageCallback): Promise<void> {
 
@@ -420,9 +462,6 @@ export module ThreadMessagesView {
 
         let comments = await callback.getCommentsOfThreadMessage(messageId) || [];
 
-        const solvedCommentSpan = '<span class="uk-icon-button uk-float-right" uk-icon="check" title="Already solved" uk-tooltip></span>';
-
-        //TODO: handle multiple pages
         for (let i = 0; i < comments.length; ++i) {
 
             const comment = comments[i];
@@ -430,37 +469,7 @@ export module ThreadMessagesView {
             let card = new DOMAppender('<div class="uk-card uk-card-body message-comments-content">', '</div>');
             appender.append(card);
 
-            let author = new DOMAppender('<div class="message-comment-author uk-float-left">', '</div>');
-            card.append(author);
-            author.append(UsersView.createUserLogoSmall(comment.createdBy, 'bottom-left'));
-
-            let content = new DOMAppender('<div class="comment-content">', '</div>');
-            card.append(content);
-
-            let contentDiv = new DOMAppender('<div>', '</div>');
-            content.append(contentDiv);
-
-            let time = new DOMAppender('<span class="message-time">', '</span>');
-            contentDiv.append(time);
-            time.appendString(DisplayHelpers.getDateTime(comment.created));
-
-            let ip = new DOMAppender('<samp>', '</samp>');
-            contentDiv.append(ip);
-            ip.appendString(comment.ip);
-
-            if (comment.solved) {
-
-                contentDiv.appendRaw(solvedCommentSpan);
-            }
-            else {
-
-                let data = `data-comment-id="${DOMHelpers.escapeStringForAttribute(comment.id)}"`;
-                contentDiv.appendRaw(`<a class="solve-message-comment-link uk-float-right" ${data} title="Set comment to solved" uk-tooltip><span class="uk-icon" uk-icon="check"></span></a>`);
-            }
-
-            let paragraph = new DOMAppender('<p>', '</p>');
-            contentDiv.append(paragraph);
-            paragraph.appendString(comment.content);
+            createMessageCommentInList(comment, card);
 
             if (i < (comments.length - 1)) {
 
@@ -469,6 +478,48 @@ export module ThreadMessagesView {
         }
 
         let result = appender.toElement();
+
+        setupMessageCommentLinks(result, callback);
+
+        content.appendChild(result);
+    }
+
+    function createMessageCommentInList(comment: ThreadMessageRepository.ThreadMessageComment, container: DOMAppender) {
+
+        let author = new DOMAppender('<div class="message-comment-author uk-float-left">', '</div>');
+        container.append(author);
+        author.append(UsersView.createUserLogoSmall(comment.createdBy, 'bottom-left'));
+
+        let content = new DOMAppender('<div class="comment-content">', '</div>');
+        container.append(content);
+
+        let contentDiv = new DOMAppender('<div>', '</div>');
+        content.append(contentDiv);
+
+        let time = new DOMAppender('<span class="message-time">', '</span>');
+        contentDiv.append(time);
+        time.appendString(DisplayHelpers.getDateTime(comment.created));
+
+        let ip = new DOMAppender('<samp>', '</samp>');
+        contentDiv.append(ip);
+        ip.appendString(comment.ip);
+
+        if (comment.solved) {
+
+            contentDiv.appendRaw(solvedCommentSpan);
+        }
+        else {
+
+            let data = `data-comment-id="${DOMHelpers.escapeStringForAttribute(comment.id)}"`;
+            contentDiv.appendRaw(`<a class="solve-message-comment-link uk-float-right" ${data} title="Set comment to solved" uk-tooltip><span class="uk-icon" uk-icon="check"></span></a>`);
+        }
+
+        let paragraph = new DOMAppender('<p>', '</p>');
+        contentDiv.append(paragraph);
+        paragraph.appendString(comment.content);
+    }
+
+    function setupMessageCommentLinks(result: HTMLElement, callback: IThreadMessageCallback) {
 
         let links = result.getElementsByClassName('solve-message-comment-link');
         for (let i = 0; i < links.length; ++i) {
@@ -486,8 +537,6 @@ export module ThreadMessagesView {
                 }
             });
         }
-
-        content.appendChild(result);
     }
 
     function createNewThreadMessageControl(threadId: string,
@@ -566,14 +615,108 @@ export module ThreadMessagesView {
                                               info: CommentsPageDisplayInfo,
                                               onPageNumberChange: Views.PageNumberChangeCallback,
                                               getLinkForPage: Views.GetLinkForPageCallback,
-                                              callback: IThreadMessageCallback,
-                                              privileges: IThreadMessagePrivileges) {
+                                              threadMessageCallback: IThreadMessageCallback,
+                                              threadMessagePrivileges: IThreadMessagePrivileges,
+                                              userCallback: IUserCallback,
+                                              userPrivileges: IUserPrivileges,
+                                              threadCallback: IThreadCallback): ThreadMessageCommentsPageContent {
 
-        return null;
+        collection = collection || ThreadMessageRepository.defaultThreadMessageCommentCollection();
+
+        let result = new ThreadMessagesPageContent();
+
+        let resultList = document.createElement('div');
+
+        if (info.user) {
+
+            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges));
+        }
+        else {
+
+            let header = document.createElement('h2');
+            header.innerText = 'All Thread Message Comments';
+            resultList.appendChild(header);
+        }
+        resultList.appendChild(result.sortControls = createThreadMessageListSortControls(info));
+
+        resultList.appendChild(result.paginationTop =
+            Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+
+        let listContainer = document.createElement('div');
+        listContainer.classList.add('thread-message-comments-list');
+        listContainer.appendChild(createCommentsList(collection, threadMessageCallback, threadMessagePrivileges,
+            threadCallback));
+        resultList.appendChild(listContainer);
+
+        resultList.appendChild(result.paginationBottom =
+            Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+
+        result.list = resultList;
+
+        return result;
     }
 
-    export function createCommentsList(comments: ThreadMessageRepository.ThreadMessageComment[]): HTMLElement {
+    export function createCommentsList(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
+                                       callback: IThreadMessageCallback,
+                                       privileges: IThreadMessagePrivileges,
+                                       threadCallback: IThreadCallback): HTMLElement {
 
-        return null
+        const comments = collection.message_comments || [];
+
+        let result = new DOMAppender('<div class="uk-container uk-container-expand">', '</div>');
+
+        if (comments.length < 1) {
+
+            result.appendRaw('<span class="uk-text-warning">No comments found</span>');
+            return result.toElement();
+        }
+
+        let messagesById = {};
+
+        for (let i = 0; i < comments.length; ++i) {
+
+            const comment = comments[i];
+            const message = comment.message;
+
+            if (!message) continue;
+
+            messagesById[message.id] = message;
+
+            let messageContainer = new DOMAppender('<div class="uk-card uk-card-body discussion-thread-message">', '</div>');
+            result.append(messageContainer);
+
+            {
+                let container = new DOMAppender('<div class="message-comment-above-message">', '</div>');
+                messageContainer.append(container);
+
+                createMessageCommentInList(comment, container);
+            }
+            const showParentThreadName = message.parentThread && message.parentThread.name && message.parentThread.name.length;
+
+            createThreadMessageHeader(messageContainer, message, collection, i, true);
+            messageContainer.append(createThreadMessageDetails(message, true));
+            messageContainer.append(createThreadMessageAuthor(message, null));
+            messageContainer.append(createThreadMessageActionLinks(message, privileges, null));
+            messageContainer.append(createThreadMessageContent(message));
+
+            if (i < (comments.length - 1)) {
+
+                result.appendRaw('<hr class="uk-divider-icon" />');
+            }
+        }
+
+        let element = result.toElement();
+
+        ViewsExtra.adjustMessageContent(element);
+        Views.setupThreadsOfUsersLinks(element);
+        Views.setupSubscribedThreadsOfUsersLinks(element);
+        Views.setupThreadMessagesOfUsersLinks(element);
+        Views.setupThreadMessagesOfMessageParentThreadLinks(element);
+
+        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, null);
+
+        setupMessageCommentLinks(element, callback);
+
+        return element;
     }
 }

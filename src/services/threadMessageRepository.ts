@@ -72,7 +72,8 @@ export module ThreadMessageRepository {
         solved: boolean;
         content: string;
         ip: string;
-        createdBy: UserRepository.User
+        createdBy: UserRepository.User,
+        message?: ThreadMessage
     }
 
     export interface ThreadMessageCommentCollection extends CommonEntities.PaginationInfo {
@@ -84,6 +85,16 @@ export module ThreadMessageRepository {
 
         page: number;
         sort: string;
+    }
+
+    export function defaultThreadMessageCommentCollection(): ThreadMessageCommentCollection {
+
+        return {
+            message_comments: [],
+            page: 0,
+            pageSize: 1,
+            totalCount: 0,
+        } as ThreadMessageCommentCollection;
     }
 
     export async function getLatestThreadMessages() : Promise<ThreadMessageCollection> {
