@@ -186,7 +186,7 @@ export module EditViews {
                 {icon: 'minus', title: 'Add horizontal rule', callback: () => this.addHorizontalRule()},
                 null,
                 {icon: 'link', title: 'Add link', callback: () => this.addLink()},
-                {icon: 'image', title: 'Add image', callback: () => this.addImage()}
+                {icon: 'image', title: 'Add image reference', callback: () => this.addImage()}
             ];
 
             for (let action of actions) {
