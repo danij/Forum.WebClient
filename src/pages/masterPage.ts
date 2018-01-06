@@ -14,6 +14,7 @@ import {MasterView} from "../views/masterView";
 import {ViewsExtra} from "../views/extra";
 import {UserRepository} from "../services/userRepository";
 import {ThreadMessageCommentsPage} from "./threadMessageCommentsPage";
+import {Privileges} from "../services/privileges";
 
 export module MasterPage {
 
@@ -66,6 +67,15 @@ export module MasterPage {
 
             ev.preventDefault();
             new ThreadMessageCommentsPage().display();
+        });
+
+        let forumWidePrivileges = Privileges.getForumWidePrivileges();
+        forumWidePrivileges.canViewAllComments().then((allowed) => {
+
+            if (allowed) {
+
+                document.getElementById('CommentsPageLink').classList.remove('uk-hidden');
+            }
         });
 
         ViewsExtra.init();

@@ -235,6 +235,19 @@ export module Privileges {
         }
     }
 
+    export interface IForumWidePrivileges {
+
+        canViewAllComments(): Promise<boolean>;
+    }
+
+    class ForumWidePrivilegesAllowAll implements IForumWidePrivileges {
+
+        canViewAllComments(): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+    }
+
     export function getCategoryPrivileges(): ICategoryPrivileges {
 
         return new CategoryPrivilegesAllowAll();
@@ -258,5 +271,10 @@ export module Privileges {
     export function getUserPrivileges(): IUserPrivileges {
 
         return new UserPrivilegesAllowAll();
+    }
+
+    export function getForumWidePrivileges(): IForumWidePrivileges {
+
+        return new ForumWidePrivilegesAllowAll();
     }
 }
