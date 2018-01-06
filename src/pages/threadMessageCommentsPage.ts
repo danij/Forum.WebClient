@@ -14,7 +14,7 @@ import {ThreadMessageRepository} from "../services/threadMessageRepository";
 export class ThreadMessageCommentsPage implements Pages.Page {
 
     private pageNumber: number = 0;
-    private sortOrder: string = 'ascending';
+    private sortOrder: string = 'descending';
     private topPaginationControl: HTMLElement;
     private bottomPaginationControl: HTMLElement;
     private userName: string = null;
