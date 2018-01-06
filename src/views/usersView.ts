@@ -91,6 +91,12 @@ export module UsersView {
             DOMHelpers.escapeStringForAttribute(user.name) + '"';
     }
 
+    export function getMessageCommentsWrittenByUserLinkContent(user: UserRepository.User): string {
+
+        return 'href="' + Pages.getThreadMessageCommentsWrittenByUserUrlFull(user) + '" ' + Views.UserWrittenThreadMessageCommentsData + '="' +
+            DOMHelpers.escapeStringForAttribute(user.name) + '"';
+    }
+
     export function getMessagesOfUserLinkContent(user: UserRepository.User): string {
 
         return 'href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" ' + Views.UserMessagesData + '="' +
@@ -351,10 +357,17 @@ export module UsersView {
         let threadMessagesLink = '<a ' + getMessagesOfUserLinkContent(user) + '>messages</a>';
         let subscribedThreadsLink = '<a ' + getSubscribedThreadsOfUserLinkContent(user) + '>subscribed threads</a>';
 
+        let messageCommentsLink = '';
+
+        if (privileges.canViewUserComments(user.id)) {
+
+            messageCommentsLink = ' · <a ' + getMessageCommentsWrittenByUserLinkContent(user) + '>show written comments</a>';
+        }
+
         result.appendRaw(('<div>\n' +
             `    <p>{threadCount} ${threadsLink}` +
             ` · {messageCount} ${threadMessagesLink}` +
-            ` · {subscribedThreadCount} ${subscribedThreadsLink}` +
+            ` · {subscribedThreadCount} ${subscribedThreadsLink}${messageCommentsLink}` +
             ` <span class="uk-label score-up">+ {upVotes}</span>` +
             ` <span class="uk-label score-down">− {downVotes}</span></p>\n` +
             '    <p>Joined <span class="uk-text-meta">{joined}</span>' +
@@ -422,6 +435,7 @@ export module UsersView {
         Views.setupThreadsOfUsersLinks(resultElement);
         Views.setupSubscribedThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfUsersLinks(resultElement);
+        Views.setupThreadMessagesCommentsWrittenByUserLinks(resultElement);
 
         let toRender = resultElement.getElementsByClassName('render-style');
         for (let i = 0; i < toRender.length; ++i) {

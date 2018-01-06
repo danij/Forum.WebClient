@@ -6,6 +6,7 @@ import {HomePage} from "../pages/homePage";
 import {ThreadMessagesPage} from "../pages/threadMessagesPage";
 import {ViewsExtra} from "./extra";
 import {Pages} from "../pages/common";
+import {ThreadMessageCommentsPage} from "../pages/threadMessageCommentsPage";
 
 export module Views {
 
@@ -266,6 +267,7 @@ export module Views {
     export const UserThreadsData = 'data-threadusername';
     export const UserSubscribedThreadsData = 'data-subscribedthreadusername';
     export const UserMessagesData = 'data-threadmessageusername';
+    export const UserWrittenThreadMessageCommentsData = 'data-threadmessagecommentswrittenbyusername';
 
     function threadsWithTagLinkClicked(ev: Event) {
 
@@ -301,6 +303,15 @@ export module Views {
         const userName = DOMHelpers.getLink(ev).getAttribute(UserMessagesData);
 
         new ThreadMessagesPage().displayForUser(userName);
+    }
+
+    function threadMessageCommentsWrittenByUserLinkClicked(ev: Event) {
+
+        ev.preventDefault();
+
+        const userName = DOMHelpers.getLink(ev).getAttribute(UserWrittenThreadMessageCommentsData);
+
+        new ThreadMessageCommentsPage().displayForUser(userName);
     }
 
     function threadMessagesOfThreadLinkClicked(ev: Event) {
@@ -374,6 +385,17 @@ export module Views {
 
             let link = links.item(i);
             link.addEventListener('click', threadMessagesOfUserLinkClicked);
+        }
+    }
+
+    export function setupThreadMessagesCommentsWrittenByUserLinks(element: HTMLElement): void {
+
+        let links = element.querySelectorAll(`[${UserWrittenThreadMessageCommentsData}]`);
+
+        for (let i = 0; i < links.length; ++i) {
+
+            let link = links.item(i);
+            link.addEventListener('click', threadMessageCommentsWrittenByUserLinkClicked);
         }
     }
 

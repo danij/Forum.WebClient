@@ -645,7 +645,7 @@ export module ThreadMessagesView {
         let listContainer = document.createElement('div');
         listContainer.classList.add('thread-message-comments-list');
         listContainer.appendChild(createCommentsList(collection, threadMessageCallback, threadMessagePrivileges,
-            threadCallback));
+            threadCallback, info.user));
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
@@ -659,7 +659,8 @@ export module ThreadMessagesView {
     export function createCommentsList(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
                                        callback: IThreadMessageCallback,
                                        privileges: IThreadMessagePrivileges,
-                                       threadCallback: IThreadCallback): HTMLElement {
+                                       threadCallback: IThreadCallback,
+                                       user?: UserRepository.User): HTMLElement {
 
         const comments = collection.message_comments || [];
 
@@ -675,7 +676,9 @@ export module ThreadMessagesView {
 
         for (let i = 0; i < comments.length; ++i) {
 
-            const comment = comments[i];
+            let comment = comments[i];
+            comment.createdBy = comment.createdBy || user;
+
             const message = comment.message;
 
             if (!message) continue;
@@ -691,7 +694,6 @@ export module ThreadMessagesView {
 
                 createMessageCommentInList(comment, container);
             }
-            const showParentThreadName = message.parentThread && message.parentThread.name && message.parentThread.name.length;
 
             createThreadMessageHeader(messageContainer, message, collection, i, true);
             messageContainer.append(createThreadMessageDetails(message, true));

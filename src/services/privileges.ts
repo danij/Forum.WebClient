@@ -193,6 +193,8 @@ export module Privileges {
         canEditUserLogo(id: string): Promise<boolean>;
 
         canDeleteUser(id: string): Promise<boolean>;
+
+        canViewUserComments(id: string): Promise<boolean>;
     }
 
     class UserPrivilegesAllowAll implements IUserPrivileges {
@@ -223,6 +225,11 @@ export module Privileges {
         }
 
         canDeleteUser(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canViewUserComments(id: string): Promise<boolean> {
 
             return Promise.resolve(true);
         }
