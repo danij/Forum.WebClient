@@ -79,11 +79,22 @@ export module MasterPage {
         });
 
         ViewsExtra.init();
+        fixLinks();
 
         window.onpopstate = () => onGoBack();
         loadCurrentPage();
 
         setupUpdates();
+    }
+
+    function fixLinks() {
+
+        for (let element of linkElements) {
+
+            let link = element.getElementsByTagName('a')[0] as HTMLAnchorElement;
+            let href = link.getAttribute('data-href');
+            link.href = Pages.getUrl(href);
+        }
     }
 
     function onGoBack() {
