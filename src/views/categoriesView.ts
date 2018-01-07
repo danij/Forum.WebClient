@@ -360,6 +360,8 @@ export module CategoriesView {
             }
         }
 
+        Views.setupThreadsWithTagsLinks(result);
+
         return result;
     }
 
