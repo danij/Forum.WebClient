@@ -27,46 +27,25 @@ export module MasterPage {
     export function bootstrap(): void {
 
         originalTitle = document.title;
-        linkElements = [];
 
-        let homePageLink = document.getElementById('HomePageLink');
-        linkElements.push(homePageLink);
-        homePageLink.addEventListener('click', (ev) => {
+        let pages = [
 
-            ev.preventDefault();
-            new HomePage().display();
-        });
+            {linkId: 'HomePageLink', factory: () => new HomePage()},
+            {linkId: 'TagsPageLink', factory: () => new TagsPage()},
+            {linkId: 'ThreadsPageLink', factory: () => new ThreadsPage()},
+            {linkId: 'UsersPageLink', factory: () => new UsersPage()},
+            {linkId: 'CommentsPageLink', factory: () => new ThreadMessageCommentsPage()},
+        ];
 
-        let tagsPageLink = document.getElementById('TagsPageLink');
-        linkElements.push(tagsPageLink);
-        tagsPageLink.addEventListener('click', (ev) => {
+        linkElements = pages.map((page) => {
 
-            ev.preventDefault();
-            new TagsPage().display();
-        });
+            let link = document.getElementById(page.linkId);
+            link.addEventListener('click', (ev) => {
 
-        let threadsPageLink = document.getElementById('ThreadsPageLink');
-        linkElements.push(threadsPageLink);
-        threadsPageLink.addEventListener('click', (ev) => {
-
-            ev.preventDefault();
-            new ThreadsPage().display();
-        });
-
-        let usersPageLink = document.getElementById('UsersPageLink');
-        linkElements.push(usersPageLink);
-        usersPageLink.addEventListener('click', (ev) => {
-
-            ev.preventDefault();
-            new UsersPage().display();
-        });
-
-        let threadMessageCommentsPageLink = document.getElementById('CommentsPageLink');
-        linkElements.push(threadMessageCommentsPageLink);
-        threadMessageCommentsPageLink.addEventListener('click', (ev) => {
-
-            ev.preventDefault();
-            new ThreadMessageCommentsPage().display();
+                ev.preventDefault();
+                page.factory().display();
+            });
+            return link;
         });
 
         let forumWidePrivileges = Privileges.getForumWidePrivileges();
