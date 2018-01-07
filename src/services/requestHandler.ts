@@ -71,6 +71,11 @@ export module RequestHandler {
 
                 if (xmlHttp.readyState == XMLHttpRequest.DONE) {
 
+                    if (xmlHttp.status != 200) {
+
+                        reject(new Error(xmlHttp.statusText));
+                    }
+
                     let content = parseContent(xmlHttp.responseText);
 
                     if (null == content) {
@@ -82,10 +87,6 @@ export module RequestHandler {
                         reject(new Error(getStatusCode(content.status)));
                     }
 
-                    if (xmlHttp.status != 200) {
-
-                        reject(new Error(xmlHttp.statusText));
-                    }
                     resolve(content);
                 }
             };
