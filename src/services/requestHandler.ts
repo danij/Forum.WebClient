@@ -110,7 +110,9 @@ export module RequestHandler {
 
             return null;
         }
-        return JSON.parse(responseText.substr(serviceConfig.responsePrefix.length));
+        responseText = responseText.substr(serviceConfig.responsePrefix.length);
+
+        return responseText.length ? JSON.parse(responseText) : {};
     }
 
     export function get(request: Request): Promise<any> {
