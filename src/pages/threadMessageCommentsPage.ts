@@ -129,9 +129,6 @@ export class ThreadMessageCommentsPage implements Pages.Page {
             return ThreadMessagesView.createCommentsList(commentsCollection,
                 PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
                 PageActions.getThreadCallback(), this.user);
-        }).then(() => {
-
-            Views.scrollToTop();
         });
     }
 

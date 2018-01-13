@@ -86,9 +86,6 @@ export class UsersPage implements Pages.Page {
             this.bottomPaginationControl = newBottomPaginationControl;
 
             return UsersView.createUserListContent(userCollection.users);
-        }).then(() => {
-
-            Views.scrollToTop();
         });
     }
 

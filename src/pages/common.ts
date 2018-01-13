@@ -15,10 +15,7 @@ export module Pages {
 
         Views.hideOpenModals();
 
-        return Views.changeContent(document.getElementById('pageContentContainer'), handler).then(() => {
-
-            Views.scrollToTop();
-        });
+        return Views.changeContent(document.getElementById('pageContentContainer'), handler);
     }
 
     declare var UIkit: any;

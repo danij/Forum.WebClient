@@ -50,6 +50,9 @@ export module Views {
         }, displayConfig.showSpinnerAfterMilliSeconds);
 
         try {
+            container.innerHTML = '';
+            container.scrollTop = 0;
+
             let newPageContent = await handler();
 
             //no more need to show the spinner
@@ -435,12 +438,6 @@ export module Views {
     export function setupCategoryLink(link: HTMLAnchorElement): void {
 
         link.addEventListener('click', categoryLinkClicked);
-    }
-
-    export function scrollToTop(): void {
-
-        window.scrollTo(0, 0);
-        document.getElementById('pageContentContainer').scrollTo(0, 0);
     }
 
     export function scrollContainerToId(elementId: string): void {
