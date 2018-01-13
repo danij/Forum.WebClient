@@ -119,8 +119,11 @@ export module EditViews {
             this.textArea.classList.add('uk-textarea');
             this.textArea.value = initialText;
 
-            this.resultContainer = document.createElement('div');
-            this.resultContainer.classList.add('edit-preview', 'message-content');
+            let previewContainer = document.createElement('div');
+            previewContainer.classList.add('edit-preview', 'message-content');
+            previewContainer.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Message Preview</span>'));
+
+            previewContainer.appendChild(this.resultContainer = document.createElement('div'));
 
             let grid = document.createElement('div');
             container.appendChild(grid);
@@ -133,7 +136,7 @@ export module EditViews {
             textAreaContainer.appendChild(this.textArea);
 
             grid.appendChild(textAreaContainer);
-            grid.appendChild(this.resultContainer);
+            grid.appendChild(previewContainer);
 
             this.setupEvents();
         }
