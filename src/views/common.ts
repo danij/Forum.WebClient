@@ -50,7 +50,6 @@ export module Views {
         }, displayConfig.showSpinnerAfterMilliSeconds);
 
         try {
-            container.innerHTML = '';
             container.scrollTop = 0;
 
             let newPageContent = await handler();
