@@ -595,7 +595,7 @@ export module ThreadsView {
             let div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
             form.appendChild(div);
 
-            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label" for="addThreadName">Thread Name:</label>'));
+            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label" for="addThreadName">Thread Name</label>'));
             let formControl = DOMHelpers.parseHTML('<div class="uk-form-controls"></div>');
             div.appendChild(formControl);
             input = DOMHelpers.parseHTML('<input class="uk-input" id="addThreadName" />') as HTMLInputElement;
@@ -605,7 +605,7 @@ export module ThreadsView {
             let div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
             form.appendChild(div);
 
-            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Tags:</label>'));
+            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Tags</label>'));
             tagsSelect = DOMHelpers.parseHTML('<select class="uk-select" multiple></select>') as HTMLSelectElement;
             div.appendChild(tagsSelect);
 
@@ -615,7 +615,7 @@ export module ThreadsView {
             let div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
             form.appendChild(div);
 
-            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Message:</label>'));
+            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Message</label>'));
             let newMessageContainer = DOMHelpers.parseHTML('<div class="reply-container"></div>');
             div.appendChild(newMessageContainer);
 
