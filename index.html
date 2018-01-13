@@ -93,7 +93,7 @@
     </div>
     <div class="uk-navbar-right">
         <ul class="uk-navbar-nav">
-            <li><a data-href="search" class="uk-text-center">
+            <li id="showSearchModal"><a class="uk-text-center">
                 <div><span uk-icon="icon: search"></span>
                     <div class="uk-navbar-subtitle">Search</div>
                 </div>
@@ -275,6 +275,34 @@
         </div>
         <div class="uk-modal-body">
             <div class="message-comments-container"></div>
+        </div>
+    </div>
+</div>
+
+<div id="search-modal" uk-modal>
+    <div class="uk-modal-dialog uk-margin-auto-vertical">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Search</h2>
+        </div>
+        <div class="uk-modal-body">
+            <div class="search-header">
+                <div class="uk-form-controls uk-text-center uk-margin-bottom">
+                    <label><input class="uk-radio" type="radio" name="searchFor" value="user" checked="checked"> User</label>
+                    <label><input class="uk-radio" type="radio" name="searchFor" value="thread"> Thread</label>
+                    <label><input class="uk-radio" type="radio" name="searchFor" value="threadMessage" > Thread Message</label>
+                </div>
+                <div class="uk-form-controls uk-margin-bottom">
+                    <input class="uk-input" type="text" id="searchInput" />
+                </div>
+                <div class="uk-form-controls uk-text-center">
+                    <button id="searchButton" class="uk-button uk-button-primary">Search</button>
+                </div>
+            </div>
+            <hr/>
+            <div class="search-results-container">
+
+            </div>
         </div>
     </div>
 </div>

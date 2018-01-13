@@ -52,6 +52,12 @@ export module UserRepository {
         sort: string;
     }
 
+    interface UserSearchResult {
+
+        index: number;
+        pageSize: number;
+    }
+
     export function sortByName(users: User[]): void {
 
         users.sort((first, second) => {
@@ -137,5 +143,52 @@ export module UserRepository {
         await RequestHandler.requestDelete({
             path: 'users/' + encodeURIComponent(userId)
         });
+    }
+
+    export async function searchUsersByName(name: string): Promise<User[]> {
+
+        if (name && name.length) {
+
+            let searchResult = await RequestHandler.get({
+                path: 'users/search/' + encodeURIComponent(name),
+                query: {}
+            }) as UserSearchResult;
+            const pageNumber = Math.floor(searchResult.index / searchResult.pageSize);
+            const firstIndexInPage = pageNumber * searchResult.pageSize;
+
+            let collectionPromises: Promise<UserCollection>[] = [
+
+                getUsers({
+                    page: pageNumber,
+                    orderBy: 'name',
+                    sort: 'ascending'
+                })
+            ];
+
+            if (pageNumber != firstIndexInPage) {
+
+                collectionPromises.push(getUsers({
+                    page: pageNumber + 1,
+                    orderBy: 'name',
+                    sort: 'ascending'
+                }));
+            } else {
+
+                collectionPromises.push(Promise.resolve(defaultUserCollection()));
+            }
+
+            const collections = await Promise.all(collectionPromises);
+
+            let users = collections[0].users.slice(searchResult.index - firstIndexInPage);
+
+            let remaining = searchResult.pageSize - users.length;
+            if (remaining > 0) {
+
+                users = users.concat(collections[1].users.slice(0, remaining));
+            }
+
+            return users;
+        }
+        return Promise.resolve([]);
     }
 }

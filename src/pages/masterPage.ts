@@ -16,6 +16,9 @@ import {UserRepository} from "../services/userRepository";
 import {ThreadMessageCommentsPage} from "./threadMessageCommentsPage";
 import {Privileges} from "../services/privileges";
 import {NewThreadPage} from "./newThreadPage";
+import {PageActions} from "./action";
+import {UsersView} from "../views/usersView";
+import {DOMHelpers} from "../helpers/domHelpers";
 
 export module MasterPage {
 
@@ -49,6 +52,8 @@ export module MasterPage {
             });
             return link;
         });
+
+        setupSearch();
 
         let forumWidePrivileges = Privileges.getForumWidePrivileges();
         forumWidePrivileges.canViewAllComments().then((allowed) => {
@@ -251,5 +256,72 @@ export module MasterPage {
         }
 
         return result.join('-');
+    }
+
+    function setupSearch(): void {
+
+        let searchLink = document.getElementById('showSearchModal');
+        searchLink.addEventListener('click', (ev) => {
+
+            ev.preventDefault();
+
+            let modal = document.getElementById('search-modal');
+            Views.showModal(modal);
+
+            document.getElementById('searchButton').addEventListener('click', (ev) => {
+
+                ev.preventDefault();
+
+                const input = (document.getElementById('searchInput') as HTMLInputElement).value;
+                if (input.trim().length < 1) return;
+
+                const checkedSearchType = modal.querySelectorAll('input[name=searchFor]:checked');
+                if (checkedSearchType.length < 1) return;
+
+                let resultsContainer = modal.getElementsByClassName('search-results-container')[0] as HTMLElement;
+
+                switch ((checkedSearchType[0] as HTMLInputElement).value){
+
+                    case 'user':
+                        searchUser(input, resultsContainer);
+                        break;
+                    case 'thread':
+                        searchThread(input, resultsContainer);
+                        break;
+                    case 'threadMessage':
+                        searchThreadMessage(input, resultsContainer);
+                        break;
+                }
+            });
+        });
+    }
+
+    function searchUser(toSearch: string, resultsContainer: HTMLElement): void {
+
+        PageActions.getUserCallback().searchUsersByName(toSearch).then((users) => {
+
+            let container = DOMHelpers.parseHTML('<div class="users-list"></div>');
+            container.appendChild(UsersView.createUserListContent(users));
+
+            resultsContainer.innerHTML = '';
+            resultsContainer.appendChild(container);
+        });
+    }
+
+    function searchThread(toSearch: string, resultsContainer: HTMLElement): void {
+
+        PageActions.getThreadCallback().searchThreadsByName(toSearch).then((threads) => {
+
+            let container = DOMHelpers.parseHTML('<div class="threads-table uk-margin-left"></div>');
+            container.appendChild(ThreadsView.createThreadsTable(threads));
+
+            resultsContainer.innerHTML = '';
+            resultsContainer.appendChild(container);
+            ViewsExtra.refreshMath(container);
+        });
+    }
+
+    function searchThreadMessage(toSearch: string, resultsContainer: HTMLElement): void {
+
     }
 }

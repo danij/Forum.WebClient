@@ -98,6 +98,8 @@ export module PageActions {
         uploadUserLogo(id: string): Promise<boolean>;
 
         deleteUser(id: string): Promise<boolean>;
+
+        searchUsersByName(name: string): Promise<UserRepository.User[]>;
     }
 
     class CategoryCallback implements ICategoryCallback {
@@ -326,6 +328,17 @@ export module PageActions {
         async deleteUser(id: string): Promise<boolean> {
 
             return await Pages.trueOrShowErrorAndFalse(UserRepository.deleteUser(id));
+        }
+
+        async searchUsersByName(name: string): Promise<UserRepository.User[]> {
+
+            try {
+
+                return await UserRepository.searchUsersByName(name);
+            }
+            catch {
+                return [];
+            }
         }
     }
 
