@@ -213,6 +213,14 @@ export module ThreadRepository {
         return collection;
     }
 
+    export async function createThread(name: string): Promise<string> {
+
+        return (await RequestHandler.post({
+            path: 'threads/',
+            stringData: name
+        })).id;
+    }
+
     export async function deleteThread(threadId: string): Promise<void> {
 
         await RequestHandler.requestDelete({

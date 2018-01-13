@@ -141,7 +141,7 @@ export module ThreadsView {
                 let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
                 let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
 
-                const visitedClass =thread.visitedSinceLastChange ? 'already-visited' : '';
+                const visitedClass = thread.visitedSinceLastChange ? 'already-visited' : '';
 
                 let threadLink = new DOMAppender(`<a class="uk-button uk-button-text thread-name ${visitedClass}" href="${href}" ${data}>`, '</a>');
                 nameColumn.append(threadLink);
@@ -309,10 +309,10 @@ export module ThreadsView {
         card.classList.add('uk-card', 'uk-card-body');
 
         {
-        /* append to card:
-        <a uk-icon="icon: settings" href="editThreadPrivileges" title="Edit thread access" uk-tooltip
-           uk-toggle="target: #privileges-modal"></a>
-        */
+            /* append to card:
+            <a uk-icon="icon: settings" href="editThreadPrivileges" title="Edit thread access" uk-tooltip
+               uk-toggle="target: #privileges-modal"></a>
+            */
             let actions = document.createElement('div');
             card.appendChild(actions);
             actions.classList.add('thread-actions');
@@ -450,7 +450,7 @@ export module ThreadsView {
                 });
             }
 
-            if (thread.tags && thread.tags.length){
+            if (thread.tags && thread.tags.length) {
 
                 TagRepository.sortByName(thread.tags);
                 for (let tag of thread.tags) {
@@ -575,5 +575,78 @@ export module ThreadsView {
         const users = await callback.getSubscribedUsers(threadId);
 
         content.appendChild(UsersView.createUserListContent(users));
+    }
+
+    export function createAddNewThreadContent(allTags: TagRepository.Tag[],
+                                              callback: (name: string, tagIds: string[], message: string) => Promise<string>): HTMLElement {
+
+        let result = document.createElement('div');
+
+        result.appendChild(DOMHelpers.parseHTML('<h2>Add a New Thread</h2>'));
+
+        let form = DOMHelpers.parseHTML('<form class="uk-form-stacked"></form>');
+        result.appendChild(form);
+
+        let input: HTMLInputElement;
+        let tagsSelect: HTMLSelectElement;
+        let editControl: EditViews.EditControl;
+
+        {
+            let div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
+            form.appendChild(div);
+
+            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label" for="addThreadName">Thread Name:</label>'));
+            let formControl = DOMHelpers.parseHTML('<div class="uk-form-controls"></div>');
+            div.appendChild(formControl);
+            input = DOMHelpers.parseHTML('<input class="uk-input" id="addThreadName" />') as HTMLInputElement;
+            formControl.appendChild(input);
+        }
+        {
+            let div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
+            form.appendChild(div);
+
+            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Tags:</label>'));
+            tagsSelect = DOMHelpers.parseHTML('<select class="uk-select" multiple></select>') as HTMLSelectElement;
+            div.appendChild(tagsSelect);
+
+            TagsView.populateTagsInSelect(tagsSelect, allTags);
+        }
+        {
+            let div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
+            form.appendChild(div);
+
+            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Message:</label>'));
+            let newMessageContainer = DOMHelpers.parseHTML('<div class="reply-container"></div>');
+            div.appendChild(newMessageContainer);
+
+            editControl = new EditViews.EditControl(newMessageContainer);
+        }
+
+        let addButton = DOMHelpers.parseHTML('<button class="uk-button uk-button-primary uk-align-center">Add</button>');
+        result.appendChild(addButton);
+
+        addButton.addEventListener('click', async (ev) => {
+
+            ev.preventDefault();
+
+            let name = input.value;
+            let tagIds: string[] = [];
+
+            let selected = tagsSelect.selectedOptions;
+            for (let i = 0; i < selected.length; ++i) {
+
+                tagIds.push(selected[i].getAttribute('value'));
+            }
+
+            let message = editControl.getText();
+
+            let newThreadId = await callback(name, tagIds, message);
+            if (newThreadId && newThreadId.length) {
+
+                new ThreadMessagesPage().displayForThread(newThreadId);
+            }
+        });
+
+        return result;
     }
 }

@@ -43,7 +43,7 @@ export module PageActions {
 
     export interface IThreadCallback {
 
-        createThread(name: string, content: string): Promise<boolean>;
+        createThread(name: string, tagIds: string[], content: string): Promise<string>;
 
         deleteThread(id: string): Promise<boolean>;
 
@@ -181,9 +181,15 @@ export module PageActions {
 
     class ThreadCallback implements IThreadCallback {
 
-        createThread(name: string, content: string): Promise<boolean> {
+        async createThread(name: string, tagIds: string[], content: string): Promise<string> {
 
-            return Promise.resolve(true);
+            let result = await ThreadRepository.createThread(name);
+
+            await Pages.trueOrShowErrorAndFalse(this.editThreadTags(result, tagIds, null));
+
+            await Pages.trueOrShowErrorAndFalse(this.addThreadMessage(result, content));
+
+            return result;
         }
 
         async deleteThread(id: string): Promise<boolean> {

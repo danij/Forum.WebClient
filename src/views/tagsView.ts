@@ -325,6 +325,29 @@ export module TagsView {
         return container;
     }
 
+    export function populateTagsInSelect(selectElement: HTMLSelectElement, tags: TagRepository.Tag[],
+                                         selectedTags?: TagRepository.Tag[]) {
+
+        selectElement.innerHTML = '';
+        selectedTags = selectedTags || [];
+
+        for (let tag of tags) {
+
+            let option = document.createElement('option');
+            option.setAttribute('value', tag.id);
+            option.innerText = tag.name;
+
+            if (selectedTags.find((value) => {
+                    return value.id == tag.id;
+                })) {
+
+                option.setAttribute('selected', '');
+            }
+
+            selectElement.appendChild(option);
+        }
+    }
+
     export function showSelectTagsDialog(currentTags: TagRepository.Tag[], allTags: TagRepository.Tag[],
                                          onSave: (added: string[], removed: string[]) => void): void {
 
@@ -370,23 +393,7 @@ export module TagsView {
             onSave(added, removed);
         });
 
-        selectElement.innerHTML = '';
-
-        for (let tag of allTags) {
-
-            let option = document.createElement('option');
-            option.setAttribute('value', tag.id);
-            option.innerText = tag.name;
-
-            if (currentTags.find((value) => {
-                    return value.id == tag.id;
-                })) {
-
-                option.setAttribute('selected', '');
-            }
-
-            selectElement.appendChild(option);
-        }
+        populateTagsInSelect(selectElement, allTags, currentTags);
     }
 
     export function showSelectSingleTagDialog(allTags: TagRepository.Tag[], onSave: (selected: string) => void): void {
@@ -412,16 +419,7 @@ export module TagsView {
             }
         });
 
-        selectElement.innerHTML = '';
-
-        for (let tag of allTags) {
-
-            let option = document.createElement('option');
-            option.setAttribute('value', tag.id);
-            option.innerText = tag.name;
-
-            selectElement.appendChild(option);
-        }
+        populateTagsInSelect(selectElement, allTags);
     }
 
     function createAddNewTagElement(callback: ITagCallback): HTMLElement {

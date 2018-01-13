@@ -15,6 +15,7 @@ import {ViewsExtra} from "../views/extra";
 import {UserRepository} from "../services/userRepository";
 import {ThreadMessageCommentsPage} from "./threadMessageCommentsPage";
 import {Privileges} from "../services/privileges";
+import {NewThreadPage} from "./newThreadPage";
 
 export module MasterPage {
 
@@ -35,6 +36,7 @@ export module MasterPage {
             {linkId: 'ThreadsPageLink', factory: () => new ThreadsPage()},
             {linkId: 'UsersPageLink', factory: () => new UsersPage()},
             {linkId: 'CommentsPageLink', factory: () => new ThreadMessageCommentsPage()},
+            {linkId: 'NewThreadPageLink', factory: () => new NewThreadPage()},
         ];
 
         linkElements = pages.map((page) => {
@@ -72,7 +74,7 @@ export module MasterPage {
 
             let link = element.getElementsByTagName('a')[0] as HTMLAnchorElement;
             let href = link.getAttribute('data-href');
-            link.href = Pages.getUrl(href);
+            link.href = Pages.getUrl(href.replace(/__/g, '/'));
         }
     }
 
@@ -123,6 +125,7 @@ export module MasterPage {
 
             HomePage.loadPage,
             TagsPage.loadPage,
+            NewThreadPage.loadPage,
             ThreadsPage.loadPage,
             ThreadMessagesPage.loadPage,
             UsersPage.loadPage,
