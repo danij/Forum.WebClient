@@ -12,6 +12,7 @@ import {PageActions} from "../pages/action";
 import {EditViews} from "./edit";
 import {ViewsExtra} from "./extra";
 import {ThreadMessagesPage} from "../pages/threadMessagesPage";
+import {CategoryRepository} from "../services/categoryRepository";
 
 export module ThreadsView {
 
@@ -463,6 +464,7 @@ export module ThreadsView {
             details.appendChild(DOMHelpers.parseHTML('<span>Displayed under: </span>'));
             if (thread.categories && thread.categories.length) {
 
+                thread.categories.sort(CategoryRepository.compareCategoriesByName);
                 for (let category of thread.categories) {
 
                     let element = DOMHelpers.parseHTML('<a href="' +

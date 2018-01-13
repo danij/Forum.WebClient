@@ -45,16 +45,22 @@ export module CategoryRepository {
 
     export async function getRootCategories(): Promise<Category[]> {
 
-        return sortCategories((await RequestHandler.get({
+        let result = (await RequestHandler.get({
             path: 'categories/root'
-        }) as CategoryCollection).categories);
+        }) as CategoryCollection).categories;
+
+        sortCategories(result);
+        return result;
     }
 
     export async function getAllCategories(): Promise<Category[]> {
 
-        return sortCategories((await RequestHandler.get({
+        let result = (await RequestHandler.get({
             path: 'categories/'
-        }) as CategoryCollection).categories);
+        }) as CategoryCollection).categories;
+
+        sortCategories(result);
+        return result;
     }
 
     export async function getAllCategoriesAsTree(): Promise<Category[]> {
@@ -99,7 +105,12 @@ export module CategoryRepository {
         return Math.sign(first.displayOrder - second.displayOrder);
     }
 
-    function sortCategories(categories: Category[]): Category[] {
+    export function compareCategoriesByName(first: Category, second: Category) {
+
+        return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
+    }
+
+    function sortCategories(categories: Category[]): void {
 
         if (null == categories) return null;
         categories.sort(compareCategoriesByDisplayOrder);
@@ -111,8 +122,6 @@ export module CategoryRepository {
                 sortCategories(category.children);
             }
         }
-
-        return categories;
     }
 
     export async function addNewCategory(name: string, parentCategoryId?: string): Promise<void> {
