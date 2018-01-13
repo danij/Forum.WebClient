@@ -280,7 +280,7 @@ export module ThreadMessagesView {
         if (message.commentsCount > 0) {
 
             const total = DisplayHelpers.intToString(message.commentsCount);
-            const totalNoun = (1 == message.commentsCount) ? 'flag' : 'flags';
+            const totalNoun = (1 == message.commentsCount) ? 'comment' : 'comments';
             const unsolved = DisplayHelpers.intToString(message.commentsCount - message.solvedCommentsCount);
             const text = `<span uk-icon="icon: warning"></span> ${total} ${totalNoun} (${unsolved} unsolved) <span uk-icon="icon: warning"></span>`;
             messageDetailsContainer.appendRaw(`<a class="show-thread-message-comments" data-message-id="${message.id}">${text}</a>`);
