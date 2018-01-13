@@ -74,7 +74,7 @@ export module MasterPage {
 
             let link = element.getElementsByTagName('a')[0] as HTMLAnchorElement;
             let href = link.getAttribute('data-href');
-            link.href = Pages.getUrl(href.replace(/__/g, '/'));
+            link.href = Pages.getUrl(href);
         }
     }
 
