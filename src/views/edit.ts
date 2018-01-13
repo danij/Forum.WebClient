@@ -238,10 +238,20 @@ export module EditViews {
 
         private addList(): void {
 
-            this.addTextAtCurrentPosition('\n' +
-                '* Item 1\n' +
-                '* Item 2\n' +
-                '* Item 3\n\n');
+            this.replaceTextAtCurrentPosition((value) => {
+
+                if (value.length) {
+
+                    return value.split('\n').map((v) => `* ${v}`).join('\n');
+                }
+                else {
+
+                    return '\n' +
+                        '* Item 1\n' +
+                        '* Item 2\n' +
+                        '* Item 3\n\n';
+                }
+            });
         }
 
         private addTable(): void {
