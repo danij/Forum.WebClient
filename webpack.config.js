@@ -43,6 +43,23 @@ module.exports = {
             {
                 from: path.resolve(__dirname, 'node_modules/highlight.js/styles/default.css'),
                 to: path.resolve(__dirname, 'dist/highlight-default.css')
+            },
+            {
+                from: path.resolve(__dirname, 'node_modules/katex/dist/katex.min.js'),
+                to: path.resolve(__dirname, 'dist/katex.min.js')
+            },
+            {
+                from: path.resolve(__dirname, 'node_modules/katex/dist/katex.min.css'),
+                to: path.resolve(__dirname, 'dist/katex.min.css')
+            },
+            {
+                from: path.resolve(__dirname, 'node_modules/katex/dist/contrib/auto-render.min.js'),
+                to: path.resolve(__dirname, 'dist/auto-render.min.js')
+            },
+            {
+                context: path.resolve(__dirname, 'node_modules/katex/dist/fonts'),
+                from: '*',
+                to: path.resolve(__dirname, 'dist/fonts')
             }
         ])
     ],

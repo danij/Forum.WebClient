@@ -4,7 +4,7 @@ export module ViewsExtra {
 
     declare var Remarkable: any;
     declare var hljs: any;
-    declare var MathJax: any;
+    declare var renderMathInElement: (element: HTMLElement, options: any) => void;
 
     export function init() {
 
@@ -53,15 +53,24 @@ export module ViewsExtra {
         }
     }
 
+    const katexRenderOptions = {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "\\(", right: "\\)", display: false}
+        ]
+    };
+
     export function refreshMath(element: HTMLElement): void {
 
         setTimeout(() => {
             try {
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub, element]);
+                renderMathInElement(element, katexRenderOptions);
             }
             catch (ex) {
             }
-        }, 100);
+        }, 10);
     }
 
     export function adjustMessageContent(container: HTMLElement): void {
