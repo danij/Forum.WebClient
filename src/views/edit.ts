@@ -9,7 +9,7 @@ export module EditViews {
 
     export function getInput(title: string, value: string = ''): string {
 
-        return prompt(title, value) || '';
+        return prompt(title, value);
     }
 
     export function confirm(message: string = ''): boolean {

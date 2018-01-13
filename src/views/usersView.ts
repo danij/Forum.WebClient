@@ -459,7 +459,7 @@ export module UsersView {
 
             ev.preventDefault();
             const title = EditViews.getInput('Edit user title', user.title);
-            if (title != user.title) {
+            if ((null !== title) && (title != user.title)) {
 
                 reloadPageIfOk(callback.editUserTitle(user.id, title));
             }
@@ -468,7 +468,7 @@ export module UsersView {
 
             ev.preventDefault();
             const info = EditViews.getInput('Edit user info', user.info);
-            if (info != user.info) {
+            if ((null !== info) && (info != user.info)) {
 
                 reloadPageIfOk(callback.editUserInfo(user.id, info));
             }
@@ -477,7 +477,7 @@ export module UsersView {
 
             ev.preventDefault();
             const signature = EditViews.getInput('Edit user signature', user.signature);
-            if (signature != user.signature) {
+            if ((null !== signature) && (signature != user.signature)) {
 
                 reloadPageIfOk(callback.editUserSignature(user.id, signature));
             }

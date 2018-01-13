@@ -423,7 +423,7 @@ export module CategoriesView {
         button.addEventListener('click', () => {
 
             const name = EditViews.getInput('Enter the new category name');
-            if (name.length < 1) return;
+            if ((null === name) || (name.length < 1)) return;
 
             reloadIfOk(callback.createRootCategory(name));
         });
@@ -438,7 +438,7 @@ export module CategoriesView {
         button.addEventListener('click', () => {
 
             const name = EditViews.getInput('Enter the new sub category name');
-            if (name.length < 1) return;
+            if ((null === name) || (name.length < 1)) return;
 
             reloadIfOk(callback.createSubCategory(parentId, name));
         });
