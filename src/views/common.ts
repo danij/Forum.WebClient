@@ -68,6 +68,7 @@ export module Views {
             ViewsExtra.refreshMath(container);
         }
         finally {
+            clearTimeout(timer);
             spinner.remove();
             disabledElement.remove();
         }
