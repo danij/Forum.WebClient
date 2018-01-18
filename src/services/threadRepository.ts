@@ -143,51 +143,26 @@ export module ThreadRepository {
         }) as ThreadWithMessagesResponse;
     }
 
+    export async function getThreadsById(ids: string[]): Promise<ThreadCollection> {
+
+        return await RequestHandler.get({
+            path: 'threads/multiple/' + encodeURIComponent(ids.join(','))
+        }) as ThreadCollection;
+    }
+
     export async function searchThreadsByName(name: string): Promise<Thread[]> {
 
-        if (name && name.length) {
+        let idsResult = await RequestHandler.get({
+            path: '../search/threads?q=' + encodeURIComponent(name)
+        });
 
-            let searchResult = await RequestHandler.get({
-                path: 'threads/search/' + encodeURIComponent(name),
-                query: {}
-            }) as ThreadSearchResult;
-            const pageNumber = Math.floor(searchResult.index / searchResult.pageSize);
-            const firstIndexInPage = pageNumber * searchResult.pageSize;
+        if (idsResult && idsResult.thread_ids && idsResult.thread_ids.length) {
 
-            let collectionPromises: Promise<ThreadCollection>[] = [
-
-                getThreads({
-                    page: pageNumber,
-                    orderBy: 'name',
-                    sort: 'ascending'
-                })
-            ];
-
-            if (pageNumber != firstIndexInPage) {
-
-                collectionPromises.push(getThreads({
-                    page: pageNumber + 1,
-                    orderBy: 'name',
-                    sort: 'ascending'
-                }));
-            } else {
-
-                collectionPromises.push(Promise.resolve(defaultThreadCollection()));
-            }
-
-            const collections = await Promise.all(collectionPromises);
-
-            let threads = collections[0].threads.slice(searchResult.index - firstIndexInPage);
-
-            let remaining = searchResult.pageSize - threads.length;
-            if (remaining > 0) {
-
-                threads = threads.concat(collections[1].threads.slice(0, remaining));
-            }
-
-            return threads;
+            return (await getThreadsById(idsResult.thread_ids)).threads;
         }
-        return Promise.resolve([]);
+        else {
+            return [];
+        }
     }
 
     function appendPinnedThreadCollection(collection: PinnedThreadCollection): ThreadCollection {

@@ -1,7 +1,7 @@
-import {ThreadRepository} from "./threadRepository";
 import {RequestHandler} from "./requestHandler";
 import {CommonEntities} from "./commonEntities";
 import {UserRepository} from "./userRepository";
+import {ThreadRepository} from "./threadRepository";
 
 export module ThreadMessageRepository {
 
@@ -56,6 +56,16 @@ export module ThreadMessageRepository {
             page: 0,
             pageSize: 1,
             totalCount: 0,
+        } as ThreadMessageCollection;
+    }
+
+    export function createThreadMessageCollection(messages: ThreadMessage[]): ThreadMessageCollection {
+
+        return {
+            messages: messages,
+            page: 0,
+            pageSize: messages.length,
+            totalCount: messages.length,
         } as ThreadMessageCollection;
     }
 
@@ -148,6 +158,28 @@ export module ThreadMessageRepository {
             path: 'thread_messages/comments/user/' + encodeURIComponent(userId),
             query: request
         }) as ThreadMessageCommentCollection;
+    }
+
+    export async function getThreadMessagesById(ids: string[]): Promise<ThreadMessageCollection> {
+
+        return createThreadMessageCollection((await RequestHandler.get({
+            path: 'thread_messages/multiple/' + encodeURIComponent(ids.join(','))
+        })).thread_messages);
+    }
+
+    export async function searchThreadMessagesByName(name: string): Promise<ThreadMessageCollection> {
+
+        let idsResult = await RequestHandler.get({
+            path: '../search/thread_messages?q=' + encodeURIComponent(name)
+        });
+
+        if (idsResult && idsResult.thread_message_ids && idsResult.thread_message_ids.length) {
+
+            return await getThreadMessagesById(idsResult.thread_message_ids);
+        }
+        else {
+            return defaultThreadMessageCollection();
+        }
     }
 
     export async function addThreadMessage(threadId: string, content: string): Promise<string> {

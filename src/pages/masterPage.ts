@@ -323,5 +323,15 @@ export module MasterPage {
 
     function searchThreadMessage(toSearch: string, resultsContainer: HTMLElement): void {
 
+        PageActions.getThreadMessageCallback().searchThreadMessagesByName(toSearch).then((messages) => {
+
+            resultsContainer.innerHTML = '';
+
+            resultsContainer.appendChild(ThreadMessagesView.createThreadMessageList(messages,
+                PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
+                PageActions.getThreadCallback(), Privileges.getThreadPrivileges()));
+
+            ViewsExtra.refreshMath(resultsContainer);
+        });
     }
 }

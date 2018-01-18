@@ -81,6 +81,8 @@ export module PageActions {
         getCommentsOfThreadMessage(id: string): Promise<ThreadMessageRepository.ThreadMessageComment[]>;
 
         solveThreadMessageComment(id: string): Promise<boolean>;
+
+        searchThreadMessagesByName(name: string): Promise<ThreadMessageRepository.ThreadMessageCollection>;
     }
 
     export interface IUserCallback {
@@ -290,6 +292,17 @@ export module PageActions {
         async getCommentsOfThreadMessage(id: string): Promise<ThreadMessageRepository.ThreadMessageComment[]> {
 
             return (await ThreadMessageRepository.getThreadMessageComments(id)).message_comments;
+        }
+
+        async searchThreadMessagesByName(name: string): Promise<ThreadMessageRepository.ThreadMessageCollection> {
+
+            try {
+
+                return await ThreadMessageRepository.searchThreadMessagesByName(name);
+            }
+            catch {
+                return ThreadMessageRepository.defaultThreadMessageCollection();
+            }
         }
     }
 
