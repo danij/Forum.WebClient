@@ -268,7 +268,10 @@ export module MasterPage {
             let modal = document.getElementById('search-modal');
             Views.showModal(modal);
 
-            document.getElementById('searchButton').addEventListener('click', (ev) => {
+            let searchButton = document.getElementById('searchButton');
+            searchButton = DOMHelpers.removeEventListeners(searchButton);
+
+            searchButton.addEventListener('click', (ev) => {
 
                 ev.preventDefault();
 
