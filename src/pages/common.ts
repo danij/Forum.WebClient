@@ -59,6 +59,18 @@ export module Pages {
         }
     }
 
+    export async function getOrShowErrorAndDefault<T>(promise: Promise<T>, defaultFn: () => T): Promise<T> {
+
+        try {
+            return await promise;
+        }
+        catch (ex) {
+
+            showError(ex.message);
+            return defaultFn();
+        }
+    }
+
     export async function trueOrShowErrorAndFalse<T>(promise: Promise<T>): Promise<boolean> {
 
         try {

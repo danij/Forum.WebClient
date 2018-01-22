@@ -236,26 +236,14 @@ export module PageActions {
             return await Pages.trueOrShowErrorAndFalse(ThreadRepository.mergeThreads(sourceId, destinationId));
         }
 
-        async searchThreadsByInitial(name: string): Promise<ThreadRepository.Thread[]> {
+        searchThreadsByInitial(name: string): Promise<ThreadRepository.Thread[]> {
 
-            try {
-
-                return await ThreadRepository.searchThreadsByInitial(name);
-            }
-            catch {
-                return [];
-            }
+            return Pages.getOrShowErrorAndDefault(ThreadRepository.searchThreadsByInitial(name), () => []);
         }
 
         async searchThreadsByName(name: string): Promise<ThreadRepository.Thread[]> {
 
-            try {
-
-                return await ThreadRepository.searchThreadsByName(name);
-            }
-            catch {
-                return [];
-            }
+            return Pages.getOrShowErrorAndDefault(ThreadRepository.searchThreadsByName(name), () => []);
         }
 
         getSubscribedUsers(id: string): Promise<UserRepository.User[]> {
@@ -307,15 +295,10 @@ export module PageActions {
             return (await ThreadMessageRepository.getThreadMessageComments(id)).message_comments;
         }
 
-        async searchThreadMessagesByName(name: string): Promise<ThreadMessageRepository.ThreadMessageCollection> {
+        searchThreadMessagesByName(name: string): Promise<ThreadMessageRepository.ThreadMessageCollection> {
 
-            try {
-
-                return await ThreadMessageRepository.searchThreadMessagesByName(name);
-            }
-            catch {
-                return ThreadMessageRepository.defaultThreadMessageCollection();
-            }
+            return Pages.getOrShowErrorAndDefault(ThreadMessageRepository.searchThreadMessagesByName(name),
+                () => ThreadMessageRepository.defaultThreadMessageCollection());
         }
     }
 
@@ -356,15 +339,9 @@ export module PageActions {
             return await Pages.trueOrShowErrorAndFalse(UserRepository.deleteUser(id));
         }
 
-        async searchUsersByName(name: string): Promise<UserRepository.User[]> {
+        searchUsersByName(name: string): Promise<UserRepository.User[]> {
 
-            try {
-
-                return await UserRepository.searchUsersByName(name);
-            }
-            catch {
-                return [];
-            }
+            return Pages.getOrShowErrorAndDefault(UserRepository.searchUsersByName(name), () => []);
         }
     }
 
