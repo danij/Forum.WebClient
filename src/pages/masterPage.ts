@@ -316,40 +316,41 @@ export module MasterPage {
 
     function searchUser(toSearch: string, resultsContainer: HTMLElement): void {
 
-        PageActions.getUserCallback().searchUsersByName(toSearch).then((users) => {
+        Views.changeContent(resultsContainer, async () => {
 
-            let container = DOMHelpers.parseHTML('<div class="users-list"></div>');
-            container.appendChild(UsersView.createUserListContent(users));
+            const users = await PageActions.getUserCallback().searchUsersByName(toSearch);
 
-            resultsContainer.innerHTML = '';
-            resultsContainer.appendChild(container);
+            let result = DOMHelpers.parseHTML('<div class="users-list"></div>');
+            result.appendChild(UsersView.createUserListContent(users));
+
+            return result;
         });
     }
 
-    function searchThread(toSearch: string, resultsContainer: HTMLElement): void {
+    async function searchThread(toSearch: string, resultsContainer: HTMLElement): Promise<void> {
 
-        PageActions.getThreadCallback().searchThreadsByName(toSearch).then((threads) => {
+        await Views.changeContent(resultsContainer, async () => {
 
-            let container = DOMHelpers.parseHTML('<div class="threads-table uk-margin-left"></div>');
-            container.appendChild(ThreadsView.createThreadsTable(threads));
+            const threads = await PageActions.getThreadCallback().searchThreadsByName(toSearch);
 
-            resultsContainer.innerHTML = '';
-            resultsContainer.appendChild(container);
-            ViewsExtra.refreshMath(container);
+            let result = DOMHelpers.parseHTML('<div class="threads-table uk-margin-left"></div>');
+            result.appendChild(ThreadsView.createThreadsTable(threads));
+
+            return result;
         });
+        ViewsExtra.refreshMath(resultsContainer);
     }
 
-    function searchThreadMessage(toSearch: string, resultsContainer: HTMLElement): void {
+    async function searchThreadMessage(toSearch: string, resultsContainer: HTMLElement): Promise<void> {
 
-        PageActions.getThreadMessageCallback().searchThreadMessagesByName(toSearch).then((messages) => {
+        await Views.changeContent(resultsContainer, async () => {
 
-            resultsContainer.innerHTML = '';
+            const messages = await PageActions.getThreadMessageCallback().searchThreadMessagesByName(toSearch);
 
-            resultsContainer.appendChild(ThreadMessagesView.createThreadMessageList(messages,
+            return ThreadMessagesView.createThreadMessageList(messages,
                 PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
-                PageActions.getThreadCallback(), Privileges.getThreadPrivileges()));
-
-            ViewsExtra.refreshMath(resultsContainer);
+                PageActions.getThreadCallback(), Privileges.getThreadPrivileges());
         });
+        ViewsExtra.refreshMath(resultsContainer);
     }
 }
