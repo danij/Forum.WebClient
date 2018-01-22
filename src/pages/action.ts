@@ -59,6 +59,8 @@ export module PageActions {
 
         mergeThreads(sourceId: string, destinationId: string): Promise<boolean>;
 
+        searchThreadsByInitial(name: string): Promise<ThreadRepository.Thread[]>;
+
         searchThreadsByName(name: string): Promise<ThreadRepository.Thread[]>;
 
         getSubscribedUsers(id: string): Promise<UserRepository.User[]>;
@@ -232,6 +234,17 @@ export module PageActions {
         async mergeThreads(sourceId: string, destinationId: string): Promise<boolean> {
 
             return await Pages.trueOrShowErrorAndFalse(ThreadRepository.mergeThreads(sourceId, destinationId));
+        }
+
+        async searchThreadsByInitial(name: string): Promise<ThreadRepository.Thread[]> {
+
+            try {
+
+                return await ThreadRepository.searchThreadsByInitial(name);
+            }
+            catch {
+                return [];
+            }
         }
 
         async searchThreadsByName(name: string): Promise<ThreadRepository.Thread[]> {

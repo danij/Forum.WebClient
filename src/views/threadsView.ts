@@ -542,7 +542,7 @@ export module ThreadsView {
                 selectElement.innerHTML = '';
                 selectElement = DOMHelpers.removeEventListeners(selectElement);
 
-                const threads = await callback.searchThreadsByName(searchByNameElement.value);
+                const threads = await callback.searchThreadsByInitial(searchByNameElement.value);
                 for (const thread of threads) {
 
                     let option = document.createElement('option');
