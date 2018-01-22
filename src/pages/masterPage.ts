@@ -268,14 +268,14 @@ export module MasterPage {
             let modal = document.getElementById('search-modal');
             Views.showModal(modal);
 
+            let searchInput = document.getElementById('searchInput') as HTMLInputElement;
+
             let searchButton = document.getElementById('searchButton');
             searchButton = DOMHelpers.removeEventListeners(searchButton);
 
-            searchButton.addEventListener('click', (ev) => {
+            let searchFn = () => {
 
-                ev.preventDefault();
-
-                const input = (document.getElementById('searchInput') as HTMLInputElement).value;
+                const input = searchInput.value;
                 if (input.trim().length < 1) return;
 
                 const checkedSearchType = modal.querySelectorAll('input[name=searchFor]:checked');
@@ -283,7 +283,7 @@ export module MasterPage {
 
                 let resultsContainer = modal.getElementsByClassName('search-results-container')[0] as HTMLElement;
 
-                switch ((checkedSearchType[0] as HTMLInputElement).value){
+                switch ((checkedSearchType[0] as HTMLInputElement).value) {
 
                     case 'user':
                         searchUser(input, resultsContainer);
@@ -295,6 +295,21 @@ export module MasterPage {
                         searchThreadMessage(input, resultsContainer);
                         break;
                 }
+            };
+
+            searchInput.addEventListener('keypress', (ev) => {
+
+                if (13 == ev.keyCode) {
+
+                    ev.preventDefault();
+                    searchFn();
+                }
+            });
+
+            searchButton.addEventListener('click', (ev) => {
+
+                ev.preventDefault();
+                searchFn();
             });
         });
     }
