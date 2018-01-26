@@ -159,9 +159,10 @@ html {
     cursor: pointer;
 }
 
-@avatar-size: 96px;
+@logo-size: 96px;
+@latest-message-logo-scale: 0.6;
 
-.text-avatar-mixin(@dimension, @scale) {
+.text-logo-mixin(@dimension, @scale) {
     box-sizing: border-box;
     width: @dimension * @scale;
     height: @dimension * @scale;
@@ -189,12 +190,12 @@ html {
     }
 }
 
-.text-avatar {
-    .text-avatar-mixin(@avatar-size, 1);
+.text-logo {
+    .text-logo-mixin(@logo-size, 1);
 }
 
-.text-avatar-flag {
-    .text-avatar-mixin(@avatar-size, 0.75);
+.text-logo-flag {
+    .text-logo-mixin(@logo-size, 0.75);
 }
 
 .message-parent-thread {
@@ -327,7 +328,7 @@ html {
 .message-number {
     position: absolute;
     top: 8px;
-    width: @avatar-size;
+    width: @logo-size;
     text-align: right;
     right: 0;
     z-index: 100;
@@ -690,9 +691,12 @@ html {
         }
 
         .author-logo {
-            .text-avatar-mixin(@avatar-size, 0.6);
-            float: left;
-            margin-right: 10px;
+            width: @logo-size * @latest-message-logo-scale;
+            height: @logo-size * @latest-message-logo-scale;
+        }
+
+        .author-text-logo {
+            .text-logo-mixin(@logo-size, @latest-message-logo-scale);
         }
 
         .author {
@@ -818,9 +822,12 @@ html {
         }
 
         .author-logo {
-            .text-avatar-mixin(@avatar-size, 0.5);
-            float: left;
-            margin-right: 10px;
+            width: @logo-size * @latest-message-logo-scale;
+            height: @logo-size * @latest-message-logo-scale;
+        }
+
+        .author-text-logo {
+            .text-logo-mixin(@logo-size, @latest-message-logo-scale);
         }
 
         .author {
@@ -968,9 +975,13 @@ html {
         }
 
         .author-logo {
-            .text-avatar-mixin(@avatar-size, 0.6);
-            float: left;
-            margin-right: 10px;
+
+            width: @logo-size * @latest-message-logo-scale;
+            height: @logo-size * @latest-message-logo-scale;
+        }
+
+        .author-text-logo {
+            .text-logo-mixin(@logo-size, @latest-message-logo-scale);
         }
 
         .author {
@@ -1067,8 +1078,15 @@ html {
     }
 }
 
+.author-text-logo {
+    .text-logo-mixin(@logo-size, 0.5);
+    float: left;
+    margin-right: 10px;
+}
+
 .author-logo {
-    .text-avatar-mixin(@avatar-size, 0.5);
+    width: @logo-size * 0.5;
+    height: @logo-size * 0.5;
     float: left;
     margin-right: 10px;
 }

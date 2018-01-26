@@ -42,6 +42,11 @@ export module Pages {
         return `${masterPageConfig.baseUri}/${relative}`;
     }
 
+    export function getApiUrl(relative: string): string {
+
+        return `${masterPageConfig.baseUri}/api/${relative}`;
+    }
+
     function showError(message: string): void {
 
         Views.showPrimaryNotification('An error has occurred: ' + message);
@@ -303,5 +308,10 @@ export module Pages {
     export function getCategoryUrl(id: string, name: string): string {
 
         return `category/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
+    }
+
+    export function getUserLogoSrc(user: UserRepository.User): string {
+
+        return getApiUrl(`users/logo/${user.id}`);
     }
 }

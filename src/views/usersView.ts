@@ -50,9 +50,19 @@ export module UsersView {
 
         let container = new DOMAppender('<div>', '</div>');
 
-        let element = new DOMAppender(`<div class="author-logo pointer-cursor" style="color: ${getUserLogoColor(user.id)}">`, '</div>');
-        container.append(element);
-        element.appendString(getUserLogoInitial(user.name));
+        if (user.hasLogo) {
+
+            let element = new DOMAppender(`<div class="author-logo pointer-cursor">`, '</div>');
+            container.append(element);
+            let img = new DOMAppender(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`, '');
+            element.append(img);
+        }
+        else {
+
+            let element = new DOMAppender(`<div class="author-text-logo pointer-cursor" style="color: ${getUserLogoColor(user.id)}">`, '</div>');
+            container.append(element);
+            element.appendString(getUserLogoInitial(user.name));
+        }
 
         let dropdown = createUserDropdown(user, 'user-info', position);
         container.append(dropdown);
@@ -62,10 +72,20 @@ export module UsersView {
 
     export function createUserLogoForList(user: UserRepository.User): DOMAppender {
 
-        let element = new DOMAppender(`<div class="text-avatar" style="color: ${getUserLogoColor(user.id)}">`, '</div>');
-        element.appendString(getUserLogoInitial(user.name));
+        if (user.hasLogo) {
 
-        return element;
+            let element = new DOMAppender(`<div class="logo">`, '</div>');
+            let img = new DOMAppender(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`, '');
+            element.append(img);
+
+            return element;
+        }
+        else {
+
+            let element = new DOMAppender(`<div class="text-logo" style="color: ${getUserLogoColor(user.id)}">`, '</div>');
+            element.appendString(getUserLogoInitial(user.name));
+            return element;
+        }
     }
 
     export function createAuthorSmall(user: UserRepository.User): DOMAppender {
