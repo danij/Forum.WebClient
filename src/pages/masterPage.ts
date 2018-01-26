@@ -269,6 +269,7 @@ export module MasterPage {
             Views.showModal(modal);
 
             let searchInput = document.getElementById('searchInput') as HTMLInputElement;
+            searchInput.focus();
 
             let searchButton = document.getElementById('searchButton');
             searchButton = DOMHelpers.removeEventListeners(searchButton);
