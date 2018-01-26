@@ -138,6 +138,14 @@ export module UserRepository {
         });
     }
 
+    export async function editUserLogo(userId: string, fileContent: ArrayBuffer): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'users/logo/' + encodeURIComponent(userId),
+            binaryData: fileContent
+        });
+    }
+
     export async function deleteUser(userId: string): Promise<void> {
 
         await RequestHandler.requestDelete({

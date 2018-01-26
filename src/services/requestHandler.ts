@@ -9,6 +9,7 @@ export module RequestHandler {
         query?: any;
         type?: string;
         stringData?: string;
+        binaryData?: ArrayBuffer;
     }
 
     interface ServiceConfig {
@@ -93,9 +94,14 @@ export module RequestHandler {
 
             xmlHttp.open(method, getUrl(request));
             xmlHttp.setRequestHeader('Content-Type', request.type ? request.type : 'application/json');
-            if (request.stringData && request.stringData.length) {
+
+            if (request.stringData) {
 
                 xmlHttp.send(request.stringData);
+            }
+            else if (request.binaryData) {
+
+                xmlHttp.send(request.binaryData);
             }
             else {
 

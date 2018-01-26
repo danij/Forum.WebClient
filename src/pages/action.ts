@@ -99,7 +99,7 @@ export module PageActions {
 
         deleteUserLogo(id: string): Promise<boolean>;
 
-        uploadUserLogo(id: string): Promise<boolean>;
+        uploadUserLogo(id: string, fileContent: ArrayBuffer): Promise<boolean>;
 
         deleteUser(id: string): Promise<boolean>;
 
@@ -329,9 +329,9 @@ export module PageActions {
             return await Pages.trueOrShowErrorAndFalse(UserRepository.deleteUserLogo(id));
         }
 
-        uploadUserLogo(id: string): Promise<boolean> {
+        async uploadUserLogo(id: string, fileContent: ArrayBuffer): Promise<boolean> {
 
-            return Promise.resolve(true);
+            return await Pages.trueOrShowErrorAndFalse(UserRepository.editUserLogo(id, fileContent));
         }
 
         async deleteUser(id: string): Promise<boolean> {

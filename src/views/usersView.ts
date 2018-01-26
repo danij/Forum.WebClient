@@ -425,7 +425,7 @@ export module UsersView {
 
                 let editParagraph = new DOMAppender('<p>', '<p>');
                 result.append(editParagraph);
-                editParagraph.appendRaw(editContent.join(' · '));
+                editParagraph.appendRaw(editContent.join(' · ') + '<input type="file" class="upload-user-logo" />');
             }
         }
         result.appendRaw('<div class="uk-clearfix"></div>');
@@ -493,7 +493,32 @@ export module UsersView {
         resultElement.getElementsByClassName('edit-user-logo-link')[0].addEventListener('click', (ev) =>{
 
             ev.preventDefault();
-            //TODO
+            let fileInput = document.getElementsByClassName('upload-user-logo')[0] as HTMLInputElement;
+            fileInput = DOMHelpers.removeEventListeners(fileInput);
+
+            fileInput.value = '';
+            fileInput.addEventListener('change', (ev) =>
+            {
+                if (fileInput.files && fileInput.files.length) {
+
+                    const file = fileInput.files[0];
+                    if ('image/png' != file.type) {
+
+                        Views.showPrimaryNotification('Only PNG files are supported as logos');
+                        return;
+                    }
+
+                    let reader = new FileReader();
+                    reader.onloadend = (ev) => {
+
+                        ev.preventDefault();
+                        reloadPageIfOk(callback.uploadUserLogo(user.id, reader.result));
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
+            });
+
+            fileInput.click();
         });
         resultElement.getElementsByClassName('delete-user-link')[0].addEventListener('click', async (ev) =>{
 
