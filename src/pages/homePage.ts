@@ -15,8 +15,8 @@ import {DOMHelpers} from "../helpers/domHelpers";
 export class HomePage implements Pages.Page {
 
     private pageNumber: number = 0;
-    private orderBy: string = 'name';
-    private sortOrder: string = 'ascending';
+    private orderBy: string = 'latestmessagecreated';
+    private sortOrder: string = 'descending';
     private topPaginationControl: HTMLElement;
     private bottomPaginationControl: HTMLElement;
     private category: CategoryRepository.Category;
