@@ -432,7 +432,7 @@ export module ThreadMessagesView {
 
                 if (await callback.commentThreadMessage(messageId, comment)) {
 
-                    Views.showPrimaryNotification('Comment sent!');
+                    Views.showSuccessNotification('Comment sent!');
                 }
             }
         });

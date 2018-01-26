@@ -524,7 +524,7 @@ export module UsersView {
                     const file = fileInput.files[0];
                     if ('image/png' != file.type) {
 
-                        Views.showPrimaryNotification('Only PNG files are supported as logos');
+                        Views.showWarningNotification('Only PNG files are supported as logos');
                         return;
                     }
 

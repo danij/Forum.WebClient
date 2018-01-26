@@ -49,7 +49,7 @@ export module Pages {
 
     function showError(message: string): void {
 
-        Views.showPrimaryNotification('An error has occurred: ' + message);
+        Views.showDangerNotification('An error has occurred: ' + message);
     }
 
     export async function getOrShowError<T>(promise: Promise<T>): Promise<T> {

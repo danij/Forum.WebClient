@@ -478,12 +478,32 @@ export module Views {
         }
     }
 
-    export function showPrimaryNotification(message: string, timeout: number = 3000): void {
+    function showNotification(message: string, status: string, timeout: number = 3000): void {
 
         UIkit.notification({
             message: message,
-            status: 'primary',
+            status: status,
             timeout: timeout
         });
+    }
+
+    export function showPrimaryNotification(message: string) {
+
+        showNotification(message, 'primary');
+    }
+
+    export function showDangerNotification(message: string): void {
+
+        showNotification(message, 'danger');
+    }
+
+    export function showWarningNotification(message: string): void {
+
+        showNotification(message, 'warning');
+    }
+
+    export function showSuccessNotification(message: string): void {
+
+        showNotification(message, 'success');
     }
 }
