@@ -49,7 +49,8 @@ export module ViewsExtra {
         }
         catch (ex) {
 
-            return 'Error while rendering';
+            console.log(ex);
+            return '<span class="uk-label uk-label-danger">Error while rendering</span>';
         }
     }
 
