@@ -11,11 +11,7 @@ module.exports = {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
-    devtool: 'source-map',
     plugins: [
-        // new webpack.optimize.UglifyJsPlugin({
-        //     sourceMap: true
-        // }),
         new CopyWebpackPlugin([
             {
                 from: path.resolve(__dirname, 'node_modules/uikit/dist/css/uikit.min.css'),
