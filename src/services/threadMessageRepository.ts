@@ -34,6 +34,7 @@ export module ThreadMessageRepository {
         downVotes: ThreadMessageVote[];
         lastUpdated: ThreadMessageLastUpdated;
         privileges: string[];
+        voteStatus: number;
     }
 
     export interface ThreadMessageCollection extends CommonEntities.PaginationInfo {

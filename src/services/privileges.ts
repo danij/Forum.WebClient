@@ -150,6 +150,12 @@ export module Privileges {
         canCommentThreadMessage(id: string): Promise<boolean>;
 
         canSolveThreadMessageComment(id: string): Promise<boolean>;
+
+        canUpVoteThreadMessage(id: string): Promise<boolean>;
+
+        canDownVoteThreadMessage(id: string): Promise<boolean>;
+
+        canResetVoteOfThreadMessage(id: string): Promise<boolean>;
     }
 
     class ThreadMessagePrivilegesAllowAll implements IThreadMessagePrivileges {
@@ -175,6 +181,21 @@ export module Privileges {
         }
 
         canSolveThreadMessageComment(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canUpVoteThreadMessage(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canDownVoteThreadMessage(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canResetVoteOfThreadMessage(id: string): Promise<boolean> {
 
             return Promise.resolve(true);
         }

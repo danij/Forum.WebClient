@@ -60,7 +60,7 @@ export module DOMHelpers {
         let firstQuote = html.indexOf('"');
         let lastQuote = html.lastIndexOf('"');
 
-        return html.substring(firstQuote + 1, lastQuote);
+        return html.substring(firstQuote + 1, lastQuote).replace(/\n/g, '&#013;');
     }
 
     export function parseHTML(html: string): HTMLElement {

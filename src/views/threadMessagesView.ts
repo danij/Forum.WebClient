@@ -208,7 +208,7 @@ export module ThreadMessagesView {
 
             createThreadMessageHeader(messageContainer, message, collection, i, showParentThreadName);
             messageContainer.append(createThreadMessageDetails(message, showParentThreadName));
-            messageContainer.append(createThreadMessageAuthor(message, thread));
+            messageContainer.append(createThreadMessageAuthor(message, thread, privileges));
             messageContainer.append(createThreadMessageActionLinks(message, privileges, quoteCallback));
             messageContainer.append(createThreadMessageContent(message));
 
@@ -289,8 +289,21 @@ export module ThreadMessagesView {
         return messageDetailsContainer;
     }
 
+    function getUsersWhoVotedTooltip(votes: ThreadMessageRepository.ThreadMessageVote[]) : string {
+
+        if ( ! votes.length) return '–';
+
+        votes.sort((first, second) => {
+
+            return second.at - first.at;
+        });
+
+        return votes.map((v) => `${v.userName} (${DisplayHelpers.getShortDate(v.at)})`).join(' · ');
+    }
+
     function createThreadMessageAuthor(message: ThreadMessageRepository.ThreadMessage,
-                                       thread: ThreadRepository.Thread): DOMAppender {
+                                       thread: ThreadRepository.Thread,
+                                       privileges: IThreadMessagePrivileges): DOMAppender {
 
         let author = message.createdBy;
         let authorContainer = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
@@ -327,11 +340,53 @@ export module ThreadMessagesView {
             signature.appendString(author.signature);
         }
         {
-            let upVotesNr = DisplayHelpers.intToString((message.upVotes || []).length);
-            let downVotesNr = DisplayHelpers.intToString((message.downVotes || []).length);
 
-            authorContainer.appendRaw(`<div class="uk-text-center uk-float-left message-up-vote"><span class="uk-label" title="Up vote message" uk-tooltip>&plus; ${upVotesNr}</span></div>`);
-            authorContainer.appendRaw(`<div class="uk-text-center uk-float-right message-down-vote"><span class="uk-label" title="Down vote message" uk-tooltip>&minus; ${downVotesNr}</span></div>`);
+            let upVotesNr = message.upVotes ? DisplayHelpers.intToString(message.upVotes.length) : '?';
+            let downVotesNr = message.downVotes ? DisplayHelpers.intToString(message.downVotes.length) : '?';
+
+            let upVotesTooltip = [];
+            let downVotesTooltip = [];
+
+            if ((undefined === message.voteStatus) || (0 == message.voteStatus)) {
+
+                if (privileges.canUpVoteThreadMessage(message.id)) {
+
+                    upVotesTooltip.push('Click to up vote message.');
+                }
+                if (privileges.canDownVoteThreadMessage(message.id)) {
+
+                    downVotesTooltip.push('Click to down vote message.');
+                }
+            }
+            else if (privileges.canResetVoteOfThreadMessage(message.id)) {
+
+                if (-1 == message.voteStatus) {
+
+                    downVotesTooltip.push('Click to reset vote.');
+                    downVotesNr += " ✓";
+                }
+                else {
+
+                    upVotesTooltip.push('Click to reset vote.');
+                    upVotesNr += " ✓";
+                }
+            }
+
+            if (message.upVotes && message.upVotes.length) {
+
+                upVotesTooltip.push('Other voters: ' + getUsersWhoVotedTooltip(message.upVotes));
+            }
+            if (message.downVotes && message.downVotes.length) {
+
+                downVotesTooltip.push('Other voters: ' + getUsersWhoVotedTooltip(message.downVotes));
+            }
+
+            authorContainer.appendRaw('<div class="uk-text-center uk-float-left message-up-vote">' +
+                `<span class="uk-label" title="${DOMHelpers.escapeStringForAttribute(upVotesTooltip.join('\n'))}">` +
+                `&plus; ${upVotesNr}</span></div>`);
+            authorContainer.appendRaw('<div class="uk-text-center uk-float-right message-down-vote">' +
+                `<span class="uk-label" title="${DOMHelpers.escapeStringForAttribute(downVotesTooltip.join('\n'))}">` +
+                `&minus; ${downVotesNr}</span></div>`);
         }
 
         return authorContainer;
@@ -697,7 +752,7 @@ export module ThreadMessagesView {
 
             createThreadMessageHeader(messageContainer, message, collection, i, true);
             messageContainer.append(createThreadMessageDetails(message, true));
-            messageContainer.append(createThreadMessageAuthor(message, null));
+            messageContainer.append(createThreadMessageAuthor(message, null, privileges));
             messageContainer.append(createThreadMessageActionLinks(message, privileges, null));
             messageContainer.append(createThreadMessageContent(message));
 
