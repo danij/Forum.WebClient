@@ -13,6 +13,7 @@ export module Views {
     import DOMAppender = DOMHelpers.DOMAppender;
 
     declare var UIkit: any;
+    declare var jQuery: any;
 
     interface DisplayConfig {
 
@@ -448,7 +449,7 @@ export module Views {
             let container = document.getElementById('pageContentContainer');
             if (element) {
 
-                const top = $(element).offset().top - $(container).offset().top;
+                const top = jQuery(element).offset().top - jQuery(container).offset().top;
                 container.scrollTo(0, top);
             }
         }, 100);
