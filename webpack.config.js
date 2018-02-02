@@ -26,6 +26,10 @@ module.exports = {
                 to: path.resolve(__dirname, 'dist/highlight-default.css')
             },
             {
+                from: path.resolve(__dirname, 'node_modules/highlight.js/lib/highlight.pack.js'),
+                to: path.resolve(__dirname, 'dist/highlight.pack.js')
+            },
+            {
                 from: path.resolve(__dirname, 'node_modules/katex/dist/katex.min.css'),
                 to: path.resolve(__dirname, 'dist/katex.min.css')
             },
