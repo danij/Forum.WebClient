@@ -6,3 +6,4 @@ Prototype
 src/**/*.js
 css/**/*.css
 *.map
+package-lock.json
