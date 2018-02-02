@@ -144,7 +144,7 @@ export module ThreadsView {
 
                 const visitedClass = thread.visitedSinceLastChange ? 'already-visited' : '';
 
-                let threadLink = new DOMAppender(`<a class="uk-button uk-button-text thread-name ${visitedClass}" href="${href}" ${data}>`, '</a>');
+                let threadLink = new DOMAppender(`<a class="uk-button uk-button-text thread-name render-math ${visitedClass}" href="${href}" ${data}>`, '</a>');
                 nameColumn.append(threadLink);
                 threadLink.appendString(' ' + thread.name);
 
@@ -283,7 +283,7 @@ export module ThreadsView {
 
             let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
             let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
-            let link = new DOMAppender(`<a href="${href}" class="recent-thread-link" title="${title}" ${data}>`, '</a>');
+            let link = new DOMAppender(`<a href="${href}" class="recent-thread-link render-math" title="${title}" ${data}>`, '</a>');
             element.append(link);
             link.appendString(thread.name);
         }
@@ -419,7 +419,7 @@ export module ThreadsView {
 
             }
             title.appendChild(threadTitle);
-            threadTitle.classList.add('uk-logo');
+            threadTitle.classList.add('uk-logo', 'render-math');
 
             threadTitle.innerText = thread.name;
             title.appendChild(document.createTextNode(' '));

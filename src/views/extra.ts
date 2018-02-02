@@ -66,10 +66,18 @@ export module ViewsExtra {
     export function refreshMath(element: HTMLElement): void {
 
         setTimeout(() => {
-            try {
-                renderMathInElement(element, katexRenderOptions);
-            }
-            catch (ex) {
+
+            const elements = document.getElementsByClassName('render-math');
+            for (let i = 0; i < elements.length; ++i) {
+
+                try {
+
+                    renderMathInElement(elements[i] as HTMLElement, katexRenderOptions);
+                }
+                catch (ex) {
+
+                    console.log(ex);
+                }
             }
         }, 10);
     }

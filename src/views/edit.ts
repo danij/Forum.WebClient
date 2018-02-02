@@ -120,7 +120,7 @@ export module EditViews {
             this.textArea.value = initialText;
 
             let previewContainer = document.createElement('div');
-            previewContainer.classList.add('edit-preview', 'message-content');
+            previewContainer.classList.add('edit-preview', 'message-content', 'render-math');
             previewContainer.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Message Preview</span>'));
 
             previewContainer.appendChild(this.resultContainer = document.createElement('div'));

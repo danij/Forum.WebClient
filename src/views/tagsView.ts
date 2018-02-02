@@ -168,7 +168,7 @@ export module TagsView {
                     } as ThreadRepository.Thread);
 
                     let threadTitleElement = document.createElement('a');
-                    threadTitleElement.classList.add('recent-message-thread-link');
+                    threadTitleElement.classList.add('recent-message-thread-link', 'render-math');
                     threadTitleElement.setAttribute('href', href);
                     threadTitleElement.setAttribute('title', threadTitle);
                     threadTitleElement.setAttribute('data-threadmessagethreadid', latestMessage.threadId);
@@ -185,7 +185,7 @@ export module TagsView {
                     let messageContent = latestMessage.content || 'empty';
 
                     let messageLink = document.createElement('a');
-                    messageLink.classList.add('recent-message-link', 'no-math');
+                    messageLink.classList.add('recent-message-link');
                     messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
                     messageLink.setAttribute('title', messageContent);
                     messageLink.setAttribute('data-threadmessagemessageid', latestMessage.id);

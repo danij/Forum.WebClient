@@ -81,7 +81,7 @@ export module ThreadMessagesView {
 
             let href = Pages.getThreadMessagesOfThreadUrlFull(message.parentThread);
             let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(message.parentThread.id)}"`;
-            let threadLink = new DOMAppender(`<a href="${href}" class="recent-message-thread-link" title="${threadTitle}" ${data}>`, '</a>');
+            let threadLink = new DOMAppender(`<a href="${href}" class="recent-message-thread-link render-math" title="${threadTitle}" ${data}>`, '</a>');
             element.append(threadLink);
             threadLink.appendString(message.parentThread.name);
 
@@ -89,7 +89,7 @@ export module ThreadMessagesView {
 
             href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
             data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-            let link = new DOMAppender(`<a href="${href}" class="recent-message-link no-math" title="${messageTitle}" ${data}>`, '</a>');
+            let link = new DOMAppender(`<a href="${href}" class="recent-message-link" title="${messageTitle}" ${data}>`, '</a>');
             element.append(link);
             link.appendRaw(ViewsExtra.expandContent(message.content));
         }
@@ -243,7 +243,7 @@ export module ThreadMessagesView {
             let link = new DOMAppender(`<a id="${id}" href="${href}" ${data}>`, '</a>');
             link.appendString(message.parentThread.name);
 
-            let container = new DOMAppender('<div class="message-parent-thread uk-card-badge">', '</div>');
+            let container = new DOMAppender('<div class="message-parent-thread render-math uk-card-badge">', '</div>');
             container.append(link);
             messageContainer.append(container);
         }
@@ -394,7 +394,7 @@ export module ThreadMessagesView {
 
     function createThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
 
-        let content = new DOMAppender('<div class="message-content">', '</div>');
+        let content = new DOMAppender('<div class="message-content render-math">', '</div>');
         content.appendRaw(ViewsExtra.expandContent(message.content));
         return content;
     }
