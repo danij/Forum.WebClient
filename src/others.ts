@@ -16,3 +16,12 @@ import 'katex/dist/katex.min.css';
 (<any>window).renderMathInElement = renderMathInElement;
 
 UIkit.use(UIkitIcons);
+
+//various polyfills
+if ( ! String.prototype.endsWith) {
+
+    String.prototype.endsWith = function(search) {
+
+        return this.substring(this.length - search.length, this.length) === search;
+    };
+}
