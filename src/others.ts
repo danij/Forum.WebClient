@@ -18,6 +18,14 @@ import 'katex/dist/katex.min.css';
 UIkit.use(UIkitIcons);
 
 //various polyfills
+if ( ! String.prototype.startsWith) {
+
+    String.prototype.startsWith = function(search) {
+
+        return this.indexOf(search) === 0;
+    };
+}
+
 if ( ! String.prototype.endsWith) {
 
     String.prototype.endsWith = function(search) {
