@@ -14,25 +14,8 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin([
             {
-                from: path.resolve(__dirname, 'node_modules/uikit/dist/css/uikit.min.css'),
-                to: path.resolve(__dirname, 'dist/uikit.min.css')
-            },
-            {
-                from: path.resolve(__dirname, 'node_modules/highlight.js/styles/default.css'),
-                to: path.resolve(__dirname, 'dist/highlight-default.css')
-            },
-            {
                 from: path.resolve(__dirname, 'node_modules/highlight.js/lib/highlight.pack.js'),
                 to: path.resolve(__dirname, 'dist/highlight.pack.js')
-            },
-            {
-                from: path.resolve(__dirname, 'node_modules/katex/dist/katex.min.css'),
-                to: path.resolve(__dirname, 'dist/katex.min.css')
-            },
-            {
-                context: path.resolve(__dirname, 'node_modules/katex/dist/fonts'),
-                from: '*',
-                to: path.resolve(__dirname, 'dist/fonts')
             }
         ])
     ],
@@ -40,8 +23,15 @@ module.exports = {
         extensions: ['.webpack.js', '.web.js', '.ts', '.js']
     },
     module: {
-        loaders: [
-            {test: /\.ts$/, loader: 'ts-loader'}
+        rules: [
+            {test: /\.ts$/, loader: 'ts-loader'},
+            {
+                test: /\.(png|woff(2)?|eot|ttf|svg)$/, loader: 'file-loader', options: {
+                    name: '[name].[ext]',
+                    publicPath: 'dist/'
+                }
+            },
+            {test: /\.css$/, loader: ['style-loader', 'css-loader']}
         ]
     }
 };

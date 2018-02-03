@@ -13,9 +13,13 @@
   },
   "devDependencies": {
     "copy-webpack-plugin": "^4.3.1",
+    "css-loader": "^0.28.9",
     "expose-loader": "^0.7.3",
+    "file-loader": "^1.1.6",
+    "style-loader": "^0.20.1",
     "ts-loader": "^3.4.0",
     "typescript": "^2.7.1",
+    "url-loader": "^0.6.2",
     "webpack": "^3.10.0",
     "webpack-merge": "^4.1.1"
   },

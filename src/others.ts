@@ -6,6 +6,10 @@ import * as Remarkable from 'remarkable';
 import 'katex';
 import * as renderMathInElement from 'katex/dist/contrib/auto-render';
 
+import 'uikit/dist/css/uikit.min.css';
+import 'highlight.js/styles/default.css';
+import 'katex/dist/katex.min.css';
+
 (<any>window).jQuery = jQuery;
 (<any>window).UIkit = UIkit;
 (<any>window).Remarkable = Remarkable;
