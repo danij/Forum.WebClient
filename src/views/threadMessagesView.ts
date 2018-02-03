@@ -89,7 +89,7 @@ export module ThreadMessagesView {
 
             href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
             data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-            let link = new DOMAppender(`<a href="${href}" class="recent-message-link" title="${messageTitle}" ${data}>`, '</a>');
+            let link = new DOMAppender(`<a href="${href}" class="recent-message-link render-math" title="${messageTitle}" ${data}>`, '</a>');
             element.append(link);
             link.appendRaw(ViewsExtra.expandContent(message.content));
         }
