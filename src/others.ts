@@ -1,7 +1,7 @@
 import * as jQuery from 'jquery';
 import * as UIkit from 'uikit';
 import * as UIkitIcons from 'uikit/dist/js/uikit-icons';
-import 'es6-promise';
+import 'es6-promise/auto';
 import * as Remarkable from 'remarkable';
 import 'katex';
 import * as renderMathInElement from 'katex/dist/contrib/auto-render';
