@@ -18,6 +18,13 @@ export module Pages {
         return Views.changeContent(document.getElementById('pageContentContainer'), handler);
     }
 
+    export function changePageDontRefreshMath(handler: () => Promise<HTMLElement>): Promise<void> {
+
+        Views.hideOpenModals();
+
+        return Views.changeContent(document.getElementById('pageContentContainer'), handler, false);
+    }
+
     declare var UIkit: any;
 
     export interface MasterPageConfig {
@@ -218,7 +225,7 @@ export module Pages {
         return extra + result;
     }
 
-    function encodeURIComponentMax(url: string, maxSize: number) : string {
+    function encodeURIComponentMax(url: string, maxSize: number): string {
 
         const ellipsis = '...';
         maxSize = Math.max(ellipsis.length, maxSize);

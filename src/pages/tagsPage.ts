@@ -18,7 +18,7 @@ export class TagsPage implements Pages.Page {
 
         this.refreshUrl();
 
-        Pages.changePage(async () => {
+        Pages.changePageDontRefreshMath(async () => {
 
             let tagCollection = await this.getAllTags();
             if (null == tagCollection) return;

@@ -37,7 +37,8 @@ export module Views {
         sortOrder: string
     }
 
-    export async function changeContent(container: HTMLElement, handler: () => Promise<HTMLElement>): Promise<void> {
+    export async function changeContent(container: HTMLElement, handler: () => Promise<HTMLElement>,
+                                        refreshMath: boolean = true): Promise<void> {
 
         let spinner = DOMHelpers.parseHTML('<div class="spinner-element"><div uk-spinner></div></div>');
         let disabledElement = DOMHelpers.parseHTML('<div class="disabled-element"></div>');
@@ -66,7 +67,10 @@ export module Views {
             container.innerHTML = '';
             container.appendChild(newPageContent);
 
-            ViewsExtra.refreshMath(container);
+            if (refreshMath) {
+
+                ViewsExtra.refreshMath(container);
+            }
         }
         finally {
             clearTimeout(timer);
