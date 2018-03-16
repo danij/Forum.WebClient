@@ -168,7 +168,7 @@ export module TagsView {
                     } as ThreadRepository.Thread);
 
                     let threadTitleElement = document.createElement('a');
-                    threadTitleElement.classList.add('recent-message-thread-link', 'render-math');
+                    threadTitleElement.classList.add('recent-message-thread-link');
                     threadTitleElement.setAttribute('href', href);
                     threadTitleElement.setAttribute('title', threadTitle);
                     threadTitleElement.setAttribute('data-threadmessagethreadid', latestMessage.threadId);
