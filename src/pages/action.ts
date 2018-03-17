@@ -292,7 +292,7 @@ export module PageActions {
 
         async getCommentsOfThreadMessage(id: string): Promise<ThreadMessageRepository.ThreadMessageComment[]> {
 
-            return (await ThreadMessageRepository.getThreadMessageComments(id)).message_comments;
+            return (await ThreadMessageRepository.getThreadMessageComments(id)).messageComments;
         }
 
         searchThreadMessagesByName(name: string): Promise<ThreadMessageRepository.ThreadMessageCollection> {

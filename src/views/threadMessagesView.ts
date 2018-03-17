@@ -717,7 +717,7 @@ export module ThreadMessagesView {
                                        threadCallback: IThreadCallback,
                                        user?: UserRepository.User): HTMLElement {
 
-        const comments = collection.message_comments || [];
+        const comments = collection.messageComments || [];
 
         let result = new DOMAppender('<div class="uk-container uk-container-expand">', '</div>');
 

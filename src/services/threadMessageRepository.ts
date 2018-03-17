@@ -89,7 +89,7 @@ export module ThreadMessageRepository {
 
     export interface ThreadMessageCommentCollection extends CommonEntities.PaginationInfo {
 
-        message_comments: ThreadMessageComment[];
+        messageComments: ThreadMessageComment[];
     }
 
     export class GetThreadMessageCommentsRequest {
@@ -101,7 +101,7 @@ export module ThreadMessageRepository {
     export function defaultThreadMessageCommentCollection(): ThreadMessageCommentCollection {
 
         return {
-            message_comments: [],
+            messageComments: [],
             page: 0,
             pageSize: 1,
             totalCount: 0,
@@ -145,9 +145,9 @@ export module ThreadMessageRepository {
 
         let result = value as ThreadMessageCommentCollection;
 
-        result.message_comments = (result.message_comments || []).filter(t => null != t);
+        result.messageComments = (result.messageComments || []).filter(t => null != t);
 
-        for (let comment of result.message_comments) {
+        for (let comment of result.messageComments) {
 
             comment.createdBy = comment.createdBy || UserRepository.UnknownUser;
 
