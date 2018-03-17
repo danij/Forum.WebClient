@@ -43,11 +43,65 @@ export module CategoryRepository {
         category: Category;
     }
 
+    export function filterLatestMessage(latestMessage: LatestMessage): LatestMessage {
+
+        if (null == latestMessage) {
+
+            latestMessage = {
+                id: '',
+                created: 0,
+                createdBy: null,
+                content: '',
+                threadId: '',
+                threadName: '',
+            }
+        }
+
+        latestMessage.createdBy = latestMessage.createdBy || UserRepository.UnknownUser;
+
+        return latestMessage;
+    }
+
+    export function filterCategoryNulls(category: Category): Category {
+
+        category.tags = (category.tags || []).filter(t => null != t);
+
+        for (let tag of category.tags) {
+
+            TagRepository.filterTag(tag);
+        }
+
+        category.latestMessage = filterLatestMessage(category.latestMessage);
+
+        category.children = (category.children || []).filter(c => null != c);
+
+        for (let childCategory of category.children) {
+
+            filterCategoryNulls(childCategory);
+        }
+
+        return category;
+    }
+
+    function filterNulls(value: any): CategoryCollection {
+
+        let result = value as CategoryCollection;
+
+        result.categories = (result.categories || []).filter(c => null != c);
+
+        for (let category of result.categories)
+        {
+            filterCategoryNulls(category);
+        }
+
+        return result;
+    }
+
     export async function getRootCategories(): Promise<Category[]> {
 
-        let result = (await RequestHandler.get({
+        let result = filterNulls(await RequestHandler.get({
             path: 'categories/root'
-        }) as CategoryCollection).categories;
+        })).categories;
 
         sortCategories(result);
         return result;
@@ -55,9 +109,9 @@ export module CategoryRepository {
 
     export async function getAllCategories(): Promise<Category[]> {
 
-        let result = (await RequestHandler.get({
+        let result = filterNulls(await RequestHandler.get({
             path: 'categories/'
-        }) as CategoryCollection).categories;
+        })).categories;
 
         sortCategories(result);
         return result;
@@ -91,9 +145,9 @@ export module CategoryRepository {
 
     export async function getCategoryById(id: string): Promise<Category> {
 
-        let result = (await RequestHandler.get({
+        let result = filterCategoryNulls((await RequestHandler.get({
             path: 'category/' + encodeURIComponent(id)
-        }) as SingleCategory).category;
+        }) as SingleCategory).category);
 
         sortCategories(result.children);
 

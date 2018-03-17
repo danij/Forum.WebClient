@@ -20,6 +20,19 @@ export module UserRepository {
         receivedDownVotes: number;
     }
 
+    export const EmptyUserId: string = '';
+
+    export const UnknownUser = {
+
+        id: EmptyUserId,
+        name: '<Unknown>',
+        info: '',
+        title: '',
+        created: 0,
+        lastSeen: 0
+
+    } as User;
+
     export interface UserCollection extends CommonEntities.PaginationInfo {
 
         users: User[];

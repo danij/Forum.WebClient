@@ -478,7 +478,8 @@ export module ThreadsView {
             }
             else {
 
-                details.appendChild(DOMHelpers.parseHTML('<span class="uk-text-warning">&lt;none&gt;</span> · '));
+                details.appendChild(DOMHelpers.parseHTML('<span class="uk-text-warning">&lt;none&gt;</span>'));
+                details.appendChild(document.createTextNode(' · '));
             }
             details.appendChild(document.createTextNode(`${DisplayHelpers.intToString(thread.visited)} total views · `));
 

@@ -62,12 +62,12 @@ export module ThreadMessageRepository {
 
     export function createThreadMessageCollection(messages: ThreadMessage[]): ThreadMessageCollection {
 
-        return {
+        return filterNulls({
             messages: messages,
             page: 0,
             pageSize: messages.length,
             totalCount: messages.length,
-        } as ThreadMessageCollection;
+        });
     }
 
     export class GetThreadMessagesRequest {
@@ -108,19 +108,71 @@ export module ThreadMessageRepository {
         } as ThreadMessageCommentCollection;
     }
 
-    export async function getLatestThreadMessages() : Promise<ThreadMessageCollection> {
+    function filterMessageNulls(message: ThreadMessage): ThreadMessage {
 
-        return await RequestHandler.get({
-            path: 'thread_messages/latest'
-        }) as ThreadMessageCollection;
+        message = filterMessageNullsWithoutParentThread(message);
+
+        if (message.parentThread) {
+
+            ThreadRepository.filterThreadNulls(message.parentThread);
+        }
+
+        return message;
     }
 
-    export async function getThreadMessagesOfUser(user: UserRepository.User, request: GetThreadMessagesRequest) : Promise<ThreadMessageCollection> {
+    export function filterMessageNullsWithoutParentThread(message: ThreadMessage): ThreadMessage {
 
-        let result = await RequestHandler.get({
+        message.createdBy = message.createdBy || UserRepository.UnknownUser;
+
+        return message;
+    }
+
+    function filterNulls(value: any): ThreadMessageCollection {
+
+        let result = value as ThreadMessageCollection;
+
+        result.messages = (result.messages || []).filter(t => null != t);
+
+        for (let message of result.messages) {
+
+            filterMessageNulls(message);
+        }
+
+        return result;
+    }
+
+    function filterCommentNulls(value: any): ThreadMessageCommentCollection {
+
+        let result = value as ThreadMessageCommentCollection;
+
+        result.message_comments = (result.message_comments || []).filter(t => null != t);
+
+        for (let comment of result.message_comments) {
+
+            comment.createdBy = comment.createdBy || UserRepository.UnknownUser;
+
+            if (comment.message) {
+
+                filterMessageNulls(comment.message);
+            }
+        }
+
+        return result;
+    }
+
+    export async function getLatestThreadMessages(): Promise<ThreadMessageCollection> {
+
+        return filterNulls(await RequestHandler.get({
+            path: 'thread_messages/latest'
+        }));
+    }
+
+    export async function getThreadMessagesOfUser(user: UserRepository.User, request: GetThreadMessagesRequest): Promise<ThreadMessageCollection> {
+
+        let result = filterNulls(await RequestHandler.get({
             path: 'thread_messages/user/' + encodeURIComponent(user.id),
             query: request
-        }) as ThreadMessageCollection;
+        }));
 
         result.messages = result.messages || [];
         for (let message of result.messages) {
@@ -130,35 +182,35 @@ export module ThreadMessageRepository {
         return result;
     }
 
-    export async function getThreadMessageRank(threadMessageId: string) : Promise<ThreadMessageRankInfo> {
+    export async function getThreadMessageRank(threadMessageId: string): Promise<ThreadMessageRankInfo> {
 
         return await RequestHandler.get({
             path: 'thread_messages/rank/' + encodeURIComponent(threadMessageId)
         }) as ThreadMessageRankInfo;
     }
 
-    export async function getThreadMessageComments(messageId: string) : Promise<ThreadMessageCommentCollection> {
+    export async function getThreadMessageComments(messageId: string): Promise<ThreadMessageCommentCollection> {
 
-        return await RequestHandler.get({
+        return filterCommentNulls(await RequestHandler.get({
             path: 'thread_messages/comments/' + encodeURIComponent(messageId)
-        }) as ThreadMessageCommentCollection;
+        }));
     }
 
-    export async function getAllThreadMessageComments(request: GetThreadMessageCommentsRequest) : Promise<ThreadMessageCommentCollection> {
+    export async function getAllThreadMessageComments(request: GetThreadMessageCommentsRequest): Promise<ThreadMessageCommentCollection> {
 
-        return await RequestHandler.get({
+        return filterCommentNulls(await RequestHandler.get({
             path: 'thread_messages/allcomments',
             query: request
-        }) as ThreadMessageCommentCollection;
+        }));
     }
 
     export async function getThreadMessageCommentsWrittenByUser(userId: string,
-                                                                request: GetThreadMessageCommentsRequest) : Promise<ThreadMessageCommentCollection> {
+                                                                request: GetThreadMessageCommentsRequest): Promise<ThreadMessageCommentCollection> {
 
-        return await RequestHandler.get({
+        return filterCommentNulls(await RequestHandler.get({
             path: 'thread_messages/comments/user/' + encodeURIComponent(userId),
             query: request
-        }) as ThreadMessageCommentCollection;
+        }));
     }
 
     export async function getThreadMessagesById(ids: string[]): Promise<ThreadMessageCollection> {

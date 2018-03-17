@@ -72,28 +72,92 @@ export module ThreadRepository {
         pageSize: number;
     }
 
+    function filterThreadWithMessagesNulls(thread: ThreadWithMessages): ThreadWithMessages {
+
+        filterThreadNulls(thread);
+
+        thread.messages = thread.messages || [];
+
+        for (let message of thread.messages) {
+
+            ThreadMessageRepository.filterMessageNullsWithoutParentThread(message);
+        }
+
+        return thread;
+    }
+
+    export function filterThreadNulls(thread: Thread): Thread {
+
+        thread.tags = (thread.tags || []).filter(t => null != t);
+        for (let tag of thread.tags) {
+
+            TagRepository.filterTag(tag);
+        }
+
+        thread.categories = (thread.categories || []).filter(c => null != c);
+        for (let category of thread.categories) {
+
+            CategoryRepository.filterCategoryNulls(category);
+        }
+
+        thread.latestMessage = CategoryRepository.filterLatestMessage(thread.latestMessage);
+
+        return thread;
+    }
+
+    function filterNulls(value: any): ThreadCollection {
+
+        let result = value as ThreadCollection;
+
+        result.threads = (result.threads || []).filter(t => null != t);
+
+        for (let thread of result.threads) {
+            filterThreadNulls(thread);
+        }
+
+        return result;
+    }
+
+    function filterPinnedThreadNulls(value: any): PinnedThreadCollection {
+
+        let result = value as PinnedThreadCollection;
+
+        result.threads = (result.threads || []).filter(t => null != t);
+        result.pinned_threads = (result.pinned_threads || []).filter(t => null != t);
+
+        for (let thread of result.threads) {
+            filterThreadNulls(thread);
+        }
+        for (let thread of result.pinned_threads) {
+            filterThreadNulls(thread);
+        }
+
+
+        return result;
+    }
+
     export async function getThreads(request: GetThreadsRequest): Promise<ThreadCollection> {
 
-        return await RequestHandler.get({
+        return filterNulls(await RequestHandler.get({
             path: 'threads',
             query: request
-        }) as ThreadCollection;
+        }));
     }
 
     export async function getThreadsWithTag(tag: TagRepository.Tag, request: GetThreadsRequest): Promise<ThreadCollection> {
 
-        return await RequestHandler.get({
+        return filterNulls(await RequestHandler.get({
             path: 'threads/tag/' + encodeURIComponent(tag.id),
             query: request
-        }) as ThreadCollection;
+        }));
     }
 
     export async function getThreadsOfUser(user: UserRepository.User, request: GetThreadsRequest): Promise<ThreadCollection> {
 
-        let result = await RequestHandler.get({
+        let result = filterNulls(await RequestHandler.get({
             path: 'threads/user/' + encodeURIComponent(user.id),
             query: request
-        }) as ThreadCollection;
+        }));
 
         if (result.threads && result.threads.length) {
 
@@ -107,12 +171,13 @@ export module ThreadRepository {
         return result;
     }
 
-    export async function getSubscribedThreadsOfUser(user: UserRepository.User, request: GetThreadsRequest): Promise<ThreadCollection> {
+    export async function getSubscribedThreadsOfUser(user: UserRepository.User,
+                                                     request: GetThreadsRequest): Promise<ThreadCollection> {
 
-        let result = await RequestHandler.get({
+        let result = filterNulls(await RequestHandler.get({
             path: 'threads/subscribed/user/' + encodeURIComponent(user.id),
             query: request
-        }) as ThreadCollection;
+        }));
 
         if (result.threads && result.threads.length) {
 
@@ -129,25 +194,31 @@ export module ThreadRepository {
     export async function getThreadsOfCategory(category: CategoryRepository.Category,
                                                request: GetThreadsRequest): Promise<ThreadCollection> {
 
-        return appendPinnedThreadCollection(await RequestHandler.get({
+        return appendPinnedThreadCollection(filterPinnedThreadNulls(await RequestHandler.get({
             path: 'threads/category/' + encodeURIComponent(category.id),
             query: request
-        }) as PinnedThreadCollection);
+        })));
     }
 
     export async function getThreadById(id: string, request: GetThreadsRequest): Promise<ThreadWithMessagesResponse> {
 
-        return await RequestHandler.get({
+        let response = await RequestHandler.get({
             path: 'threads/id/' + encodeURIComponent(id),
             query: request
         }) as ThreadWithMessagesResponse;
+
+        if (response.thread) {
+
+            filterThreadWithMessagesNulls(response.thread);
+        }
+        return response;
     }
 
     export async function getThreadsById(ids: string[]): Promise<ThreadCollection> {
 
-        return await RequestHandler.get({
+        return filterNulls(await RequestHandler.get({
             path: 'threads/multiple/' + encodeURIComponent(ids.join(','))
-        }) as ThreadCollection;
+        }));
     }
 
     export async function searchThreadsByInitial(name: string): Promise<Thread[]> {

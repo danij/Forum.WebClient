@@ -35,13 +35,36 @@ export module TagRepository {
 
     let latestTags: Tag[];
 
+    export function filterTag(tag: Tag): Tag {
+
+        tag.latestMessage = CategoryRepository.filterLatestMessage(tag.latestMessage);
+
+        return tag;
+    }
+
+    function filterNulls(value: any): TagCollection {
+
+        let result = value as TagCollection;
+
+        result.tags = (result.tags || []).filter(t => null != t);
+
+        for (let tag of result.tags) {
+
+            filterTag(tag);
+        }
+
+        return result;
+    }
+
     export async function getTags(request: GetTagsRequest): Promise<TagCollection> {
 
-        let result = await RequestHandler.get({
+        let result = filterNulls(await RequestHandler.get({
             path: 'tags',
             query: request || {orderBy: 'name', sort: 'ascending'}
-        }) as TagCollection;
+        }));
+
         latestTags = result.tags;
+
         return result;
     }
 
