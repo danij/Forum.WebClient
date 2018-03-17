@@ -22,10 +22,13 @@ export module UserRepository {
 
     export const EmptyUserId: string = '';
 
+    export const AnonymousUserName: string = '<anonymous>';
+    export const UnknownUserName: string = '<unknown>';
+
     export const UnknownUser = {
 
         id: EmptyUserId,
-        name: '<Unknown>',
+        name: UnknownUserName,
         info: '',
         title: '',
         created: 0,

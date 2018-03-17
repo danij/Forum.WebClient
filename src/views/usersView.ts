@@ -39,7 +39,7 @@ export module UsersView {
 
     function getUserLogoInitial(name: string): string {
 
-        if (name == '<anonymous>') {
+        if ((name == UserRepository.AnonymousUserName) || (name == UserRepository.UnknownUserName)) {
 
             return '?';
         }
