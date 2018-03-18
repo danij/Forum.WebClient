@@ -177,7 +177,10 @@ export module ThreadMessageRepository {
         result.messages = result.messages || [];
         for (let message of result.messages) {
 
-            message.createdBy = message.createdBy || user;
+            if (message.createdBy == UserRepository.UnknownUser) {
+
+                message.createdBy = user;
+            }
         }
         return result;
     }
