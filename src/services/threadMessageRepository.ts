@@ -279,4 +279,25 @@ export module ThreadMessageRepository {
             path: 'thread_messages/comment/solved/' + encodeURIComponent(commentId),
         });
     }
+
+    export async function upVote(messageId: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'thread_messages/upvote/' + encodeURIComponent(messageId),
+        });
+    }
+
+    export async function downVote(messageId: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'thread_messages/downvote/' + encodeURIComponent(messageId),
+        });
+    }
+
+    export async function resetVote(messageId: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'thread_messages/resetvote/' + encodeURIComponent(messageId),
+        });
+    }
 }

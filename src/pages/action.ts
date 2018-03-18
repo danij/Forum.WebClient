@@ -85,6 +85,12 @@ export module PageActions {
         solveThreadMessageComment(id: string): Promise<boolean>;
 
         searchThreadMessagesByName(name: string): Promise<ThreadMessageRepository.ThreadMessageCollection>;
+
+        upVote(id: string): Promise<boolean>;
+
+        downVote(id: string): Promise<boolean>;
+
+        resetVote(id: string): Promise<boolean>;
     }
 
     export interface IUserCallback {
@@ -299,6 +305,21 @@ export module PageActions {
 
             return Pages.getOrShowErrorAndDefault(ThreadMessageRepository.searchThreadMessagesByName(name),
                 () => ThreadMessageRepository.defaultThreadMessageCollection());
+        }
+
+        upVote(id: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.upVote(id));
+        }
+
+        downVote(id: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.downVote(id));
+        }
+
+        resetVote(id: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.resetVote(id));
         }
     }
 

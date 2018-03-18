@@ -301,6 +301,8 @@ export module ThreadMessagesView {
         return votes.map((v) => `${v.userName} (${DisplayHelpers.getShortDate(v.at)})`).join(' · ');
     }
 
+    const VotedMark: string = ' ✓';
+
     function createThreadMessageAuthor(message: ThreadMessageRepository.ThreadMessage,
                                        thread: ThreadRepository.Thread,
                                        privileges: IThreadMessagePrivileges): DOMAppender {
@@ -347,15 +349,20 @@ export module ThreadMessagesView {
             let upVotesTooltip = [];
             let downVotesTooltip = [];
 
+            let upVoteData = '';
+            let downVoteData = '';
+
             if ((undefined === message.voteStatus) || (0 == message.voteStatus)) {
 
                 if (privileges.canUpVoteThreadMessage(message.id)) {
 
                     upVotesTooltip.push('Click to up vote message.');
+                    upVoteData = ` data-upvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 }
                 if (privileges.canDownVoteThreadMessage(message.id)) {
 
                     downVotesTooltip.push('Click to down vote message.');
+                    downVoteData = ` data-downvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 }
             }
             else if (privileges.canResetVoteOfThreadMessage(message.id)) {
@@ -363,12 +370,14 @@ export module ThreadMessagesView {
                 if (-1 == message.voteStatus) {
 
                     downVotesTooltip.push('Click to reset vote.');
-                    downVotesNr += " ✓";
+                    downVotesNr += VotedMark;
+                    downVoteData = ` data-resetvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 }
                 else {
 
                     upVotesTooltip.push('Click to reset vote.');
-                    upVotesNr += " ✓";
+                    upVotesNr += VotedMark;
+                    upVoteData = ` data-resetvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 }
             }
 
@@ -382,10 +391,10 @@ export module ThreadMessagesView {
             }
 
             authorContainer.appendRaw('<div class="uk-text-center uk-float-left message-up-vote">' +
-                `<span class="uk-label" title="${DOMHelpers.escapeStringForAttribute(upVotesTooltip.join('\n'))}">` +
+                `<span class="uk-label" ${upVoteData} title="${DOMHelpers.escapeStringForAttribute(upVotesTooltip.join('\n'))}">` +
                 `&plus; ${upVotesNr}</span></div>`);
             authorContainer.appendRaw('<div class="uk-text-center uk-float-right message-down-vote">' +
-                `<span class="uk-label" title="${DOMHelpers.escapeStringForAttribute(downVotesTooltip.join('\n'))}">` +
+                `<span class="uk-label" ${downVoteData} title="${DOMHelpers.escapeStringForAttribute(downVotesTooltip.join('\n'))}">` +
                 `&minus; ${downVotesNr}</span></div>`);
         }
 
@@ -500,6 +509,47 @@ export module ThreadMessagesView {
 
             quoteCallback(message);
         });
+
+        DOMHelpers.addEventListenersData(element, 'upvote-id', 'click', async (ev, messageId) => {
+
+            ev.preventDefault();
+
+            if (await callback.upVote(messageId)) {
+
+                let element = ev.target as HTMLElement;
+                element.innerText = adjustVote(element.innerText, 1) + VotedMark;
+                DOMHelpers.removeEventListeners(element);
+            }
+        });
+
+        DOMHelpers.addEventListenersData(element, 'downvote-id', 'click', async (ev, messageId) => {
+
+            ev.preventDefault();
+
+            if (await callback.downVote(messageId)) {
+
+                let element = ev.target as HTMLElement;
+                element.innerText = adjustVote(element.innerText, 1) + VotedMark;
+                DOMHelpers.removeEventListeners(element);
+            }
+        });
+
+        DOMHelpers.addEventListenersData(element, 'resetvote-id', 'click', async (ev, messageId) => {
+
+            ev.preventDefault();
+
+            if (await callback.resetVote(messageId)) {
+
+                let element = ev.target as HTMLElement;
+                element.innerText = adjustVote(element.innerText, -1).replace(VotedMark, '');
+                DOMHelpers.removeEventListeners(element);
+            }
+        });
+    }
+
+    function adjustVote(value: string, adjustement: number): string {
+
+        return value.replace(/\d+/, (value) => (parseInt(value) + adjustement).toString());
     }
 
     const solvedCommentSpan = '<span class="uk-icon-button uk-float-right" uk-icon="check" title="Already solved" uk-tooltip></span>';

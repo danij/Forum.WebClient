@@ -123,4 +123,19 @@ export module DOMHelpers {
             elements[i].addEventListener(eventType, handler);
         }
     }
+
+    export function addEventListenersData(element: HTMLElement, dataName: string, eventType: string,
+                                      handler: (ev: Event, value: string) => void): void {
+
+        const attribute = `data-${dataName}`;
+        let elements = element.querySelectorAll(`[${attribute}]`);
+
+        for (let i = 0; i < elements.length; ++i) {
+
+            elements[i].addEventListener(eventType, (ev) => {
+
+                handler(ev, elements[i].getAttribute(attribute));
+            });
+        }
+    }
 }
