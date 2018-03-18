@@ -168,25 +168,25 @@ export module PrivilegesView {
 
             if (threadMessageRequiredPrivileges) {
 
-                appendRequiredPrivileges(appender, 'Discussion Thread Message Required Levels',
+                appendRequiredPrivileges(appender, 'Thread Message Required Levels',
                     ThreadMessagePrivilegeNames, await threadMessageRequiredPrivileges,
                     'discussionThreadMessagePrivileges');
             }
             if (threadRequiredPrivileges) {
 
-                appendRequiredPrivileges(appender, 'Discussion Thread Required Levels',
+                appendRequiredPrivileges(appender, 'Thread Required Levels',
                     ThreadPrivilegeNames, await threadRequiredPrivileges,
                     'discussionThreadPrivileges');
             }
             if (tagRequiredPrivileges) {
 
-                appendRequiredPrivileges(appender, 'Discussion Tag Required Levels',
+                appendRequiredPrivileges(appender, 'Tag Required Levels',
                     TagPrivilegeNames, await tagRequiredPrivileges,
                     'discussionTagPrivileges');
             }
             if (categoryRequiredPrivileges) {
 
-                appendRequiredPrivileges(appender, 'Discussion Category Required Levels',
+                appendRequiredPrivileges(appender, 'Category Required Levels',
                     CategoryPrivilegeNames, await categoryRequiredPrivileges,
                     'discussionCategoryPrivileges');
             }
