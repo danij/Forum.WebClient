@@ -74,6 +74,11 @@ export module UserRepository {
         pageSize: number;
     }
 
+    export function isValidUser(user: User): boolean {
+
+        return (null != user) && (EmptyUserId != user.id) && ('00000000-0000-0000-0000-000000000000' != user.id);
+    }
+
     export function sortByName(users: User[]): void {
 
         users.sort((first, second) => {

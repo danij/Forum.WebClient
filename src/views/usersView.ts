@@ -127,20 +127,38 @@ export module UsersView {
                                        position: string = 'bottom-right'): DOMAppender {
 
         let content = new DOMAppender('<div>', '</div>');
+
+        let threadsOfUserLink = '';
+        let threadMessagesOfUserLink = '';
+        let subscribedThreadsOfUserLink = '';
+
+        if (UserRepository.isValidUser(user)) {
+
+            threadsOfUserLink = `<a class="align-left" ${getThreadsOfUserLinkContent(user)}>Threads</a>`;
+            threadMessagesOfUserLink = `<a class="align-left" ${getMessagesOfUserLinkContent(user)}>Messages</a>`;
+            subscribedThreadsOfUserLink = `<a class="align-left" ${getSubscribedThreadsOfUserLinkContent(user)}>Subscribed Threads</a>`;
+        }
+        else {
+
+            threadsOfUserLink = 'Threads';
+            threadMessagesOfUserLink = 'Messages';
+            subscribedThreadsOfUserLink = 'Subscribed Threads';
+        }
+
         content.appendRaw(('<li>\n' +
-            '    <a class="align-left" ' + getThreadsOfUserLinkContent(user) + '>Threads</a>\n' +
+            '    ' + threadsOfUserLink + '\n' +
             '    <span class="uk-badge align-right">{nrOfThreads}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount)));
 
         content.appendRaw(('<li>\n' +
-            '    <a class="align-left" ' + getMessagesOfUserLinkContent(user) + '>Messages</a>\n' +
+            '    ' + threadMessagesOfUserLink + '\n' +
             '    <span class="uk-badge align-right">{nrOfMessages}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));
 
         content.appendRaw(('<li>\n' +
-            '    <a class="align-left" ' + getSubscribedThreadsOfUserLinkContent(user) + '>Subscribed Threads</a>\n' +
+            '    ' + subscribedThreadsOfUserLink +'\n' +
             '    <span class="uk-badge align-right">{nrOfSubscribedThreads}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfSubscribedThreads}', DisplayHelpers.intToString(user.subscribedThreadCount)));
