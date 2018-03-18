@@ -10,6 +10,7 @@ import {PageActions} from "../pages/action";
 import {Privileges} from "../services/privileges";
 import {EditViews} from "./edit";
 import {TagRepository} from "../services/tagRepository";
+import {PrivilegesView} from "./privilegesView";
 
 export module CategoriesView {
 
@@ -18,6 +19,7 @@ export module CategoriesView {
     import ICategoryPrivileges = Privileges.ICategoryPrivileges;
     import reloadIfOk = EditViews.reloadPageIfOk;
     import doIfOk = EditViews.doIfOk;
+    import IPrivilegesCallback = PageActions.IPrivilegesCallback;
 
     export function createCategoriesTable(categories: CategoryRepository.Category[],
                                           callback: ICategoryCallback,
@@ -203,7 +205,8 @@ export module CategoriesView {
 
     export function createCategoryHeader(category: CategoryRepository.Category,
                                          callback: ICategoryCallback,
-                                         privileges: ICategoryPrivileges): HTMLElement {
+                                         privileges: ICategoryPrivileges,
+                                         privilegesCallback: IPrivilegesCallback): HTMLElement {
 
         let result = document.createElement('div');
         result.classList.add('categories-list-header');
@@ -286,7 +289,6 @@ export module CategoriesView {
                     reloadIfOk(callback.editCategoryParent(category.id, newParentId));
                 });
             });
-
         }
 
         if (privileges.canEditCategoryName(category.id)) {
@@ -330,6 +332,15 @@ export module CategoriesView {
                         descriptionElement.innerText = category.description = description;
                     });
                 }
+            });
+        }
+        {
+            let link = EditViews.createEditLink('Privileges', 'settings');
+            result.appendChild(link);
+
+            link.addEventListener('click', () => {
+
+                PrivilegesView.showCategoryPrivileges(category, privilegesCallback);
             });
         }
 
@@ -383,10 +394,11 @@ export module CategoriesView {
     export function createCategoryDisplay(category: CategoryRepository.Category,
                                           threadList: HTMLElement,
                                           callback: ICategoryCallback,
-                                          privileges: ICategoryPrivileges): HTMLElement {
+                                          privileges: ICategoryPrivileges,
+                                          privilegesCallback: IPrivilegesCallback): HTMLElement {
 
         let result = document.createElement('div');
-        result.appendChild(createCategoryHeader(category, callback, privileges));
+        result.appendChild(createCategoryHeader(category, callback, privileges, privilegesCallback));
 
         let separatorNeeded = false;
 

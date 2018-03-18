@@ -5,6 +5,7 @@ import {PrivilegesRepository} from "../services/privilegesRepository";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadRepository} from "../services/threadRepository";
 import {TagRepository} from "../services/tagRepository";
+import {CategoryRepository} from "../services/categoryRepository";
 
 export module PrivilegesView {
 
@@ -52,6 +53,20 @@ export module PrivilegesView {
         //['change_uiblob', 'Change UI Blob'],
         ['delete', 'Delete'],
         ['merge', 'Merge'],
+        ['adjust_privilege', 'Adjust Privileges'],
+    ];
+
+    const CategoryPrivilegeNames = [
+
+        ['view', 'View'],
+        ['get_discussion_threads', 'Get Threads'],
+        ['change_name', 'Change Name'],
+        ['change_description', 'Change Description'],
+        ['change_parent', 'Change Parent'],
+        ['change_displayorder', 'Change Displayorder'],
+        ['add_tag', 'Add Tag'],
+        ['remove_tag', 'Remove Tag'],
+        ['delete', 'Delete'],
         ['adjust_privilege', 'Adjust Privileges'],
     ];
 
@@ -121,10 +136,28 @@ export module PrivilegesView {
             Promise.all(requiredPrivilegesPromises));
     }
 
+    export function showCategoryPrivileges(category: CategoryRepository.Category,
+                                           callback: PageActions.IPrivilegesCallback): void {
+
+        let modal = document.getElementById('privileges-modal');
+
+        Views.showModal(modal);
+
+        const requiredPrivilegesPromises = [
+
+            callback.getCategoryRequiredPrivileges(category.id),
+            callback.getForumWideRequiredPrivileges()
+        ];
+
+        showRequiredPrivileges(modal, null, null, null,
+            Promise.all(requiredPrivilegesPromises));
+    }
+
     function showRequiredPrivileges(modal: HTMLElement,
                                     threadMessageRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>,
                                     threadRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>,
-                                    tagRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>): void {
+                                    tagRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>,
+                                    categoryRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>): void {
 
         let toReplace = modal.getElementsByClassName('required-privileges')[0] as HTMLElement;
         toReplace.innerText = '';
@@ -150,6 +183,12 @@ export module PrivilegesView {
                 appendRequiredPrivileges(appender, 'Discussion Tag Required Levels',
                     TagPrivilegeNames, await tagRequiredPrivileges,
                     'discussionTagPrivileges');
+            }
+            if (categoryRequiredPrivileges) {
+
+                appendRequiredPrivileges(appender, 'Discussion Category Required Levels',
+                    CategoryPrivilegeNames, await categoryRequiredPrivileges,
+                    'discussionCategoryPrivileges');
             }
 
             let result = appender.toElement();

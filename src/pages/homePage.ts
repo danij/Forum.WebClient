@@ -70,7 +70,7 @@ export class HomePage implements Pages.Page {
             }
 
             return CategoriesView.createCategoryDisplay(this.category, threadList, PageActions.getCategoryCallback(),
-                Privileges.getCategoryPrivileges());
+                Privileges.getCategoryPrivileges(), PageActions.getPrivilegesCallback());
         });
     }
 
