@@ -13,6 +13,7 @@ import {EditViews} from "./edit";
 import {ThreadMessagesPage} from "../pages/threadMessagesPage";
 import {ThreadsView} from "./threadsView";
 import {CommonEntities} from "../services/commonEntities";
+import {PrivilegesView} from "./privilegesView";
 
 export module ThreadMessagesView {
 
@@ -24,6 +25,7 @@ export module ThreadMessagesView {
     import IThreadMessageCallback = PageActions.IThreadMessageCallback;
     import IThreadMessagePrivileges = Privileges.IThreadMessagePrivileges;
     import reloadPageIfOk = EditViews.reloadPageIfOk;
+    import IPrivilegesCallback = PageActions.IPrivilegesCallback;
 
     export class ThreadMessagesPageContent {
 
@@ -116,6 +118,7 @@ export module ThreadMessagesView {
                                                     threadMessagePrivileges: IThreadMessagePrivileges,
                                                     userCallback: IUserCallback,
                                                     userPrivileges: IUserPrivileges,
+                                                    privilegesCallback: IPrivilegesCallback,
                                                     quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): ThreadMessagesPageContent {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCollection();
@@ -142,7 +145,7 @@ export module ThreadMessagesView {
         let listContainer = document.createElement('div');
         listContainer.classList.add('thread-message-list');
         listContainer.appendChild(createThreadMessageList(collection, threadMessageCallback, threadMessagePrivileges,
-            threadCallback, threadPrivileges, thread, quoteCallback));
+            threadCallback, threadPrivileges, privilegesCallback, thread, quoteCallback));
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
@@ -180,6 +183,7 @@ export module ThreadMessagesView {
                                             privileges: IThreadMessagePrivileges,
                                             threadCallback: IThreadCallback,
                                             threadPrivileges: IThreadPrivileges,
+                                            privilegesCallback: IPrivilegesCallback,
                                             thread?: ThreadRepository.Thread,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): HTMLElement {
 
@@ -226,7 +230,7 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
-        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, quoteCallback);
+        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback, quoteCallback);
 
         return element;
     }
@@ -419,6 +423,9 @@ export module ThreadMessagesView {
 
             actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}" uk-tooltip></a>`);
         }
+
+        actions.appendRaw(`<a uk-icon="icon: settings" class="show-thread-message-privileges-link" title="Privileges" data-message-id="${messageId}" uk-tooltip></a>`);
+
         if (privileges.canMoveThreadMessage(message.id)) {
 
             actions.appendRaw(`<a uk-icon="icon: move" class="move-thread-message-link" title="Move to different thread" data-message-id="${messageId}" uk-tooltip></a>`);
@@ -434,11 +441,13 @@ export module ThreadMessagesView {
         if (quoteCallback) {
             actions.appendRaw(`<a uk-icon="icon: commenting" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}" uk-tooltip></a>`);
         }
+
         return actions;
     }
 
     function setupThreadMessageActionEvents(element: HTMLElement, messagesById, callback: IThreadMessageCallback,
                                             threadCallback: IThreadCallback,
+                                            privilegesCallback: IPrivilegesCallback,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void) {
 
         DOMHelpers.addEventListeners(element, 'edit-thread-message-content-link', 'click', async (ev) => {
@@ -544,6 +553,16 @@ export module ThreadMessagesView {
                 element.innerText = adjustVote(element.innerText, -1).replace(VotedMark, '');
                 DOMHelpers.removeEventListeners(element);
             }
+        });
+
+        DOMHelpers.addEventListeners(element, 'show-thread-message-privileges-link', 'click', async (ev) => {
+
+            ev.preventDefault();
+
+            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            let message = messagesById[messageId];
+
+            PrivilegesView.showThreadMessagePrivileges(message, privilegesCallback);
         });
     }
 

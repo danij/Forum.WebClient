@@ -81,6 +81,7 @@ export module ThreadRepository {
         for (let message of thread.messages) {
 
             ThreadMessageRepository.filterMessageNullsWithoutParentThread(message);
+            message.parentThread = message.parentThread || thread;
         }
 
         return thread;

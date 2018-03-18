@@ -71,6 +71,7 @@ export class ThreadMessagesPage implements Pages.Page {
                 PageActions.getThreadCallback(), Privileges.getThreadPrivileges(),
                 PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
                 PageActions.getUserCallback(), Privileges.getUserPrivileges(),
+                PageActions.getPrivilegesCallback(),
                 this.thread ? (message) => this.quoteCallback(message) : null);
 
             this.setupSortControls(elements.sortControls);
@@ -183,7 +184,7 @@ export class ThreadMessagesPage implements Pages.Page {
             return ThreadMessagesView.createThreadMessageList(messageCollection,
                 PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
                 PageActions.getThreadCallback(), Privileges.getThreadPrivileges(),
-                this.thread, (message) => this.quoteCallback(message));
+                PageActions.getPrivilegesCallback(), this.thread, (message) => this.quoteCallback(message));
         });
     }
 

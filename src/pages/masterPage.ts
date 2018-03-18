@@ -351,7 +351,7 @@ export module MasterPage {
 
             return ThreadMessagesView.createThreadMessageList(messages,
                 PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
-                PageActions.getThreadCallback(), Privileges.getThreadPrivileges());
+                PageActions.getThreadCallback(), Privileges.getThreadPrivileges(), PageActions.getPrivilegesCallback());
         });
         ViewsExtra.refreshMath(resultsContainer);
     }

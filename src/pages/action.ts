@@ -4,6 +4,7 @@ import {UserRepository} from "../services/userRepository";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {CategoryRepository} from "../services/categoryRepository";
 import {Pages} from "./common";
+import {PrivilegesRepository} from "../services/privilegesRepository";
 
 export module PageActions {
 
@@ -110,6 +111,19 @@ export module PageActions {
         deleteUser(id: string): Promise<boolean>;
 
         searchUsersByName(name: string): Promise<UserRepository.User[]>;
+    }
+
+    export interface IPrivilegesCallback {
+
+        getThreadMessageRequiredPrivileges(messageId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection>;
+
+        getThreadRequiredPrivileges(threadId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection>;
+
+        getTagRequiredPrivileges(tagId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection>;
+
+        getCategoryRequiredPrivileges(categoryId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection>;
+
+        getForumWideRequiredPrivileges(): Promise<PrivilegesRepository.RequiredPrivilegesCollection>;
     }
 
     class CategoryCallback implements ICategoryCallback {
@@ -366,6 +380,40 @@ export module PageActions {
         }
     }
 
+    class PrivilegesCallback implements IPrivilegesCallback {
+
+        getThreadMessageRequiredPrivileges(messageId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getThreadMessageRequiredPrivileges(messageId),
+                () => ({} as PrivilegesRepository.RequiredPrivilegesCollection));
+        }
+
+
+        getThreadRequiredPrivileges(threadId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getThreadRequiredPrivileges(threadId),
+                () => ({} as PrivilegesRepository.RequiredPrivilegesCollection));
+        }
+
+        getTagRequiredPrivileges(tagId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getTagRequiredPrivileges(tagId),
+                () => ({} as PrivilegesRepository.RequiredPrivilegesCollection));
+        }
+
+        getCategoryRequiredPrivileges(categoryId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getCategoryRequiredPrivileges(categoryId),
+                () => ({} as PrivilegesRepository.RequiredPrivilegesCollection));
+        }
+
+        getForumWideRequiredPrivileges(): Promise<PrivilegesRepository.RequiredPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getForumWideRequiredPrivileges(),
+                () => ({} as PrivilegesRepository.RequiredPrivilegesCollection));
+        }
+    }
+
     export function getCategoryCallback(): ICategoryCallback {
 
         return new CategoryCallback();
@@ -389,5 +437,10 @@ export module PageActions {
     export function getUserCallback(): IUserCallback {
 
         return new UserCallback();
+    }
+
+    export function getPrivilegesCallback(): IPrivilegesCallback {
+
+        return new PrivilegesCallback();
     }
 }
