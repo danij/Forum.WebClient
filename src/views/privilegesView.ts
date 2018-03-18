@@ -3,6 +3,7 @@ import {PageActions} from "../pages/action";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {PrivilegesRepository} from "../services/privilegesRepository";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
+import {ThreadRepository} from "../services/threadRepository";
 
 export module PrivilegesView {
 
@@ -24,6 +25,21 @@ export module PrivilegesView {
         ['change_content', 'Change Content'],
         ['delete', 'Delete'],
         ['move', 'Move'],
+        ['adjust_privilege', 'Adjust Privileges'],
+    ];
+
+    const ThreadPrivilegeNames = [
+
+        ['view', 'View'],
+        ['subscribe', 'Subscribe'],
+        ['unsubscribe', 'Unsubscribe'],
+        ['add_message', 'Add Message'],
+        ['change_name', 'Change Name'],
+        ['change_pin_display_order', 'Change Pin Display Order'],
+        ['add_tag', 'Add Tag'],
+        ['remove_tag', 'Remove Tag'],
+        ['delete', 'Delete'],
+        ['merge', 'Merge'],
         ['adjust_privilege', 'Adjust Privileges'],
     ];
 
@@ -57,8 +73,29 @@ export module PrivilegesView {
         showRequiredPrivileges(modal, Promise.all(threadMessageRequiredPrivilegesPromises));
     }
 
+    export function showThreadPrivileges(thread: ThreadRepository.Thread,
+                                         callback: PageActions.IPrivilegesCallback): void {
+
+        let modal = document.getElementById('privileges-modal');
+
+        Views.showModal(modal);
+
+        const requiredPrivilegesPromises = [
+
+            callback.getThreadRequiredPrivileges(thread.id)
+        ];
+        for (let tag of thread.tags) {
+
+            requiredPrivilegesPromises.push(callback.getTagRequiredPrivileges(tag.id));
+        }
+        requiredPrivilegesPromises.push(callback.getForumWideRequiredPrivileges());
+
+        showRequiredPrivileges(modal, Promise.all(requiredPrivilegesPromises), Promise.all(requiredPrivilegesPromises));
+    }
+
     function showRequiredPrivileges(modal: HTMLElement,
-                                    threadMessageRequiredPrivileges: Promise<RequiredPrivilegesCollection[]>): void {
+                                    threadMessageRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>,
+                                    threadRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>): void {
 
         let toReplace = modal.getElementsByClassName('required-privileges')[0] as HTMLElement;
         toReplace.innerText = '';
@@ -72,6 +109,12 @@ export module PrivilegesView {
                 appendRequiredPrivileges(appender, 'Discussion Thread Message Required Levels',
                     ThreadMessagePrivilegeNames, await threadMessageRequiredPrivileges,
                     'discussionThreadMessagePrivileges');
+            }
+            if (threadRequiredPrivileges) {
+
+                appendRequiredPrivileges(appender, 'Discussion Thread Required Levels',
+                    ThreadPrivilegeNames, await threadRequiredPrivileges,
+                    'discussionThreadPrivileges');
             }
 
             let result = appender.toElement();

@@ -129,7 +129,8 @@ export module ThreadMessagesView {
 
         if (info.thread) {
 
-            resultList.appendChild(ThreadsView.createThreadPageHeader(info.thread, threadCallback, threadPrivileges));
+            resultList.appendChild(ThreadsView.createThreadPageHeader(info.thread, threadCallback, threadPrivileges,
+                privilegesCallback));
         }
         else if (info.user) {
 

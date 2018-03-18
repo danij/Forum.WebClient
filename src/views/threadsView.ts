@@ -13,6 +13,7 @@ import {EditViews} from "./edit";
 import {ViewsExtra} from "./extra";
 import {ThreadMessagesPage} from "../pages/threadMessagesPage";
 import {CategoryRepository} from "../services/categoryRepository";
+import {PrivilegesView} from "./privilegesView";
 
 export module ThreadsView {
 
@@ -25,6 +26,7 @@ export module ThreadsView {
     import reloadPageIfOk = EditViews.reloadPageIfOk;
     import IUserCallback = PageActions.IUserCallback;
     import IUserPrivileges = Privileges.IUserPrivileges;
+    import IPrivilegesCallback = PageActions.IPrivilegesCallback;
 
     export class ThreadsPageContent {
 
@@ -300,7 +302,8 @@ export module ThreadsView {
 
     export function createThreadPageHeader(thread: ThreadRepository.Thread,
                                            callback: IThreadCallback,
-                                           privileges: IThreadPrivileges): HTMLElement {
+                                           privileges: IThreadPrivileges,
+                                           privilegesCallback: IPrivilegesCallback): HTMLElement {
 
         let element = document.createElement('div');
         element.classList.add('uk-container', 'uk-container-expand', 'thread-header');
@@ -363,6 +366,15 @@ export module ThreadsView {
                             new ThreadMessagesPage().displayForThread(selected);
                         }
                     });
+                });
+            }
+
+            {
+                let link = EditViews.createEditLink('Privileges', 'settings', []);
+                actions.appendChild(link);
+                link.addEventListener('click', async () => {
+
+                    PrivilegesView.showThreadPrivileges(thread, privilegesCallback);
                 });
             }
 
