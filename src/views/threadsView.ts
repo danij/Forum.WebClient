@@ -43,7 +43,8 @@ export module ThreadsView {
                                              tagCallback: ITagCallback,
                                              tagPrivileges: ITagPrivileges,
                                              userCallback: IUserCallback,
-                                             userPrivileges: IUserPrivileges) {
+                                             userPrivileges: IUserPrivileges,
+                                             privilegesCallback: PageActions.IPrivilegesCallback) {
 
         collection = collection || ThreadRepository.defaultThreadCollection();
 
@@ -53,7 +54,8 @@ export module ThreadsView {
 
         if (info.tag) {
 
-            resultList.appendChild(TagsView.createTagPageHeader(info.tag, tagCallback, tagPrivileges));
+            resultList.appendChild(TagsView.createTagPageHeader(info.tag, tagCallback, tagPrivileges,
+                privilegesCallback));
         }
         else if (info.user) {
 

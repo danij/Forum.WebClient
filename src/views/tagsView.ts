@@ -8,6 +8,7 @@ import {ThreadRepository} from "../services/threadRepository";
 import {PageActions} from "../pages/action";
 import {Privileges} from "../services/privileges";
 import {EditViews} from "./edit";
+import {PrivilegesView} from "./privilegesView";
 
 export module TagsView {
 
@@ -229,7 +230,8 @@ export module TagsView {
 
     export function createTagPageHeader(tag: TagRepository.Tag,
                                         callback: ITagCallback,
-                                        privileges: ITagPrivileges): HTMLElement {
+                                        privileges: ITagPrivileges,
+                                        privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         let container = document.createElement('div');
         container.classList.add('uk-grid-small', 'tag-page-header');
@@ -273,6 +275,14 @@ export module TagsView {
 
                     EditViews.goToTagsPageIfOk(callback.mergeTags(tag.id, selected));
                 });
+            });
+        }
+        {
+            let link = EditViews.createEditLink('Privileges', 'settings');
+            container.appendChild(link);
+            link.addEventListener('click', async () => {
+
+                PrivilegesView.showTagPrivileges(tag, privilegesCallback);
             });
         }
 
