@@ -70,6 +70,44 @@ export module PrivilegesView {
         ['adjust_privilege', 'Adjust Privileges'],
     ];
 
+    const ForumWidePrivilegeNames = [
+
+        ['add_user', 'Add User'],
+        ['login', 'Login'],
+        ['get_entities_count', 'Get Entities Count'],
+        ['get_version', 'Get Version'],
+        ['get_all_users', 'Get All Users'],
+        ['get_user_info', 'Get User Info'],
+        ['get_discussion_threads_of_user', 'Get Threads Of User'],
+        ['get_discussion_thread_messages_of_user', 'Get Thread Messages Of User'],
+        ['get_subscribed_discussion_threads_of_user', 'Get Subscribed Threads Of User'],
+        ['get_all_discussion_categories', 'Get All Categories'],
+        ['get_discussion_categories_from_root', 'Get Root Categories'],
+        ['get_all_discussion_tags', 'Get All Tags'],
+        ['get_all_discussion_threads', 'Get All Threads'],
+        ['get_all_message_comments', 'Get All Message Comments'],
+        ['get_message_comments_of_user', 'Get Message Comments Of User'],
+        ['add_discussion_category', 'Add Category'],
+        ['add_discussion_tag', 'Add Tag'],
+        ['add_discussion_thread', 'Add Thread'],
+        ['change_own_user_name', 'Change Own User Name'],
+        ['change_any_user_name', 'Change Any User Name'],
+        ['change_own_user_info', 'Change Own User Info'],
+        ['change_any_user_info', 'Change Any User Info'],
+        ['change_own_user_title', 'Change Own User Title'],
+        ['change_any_user_title', 'Change Any User Title'],
+        ['change_own_user_signature', 'Change Own User Signature'],
+        ['change_any_user_signature', 'Change Any User Signature'],
+        ['change_own_user_logo', 'Change Own User Logo'],
+        ['change_any_user_logo', 'Change Any User Logo'],
+        ['delete_own_user_logo', 'Delete Own User Logo'],
+        ['delete_any_user_logo', 'Delete Any User Logo'],
+        ['delete_any_user', 'Delete Any User'],
+        ['adjust_forum_wide_privilege', 'Adjust Privileges'],
+        ['get_user_vote_history', 'Get User Vote History'],
+        ['no_throttling', 'No Throttling Exception'],
+    ];
+
     const Columns = [
 
         ['discussionThreadMessagePrivileges', 'Message'],
@@ -153,11 +191,28 @@ export module PrivilegesView {
             Promise.all(requiredPrivilegesPromises));
     }
 
+    export function showForumWidePrivileges(callback: PageActions.IPrivilegesCallback): void {
+
+        let modal = document.getElementById('privileges-modal');
+
+        Views.showModal(modal);
+
+        const requiredPrivilegesPromises = [
+
+            callback.getForumWideRequiredPrivileges()
+        ];
+
+        let promise = Promise.all(requiredPrivilegesPromises);
+
+        showRequiredPrivileges(modal, promise, promise, promise, promise, promise);
+    }
+
     function showRequiredPrivileges(modal: HTMLElement,
                                     threadMessageRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>,
                                     threadRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>,
                                     tagRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>,
-                                    categoryRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>): void {
+                                    categoryRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>,
+                                    forumWideRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>): void {
 
         let toReplace = modal.getElementsByClassName('required-privileges')[0] as HTMLElement;
         toReplace.innerText = '';
@@ -189,6 +244,12 @@ export module PrivilegesView {
                 appendRequiredPrivileges(appender, 'Category Required Levels',
                     CategoryPrivilegeNames, await categoryRequiredPrivileges,
                     'discussionCategoryPrivileges');
+            }
+            if (forumWideRequiredPrivileges) {
+
+                appendRequiredPrivileges(appender, 'Forum Wide Required Levels',
+                    ForumWidePrivilegeNames, await forumWideRequiredPrivileges,
+                    'forumWidePrivileges');
             }
 
             let result = appender.toElement();

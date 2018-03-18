@@ -19,6 +19,7 @@ import {NewThreadPage} from "./newThreadPage";
 import {PageActions} from "./action";
 import {UsersView} from "../views/usersView";
 import {DOMHelpers} from "../helpers/domHelpers";
+import {PrivilegesView} from "../views/privilegesView";
 
 export module MasterPage {
 
@@ -71,6 +72,7 @@ export module MasterPage {
         loadCurrentPage();
 
         setupUpdates();
+        setupSettings();
     }
 
     function fixLinks() {
@@ -354,5 +356,15 @@ export module MasterPage {
                 PageActions.getThreadCallback(), Privileges.getThreadPrivileges(), PageActions.getPrivilegesCallback());
         });
         ViewsExtra.refreshMath(resultsContainer);
+    }
+
+    function setupSettings() {
+
+        document.getElementById('Settings').addEventListener('click', (ev) => {
+
+            ev.preventDefault();
+
+            PrivilegesView.showForumWidePrivileges(PageActions.getPrivilegesCallback());
+        })
     }
 }
