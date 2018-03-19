@@ -6,12 +6,17 @@ import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadRepository} from "../services/threadRepository";
 import {TagRepository} from "../services/tagRepository";
 import {CategoryRepository} from "../services/categoryRepository";
+import {UsersView} from "./usersView";
+import {UserRepository} from "../services/userRepository";
+import {DisplayHelpers} from "../helpers/displayHelpers";
 
 export module PrivilegesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import RequiredPrivilegesCollection = PrivilegesRepository.RequiredPrivilegesCollection;
     import TabEntry = Views.TabEntry;
+    import AssignedPrivilegesCollection = PrivilegesRepository.AssignedPrivilegesCollection;
+    import AssignedPrivilege = PrivilegesRepository.AssignedPrivilege;
 
     const ThreadMessagePrivilegeNames = [
 
@@ -146,6 +151,8 @@ export module PrivilegesView {
         threadMessageRequiredPrivilegesPromises.push(callback.getForumWideRequiredPrivileges());
 
         showRequiredPrivileges(modal, Promise.all(threadMessageRequiredPrivilegesPromises));
+
+        showAssignedPrivileges(modal, callback.getThreadMessageAssignedPrivileges(message.id));
     }
 
     export function showThreadPrivileges(thread: ThreadRepository.Thread,
@@ -164,6 +171,8 @@ export module PrivilegesView {
         requiredPrivilegesPromises.push(callback.getForumWideRequiredPrivileges());
 
         showRequiredPrivileges(modal, Promise.all(requiredPrivilegesPromises), Promise.all(requiredPrivilegesPromises));
+
+        showAssignedPrivileges(modal, callback.getThreadAssignedPrivileges(thread.id));
     }
 
     export function showTagPrivileges(tag: TagRepository.Tag, callback: PageActions.IPrivilegesCallback): void {
@@ -178,6 +187,8 @@ export module PrivilegesView {
 
         showRequiredPrivileges(modal, Promise.all(requiredPrivilegesPromises), Promise.all(requiredPrivilegesPromises),
             Promise.all(requiredPrivilegesPromises));
+
+        showAssignedPrivileges(modal, callback.getTagAssignedPrivileges(tag.id));
     }
 
     export function showCategoryPrivileges(category: CategoryRepository.Category,
@@ -193,6 +204,8 @@ export module PrivilegesView {
 
         showRequiredPrivileges(modal, null, null, null,
             Promise.all(requiredPrivilegesPromises));
+
+        showAssignedPrivileges(modal, callback.getCategoryAssignedPrivileges(category.id));
     }
 
     export function showForumWidePrivileges(callback: PageActions.IPrivilegesCallback): void {
@@ -209,6 +222,8 @@ export module PrivilegesView {
         let promise = Promise.all(requiredPrivilegesPromises);
 
         showRequiredPrivileges(modal, promise, promise, promise, promise, promise);
+
+        showAssignedPrivileges(modal, callback.getForumWideAssignedPrivileges());
     }
 
     function showRequiredPrivileges(modal: HTMLElement,
@@ -378,4 +393,146 @@ export module PrivilegesView {
 
         return result;
     }
+
+    function showAssignedPrivileges(modal: HTMLElement, promise: Promise<AssignedPrivilegesCollection>): void {
+
+        let toReplace = modal.getElementsByClassName('assigned-privileges')[0] as HTMLElement;
+        toReplace.innerText = '';
+
+        Views.changeContent(toReplace, async () => {
+
+            let tabEntries: TabEntry[] = [];
+
+            let collection = await promise;
+
+            let now = collection.now;
+            let assignedPrivileges = collection.forumWidePrivileges
+                || collection.discussionCategoryPrivileges
+                || collection.discussionTagPrivileges
+                || collection.discussionThreadPrivileges
+                || collection.discussionThreadMessagePrivileges;
+
+            let granted: AssignedPrivilege[] = [];
+            let grantedExpired: AssignedPrivilege[] = [];
+            let revoked: AssignedPrivilege[] = [];
+            let revokedExpired: AssignedPrivilege[] = [];
+
+            assignedPrivileges.sort((first, second) => first.granted - second.granted);
+
+            function expired(assignedPrivilege: AssignedPrivilege): boolean {
+
+                return (assignedPrivilege.expires > 0) && (assignedPrivilege.expires < now);
+            }
+
+            for (const assignedPrivilege of assignedPrivileges) {
+
+                if (assignedPrivilege.value > 0) {
+
+                    if (expired(assignedPrivilege)) {
+
+                        grantedExpired.push(assignedPrivilege);
+                    }
+                    else {
+
+                        granted.push(assignedPrivilege);
+                    }
+                }
+                else {
+
+                    if (expired(assignedPrivilege)) {
+
+                        revokedExpired.push(assignedPrivilege);
+                    }
+                    else {
+
+                        revoked.push(assignedPrivilege);
+                    }
+                }
+            }
+
+            if (granted.length) {
+
+                tabEntries.push(createAssignedPrivilegesTable('Granted Levels', granted));
+            }
+
+            if (grantedExpired.length) {
+
+                tabEntries.push(createAssignedPrivilegesTable('Granted Levels (Expired)', grantedExpired));
+            }
+
+            if (revoked.length) {
+
+                tabEntries.push(createAssignedPrivilegesTable('Revoked Levels', revoked));
+            }
+
+            if (revokedExpired.length) {
+
+                tabEntries.push(createAssignedPrivilegesTable('Revoked Levels (Expired)', revokedExpired));
+            }
+
+            const result = Views.createTabs(tabEntries, 0, 'center');
+
+            Views.setupThreadsOfUsersLinks(result);
+
+            return result;
+
+        }, false);
+    }
+
+    function createAssignedPrivilegesTable(title: string, assignedPrivileges: AssignedPrivilege[]): TabEntry {
+
+        let tableAppender = new DOMAppender('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">', '</table>');
+
+        let result: TabEntry = {
+
+            title: title,
+            content: tableAppender
+        };
+
+        let tHead = new DOMAppender('<thead>', '</thead>');
+        tableAppender.append(tHead);
+        {
+            let row = new DOMAppender('<tr>', '</tr>');
+            tHead.append(row);
+
+            row.appendRaw('<th>User</th>');
+            row.appendRaw('<th>Level</th>');
+            row.appendRaw('<th>From</th>');
+            row.appendRaw('<th>Until</th>');
+        }
+
+        let tBody = new DOMAppender('<tbody>', '</tbody>');
+        tableAppender.append(tBody);
+
+        for (let assignedPrivilege of assignedPrivileges) {
+
+            let row = new DOMAppender('<tr>', '</tr>');
+            tBody.append(row);
+
+            let userCell = new DOMAppender('<td>', '</td>');
+            row.append(userCell);
+
+            userCell.append(UsersView.createAuthorSmall({
+                id: assignedPrivilege.id,
+                name: assignedPrivilege.name
+            } as UserRepository.User));
+
+            let labelCell = new DOMAppender('<td>', '</td>');
+            row.append(labelCell);
+            labelCell.appendString(assignedPrivilege.value.toString());
+
+            let fromCell = new DOMAppender('<td>', '</td>');
+            row.append(fromCell);
+            fromCell.appendString(DisplayHelpers.getDateTime(assignedPrivilege.granted));
+
+            let untilCell = new DOMAppender('<td>', '</td>');
+            row.append(untilCell);
+            untilCell.appendString((0 == assignedPrivilege.expires)
+                ? '∞'
+                : DisplayHelpers.getDateTime(assignedPrivilege.expires));
+        }
+
+        return result;
+    }
+
 }

@@ -124,6 +124,16 @@ export module PageActions {
         getCategoryRequiredPrivileges(categoryId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection>;
 
         getForumWideRequiredPrivileges(): Promise<PrivilegesRepository.RequiredPrivilegesCollection>;
+
+        getThreadMessageAssignedPrivileges(messageId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection>;
+
+        getThreadAssignedPrivileges(threadId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection>;
+
+        getTagAssignedPrivileges(tagId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection>;
+
+        getCategoryAssignedPrivileges(categoryId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection>;
+
+        getForumWideAssignedPrivileges(): Promise<PrivilegesRepository.AssignedPrivilegesCollection>;
     }
 
     class CategoryCallback implements ICategoryCallback {
@@ -388,7 +398,6 @@ export module PageActions {
                 () => ({} as PrivilegesRepository.RequiredPrivilegesCollection));
         }
 
-
         getThreadRequiredPrivileges(threadId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection> {
 
             return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getThreadRequiredPrivileges(threadId),
@@ -411,6 +420,36 @@ export module PageActions {
 
             return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getForumWideRequiredPrivileges(),
                 () => ({} as PrivilegesRepository.RequiredPrivilegesCollection));
+        }
+        
+        getThreadMessageAssignedPrivileges(messageId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getThreadMessageAssignedPrivileges(messageId),
+                () => ({} as PrivilegesRepository.AssignedPrivilegesCollection));
+        }
+
+        getThreadAssignedPrivileges(threadId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getThreadAssignedPrivileges(threadId),
+                () => ({} as PrivilegesRepository.AssignedPrivilegesCollection));
+        }
+
+        getTagAssignedPrivileges(tagId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getTagAssignedPrivileges(tagId),
+                () => ({} as PrivilegesRepository.AssignedPrivilegesCollection));
+        }
+
+        getCategoryAssignedPrivileges(categoryId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getCategoryAssignedPrivileges(categoryId),
+                () => ({} as PrivilegesRepository.AssignedPrivilegesCollection));
+        }
+
+        getForumWideAssignedPrivileges(): Promise<PrivilegesRepository.AssignedPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getForumWideAssignedPrivileges(),
+                () => ({} as PrivilegesRepository.AssignedPrivilegesCollection));
         }
     }
 
