@@ -368,7 +368,7 @@ export module PrivilegesView {
                     }
                     else {
 
-                        result.push(Math.max(...currentResultValues).toString());
+                        result.push(DisplayHelpers.intToStringLargeMinus(Math.max(...currentResultValues)));
                     }
                 }
             }
@@ -523,7 +523,7 @@ export module PrivilegesView {
 
             let labelCell = new DOMAppender('<td>', '</td>');
             row.append(labelCell);
-            labelCell.appendString(assignedPrivilege.value.toString());
+            labelCell.appendString(DisplayHelpers.intToStringLargeMinus(assignedPrivilege.value));
 
             let fromCell = new DOMAppender('<td>', '</td>');
             row.append(fromCell);

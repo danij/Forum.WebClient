@@ -7,13 +7,26 @@ export module DisplayHelpers {
         let result = '';
         value = (value || 0);
 
+        const sign = Math.sign(value);
+        value = Math.abs(value);
+
         while (value >= 1000) {
             result = ' ' + ('000' + (value % 1000)).slice(-3) + result;
             value = Math.floor(value / 1000);
         }
-        result = ' ' + value + result;
+        result = ' ' + (sign * value) + result;
 
         return result.trim();
+    }
+
+    export function largeMinus(value: string): string {
+
+        return value.replace('-', '−'); //U+2212 : MINUS SIGN
+    }
+
+    export function intToStringLargeMinus(value: number): string {
+
+        return largeMinus(intToString(value));
     }
 
     export function padPositiveWithZeros(value: number, size: number): string {

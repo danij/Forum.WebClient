@@ -156,7 +156,7 @@ export module ThreadsView {
                 nameColumn.append(details);
 
                 if (thread.voteScore < 0) {
-                    details.appendRaw(`<span class="uk-label score-down">− ${DisplayHelpers.intToString(Math.abs(thread.voteScore))}</span>`);
+                    details.appendRaw(`<span class="uk-label score-down">${DisplayHelpers.intToStringLargeMinus(Math.abs(thread.voteScore))}</span>`);
                 }
                 else if (thread.voteScore == 0) {
                     details.appendRaw(`<span class="uk-label score-neutral">0</span>`);
