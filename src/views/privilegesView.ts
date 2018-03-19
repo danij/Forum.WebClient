@@ -11,6 +11,7 @@ export module PrivilegesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import RequiredPrivilegesCollection = PrivilegesRepository.RequiredPrivilegesCollection;
+    import TabEntry = Views.TabEntry;
 
     const ThreadMessagePrivilegeNames = [
 
@@ -219,56 +220,56 @@ export module PrivilegesView {
 
         Views.changeContent(toReplace, async () => {
 
-            let appender = new DOMAppender('<div>', '</div>');
+            let tabEntries: TabEntry[] = [];
 
             if (threadMessageRequiredPrivileges) {
 
-                appendRequiredPrivileges(appender, 'Thread Message Required Levels',
+                tabEntries.push(appendRequiredPrivileges('Thread Message Required Levels',
                     ThreadMessagePrivilegeNames, await threadMessageRequiredPrivileges,
-                    'discussionThreadMessagePrivileges');
+                    'discussionThreadMessagePrivileges'));
             }
             if (threadRequiredPrivileges) {
 
-                appendRequiredPrivileges(appender, 'Thread Required Levels',
+                tabEntries.push(appendRequiredPrivileges('Thread Required Levels',
                     ThreadPrivilegeNames, await threadRequiredPrivileges,
-                    'discussionThreadPrivileges');
+                    'discussionThreadPrivileges'));
             }
             if (tagRequiredPrivileges) {
 
-                appendRequiredPrivileges(appender, 'Tag Required Levels',
+                tabEntries.push(appendRequiredPrivileges('Tag Required Levels',
                     TagPrivilegeNames, await tagRequiredPrivileges,
-                    'discussionTagPrivileges');
+                    'discussionTagPrivileges'));
             }
             if (categoryRequiredPrivileges) {
 
-                appendRequiredPrivileges(appender, 'Category Required Levels',
+                tabEntries.push(appendRequiredPrivileges('Category Required Levels',
                     CategoryPrivilegeNames, await categoryRequiredPrivileges,
-                    'discussionCategoryPrivileges');
+                    'discussionCategoryPrivileges'));
             }
             if (forumWideRequiredPrivileges) {
 
-                appendRequiredPrivileges(appender, 'Forum Wide Required Levels',
+                tabEntries.push(appendRequiredPrivileges('Forum Wide Required Levels',
                     ForumWidePrivilegeNames, await forumWideRequiredPrivileges,
-                    'forumWidePrivileges');
+                    'forumWidePrivileges'));
             }
 
-            let result = appender.toElement();
+            const result = Views.createTabs(tabEntries, 0, 'center');
 
             return result;
 
         }, false);
     }
 
-    function appendRequiredPrivileges(appender: DOMAppender, title: string, privilegeNames,
-                                      values: RequiredPrivilegesCollection[], property: string): void {
-
-
-        let titleAppender = new DOMAppender('<h3>', '</h3>');
-        appender.append(titleAppender);
-        titleAppender.appendString(title);
+    function appendRequiredPrivileges(title: string, privilegeNames,
+                                      values: RequiredPrivilegesCollection[], property: string): TabEntry {
 
         let tableAppender = new DOMAppender('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">', '</table>');
-        appender.append(tableAppender);
+
+        let result: TabEntry = {
+
+            title: title,
+            content: tableAppender
+        };
 
         let columnValues = {};
 
@@ -371,5 +372,7 @@ export module PrivilegesView {
                 cell.appendString(value);
             }
         }
+
+        return result;
     }
 }

@@ -511,4 +511,39 @@ export module Views {
 
         showNotification(message, 'success');
     }
+
+    export interface TabEntry {
+        title: string;
+        content: DOMAppender;
+    }
+
+    export function createTabs(entries: TabEntry[], selectedIndex: number = 0, alignment: string = 'left'): HTMLElement {
+
+        let appender = new DOMAppender('<div>', '</div>');
+
+        let header = new DOMAppender(`<ul uk-tab class="uk-flex-${alignment}">`, '</ul>');
+        appender.append(header);
+        let content = new DOMAppender('<ul class="uk-switcher">', '</ul>');
+        appender.append(content);
+
+        for (let i = 0; i < entries.length; ++i) {
+
+            const entry = entries[i];
+
+            let headerItem = new DOMAppender(selectedIndex == i ? '<li class="uk-active">' : '<li>', '</li>');
+            header.append(headerItem);
+
+            let headerLink = new DOMAppender('<a href="#">', '</a>');
+            headerItem.append(headerLink);
+            headerLink.appendString(entry.title);
+
+            let contentItem = new DOMAppender('<li>', '</li>');
+            content.append(contentItem);
+            contentItem.append(entry.content);
+        }
+
+        let element = appender.toElement();
+
+        return element;
+    }
 }
