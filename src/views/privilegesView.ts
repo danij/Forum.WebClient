@@ -9,6 +9,7 @@ import {CategoryRepository} from "../services/categoryRepository";
 import {UsersView} from "./usersView";
 import {UserRepository} from "../services/userRepository";
 import {DisplayHelpers} from "../helpers/displayHelpers";
+import {ViewsExtra} from "./extra";
 
 export module PrivilegesView {
 
@@ -127,7 +128,10 @@ export module PrivilegesView {
 
         let modal = document.getElementById('privileges-modal');
 
-        (modal.getElementsByClassName('uk-modal-title')[0] as HTMLElement).innerText = title;
+        let titleElement =modal.getElementsByClassName('uk-modal-title')[0] as HTMLElement;
+        titleElement.innerText = title;
+
+        ViewsExtra.refreshMath(titleElement);
 
         Views.showModal(modal);
 
