@@ -36,7 +36,8 @@ export module ThreadsView {
         list: HTMLElement
     }
 
-    export function createThreadsLink(thread: ThreadRepository.Thread, showAsButton: boolean = false): DOMAppender {
+    export function createThreadsLink(thread: ThreadRepository.Thread, showAsButton: boolean = false,
+                                      addSpace: boolean = false): DOMAppender {
 
         let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
         let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
@@ -46,7 +47,7 @@ export module ThreadsView {
         const classes = showAsButton ? 'uk-button uk-button-text ' : '';
 
         let result = new DOMAppender(`<a class="${classes}thread-name render-math ${visitedClass}" href="${href}" ${data}>`, '</a>');
-        result.appendString(' ' + thread.name);
+        result.appendString((addSpace ? ' ' : '') + thread.name);
 
         return result;
     }
@@ -158,7 +159,7 @@ export module ThreadsView {
                     nameColumn.append(new DOMAppender(`<span class="uk-icon pinned-icon" uk-icon="icon: star; ratio: 1.5" title="Thread is pinned" uk-tooltip>`, '</span>'));
                 }
 
-                let threadLink = createThreadsLink(thread, true);
+                let threadLink = createThreadsLink(thread, true, true);
                 nameColumn.append(threadLink);
 
                 let details = new DOMAppender('<div class="thread-tags">', '</div>');
