@@ -118,12 +118,21 @@ export module PrivilegesView {
         ['forumWidePrivileges', 'Forum Wide'],
     ];
 
-    export function showThreadMessagePrivileges(message: ThreadMessageRepository.ThreadMessage,
-                                                callback: PageActions.IPrivilegesCallback): void {
+    function showPrivilegesModal(title: string): HTMLElement {
 
         let modal = document.getElementById('privileges-modal');
 
+        (modal.getElementsByClassName('uk-modal-title')[0] as HTMLElement).innerText = title;
+
         Views.showModal(modal);
+
+        return modal;
+    }
+
+    export function showThreadMessagePrivileges(message: ThreadMessageRepository.ThreadMessage,
+                                                callback: PageActions.IPrivilegesCallback): void {
+
+        let modal = showPrivilegesModal('Privileges For Thread Message');
 
         const threadMessageRequiredPrivilegesPromises = [
 
@@ -142,9 +151,7 @@ export module PrivilegesView {
     export function showThreadPrivileges(thread: ThreadRepository.Thread,
                                          callback: PageActions.IPrivilegesCallback): void {
 
-        let modal = document.getElementById('privileges-modal');
-
-        Views.showModal(modal);
+        let modal = showPrivilegesModal('Privileges For Thread: ' + thread.name);
 
         const requiredPrivilegesPromises = [
 
@@ -161,9 +168,7 @@ export module PrivilegesView {
 
     export function showTagPrivileges(tag: TagRepository.Tag, callback: PageActions.IPrivilegesCallback): void {
 
-        let modal = document.getElementById('privileges-modal');
-
-        Views.showModal(modal);
+        let modal = showPrivilegesModal('Privileges For Tag: ' + tag.name);
 
         const requiredPrivilegesPromises = [
 
@@ -178,9 +183,7 @@ export module PrivilegesView {
     export function showCategoryPrivileges(category: CategoryRepository.Category,
                                            callback: PageActions.IPrivilegesCallback): void {
 
-        let modal = document.getElementById('privileges-modal');
-
-        Views.showModal(modal);
+        let modal = showPrivilegesModal('Privileges For Category: ' + category.name);
 
         const requiredPrivilegesPromises = [
 
@@ -194,7 +197,7 @@ export module PrivilegesView {
 
     export function showForumWidePrivileges(callback: PageActions.IPrivilegesCallback): void {
 
-        let modal = document.getElementById('privileges-modal');
+        let modal = showPrivilegesModal('Forum Wide Privileges');
 
         Views.showModal(modal);
 
