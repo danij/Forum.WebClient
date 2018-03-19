@@ -242,31 +242,31 @@ export module PrivilegesView {
 
             if (threadMessageRequiredPrivileges) {
 
-                tabEntries.push(appendRequiredPrivileges('Thread Message Required Levels',
+                tabEntries.push(createdRequiredPrivilegesTable('Thread Message Required Levels',
                     ThreadMessagePrivilegeNames, await threadMessageRequiredPrivileges,
                     'discussionThreadMessagePrivileges'));
             }
             if (threadRequiredPrivileges) {
 
-                tabEntries.push(appendRequiredPrivileges('Thread Required Levels',
+                tabEntries.push(createdRequiredPrivilegesTable('Thread Required Levels',
                     ThreadPrivilegeNames, await threadRequiredPrivileges,
                     'discussionThreadPrivileges'));
             }
             if (tagRequiredPrivileges) {
 
-                tabEntries.push(appendRequiredPrivileges('Tag Required Levels',
+                tabEntries.push(createdRequiredPrivilegesTable('Tag Required Levels',
                     TagPrivilegeNames, await tagRequiredPrivileges,
                     'discussionTagPrivileges'));
             }
             if (categoryRequiredPrivileges) {
 
-                tabEntries.push(appendRequiredPrivileges('Category Required Levels',
+                tabEntries.push(createdRequiredPrivilegesTable('Category Required Levels',
                     CategoryPrivilegeNames, await categoryRequiredPrivileges,
                     'discussionCategoryPrivileges'));
             }
             if (forumWideRequiredPrivileges) {
 
-                tabEntries.push(appendRequiredPrivileges('Forum Wide Required Levels',
+                tabEntries.push(createdRequiredPrivilegesTable('Forum Wide Required Levels',
                     ForumWidePrivilegeNames, await forumWideRequiredPrivileges,
                     'forumWidePrivileges'));
             }
@@ -278,8 +278,8 @@ export module PrivilegesView {
         }, false);
     }
 
-    function appendRequiredPrivileges(title: string, privilegeNames,
-                                      values: RequiredPrivilegesCollection[], property: string): TabEntry {
+    function createdRequiredPrivilegesTable(title: string, privilegeNames,
+                                            values: RequiredPrivilegesCollection[], property: string): TabEntry {
 
         let tableAppender = new DOMAppender('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">', '</table>');
 
