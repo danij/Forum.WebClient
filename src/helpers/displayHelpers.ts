@@ -54,7 +54,7 @@ export module DisplayHelpers {
             .map(v => padPositiveWithZeros(v, 2))
             .join(':');
 
-        return `${dateString} ${timeString}`;
+        return `${dateString}\u2003${timeString}`; //using em-space for a better visual separation
     }
 
     export function getShortDate(epochTime: number): string {
@@ -67,7 +67,7 @@ export module DisplayHelpers {
 
     function formatDate(date: Date) : string {
 
-        return `${date.getDate()}-${EnMonths[date.getMonth()]}-${padPositiveWithZeros(date.getFullYear() % 100, 2)}`;
+        return `${padPositiveWithZeros(date.getDate(), 2)}-${EnMonths[date.getMonth()]}-${padPositiveWithZeros(date.getFullYear() % 100, 2)}`;
     }
 
     // export function getAgoTime(epochTime: number): string {
