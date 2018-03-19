@@ -134,7 +134,7 @@ export module ThreadMessagesView {
         }
         else if (info.user) {
 
-            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges));
+            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges, privilegesCallback));
             resultList.appendChild(result.sortControls = createThreadMessageListSortControls(info));
         }
 
@@ -744,7 +744,8 @@ export module ThreadMessagesView {
                                               threadMessagePrivileges: IThreadMessagePrivileges,
                                               userCallback: IUserCallback,
                                               userPrivileges: IUserPrivileges,
-                                              threadCallback: IThreadCallback): ThreadMessageCommentsPageContent {
+                                              threadCallback: IThreadCallback,
+                                              privilegesCallback: PageActions.IPrivilegesCallback): ThreadMessageCommentsPageContent {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCommentCollection();
 
@@ -754,7 +755,7 @@ export module ThreadMessagesView {
 
         if (info.user) {
 
-            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges));
+            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges, privilegesCallback));
         }
         else {
 

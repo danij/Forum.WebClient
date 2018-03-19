@@ -134,6 +134,8 @@ export module PageActions {
         getCategoryAssignedPrivileges(categoryId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection>;
 
         getForumWideAssignedPrivileges(): Promise<PrivilegesRepository.AssignedPrivilegesCollection>;
+
+        getPrivilegesAssignedToUser(userId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection>;
     }
 
     class CategoryCallback implements ICategoryCallback {
@@ -449,6 +451,12 @@ export module PageActions {
         getForumWideAssignedPrivileges(): Promise<PrivilegesRepository.AssignedPrivilegesCollection> {
 
             return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getForumWideAssignedPrivileges(),
+                () => ({} as PrivilegesRepository.AssignedPrivilegesCollection));
+        }
+
+        getPrivilegesAssignedToUser(userId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection> {
+
+            return Pages.getOrShowErrorAndDefault(PrivilegesRepository.getPrivilegesAssignedToUser(userId),
                 () => ({} as PrivilegesRepository.AssignedPrivilegesCollection));
         }
     }

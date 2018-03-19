@@ -21,6 +21,14 @@ export module CategoriesView {
     import doIfOk = EditViews.doIfOk;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
 
+    export function createCategoryLink(category: CategoryRepository.Category): DOMAppender {
+
+        return new DOMAppender('<a class="uk-button uk-button-text" href="' +
+            Pages.getCategoryFullUrl(category) +
+            '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
+            DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
+    }
+
     export function createCategoriesTable(categories: CategoryRepository.Category[],
                                           callback: ICategoryCallback,
                                           privileges: ICategoryPrivileges): HTMLElement {
@@ -73,10 +81,7 @@ export module CategoriesView {
                     nameColumn.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: folder">', '</span>'));
                 }
 
-                let nameLink = new DOMAppender('<a class="uk-button uk-button-text" href="' +
-                    Pages.getCategoryFullUrl(category) +
-                    '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
-                    DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
+                let nameLink = createCategoryLink(category);
                 nameColumn.append(nameLink);
                 nameLink.appendString(' ' + category.name);
                 nameColumn.appendRaw('<br/>');
@@ -100,10 +105,7 @@ export module CategoriesView {
 
                         let childCategory = category.children[i];
 
-                        let element = new DOMAppender('<a href="' +
-                            Pages.getCategoryFullUrl(childCategory) +
-                            '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(childCategory.id) + '" data-categoryname="' +
-                            DOMHelpers.escapeStringForAttribute(childCategory.name) + '">', '</a>');
+                        let element = createCategoryLink(childCategory);
                         childCategoryElement.append(element);
                         element.appendString(childCategory.name);
 

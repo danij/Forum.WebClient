@@ -44,7 +44,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
                 (pageNumber: number) => this.getLinkForPage(pageNumber),
                 PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
                 PageActions.getUserCallback(), Privileges.getUserPrivileges(),
-                PageActions.getThreadCallback());
+                PageActions.getThreadCallback(), PageActions.getPrivilegesCallback());
 
             this.setupSortControls(elements.sortControls);
 

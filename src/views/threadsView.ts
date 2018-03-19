@@ -36,6 +36,19 @@ export module ThreadsView {
         list: HTMLElement
     }
 
+    export function createThreadsLink(thread: ThreadRepository.Thread): DOMAppender {
+
+        let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
+        let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
+
+        const visitedClass = thread.visitedSinceLastChange ? 'already-visited' : '';
+
+        let result = new DOMAppender(`<a class="uk-button uk-button-text thread-name render-math ${visitedClass}" href="${href}" ${data}>`, '</a>');
+        result.appendString(' ' + thread.name);
+
+        return result;
+    }
+
     export function createThreadsPageContent(collection: ThreadRepository.ThreadCollection,
                                              info: ThreadPageDisplayInfo,
                                              onPageNumberChange: Views.PageNumberChangeCallback,
@@ -59,7 +72,7 @@ export module ThreadsView {
         }
         else if (info.user) {
 
-            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges));
+            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges, privilegesCallback));
         }
 
         resultList.appendChild(result.sortControls = createThreadListSortControls(info));
@@ -143,14 +156,8 @@ export module ThreadsView {
                     nameColumn.append(new DOMAppender(`<span class="uk-icon pinned-icon" uk-icon="icon: star; ratio: 1.5" title="Thread is pinned" uk-tooltip>`, '</span>'));
                 }
 
-                let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
-                let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
-
-                const visitedClass = thread.visitedSinceLastChange ? 'already-visited' : '';
-
-                let threadLink = new DOMAppender(`<a class="uk-button uk-button-text thread-name render-math ${visitedClass}" href="${href}" ${data}>`, '</a>');
+                let threadLink = createThreadsLink(thread);
                 nameColumn.append(threadLink);
-                threadLink.appendString(' ' + thread.name);
 
                 let details = new DOMAppender('<div class="thread-tags">', '</div>');
                 nameColumn.append(details);

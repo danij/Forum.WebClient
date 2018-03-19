@@ -9,6 +9,7 @@ import {EditViews} from "./edit";
 import {UsersPage} from "../pages/usersPage";
 import {ThreadsPage} from "../pages/threadsPage";
 import {ViewsExtra} from "./extra";
+import {PrivilegesView} from "./privilegesView";
 
 export module UsersView {
 
@@ -372,7 +373,8 @@ export module UsersView {
 
     export function createUserPageHeader(user: UserRepository.User,
                                          callback: IUserCallback,
-                                         privileges: IUserPrivileges): HTMLElement {
+                                         privileges: IUserPrivileges,
+                                         privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         let result = new DOMAppender('<div class="user-header">', '</div>');
         let left = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
@@ -401,11 +403,12 @@ export module UsersView {
 
             messageCommentsLink = ' · <a ' + getMessageCommentsWrittenByUserLinkContent(user) + '>show written comments</a>';
         }
+        let assignedPrivilegesLink = ' · <a class="show-assigned-privileges-of-user">show assigned privileges</a>';
 
         result.appendRaw(('<div>\n' +
             `    <p>{threadCount} ${threadsLink}` +
             ` · {messageCount} ${threadMessagesLink}` +
-            ` · {subscribedThreadCount} ${subscribedThreadsLink}${messageCommentsLink}` +
+            ` · {subscribedThreadCount} ${subscribedThreadsLink}${messageCommentsLink}${assignedPrivilegesLink}` +
             ` <span class="uk-label score-up">+ {upVotes}</span>` +
             ` <span class="uk-label score-down">− {downVotes}</span></p>\n` +
             '    <p>Joined <span class="uk-text-meta">{joined}</span>' +
@@ -569,6 +572,13 @@ export module UsersView {
                 }
             }
         });
+        resultElement.getElementsByClassName('show-assigned-privileges-of-user')[0].addEventListener('click', (ev) => {
+
+            ev.preventDefault();
+
+            PrivilegesView.showPrivilegesAssignedToUser(user, privilegesCallback);
+        });
+
 
         return resultElement;
     }

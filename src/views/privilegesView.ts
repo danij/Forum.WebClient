@@ -10,6 +10,9 @@ import {UsersView} from "./usersView";
 import {UserRepository} from "../services/userRepository";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {ViewsExtra} from "./extra";
+import {CategoriesView} from "./categoriesView";
+import {TagsView} from "./tagsView";
+import {ThreadsView} from "./threadsView";
 
 export module PrivilegesView {
 
@@ -128,7 +131,7 @@ export module PrivilegesView {
 
         let modal = document.getElementById('privileges-modal');
 
-        let titleElement =modal.getElementsByClassName('uk-modal-title')[0] as HTMLElement;
+        let titleElement = modal.getElementsByClassName('uk-modal-title')[0] as HTMLElement;
         titleElement.innerText = title;
 
         ViewsExtra.refreshMath(titleElement);
@@ -237,7 +240,7 @@ export module PrivilegesView {
                                     categoryRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>,
                                     forumWideRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>): void {
 
-        let toReplace = modal.getElementsByClassName('required-privileges')[0] as HTMLElement;
+        let toReplace = modal.getElementsByClassName('privileges-part1')[0] as HTMLElement;
         toReplace.innerText = '';
 
         Views.changeContent(toReplace, async () => {
@@ -400,7 +403,7 @@ export module PrivilegesView {
 
     function showAssignedPrivileges(modal: HTMLElement, promise: Promise<AssignedPrivilegesCollection>): void {
 
-        let toReplace = modal.getElementsByClassName('assigned-privileges')[0] as HTMLElement;
+        let toReplace = modal.getElementsByClassName('privileges-part2')[0] as HTMLElement;
         toReplace.innerText = '';
 
         Views.changeContent(toReplace, async () => {
@@ -454,24 +457,37 @@ export module PrivilegesView {
                 }
             }
 
+            function getUserLink(assignedPrivilege: AssignedPrivilege): DOMAppender {
+
+                return UsersView.createAuthorSmall({
+
+                    id: assignedPrivilege.id,
+                    name: assignedPrivilege.name
+                } as UserRepository.User);
+            }
+
+            const columnName = 'User';
+
             if (granted.length) {
 
-                tabEntries.push(createAssignedPrivilegesTable('Granted Levels', granted));
+                tabEntries.push(createAssignedPrivilegesTable('Granted Levels', granted, columnName, getUserLink));
             }
 
             if (grantedExpired.length) {
 
-                tabEntries.push(createAssignedPrivilegesTable('Granted Levels (Expired)', grantedExpired));
+                tabEntries.push(createAssignedPrivilegesTable('Granted Levels (Expired)', grantedExpired,
+                    columnName, getUserLink));
             }
 
             if (revoked.length) {
 
-                tabEntries.push(createAssignedPrivilegesTable('Revoked Levels', revoked));
+                tabEntries.push(createAssignedPrivilegesTable('Revoked Levels', revoked, columnName, getUserLink));
             }
 
             if (revokedExpired.length) {
 
-                tabEntries.push(createAssignedPrivilegesTable('Revoked Levels (Expired)', revokedExpired));
+                tabEntries.push(createAssignedPrivilegesTable('Revoked Levels (Expired)', revokedExpired,
+                    columnName, getUserLink));
             }
 
             const result = Views.createTabs(tabEntries, 0, 'center');
@@ -483,7 +499,9 @@ export module PrivilegesView {
         }, false);
     }
 
-    function createAssignedPrivilegesTable(title: string, assignedPrivileges: AssignedPrivilege[]): TabEntry {
+    function createAssignedPrivilegesTable(title: string, assignedPrivileges: AssignedPrivilege[],
+                                           firstColumn: string,
+                                           firstColumnCallback: (AssignedPrivilege) => DOMAppender): TabEntry {
 
         let tableAppender = new DOMAppender('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">', '</table>');
 
@@ -499,7 +517,10 @@ export module PrivilegesView {
             let row = new DOMAppender('<tr>', '</tr>');
             tHead.append(row);
 
-            row.appendRaw('<th>User</th>');
+            if (firstColumn && firstColumn.length) {
+
+                row.appendRaw(`<th>${firstColumn}</th>`);
+            }
             row.appendRaw('<th>Level</th>');
             row.appendRaw('<th>From</th>');
             row.appendRaw('<th>Until</th>');
@@ -516,10 +537,10 @@ export module PrivilegesView {
             let userCell = new DOMAppender('<td>', '</td>');
             row.append(userCell);
 
-            userCell.append(UsersView.createAuthorSmall({
-                id: assignedPrivilege.id,
-                name: assignedPrivilege.name
-            } as UserRepository.User));
+            if (firstColumnCallback) {
+
+                userCell.append(firstColumnCallback(assignedPrivilege));
+            }
 
             let labelCell = new DOMAppender('<td>', '</td>');
             row.append(labelCell);
@@ -539,4 +560,104 @@ export module PrivilegesView {
         return result;
     }
 
+    export function showPrivilegesAssignedToUser(user: UserRepository.User, callback: PageActions.IPrivilegesCallback): void {
+
+        let modal = showPrivilegesModal('Privileges Assigned To User: ' + user.name);
+
+        Views.showModal(modal);
+
+        let promise = callback.getPrivilegesAssignedToUser(user.id);
+
+        showPrivilegesAssignedToUserPart(modal.getElementsByClassName('privileges-part1')[0] as HTMLElement,
+            promise, false);
+
+        showPrivilegesAssignedToUserPart(modal.getElementsByClassName('privileges-part2')[0] as HTMLElement,
+            promise, true);
+    }
+
+    function showPrivilegesAssignedToUserPart(toReplace: HTMLElement, promise: Promise<AssignedPrivilegesCollection>,
+                                              showRevoked: boolean): void {
+
+        toReplace.innerText = '';
+
+        Views.changeContent(toReplace, async () => {
+
+            let tabEntries: TabEntry[] = [];
+
+            let collection = await promise;
+
+            let prefix = showRevoked ? 'Revoked' : 'Granted';
+
+            function compareFn(first: AssignedPrivilege, second: AssignedPrivilege): number {
+
+                return first.granted - second.granted;
+            }
+
+            function filterFn(assignedPrivilege: AssignedPrivilege): boolean {
+
+                return showRevoked ? (assignedPrivilege.value < 0) : (assignedPrivilege.value >= 0);
+            }
+
+            let discussionThreadPrivileges = collection.discussionThreadPrivileges.filter(filterFn);
+            discussionThreadPrivileges.sort(compareFn);
+
+            let discussionTagPrivileges = collection.discussionTagPrivileges.filter(filterFn);
+            discussionTagPrivileges.sort(compareFn);
+
+            let discussionCategoryPrivileges = collection.discussionCategoryPrivileges.filter(filterFn);
+            discussionCategoryPrivileges.sort(compareFn);
+
+            let forumWidePrivileges = collection.forumWidePrivileges.filter(filterFn);
+            forumWidePrivileges.sort(compareFn);
+
+            if (discussionThreadPrivileges.length) {
+
+                tabEntries.push(createAssignedPrivilegesTable(`${prefix} Thread Levels`,
+                    discussionThreadPrivileges, 'Thread',
+                    (assignedPrivilege) => ThreadsView.createThreadsLink({
+
+                        id: assignedPrivilege.id,
+                        name: assignedPrivilege.name
+                    } as ThreadRepository.Thread)));
+            }
+
+            if (discussionTagPrivileges.length) {
+
+                tabEntries.push(createAssignedPrivilegesTable(`${prefix} Tag Levels`,
+                    discussionTagPrivileges, 'Tag',
+                    (assignedPrivilege) => TagsView.createTagElement({
+
+                        id: assignedPrivilege.id,
+                        name: assignedPrivilege.name
+                    } as TagRepository.Tag)));
+            }
+
+            if (discussionCategoryPrivileges.length) {
+
+                tabEntries.push(createAssignedPrivilegesTable(`${prefix} Category Levels`,
+                    discussionCategoryPrivileges, 'Category',
+                    (assignedPrivilege) => CategoriesView.createCategoryLink({
+
+                        id: assignedPrivilege.id,
+                        name: assignedPrivilege.name
+                    } as CategoryRepository.Category)));
+            }
+
+            if (forumWidePrivileges.length) {
+
+                tabEntries.push(createAssignedPrivilegesTable(`${prefix} Forum Wide Levels`,
+                    forumWidePrivileges, '', null));
+            }
+
+            const result = Views.createTabs(tabEntries, 0, 'center');
+
+            Views.setupThreadMessagesOfThreadsLinks(result);
+            Views.setupThreadsWithTagsLinks(result);
+            Views.setupCategoryLinks(result);
+
+            return result;
+
+        }, true);
+
+    }
 }

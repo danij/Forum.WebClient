@@ -105,4 +105,11 @@ export module PrivilegesRepository {
             path: 'privileges/assigned/forum_wide'
         }) as AssignedPrivilegesCollection);
     }
+
+    export async function getPrivilegesAssignedToUser(userId: string): Promise<AssignedPrivilegesCollection> {
+
+        return (await RequestHandler.get({
+            path: 'privileges/assigned/user/' + encodeURIComponent(userId)
+        }) as AssignedPrivilegesCollection);
+    }
 }
