@@ -189,7 +189,7 @@ export module TagsView {
                     messageLink.classList.add('recent-message-link');
                     messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
                     messageLink.setAttribute('title', messageContent);
-                    messageLink.setAttribute('data-threadmessagemessageid', latestMessage.id);
+                    messageLink.setAttribute('data-threadmessageid', latestMessage.id);
                     messageLink.innerText = messageContent;
                     latestMessageColumn.appendElement(messageLink);
                 }

@@ -335,7 +335,7 @@ export module Views {
 
         ev.preventDefault();
 
-        const threadMessageId = DOMHelpers.getLink(ev).getAttribute('data-threadmessagemessageid');
+        const threadMessageId = DOMHelpers.getLink(ev).getAttribute('data-threadmessageid');
 
         new ThreadMessagesPage().displayForThreadMessage(threadMessageId);
     }
@@ -420,7 +420,7 @@ export module Views {
 
     export function setupThreadMessagesOfMessageParentThreadLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll('[data-threadmessagemessageid]');
+        let links = element.querySelectorAll('[data-threadmessageid]');
 
         for (let i = 0; i < links.length; ++i) {
 

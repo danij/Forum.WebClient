@@ -90,7 +90,7 @@ export module ThreadMessagesView {
             let messageTitle = DOMHelpers.escapeStringForAttribute(message.content);
 
             href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
-            data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+            data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
             let link = new DOMAppender(`<a href="${href}" class="recent-message-link render-math" title="${messageTitle}" ${data}>`, '</a>');
             element.append(link);
             link.appendRaw(ViewsExtra.expandContent(message.content));
@@ -242,7 +242,7 @@ export module ThreadMessagesView {
         if (showParentThreadName) {
 
             let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
-            let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+            let data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
             let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
 
             let link = new DOMAppender(`<a id="${id}" href="${href}" ${data}>`, '</a>');
@@ -256,7 +256,7 @@ export module ThreadMessagesView {
 
             const number = collection.page * collection.pageSize + i + 1;
             let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
-            let data = `data-threadmessagemessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+            let data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
             let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
             messageContainer.appendRaw(`<div class="message-number uk-text-meta"><a id="${id}" href="${href}" ${data}>#${DisplayHelpers.intToString(number)}</a></div>`);
         }

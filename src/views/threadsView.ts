@@ -231,7 +231,7 @@ export module ThreadsView {
                     messageLink.classList.add('recent-message-link');
                     messageLink.setAttribute('title', messageContent);
                     messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
-                    messageLink.setAttribute('data-threadmessagemessageid', latestMessage.id);
+                    messageLink.setAttribute('data-threadmessageid', latestMessage.id);
                     messageLink.innerText = messageContent;
                     latestMessageColumn.appendElement(messageLink);
                 }
