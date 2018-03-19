@@ -21,12 +21,16 @@ export module CategoriesView {
     import doIfOk = EditViews.doIfOk;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
 
-    export function createCategoryLink(category: CategoryRepository.Category): DOMAppender {
+    export function createCategoryLink(category: CategoryRepository.Category, addSpace: boolean = false): DOMAppender {
 
-        return new DOMAppender('<a class="uk-button uk-button-text" href="' +
+        let result = new DOMAppender('<a class="uk-button uk-button-text" href="' +
             Pages.getCategoryFullUrl(category) +
             '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
             DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
+
+        result.appendString((addSpace ? ' ' : '') + category.name);
+
+        return result;
     }
 
     export function createCategoriesTable(categories: CategoryRepository.Category[],
@@ -81,9 +85,8 @@ export module CategoriesView {
                     nameColumn.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: folder">', '</span>'));
                 }
 
-                let nameLink = createCategoryLink(category);
+                let nameLink = createCategoryLink(category, true);
                 nameColumn.append(nameLink);
-                nameLink.appendString(' ' + category.name);
                 nameColumn.appendRaw('<br/>');
 
                 let description = new DOMAppender('<span class="category-description">', '</span>');
@@ -107,7 +110,6 @@ export module CategoriesView {
 
                         let element = createCategoryLink(childCategory);
                         childCategoryElement.append(element);
-                        element.appendString(childCategory.name);
 
                         if (i < (category.children.length - 1)) {
                             childCategoryElement.appendRaw(' · ');
@@ -358,8 +360,8 @@ export module CategoriesView {
                 TagsView.showSelectTagsDialog(category.tags, allTags,
                     (added: string[], removed: string[]) => {
 
-                    reloadIfOk(callback.editCategoryTags(category.id, added, removed));
-                });
+                        reloadIfOk(callback.editCategoryTags(category.id, added, removed));
+                    });
             });
         }
 
