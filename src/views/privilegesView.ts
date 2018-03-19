@@ -539,12 +539,11 @@ export module PrivilegesView {
             let row = new DOMAppender('<tr>', '</tr>');
             tBody.append(row);
 
-            let userCell = new DOMAppender('<td>', '</td>');
-            row.append(userCell);
-
             if (firstColumnCallback) {
 
-                userCell.append(firstColumnCallback(assignedPrivilege));
+                let firstCell = new DOMAppender('<td>', '</td>');
+                row.append(firstCell);
+                firstCell.append(firstColumnCallback(assignedPrivilege));
             }
 
             let labelCell = new DOMAppender('<td>', '</td>');
