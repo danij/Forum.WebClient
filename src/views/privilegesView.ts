@@ -419,6 +419,11 @@ export module PrivilegesView {
                 || collection.discussionThreadPrivileges
                 || collection.discussionThreadMessagePrivileges;
 
+            if (0 == assignedPrivileges.length) {
+
+                return DOMHelpers.parseHTML('<span class="uk-text-warning">No privileges assigned</span>');
+            }
+
             let granted: AssignedPrivilege[] = [];
             let grantedExpired: AssignedPrivilege[] = [];
             let revoked: AssignedPrivilege[] = [];
@@ -647,6 +652,11 @@ export module PrivilegesView {
 
                 tabEntries.push(createAssignedPrivilegesTable(`${prefix} Forum Wide Levels`,
                     forumWidePrivileges, '', null));
+            }
+
+            if (0 == tabEntries.length) {
+
+                return DOMHelpers.parseHTML(`<span class="uk-text-warning">No privileges ${showRevoked ? 'revoked' : 'assigned'}</span>`);
             }
 
             const result = Views.createTabs(tabEntries, 0, 'center');
