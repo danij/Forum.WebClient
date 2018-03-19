@@ -208,8 +208,8 @@ export module ThreadMessagesView {
             let messageContainer = new DOMAppender('<div class="uk-card uk-card-body discussion-thread-message">', '</div>');
             result.append(messageContainer);
 
-            const showParentThreadName = (message.parentThread && message.parentThread.name
-                && message.parentThread.name.length) ? true : false;
+            const showParentThreadName = !!(message.receivedParentThread && message.parentThread.name
+                && message.parentThread.name.length);
 
             createThreadMessageHeader(messageContainer, message, collection, i, showParentThreadName);
             messageContainer.append(createThreadMessageDetails(message, showParentThreadName));

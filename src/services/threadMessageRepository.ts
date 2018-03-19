@@ -29,6 +29,7 @@ export module ThreadMessageRepository {
         solvedCommentsCount: number;
         content: string;
         parentThread: ThreadRepository.Thread;
+        receivedParentThread: boolean;
         ip: string;
         upVotes: ThreadMessageVote[];
         downVotes: ThreadMessageVote[];
@@ -123,6 +124,7 @@ export module ThreadMessageRepository {
     export function filterMessageNullsWithoutParentThread(message: ThreadMessage): ThreadMessage {
 
         message.createdBy = message.createdBy || UserRepository.UnknownUser;
+        message.receivedParentThread = null != message.parentThread;
 
         return message;
     }
