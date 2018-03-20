@@ -552,13 +552,13 @@ export module PrivilegesView {
 
             let fromCell = new DOMAppender('<td>', '</td>');
             row.append(fromCell);
-            fromCell.appendString(DisplayHelpers.getDateTime(assignedPrivilege.granted));
+            fromCell.appendString(DisplayHelpers.getDateTimeLargeSeparator(assignedPrivilege.granted));
 
             let untilCell = new DOMAppender('<td>', '</td>');
             row.append(untilCell);
             untilCell.appendString((0 == assignedPrivilege.expires)
                 ? '∞'
-                : DisplayHelpers.getDateTime(assignedPrivilege.expires));
+                : DisplayHelpers.getDateTimeLargeSeparator(assignedPrivilege.expires));
         }
 
         return result;

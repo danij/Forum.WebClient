@@ -67,7 +67,12 @@ export module DisplayHelpers {
             .map(v => padPositiveWithZeros(v, 2))
             .join(':');
 
-        return `${dateString}\u2003${timeString}`; //using em-space for a better visual separation
+        return `${dateString} ${timeString}`;
+    }
+
+    export function getDateTimeLargeSeparator(epochTime: number): string {
+
+        return getDateTime(epochTime).replace(' ', '\u2003'); //using em-space for a better visual separation
     }
 
     export function getShortDate(epochTime: number): string {
