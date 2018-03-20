@@ -64,6 +64,16 @@ export module MasterPage {
                 document.getElementById('CommentsPageLink').classList.remove('uk-hidden');
             }
         });
+        Promise.all([
+            forumWidePrivileges.canViewForumWideRequiredPrivileges(),
+            forumWidePrivileges.canViewForumWideAssignedPrivileges()
+        ]).then((allowed) => {
+
+            if (allowed[0] || allowed[1]) {
+
+                document.getElementById('ForumWidePrivilegesLink').classList.remove('uk-hidden');
+            }
+        });
 
         ViewsExtra.init();
         fixLinks();
@@ -364,7 +374,8 @@ export module MasterPage {
 
             ev.preventDefault();
 
-            PrivilegesView.showForumWidePrivileges(PageActions.getPrivilegesCallback());
+            PrivilegesView.showForumWidePrivileges(PageActions.getPrivilegesCallback(),
+                Privileges.getForumWidePrivileges());
         })
     }
 }

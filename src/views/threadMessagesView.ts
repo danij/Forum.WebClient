@@ -231,7 +231,8 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
-        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback, quoteCallback);
+        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback,
+            privileges, quoteCallback);
 
         return element;
     }
@@ -424,9 +425,11 @@ export module ThreadMessagesView {
 
             actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}" uk-tooltip></a>`);
         }
+        if (privileges.canViewThreadMessageRequiredPrivileges(message.id)
+            || privileges.canViewThreadMessageAssignedPrivileges(message.id)) {
 
-        actions.appendRaw(`<a uk-icon="icon: settings" class="show-thread-message-privileges-link" title="Privileges" data-message-id="${messageId}" uk-tooltip></a>`);
-
+            actions.appendRaw(`<a uk-icon="icon: settings" class="show-thread-message-privileges-link" title="Privileges" data-message-id="${messageId}" uk-tooltip></a>`);
+        }
         if (privileges.canMoveThreadMessage(message.id)) {
 
             actions.appendRaw(`<a uk-icon="icon: move" class="move-thread-message-link" title="Move to different thread" data-message-id="${messageId}" uk-tooltip></a>`);
@@ -449,6 +452,7 @@ export module ThreadMessagesView {
     function setupThreadMessageActionEvents(element: HTMLElement, messagesById, callback: IThreadMessageCallback,
                                             threadCallback: IThreadCallback,
                                             privilegesCallback: IPrivilegesCallback,
+                                            privileges: IThreadMessagePrivileges,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void) {
 
         DOMHelpers.addEventListeners(element, 'edit-thread-message-content-link', 'click', async (ev) => {
@@ -563,7 +567,7 @@ export module ThreadMessagesView {
             let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
             let message = messagesById[messageId];
 
-            PrivilegesView.showThreadMessagePrivileges(message, privilegesCallback);
+            PrivilegesView.showThreadMessagePrivileges(message, privilegesCallback, privileges);
         });
     }
 
@@ -841,7 +845,7 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
-        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, null);
+        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, null, privileges);
 
         setupMessageCommentLinks(element, callback);
 

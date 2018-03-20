@@ -13,6 +13,7 @@ import {ViewsExtra} from "./extra";
 import {CategoriesView} from "./categoriesView";
 import {TagsView} from "./tagsView";
 import {ThreadsView} from "./threadsView";
+import {Privileges} from "../services/privileges";
 
 export module PrivilegesView {
 
@@ -21,6 +22,12 @@ export module PrivilegesView {
     import TabEntry = Views.TabEntry;
     import AssignedPrivilegesCollection = PrivilegesRepository.AssignedPrivilegesCollection;
     import AssignedPrivilege = PrivilegesRepository.AssignedPrivilege;
+    import IForumWidePrivileges = Privileges.IForumWidePrivileges;
+    import IUserPrivileges = Privileges.IUserPrivileges;
+    import ICategoryPrivileges = Privileges.ICategoryPrivileges;
+    import ITagPrivileges = Privileges.ITagPrivileges;
+    import IThreadPrivileges = Privileges.IThreadPrivileges;
+    import IThreadMessagePrivileges = Privileges.IThreadMessagePrivileges;
 
     const ThreadMessagePrivilegeNames = [
 
@@ -145,6 +152,12 @@ export module PrivilegesView {
         let titleElement = modal.getElementsByClassName('uk-modal-title')[0] as HTMLElement;
         titleElement.innerText = title;
 
+        for (let i = 0; i < 2; i++) {
+
+            let toReplace = modal.getElementsByClassName(`privileges-part${i + 1}`)[0] as HTMLElement;
+            toReplace.innerText = '';
+        }
+
         ViewsExtra.refreshMath(titleElement);
 
         Views.showModal(modal);
@@ -153,7 +166,8 @@ export module PrivilegesView {
     }
 
     export function showThreadMessagePrivileges(message: ThreadMessageRepository.ThreadMessage,
-                                                callback: PageActions.IPrivilegesCallback): void {
+                                                callback: PageActions.IPrivilegesCallback,
+                                                privileges: IThreadMessagePrivileges): void {
 
         let modal = showPrivilegesModal('Privileges For Thread Message');
 
@@ -168,13 +182,19 @@ export module PrivilegesView {
         }
         threadMessageRequiredPrivilegesPromises.push(callback.getForumWideRequiredPrivileges());
 
-        showRequiredPrivileges(modal, Promise.all(threadMessageRequiredPrivilegesPromises));
+        if (privileges.canViewThreadMessageRequiredPrivileges(message.id)) {
 
-        showAssignedPrivileges(modal, callback.getThreadMessageAssignedPrivileges(message.id));
+            showRequiredPrivileges(modal, Promise.all(threadMessageRequiredPrivilegesPromises));
+        }
+        if (privileges.canViewThreadMessageAssignedPrivileges(message.id)) {
+
+            showAssignedPrivileges(modal, callback.getThreadMessageAssignedPrivileges(message.id));
+        }
     }
 
     export function showThreadPrivileges(thread: ThreadRepository.Thread,
-                                         callback: PageActions.IPrivilegesCallback): void {
+                                         callback: PageActions.IPrivilegesCallback,
+                                         privileges: IThreadPrivileges): void {
 
         let modal = showPrivilegesModal('Privileges For Thread: ' + thread.name);
 
@@ -188,12 +208,18 @@ export module PrivilegesView {
         }
         requiredPrivilegesPromises.push(callback.getForumWideRequiredPrivileges());
 
-        showRequiredPrivileges(modal, Promise.all(requiredPrivilegesPromises), Promise.all(requiredPrivilegesPromises));
+        if (privileges.canViewThreadRequiredPrivileges(thread.id)) {
 
-        showAssignedPrivileges(modal, callback.getThreadAssignedPrivileges(thread.id));
+            showRequiredPrivileges(modal, Promise.all(requiredPrivilegesPromises), Promise.all(requiredPrivilegesPromises));
+        }
+        if (privileges.canViewThreadAssignedPrivileges(thread.id)) {
+
+            showAssignedPrivileges(modal, callback.getThreadAssignedPrivileges(thread.id));
+        }
     }
 
-    export function showTagPrivileges(tag: TagRepository.Tag, callback: PageActions.IPrivilegesCallback): void {
+    export function showTagPrivileges(tag: TagRepository.Tag, callback: PageActions.IPrivilegesCallback,
+                                      privileges: ITagPrivileges): void {
 
         let modal = showPrivilegesModal('Privileges For Tag: ' + tag.name);
 
@@ -203,14 +229,20 @@ export module PrivilegesView {
             callback.getForumWideRequiredPrivileges()
         ];
 
-        showRequiredPrivileges(modal, Promise.all(requiredPrivilegesPromises), Promise.all(requiredPrivilegesPromises),
-            Promise.all(requiredPrivilegesPromises));
+        if (privileges.canViewTagRequiredPrivileges(tag.id)) {
 
-        showAssignedPrivileges(modal, callback.getTagAssignedPrivileges(tag.id));
+            showRequiredPrivileges(modal, Promise.all(requiredPrivilegesPromises), Promise.all(requiredPrivilegesPromises),
+                Promise.all(requiredPrivilegesPromises));
+        }
+        if (privileges.canViewTagAssignedPrivileges(tag.id)) {
+
+            showAssignedPrivileges(modal, callback.getTagAssignedPrivileges(tag.id));
+        }
     }
 
     export function showCategoryPrivileges(category: CategoryRepository.Category,
-                                           callback: PageActions.IPrivilegesCallback): void {
+                                           callback: PageActions.IPrivilegesCallback,
+                                           privileges: ICategoryPrivileges): void {
 
         let modal = showPrivilegesModal('Privileges For Category: ' + category.name);
 
@@ -220,13 +252,19 @@ export module PrivilegesView {
             callback.getForumWideRequiredPrivileges()
         ];
 
-        showRequiredPrivileges(modal, null, null, null,
-            Promise.all(requiredPrivilegesPromises));
+        if (privileges.canViewCategoryRequiredPrivileges(category.id)) {
 
-        showAssignedPrivileges(modal, callback.getCategoryAssignedPrivileges(category.id));
+            showRequiredPrivileges(modal, null, null, null,
+                Promise.all(requiredPrivilegesPromises));
+        }
+        if (privileges.canViewCategoryAssignedPrivileges(category.id)) {
+
+            showAssignedPrivileges(modal, callback.getCategoryAssignedPrivileges(category.id));
+        }
     }
 
-    export function showForumWidePrivileges(callback: PageActions.IPrivilegesCallback): void {
+    export function showForumWidePrivileges(callback: PageActions.IPrivilegesCallback,
+                                            privileges: IForumWidePrivileges): void {
 
         let modal = showPrivilegesModal('Forum Wide Privileges');
 
@@ -239,9 +277,14 @@ export module PrivilegesView {
 
         let promise = Promise.all(requiredPrivilegesPromises);
 
-        showRequiredPrivileges(modal, promise, promise, promise, promise, promise);
+        if (privileges.canViewForumWideRequiredPrivileges()) {
 
-        showAssignedPrivileges(modal, callback.getForumWideAssignedPrivileges());
+            showRequiredPrivileges(modal, promise, promise, promise, promise, promise);
+        }
+        if (privileges.canViewForumWideAssignedPrivileges()) {
+
+            showAssignedPrivileges(modal, callback.getForumWideAssignedPrivileges());
+        }
     }
 
     function showRequiredPrivileges(modal: HTMLElement,
@@ -575,7 +618,9 @@ export module PrivilegesView {
         return result;
     }
 
-    export function showPrivilegesAssignedToUser(user: UserRepository.User, callback: PageActions.IPrivilegesCallback): void {
+    export function showPrivilegesAssignedToUser(user: UserRepository.User,
+                                                 callback: PageActions.IPrivilegesCallback,
+                                                 privileges: IUserPrivileges): void {
 
         let modal = showPrivilegesModal('Privileges Assigned To User: ' + user.name);
 
@@ -583,11 +628,14 @@ export module PrivilegesView {
 
         let promise = callback.getPrivilegesAssignedToUser(user.id);
 
-        showPrivilegesAssignedToUserPart(modal.getElementsByClassName('privileges-part1')[0] as HTMLElement,
-            promise, false);
+        if (privileges.canViewPrivilegesAssignedToUser(user.id)) {
 
-        showPrivilegesAssignedToUserPart(modal.getElementsByClassName('privileges-part2')[0] as HTMLElement,
-            promise, true);
+            showPrivilegesAssignedToUserPart(modal.getElementsByClassName('privileges-part1')[0] as HTMLElement,
+                promise, false);
+
+            showPrivilegesAssignedToUserPart(modal.getElementsByClassName('privileges-part2')[0] as HTMLElement,
+                promise, true);
+        }
     }
 
     function showPrivilegesAssignedToUserPart(toReplace: HTMLElement, promise: Promise<AssignedPrivilegesCollection>,

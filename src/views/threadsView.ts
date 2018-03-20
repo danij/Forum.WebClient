@@ -381,12 +381,14 @@ export module ThreadsView {
                 });
             }
 
-            {
+            if (privileges.canViewThreadRequiredPrivileges(thread.id)
+                || privileges.canViewThreadAssignedPrivileges(thread.id)) {
+
                 let link = EditViews.createEditLink('Privileges', 'settings', []);
                 actions.appendChild(link);
                 link.addEventListener('click', async () => {
 
-                    PrivilegesView.showThreadPrivileges(thread, privilegesCallback);
+                    PrivilegesView.showThreadPrivileges(thread, privilegesCallback, privileges);
                 });
             }
 

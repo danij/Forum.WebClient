@@ -277,12 +277,14 @@ export module TagsView {
                 });
             });
         }
-        {
+        if (privileges.canViewTagRequiredPrivileges(tag.id)
+            || privileges.canViewTagAssignedPrivileges(tag.id)) {
+
             let link = EditViews.createEditLink('Privileges', 'settings');
             container.appendChild(link);
             link.addEventListener('click', async () => {
 
-                PrivilegesView.showTagPrivileges(tag, privilegesCallback);
+                PrivilegesView.showTagPrivileges(tag, privilegesCallback, privileges);
             });
         }
 

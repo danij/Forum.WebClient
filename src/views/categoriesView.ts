@@ -338,13 +338,15 @@ export module CategoriesView {
                 }
             });
         }
-        {
+        if (privileges.canViewCategoryRequiredPrivileges(category.id)
+            || privileges.canViewCategoryAssignedPrivileges(category.id)) {
+
             let link = EditViews.createEditLink('Privileges', 'settings');
             result.appendChild(link);
 
             link.addEventListener('click', () => {
 
-                PrivilegesView.showCategoryPrivileges(category, privilegesCallback);
+                PrivilegesView.showCategoryPrivileges(category, privilegesCallback, privileges);
             });
         }
 

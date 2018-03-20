@@ -17,6 +17,10 @@ export module Privileges {
         canEditCategoryParent(id: string): Promise<boolean>;
 
         canEditCategoryTags(id: string): Promise<boolean>;
+
+        canViewCategoryRequiredPrivileges(id: string): Promise<boolean>;
+
+        canViewCategoryAssignedPrivileges(id: string): Promise<boolean>;
     }
 
     class CategoryPrivilegesAllowAll implements ICategoryPrivileges {
@@ -52,6 +56,14 @@ export module Privileges {
         canEditCategoryTags(id: string): Promise<boolean> {
             return Promise.resolve(true);
         }
+
+        canViewCategoryRequiredPrivileges(id: string): Promise<boolean> {
+            return Promise.resolve(true);
+        }
+
+        canViewCategoryAssignedPrivileges(id: string): Promise<boolean> {
+            return Promise.resolve(true);
+        }
     }
 
     export interface ITagPrivileges {
@@ -63,6 +75,10 @@ export module Privileges {
         canEditTagName(id: string): Promise<boolean>;
 
         canMergeTags(id: string): Promise<boolean>;
+
+        canViewTagRequiredPrivileges(id: string): Promise<boolean>;
+
+        canViewTagAssignedPrivileges(id: string): Promise<boolean>;
     }
 
     class TagPrivilegesAllowAll implements ITagPrivileges {
@@ -82,6 +98,14 @@ export module Privileges {
         canMergeTags(id: string): Promise<boolean> {
             return Promise.resolve(true);
         }
+
+        canViewTagRequiredPrivileges(id: string): Promise<boolean> {
+            return Promise.resolve(true);
+        }
+
+        canViewTagAssignedPrivileges(id: string): Promise<boolean> {
+            return Promise.resolve(true);
+        }
     }
 
     export interface IThreadPrivileges {
@@ -99,6 +123,10 @@ export module Privileges {
         canMergeThreads(id: string): Promise<boolean>;
 
         canAddNewThreadMessage(id: string): Promise<boolean>;
+
+        canViewThreadRequiredPrivileges(id: string): Promise<boolean>;
+
+        canViewThreadAssignedPrivileges(id: string): Promise<boolean>;
     }
 
     class ThreadPrivilegesAllowAll implements IThreadPrivileges {
@@ -137,6 +165,17 @@ export module Privileges {
 
             return Promise.resolve(true);
         }
+
+        canViewThreadRequiredPrivileges(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canViewThreadAssignedPrivileges(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
     }
 
     export interface IThreadMessagePrivileges {
@@ -156,6 +195,10 @@ export module Privileges {
         canDownVoteThreadMessage(id: string): Promise<boolean>;
 
         canResetVoteOfThreadMessage(id: string): Promise<boolean>;
+
+        canViewThreadMessageRequiredPrivileges(id: string): Promise<boolean>;
+
+        canViewThreadMessageAssignedPrivileges(id: string): Promise<boolean>;
     }
 
     class ThreadMessagePrivilegesAllowAll implements IThreadMessagePrivileges {
@@ -199,6 +242,16 @@ export module Privileges {
 
             return Promise.resolve(true);
         }
+
+        canViewThreadMessageRequiredPrivileges(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canViewThreadMessageAssignedPrivileges(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
     }
 
     export interface IUserPrivileges {
@@ -216,6 +269,8 @@ export module Privileges {
         canDeleteUser(id: string): Promise<boolean>;
 
         canViewUserComments(id: string): Promise<boolean>;
+
+        canViewPrivilegesAssignedToUser(id: string): Promise<boolean>;
     }
 
     class UserPrivilegesAllowAll implements IUserPrivileges {
@@ -254,16 +309,35 @@ export module Privileges {
 
             return Promise.resolve(true);
         }
+
+        canViewPrivilegesAssignedToUser(id: string): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
     }
 
     export interface IForumWidePrivileges {
 
         canViewAllComments(): Promise<boolean>;
+
+        canViewForumWideRequiredPrivileges(): Promise<boolean>;
+
+        canViewForumWideAssignedPrivileges(): Promise<boolean>;
     }
 
     class ForumWidePrivilegesAllowAll implements IForumWidePrivileges {
 
         canViewAllComments(): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canViewForumWideRequiredPrivileges(): Promise<boolean> {
+
+            return Promise.resolve(true);
+        }
+
+        canViewForumWideAssignedPrivileges(): Promise<boolean> {
 
             return Promise.resolve(true);
         }

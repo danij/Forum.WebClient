@@ -576,7 +576,7 @@ export module UsersView {
 
             ev.preventDefault();
 
-            PrivilegesView.showPrivilegesAssignedToUser(user, privilegesCallback);
+            PrivilegesView.showPrivilegesAssignedToUser(user, privilegesCallback, privileges);
         });
 
 
