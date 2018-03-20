@@ -25,6 +25,8 @@ export module PrivilegesView {
     const ThreadMessagePrivilegeNames = [
 
         ['view', 'View'],
+        ['view_required_privileges', 'View Required Privileges'],
+        ['view_assigned_privileges', 'View Assigned Privileges'],
         ['view_creator_user', 'View Creator User'],
         ['view_ip_address', 'View IP Address'],
         ['view_votes', 'View Votes'],
@@ -43,6 +45,8 @@ export module PrivilegesView {
     const ThreadPrivilegeNames = [
 
         ['view', 'View'],
+        ['view_required_privileges', 'View Required Privileges'],
+        ['view_assigned_privileges', 'View Assigned Privileges'],
         ['subscribe', 'Subscribe'],
         ['unsubscribe', 'Unsubscribe'],
         ['add_message', 'Add Message'],
@@ -58,6 +62,8 @@ export module PrivilegesView {
     const TagPrivilegeNames = [
 
         ['view', 'View'],
+        ['view_required_privileges', 'View Required Privileges'],
+        ['view_assigned_privileges', 'View Assigned Privileges'],
         ['get_discussion_threads', 'Get Threads'],
         ['change_name', 'Change Name'],
         //['change_uiblob', 'Change UI Blob'],
@@ -69,6 +75,8 @@ export module PrivilegesView {
     const CategoryPrivilegeNames = [
 
         ['view', 'View'],
+        ['view_required_privileges', 'View Required Privileges'],
+        ['view_assigned_privileges', 'View Assigned Privileges'],
         ['get_discussion_threads', 'Get Threads'],
         ['change_name', 'Change Name'],
         ['change_description', 'Change Description'],
@@ -113,6 +121,9 @@ export module PrivilegesView {
         ['delete_own_user_logo', 'Delete Own User Logo'],
         ['delete_any_user_logo', 'Delete Any User Logo'],
         ['delete_any_user', 'Delete Any User'],
+        ['view_forum_wide_required_privileges', 'View Forum Wide Required Privileges'],
+        ['view_forum_wide_assigned_privileges', 'View Forum Wide Assigned Privileges'],
+        ['view_user_assigned_privileges', 'View User Assigned Privileges'],
         ['adjust_forum_wide_privilege', 'Adjust Privileges'],
         ['get_user_vote_history', 'Get User Vote History'],
         ['no_throttling', 'No Throttling Exception'],
