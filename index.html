@@ -46,11 +46,6 @@
                             <div class="uk-navbar-subtitle">Users</div>
                         </div>
                     </a></li>
-                    <li id="CommentsPageLink" class="uk-hidden"><a data-href="thread_message_comments">
-                        <div><span uk-icon="icon: warning"></span>
-                            <div class="uk-navbar-subtitle">Comments</div>
-                        </div>
-                    </a></li>
                 </ul>
             </div>
         </div>
@@ -58,29 +53,24 @@
         <div class="uk-navbar-center-right">
             <div>
                 <ul class="uk-navbar-nav">
-                    <li><a data-href="help" class="uk-text-center">
-                        <div><span uk-icon="icon: question"></span>
-                            <div class="uk-navbar-subtitle">Help</div>
-                        </div>
-                    </a></li>
-                    <li><a data-href="rules" class="uk-text-center">
-                        <div><span uk-icon="icon: info"></span>
-                            <div class="uk-navbar-subtitle">Rules</div>
-                        </div>
-                    </a></li>
-                    <li id="NewThreadPageLink"><a data-href="threads/new" class="uk-text-center">
-                        <div>New
-                            <div class="uk-navbar-subtitle">Thread</div>
-                        </div>
-                    </a></li>
-                    <li><a data-href="#" class="uk-text-center">
-                        <div><span uk-icon="icon: sign-in"></span>
-                            <div class="uk-navbar-subtitle">Login</div>
+                    <li id="showSearchModal"><a class="uk-text-center">
+                        <div><span uk-icon="icon: search"></span>
+                            <div class="uk-navbar-subtitle">Search</div>
                         </div>
                     </a></li>
                     <li id="ForumWidePrivilegesLink" class="uk-hidden"><a data-href="#" class="uk-text-center" id="Settings">
                         <div><span uk-icon="icon: settings"></span>
                             <div class="uk-navbar-subtitle">Settings</div>
+                        </div>
+                    </a></li>
+                    <li id="CommentsPageLink" class="uk-hidden"><a data-href="thread_message_comments" class="uk-text-center">
+                        <div><span uk-icon="icon: warning"></span>
+                            <div class="uk-navbar-subtitle">Comments</div>
+                        </div>
+                    </a></li>
+                    <li id="NewThreadPageLink"><a data-href="threads/new" class="uk-text-center">
+                        <div>New
+                            <div class="uk-navbar-subtitle">Thread</div>
                         </div>
                     </a></li>
                 </ul>
@@ -89,9 +79,9 @@
     </div>
     <div class="uk-navbar-right">
         <ul class="uk-navbar-nav">
-            <li id="showSearchModal"><a class="uk-text-center">
-                <div><span uk-icon="icon: search"></span>
-                    <div class="uk-navbar-subtitle">Search</div>
+            <li><a data-href="#" class="uk-text-center">
+                <div><span uk-icon="icon: sign-in"></span>
+                    <div class="uk-navbar-subtitle">Login</div>
                 </div>
             </a></li>
             <li class="uk-text-center"><a uk-toggle="target: #recent-thread-messages-modal">
@@ -315,7 +305,7 @@
 </div>
 
 <div class="page-footer">
-    <span><a href="#">Terms of Service</a><span id="entityCount"></span> · <a id="usersOnline"></a></span>
+    <span><a href="#">Help</a> · <a href="#">Terms of Service</a><span id="entityCount"></span> · <a id="usersOnline"></a></span>
 </div>
 </body>
 </html>
