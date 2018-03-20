@@ -143,7 +143,7 @@ export module ThreadMessageRepository {
         return result;
     }
 
-    function filterCommentNulls(value: any): ThreadMessageCommentCollection {
+    function filterCommentNulls(value: any, forceCreatedby?: UserRepository.User): ThreadMessageCommentCollection {
 
         let result = value as ThreadMessageCommentCollection;
 
@@ -151,7 +151,7 @@ export module ThreadMessageRepository {
 
         for (let comment of result.messageComments) {
 
-            comment.createdBy = comment.createdBy || UserRepository.UnknownUser;
+            comment.createdBy = comment.createdBy || forceCreatedby || UserRepository.UnknownUser;
 
             if (comment.message) {
 
@@ -209,13 +209,13 @@ export module ThreadMessageRepository {
         }));
     }
 
-    export async function getThreadMessageCommentsWrittenByUser(userId: string,
+    export async function getThreadMessageCommentsWrittenByUser(user: UserRepository.User,
                                                                 request: GetThreadMessageCommentsRequest): Promise<ThreadMessageCommentCollection> {
 
         return filterCommentNulls(await RequestHandler.get({
-            path: 'thread_messages/comments/user/' + encodeURIComponent(userId),
+            path: 'thread_messages/comments/user/' + encodeURIComponent(user.id),
             query: request
-        }));
+        }), user);
     }
 
     export async function getThreadMessagesById(ids: string[]): Promise<ThreadMessageCollection> {

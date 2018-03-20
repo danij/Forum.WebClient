@@ -95,7 +95,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
     private getCommentsWrittenByUser(user: UserRepository.User): Promise<ThreadMessageRepository.ThreadMessageCommentCollection> {
 
-        return Pages.getOrShowError(ThreadMessageRepository.getThreadMessageCommentsWrittenByUser(user.id, {
+        return Pages.getOrShowError(ThreadMessageRepository.getThreadMessageCommentsWrittenByUser(user, {
             page: this.pageNumber,
             sort: this.sortOrder
         } as ThreadMessageRepository.GetThreadMessageCommentsRequest));
