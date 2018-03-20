@@ -21,10 +21,11 @@ export module CategoriesView {
     import doIfOk = EditViews.doIfOk;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
 
-    export function createCategoryLink(category: CategoryRepository.Category, addSpace: boolean = false): DOMAppender {
+    export function createCategoryLink(category: CategoryRepository.Category,
+                                       addSpace: boolean = false,
+                                       classes: string = 'uk-button uk-button-text'): DOMAppender {
 
-        let result = new DOMAppender('<a class="uk-button uk-button-text" href="' +
-            Pages.getCategoryFullUrl(category) +
+        let result = new DOMAppender(`<a class="${classes}" href="` + Pages.getCategoryFullUrl(category) +
             '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
             DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
 
@@ -108,7 +109,7 @@ export module CategoriesView {
 
                         let childCategory = category.children[i];
 
-                        let element = createCategoryLink(childCategory);
+                        let element = createCategoryLink(childCategory, false, '');
                         childCategoryElement.append(element);
 
                         if (i < (category.children.length - 1)) {
