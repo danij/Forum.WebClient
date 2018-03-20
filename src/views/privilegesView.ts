@@ -165,6 +165,14 @@ export module PrivilegesView {
         return modal;
     }
 
+    function createPrivilegeLevelSpan(value: string) : DOMAppender {
+
+        let result = new DOMAppender('<span class="privilege-level">', '</span>');
+        result.appendString(value);
+
+        return result;
+    }
+
     export function showThreadMessagePrivileges(message: ThreadMessageRepository.ThreadMessage,
                                                 callback: PageActions.IPrivilegesCallback,
                                                 privileges: IThreadMessagePrivileges): void {
@@ -419,14 +427,16 @@ export module PrivilegesView {
                         }
                     }
 
+                    let value = '';
                     if (currentResultValues.length == 0) {
 
-                        result.push('-');
+                        value = '-';
                     }
                     else {
 
-                        result.push(DisplayHelpers.intToStringLargeMinus(Math.max(...currentResultValues)));
+                        value = DisplayHelpers.intToStringLargeMinus(Math.max(...currentResultValues));
                     }
+                    result.push(createPrivilegeLevelSpan(value));
                 }
             }
             return result;
@@ -448,7 +458,7 @@ export module PrivilegesView {
                 let cell = new DOMAppender('<td>', '</td>');
                 row.append(cell);
 
-                cell.appendString(value);
+                cell.append(value);
             }
         }
 
@@ -602,7 +612,7 @@ export module PrivilegesView {
 
             let labelCell = new DOMAppender('<td>', '</td>');
             row.append(labelCell);
-            labelCell.appendString(DisplayHelpers.intToStringLargeMinus(assignedPrivilege.value));
+            labelCell.append(createPrivilegeLevelSpan(DisplayHelpers.intToStringLargeMinus(assignedPrivilege.value)));
 
             let fromCell = new DOMAppender('<td>', '</td>');
             row.append(fromCell);
