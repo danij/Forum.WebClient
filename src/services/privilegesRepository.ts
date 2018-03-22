@@ -36,6 +36,28 @@ export module PrivilegesRepository {
         forumWidePrivileges?: AssignedPrivilege[];
     }
 
+    function filterAssignedPrivilegesCollection(value: any) {
+
+        let result = value as AssignedPrivilegesCollection;
+
+        result.discussionThreadMessagePrivileges = filterAssignedPrivileges(result.discussionThreadMessagePrivileges);
+        result.discussionThreadPrivileges = filterAssignedPrivileges(result.discussionThreadPrivileges);
+        result.discussionTagPrivileges = filterAssignedPrivileges(result.discussionTagPrivileges);
+        result.discussionCategoryPrivileges = filterAssignedPrivileges(result.discussionCategoryPrivileges);
+
+        //no filter needed in the case of forum wide privileges
+        //result.forumWidePrivileges = filterAssignedPrivileges(result.forumWidePrivileges);
+
+        return result;
+    }
+
+    function filterAssignedPrivileges(values: AssignedPrivilege[]) : AssignedPrivilege[] {
+
+        if (null == values) return null;
+
+        return values.filter(p => (null != p) && (null != p.id) && p.id.length);
+    }
+
     export async function getThreadMessageRequiredPrivileges(messageId: string): Promise<RequiredPrivilegesCollection> {
 
         return (await RequestHandler.get({
@@ -108,8 +130,8 @@ export module PrivilegesRepository {
 
     export async function getPrivilegesAssignedToUser(userId: string): Promise<AssignedPrivilegesCollection> {
 
-        return (await RequestHandler.get({
+        return filterAssignedPrivilegesCollection(await RequestHandler.get({
             path: 'privileges/assigned/user/' + encodeURIComponent(userId)
-        }) as AssignedPrivilegesCollection);
+        }));
     }
 }
