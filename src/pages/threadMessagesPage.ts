@@ -16,7 +16,8 @@ import {EditViews} from "../views/edit";
 export class ThreadMessagesPage implements Pages.Page {
 
     private pageNumber: number = 0;
-    private sortOrder: string = 'ascending';
+    private readonly defaultSortOrder: string = 'ascending';
+    private sortOrder: string = this.defaultSortOrder;
 
     private topPaginationControl: HTMLElement;
     private bottomPaginationControl: HTMLElement;
@@ -229,8 +230,8 @@ export class ThreadMessagesPage implements Pages.Page {
         }
 
         return Pages.appendToUrl(url, {
-            sortOrder: this.sortOrder,
-            pageNumber: pageNumber
+            sortOrder: (this.sortOrder != this.defaultSortOrder) ? this.sortOrder : null,
+            pageNumber: (pageNumber != 0) ? pageNumber : null
         });
     }
 
