@@ -26,6 +26,7 @@ export module Views {
         updateRecentThreadMessagesEveryMilliSeconds: number;
         searchThreadWaitMilliseconds: number;
         renderNewMessageEveryMilliseconds: number;
+        useDashesForThreadNameInUrl: boolean;
     }
 
     declare const displayConfig: DisplayConfig;

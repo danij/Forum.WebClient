@@ -294,6 +294,11 @@ export module Pages {
 
     export function getThreadMessagesOfThreadUrl(id: string, name: string): string {
 
+        if (Views.DisplayConfig.useDashesForThreadNameInUrl) {
+
+            name = name.replace(/\s/g, '-');
+        }
+
         return `thread/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
     }
 
