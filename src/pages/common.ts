@@ -294,7 +294,7 @@ export module Pages {
 
     export function getThreadMessagesOfThreadUrl(id: string, name: string): string {
 
-        return `thread_messages/thread/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
+        return `thread/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
     }
 
     export function getThreadMessagesOfMessageParentThreadUrlFull(messageId: string): string {

@@ -122,13 +122,13 @@ export class ThreadMessagesPage implements Pages.Page {
 
     static loadPage(url: string): boolean {
 
-        if (url.indexOf('thread_messages/') != 0) return false;
+        if ((url.indexOf('thread_messages/') != 0)
+            && (url.indexOf('thread/') != 0)) return false;
 
         let page = new ThreadMessagesPage();
-
         page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
         page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
-        page.threadId = Pages.getThreadId(url);
+        page.threadId = Pages.getThreadId('/' + url);
         page.threadMessageId = Pages.getThreadMessageId(url);
         page.userName = Pages.getUserName(url);
 
