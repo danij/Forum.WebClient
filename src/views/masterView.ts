@@ -4,8 +4,35 @@ import {Views} from "./common";
 import {UsersView} from "./usersView";
 import {UserRepository} from "../services/userRepository";
 import {DOMHelpers} from "../helpers/domHelpers";
+import {Pages} from "../pages/common";
 
 export module MasterView {
+
+    const FooterSeparator = ' · ';
+
+    export function applyPageConfig(config: Pages.MasterPageConfig) {
+
+        document.title = config.title;
+
+        let footerLinks = document.getElementById('footer-links');
+        footerLinks.innerHTML = '';
+
+        for (let footerLink of config.footerLinks) {
+
+            footerLinks.appendChild(createFooterLink(footerLink));
+            footerLinks.appendChild(document.createTextNode(FooterSeparator));
+        }
+    }
+
+    function createFooterLink(link: Pages.PageLink) : HTMLAnchorElement {
+
+        let result = document.createElement('a') as HTMLAnchorElement;
+
+        result.setAttribute('href', link.link);
+        result.innerText = link.title;
+
+        return result;
+    }
 
     export function getStatisticsText(statistics: StatisticsRepository.EntityCount): string {
 
@@ -16,8 +43,7 @@ export module MasterView {
             ['tags', DisplayHelpers.intToString(statistics.discussionTags)],
             ['categories', DisplayHelpers.intToString(statistics.discussionCategories)],
         ];
-        const separator = ' · ';
-        return separator + values.map(t => `${t[1]} ${t[0]}`).join(separator);
+        return values.map(t => `${t[1]} ${t[0]}`).join(FooterSeparator);
     }
 
     export function showOnlineUsers(link: HTMLAnchorElement, users: UserRepository.User[]) {

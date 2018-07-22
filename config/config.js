@@ -21,5 +21,13 @@ window.displayConfig = {
 
 window.masterPageConfig = {
 
-    baseUri: "http://dani.forum:8080/"
+    baseUri: "http://dani.forum:8080/",
+    title: "Fast Forum",
+    footerLinks: [{
+        title: "Help",
+        link: "#"
+    }, {
+        title: "Terms of Service",
+        link: "#"
+    }]
 };

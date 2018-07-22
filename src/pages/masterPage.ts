@@ -31,6 +31,8 @@ export module MasterPage {
 
     export function bootstrap(): void {
 
+        MasterView.applyPageConfig(masterPageConfig);
+
         originalTitle = document.title;
 
         let pages = [

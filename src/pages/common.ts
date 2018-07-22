@@ -27,9 +27,17 @@ export module Pages {
 
     declare var UIkit: any;
 
+    export interface PageLink {
+
+        title: string,
+        link: string
+    }
+
     export interface MasterPageConfig {
 
         baseUri: string
+        title: string
+        footerLinks: PageLink[]
     }
 
     declare const masterPageConfig: MasterPageConfig;
