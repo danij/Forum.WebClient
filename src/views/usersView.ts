@@ -15,7 +15,6 @@ export module UsersView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import IUserCallback = PageActions.IUserCallback;
-    import IUserPrivileges = Privileges.IUserPrivileges;
     import reloadPageIfOk = EditViews.reloadPageIfOk;
 
     function getUserLogoColor(id: string): string {
@@ -373,7 +372,6 @@ export module UsersView {
 
     export function createUserPageHeader(user: UserRepository.User,
                                          callback: IUserCallback,
-                                         privileges: IUserPrivileges,
                                          privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         let result = new DOMAppender('<div class="user-header">', '</div>');
@@ -399,7 +397,7 @@ export module UsersView {
 
         let messageCommentsLink = '';
 
-        if (privileges.canViewUserComments(user.id)) {
+        if (Privileges.User.canViewUserComments(user)) {
 
             messageCommentsLink = ' · <a ' + getMessageCommentsWrittenByUserLinkContent(user) + '>show written comments</a>';
         }
@@ -436,28 +434,28 @@ export module UsersView {
         {
             let editContent = [];
 
-            if (privileges.canEditUserName(user.id)) {
+            if (Privileges.User.canEditUserName(user)) {
 
                 editContent.push('<a class="edit-user-name-link">Edit name</a>');
             }
-            if (privileges.canEditUserInfo(user.id)) {
+            if (Privileges.User.canEditUserInfo(user)) {
 
                 editContent.push('<a class="edit-user-info-link">Edit info</a>');
             }
-            if (privileges.canEditUserTitle(user.id)) {
+            if (Privileges.User.canEditUserTitle(user)) {
 
                 editContent.push('<a class="edit-user-title-link">Edit title</a>');
             }
-            if (privileges.canEditUserSignature(user.id)) {
+            if (Privileges.User.canEditUserSignature(user)) {
 
                 editContent.push('<a class="edit-user-signature-link">Edit signature</a>');
             }
-            if (privileges.canEditUserLogo(user.id)) {
+            if (Privileges.User.canEditUserLogo(user)) {
 
                 editContent.push('<a class="clear-user-logo-link">Remove logo</a>');
                 editContent.push('<a class="edit-user-logo-link">Upload new logo</a>');
             }
-            if (privileges.canDeleteUser(user.id)) {
+            if (Privileges.User.canDeleteUser(user)) {
 
                 editContent.push('<a class="delete-user-link"><span class="uk-icon" uk-icon="icon: trash"></span></a>');
             }
@@ -576,7 +574,7 @@ export module UsersView {
 
             ev.preventDefault();
 
-            PrivilegesView.showPrivilegesAssignedToUser(user, privilegesCallback, privileges);
+            PrivilegesView.showPrivilegesAssignedToUser(user, privilegesCallback);
         });
 
 

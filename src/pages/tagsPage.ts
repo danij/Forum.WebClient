@@ -26,7 +26,7 @@ export class TagsPage implements Pages.Page {
             let elements = TagsView.createTagsPageContent(tagCollection.tags, {
                 orderBy: this.orderBy,
                 sortOrder: this.sortOrder
-            }, PageActions.getTagCallback(), Privileges.getTagPrivileges());
+            }, PageActions.getTagCallback());
 
             this.setupSortControls(elements.sortControls);
 

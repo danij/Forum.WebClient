@@ -14,7 +14,6 @@ export module TagsView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import ITagCallback = PageActions.ITagCallback;
-    import ITagPrivileges = Privileges.ITagPrivileges;
 
     export function createTagElement(tag: TagRepository.Tag): DOMAppender {
 
@@ -41,8 +40,7 @@ export module TagsView {
     }
 
     export function createTagsPageContent(tags: TagRepository.Tag[], info: Views.SortInfo,
-                                          callback: ITagCallback,
-                                          privileges: ITagPrivileges): TagsPageContent {
+                                          callback: ITagCallback): TagsPageContent {
 
         let result = new TagsPageContent();
 
@@ -50,7 +48,7 @@ export module TagsView {
 
         resultList.appendChild(result.sortControls = createTagListSortControls(info));
 
-        if (privileges.canAddNewTag()) {
+        if (Privileges.ForumWide.canAddNewTag()) {
 
             resultList.appendChild(createAddNewTagElement(callback));
         }
@@ -61,7 +59,7 @@ export module TagsView {
         tagsList.classList.add('tags-list');
         tagsList.appendChild(this.createTagsTable(tags));
 
-        if (privileges.canAddNewTag()) {
+        if (Privileges.ForumWide.canAddNewTag()) {
 
             resultList.appendChild(createAddNewTagElement(callback));
         }
@@ -230,7 +228,6 @@ export module TagsView {
 
     export function createTagPageHeader(tag: TagRepository.Tag,
                                         callback: ITagCallback,
-                                        privileges: ITagPrivileges,
                                         privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         let container = document.createElement('div');
@@ -238,7 +235,7 @@ export module TagsView {
 
         let badge = document.createElement('span');
 
-        if (privileges.canEditTagName(tag.id)) {
+        if (Privileges.Tag.canEditTagName(tag)) {
 
             let link = EditViews.createEditLink('Edit tag name');
             container.appendChild(link);
@@ -264,7 +261,7 @@ export module TagsView {
         badge.setAttribute('uk-icon', 'icon: tag');
         badge.innerText = tag.name;
 
-        if (privileges.canMergeTags(tag.id)) {
+        if (Privileges.Tag.canMergeTags(tag)) {
 
             let link = EditViews.createEditLink('Merge tags', 'git-fork');
             container.appendChild(link);
@@ -277,14 +274,14 @@ export module TagsView {
                 });
             });
         }
-        if (privileges.canViewTagRequiredPrivileges(tag.id)
-            || privileges.canViewTagAssignedPrivileges(tag.id)) {
+        if (Privileges.Tag.canViewTagRequiredPrivileges(tag)
+            || Privileges.Tag.canViewTagAssignedPrivileges(tag)) {
 
             let link = EditViews.createEditLink('Privileges', 'settings');
             container.appendChild(link);
             link.addEventListener('click', async () => {
 
-                PrivilegesView.showTagPrivileges(tag, privilegesCallback, privileges);
+                PrivilegesView.showTagPrivileges(tag, privilegesCallback);
             });
         }
 
@@ -318,7 +315,7 @@ export module TagsView {
             }
         }
 
-        if (privileges.canDeleteTag(tag.id)) {
+        if (Privileges.Tag.canDeleteTag(tag)) {
 
             let deleteLink = EditViews.createDeleteLink('Delete tag');
             container.appendChild(deleteLink);

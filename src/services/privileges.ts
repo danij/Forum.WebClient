@@ -1,375 +1,216 @@
+import {CategoryRepository} from "./categoryRepository";
+import {CommonEntities} from "./commonEntities";
+import {TagRepository} from "./tagRepository";
+import {ThreadRepository} from "./threadRepository";
+import {ThreadMessageRepository} from "./threadMessageRepository";
+import {UserRepository} from "./userRepository";
+
 export module Privileges {
 
-    export interface ICategoryPrivileges {
+    function hasPrivilege(privileges: CommonEntities.PrivilegesArray, privilege: string): boolean {
 
-        canAddNewRootCategory(): Promise<boolean>;
-
-        canAddNewSubCategory(parentId: string): Promise<boolean>;
-
-        canDeleteCategory(id: string): Promise<boolean>;
-
-        canEditCategoryName(id: string): Promise<boolean>;
-
-        canEditCategoryDescription(id: string): Promise<boolean>;
-
-        canEditCategoryDisplayOrder(id: string): Promise<boolean>;
-
-        canEditCategoryParent(id: string): Promise<boolean>;
-
-        canEditCategoryTags(id: string): Promise<boolean>;
-
-        canViewCategoryRequiredPrivileges(id: string): Promise<boolean>;
-
-        canViewCategoryAssignedPrivileges(id: string): Promise<boolean>;
+        return true; //TODO add actual search
     }
 
-    class CategoryPrivilegesAllowAll implements ICategoryPrivileges {
+    export namespace Category {
 
-        canAddNewRootCategory(): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canAddNewSubCategory(parent: CategoryRepository.Category): boolean {
+            return hasPrivilege(parent, "TODO");
         }
 
-        canAddNewSubCategory(): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canDeleteCategory(category: CategoryRepository.Category): boolean {
+            return hasPrivilege(category, "TODO");
         }
 
-        canDeleteCategory(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canEditCategoryName(category: CategoryRepository.Category): boolean {
+            return hasPrivilege(category, "TODO");
         }
 
-        canEditCategoryName(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canEditCategoryDescription(category: CategoryRepository.Category): boolean {
+            return hasPrivilege(category, "TODO");
         }
 
-        canEditCategoryDescription(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canEditCategoryDisplayOrder(category: CategoryRepository.Category): boolean {
+            return hasPrivilege(category, "TODO");
         }
 
-        canEditCategoryDisplayOrder(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canEditCategoryParent(category: CategoryRepository.Category): boolean {
+            return hasPrivilege(category, "TODO");
         }
 
-        canEditCategoryParent(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canEditCategoryTags(category: CategoryRepository.Category): boolean {
+            return hasPrivilege(category, "TODO");
         }
 
-        canEditCategoryTags(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canViewCategoryRequiredPrivileges(category: CategoryRepository.Category): boolean {
+            return hasPrivilege(category, "TODO");
         }
 
-        canViewCategoryRequiredPrivileges(id: string): Promise<boolean> {
-            return Promise.resolve(true);
-        }
-
-        canViewCategoryAssignedPrivileges(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canViewCategoryAssignedPrivileges(category: CategoryRepository.Category): boolean {
+            return hasPrivilege(category, "TODO");
         }
     }
 
-    export interface ITagPrivileges {
+    export namespace Tag {
 
-        canAddNewTag(): Promise<boolean>;
-
-        canDeleteTag(id: string): Promise<boolean>;
-
-        canEditTagName(id: string): Promise<boolean>;
-
-        canMergeTags(id: string): Promise<boolean>;
-
-        canViewTagRequiredPrivileges(id: string): Promise<boolean>;
-
-        canViewTagAssignedPrivileges(id: string): Promise<boolean>;
-    }
-
-    class TagPrivilegesAllowAll implements ITagPrivileges {
-
-        canAddNewTag(): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canDeleteTag(tag: TagRepository.Tag): boolean {
+            return hasPrivilege(tag, "TODO");
         }
 
-        canDeleteTag(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canEditTagName(tag: TagRepository.Tag): boolean {
+            return hasPrivilege(tag, "TODO");
         }
 
-        canEditTagName(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canMergeTags(tag: TagRepository.Tag): boolean {
+            return hasPrivilege(tag, "TODO");
         }
 
-        canMergeTags(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canViewTagRequiredPrivileges(tag: TagRepository.Tag): boolean {
+            return hasPrivilege(tag, "TODO");
         }
 
-        canViewTagRequiredPrivileges(id: string): Promise<boolean> {
-            return Promise.resolve(true);
-        }
-
-        canViewTagAssignedPrivileges(id: string): Promise<boolean> {
-            return Promise.resolve(true);
+        export function canViewTagAssignedPrivileges(tag: TagRepository.Tag): boolean {
+            return hasPrivilege(tag, "TODO");
         }
     }
 
-    export interface IThreadPrivileges {
+    export namespace Thread {
 
-        canAddNewThread(): Promise<boolean>;
-
-        canDeleteThread(id: string): Promise<boolean>;
-
-        canEditThreadName(id: string): Promise<boolean>;
-
-        canEditThreadPinDisplayOrder(id: string): Promise<boolean>;
-
-        canEditThreadTags(id: string): Promise<boolean>;
-
-        canMergeThreads(id: string): Promise<boolean>;
-
-        canAddNewThreadMessage(id: string): Promise<boolean>;
-
-        canViewThreadRequiredPrivileges(id: string): Promise<boolean>;
-
-        canViewThreadAssignedPrivileges(id: string): Promise<boolean>;
-    }
-
-    class ThreadPrivilegesAllowAll implements IThreadPrivileges {
-
-        canAddNewThread(): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canDeleteThread(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, "TODO");
         }
 
-        canDeleteThread(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canEditThreadName(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, "TODO");
         }
 
-        canEditThreadName(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canEditThreadPinDisplayOrder(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, "TODO");
         }
 
-        canEditThreadPinDisplayOrder(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canEditThreadTags(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, "TODO");
         }
 
-        canEditThreadTags(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canMergeThreads(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, "TODO");
         }
 
-        canMergeThreads(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canAddNewThreadMessage(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, "TODO");
         }
 
-        canAddNewThreadMessage(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canViewThreadRequiredPrivileges(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, "TODO");
         }
 
-        canViewThreadRequiredPrivileges(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-        canViewThreadAssignedPrivileges(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-    }
-
-    export interface IThreadMessagePrivileges {
-
-        canEditThreadMessageContent(id: string): Promise<boolean>;
-
-        canMoveThreadMessage(id: string): Promise<boolean>;
-
-        canDeleteThreadMessage(id: string): Promise<boolean>;
-
-        canCommentThreadMessage(id: string): Promise<boolean>;
-
-        canSolveThreadMessageComment(id: string): Promise<boolean>;
-
-        canUpVoteThreadMessage(id: string): Promise<boolean>;
-
-        canDownVoteThreadMessage(id: string): Promise<boolean>;
-
-        canResetVoteOfThreadMessage(id: string): Promise<boolean>;
-
-        canViewThreadMessageRequiredPrivileges(id: string): Promise<boolean>;
-
-        canViewThreadMessageAssignedPrivileges(id: string): Promise<boolean>;
-    }
-
-    class ThreadMessagePrivilegesAllowAll implements IThreadMessagePrivileges {
-
-        canEditThreadMessageContent(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-        canMoveThreadMessage(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-        canDeleteThreadMessage(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-        canCommentThreadMessage(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-        canSolveThreadMessageComment(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-        canUpVoteThreadMessage(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-        canDownVoteThreadMessage(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-        canResetVoteOfThreadMessage(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-        canViewThreadMessageRequiredPrivileges(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
-        }
-
-        canViewThreadMessageAssignedPrivileges(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canViewThreadAssignedPrivileges(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, "TODO");
         }
     }
 
-    export interface IUserPrivileges {
+    export namespace ThreadMessage {
 
-        canEditUserName(id: string): Promise<boolean>;
-
-        canEditUserInfo(id: string): Promise<boolean>;
-
-        canEditUserTitle(id: string): Promise<boolean>;
-
-        canEditUserSignature(id: string): Promise<boolean>;
-
-        canEditUserLogo(id: string): Promise<boolean>;
-
-        canDeleteUser(id: string): Promise<boolean>;
-
-        canViewUserComments(id: string): Promise<boolean>;
-
-        canViewPrivilegesAssignedToUser(id: string): Promise<boolean>;
-    }
-
-    class UserPrivilegesAllowAll implements IUserPrivileges {
-
-        canEditUserName(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canEditThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, "TODO");
         }
 
-        canEditUserInfo(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canMoveThreadMessage(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, "TODO");
         }
 
-        canEditUserTitle(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canDeleteThreadMessage(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, "TODO");
         }
 
-        canEditUserSignature(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canCommentThreadMessage(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, "TODO");
         }
 
-        canEditUserLogo(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canSolveThreadMessageComment(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, "TODO");
         }
 
-        canDeleteUser(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canUpVoteThreadMessage(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, "TODO");
         }
 
-        canViewUserComments(id: string): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canDownVoteThreadMessage(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, "TODO");
         }
 
-        canViewPrivilegesAssignedToUser(id: string): Promise<boolean> {
+        export function canResetVoteOfThreadMessage(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, "TODO");
+        }
 
-            return Promise.resolve(true);
+        export function canViewThreadMessageRequiredPrivileges(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, "TODO");
+        }
+
+        export function canViewThreadMessageAssignedPrivileges(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, "TODO");
         }
     }
 
-    export interface IForumWidePrivileges {
+    export namespace User {
 
-        canViewAllComments(): Promise<boolean>;
-
-        canViewForumWideRequiredPrivileges(): Promise<boolean>;
-
-        canViewForumWideAssignedPrivileges(): Promise<boolean>;
-    }
-
-    class ForumWidePrivilegesAllowAll implements IForumWidePrivileges {
-
-        canViewAllComments(): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canEditUserName(user: UserRepository.User): boolean {
+            return hasPrivilege(user, "TODO");
         }
 
-        canViewForumWideRequiredPrivileges(): Promise<boolean> {
-
-            return Promise.resolve(true);
+        export function canEditUserInfo(user: UserRepository.User): boolean {
+            return hasPrivilege(user, "TODO");
         }
 
-        canViewForumWideAssignedPrivileges(): Promise<boolean> {
+        export function canEditUserTitle(user: UserRepository.User): boolean {
+            return hasPrivilege(user, "TODO");
+        }
 
-            return Promise.resolve(true);
+        export function canEditUserSignature(user: UserRepository.User): boolean {
+            return hasPrivilege(user, "TODO");
+        }
+
+        export function canEditUserLogo(user: UserRepository.User): boolean {
+            return hasPrivilege(user, "TODO");
+        }
+
+        export function canDeleteUser(user: UserRepository.User): boolean {
+            return hasPrivilege(user, "TODO");
+        }
+
+        export function canViewUserComments(user: UserRepository.User): boolean {
+            return hasPrivilege(user, "TODO");
+        }
+
+        export function canViewPrivilegesAssignedToUser(user: UserRepository.User): boolean {
+            return hasPrivilege(user, "TODO");
         }
     }
 
-    export function getCategoryPrivileges(): ICategoryPrivileges {
+    export namespace ForumWide {
 
-        return new CategoryPrivilegesAllowAll();
-    }
+        export function canViewAllComments(): boolean {
+            return true;
+        }
 
-    export function getTagPrivileges(): ITagPrivileges {
+        export function canViewForumWideRequiredPrivileges(): boolean {
+            return true;
+        }
 
-        return new TagPrivilegesAllowAll();
-    }
+        export function canViewForumWideAssignedPrivileges(): boolean {
+            return true;
+        }
 
-    export function getThreadPrivileges(): IThreadPrivileges {
+        export function canAddNewRootCategory(): boolean {
+            return true;
+        }
 
-        return new ThreadPrivilegesAllowAll();
-    }
+        export function canAddNewTag(): boolean {
+            return true;
+        }
 
-    export function getThreadMessagePrivileges(): IThreadMessagePrivileges {
-
-        return new ThreadMessagePrivilegesAllowAll();
-    }
-
-    export function getUserPrivileges(): IUserPrivileges {
-
-        return new UserPrivilegesAllowAll();
-    }
-
-    export function getForumWidePrivileges(): IForumWidePrivileges {
-
-        return new ForumWidePrivilegesAllowAll();
+        export function canAddNewThread(): boolean {
+            return true;
+        }
     }
 }

@@ -3,7 +3,7 @@ import {CommonEntities} from "./commonEntities";
 
 export module UserRepository {
 
-    export interface User {
+    export interface User extends CommonEntities.PrivilegesArray {
 
         id: string;
         name: string;
@@ -18,6 +18,7 @@ export module UserRepository {
         subscribedThreadCount: number;
         receivedUpVotes: number;
         receivedDownVotes: number;
+        privileges: string[];
     }
 
     export const EmptyUserId: string = '';

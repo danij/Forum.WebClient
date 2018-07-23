@@ -20,7 +20,7 @@ export module ThreadMessageRepository {
         reason: string;
     }
 
-    export interface ThreadMessage {
+    export interface ThreadMessage extends CommonEntities.PrivilegesArray {
 
         id: string;
         created: number;

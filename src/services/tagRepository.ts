@@ -1,9 +1,10 @@
 import {RequestHandler} from "./requestHandler";
 import {CategoryRepository} from "./categoryRepository";
+import {CommonEntities} from "./commonEntities";
 
 export module TagRepository {
 
-    export interface Tag {
+    export interface Tag extends CommonEntities.PrivilegesArray {
 
         id: string;
         name: string;
@@ -12,6 +13,7 @@ export module TagRepository {
         messageCount: number;
         latestMessage: CategoryRepository.LatestMessage;
         categories: CategoryRepository.Category[];
+        privileges: string[];
     }
 
     export interface TagCollection {

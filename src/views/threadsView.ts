@@ -18,14 +18,11 @@ import {PrivilegesView} from "./privilegesView";
 export module ThreadsView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
-    import ITagPrivileges = Privileges.ITagPrivileges;
     import ITagCallback = PageActions.ITagCallback;
-    import IThreadPrivileges = Privileges.IThreadPrivileges;
     import IThreadCallback = PageActions.IThreadCallback;
     import refreshMath = ViewsExtra.refreshMath;
     import reloadPageIfOk = EditViews.reloadPageIfOk;
     import IUserCallback = PageActions.IUserCallback;
-    import IUserPrivileges = Privileges.IUserPrivileges;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
 
     export class ThreadsPageContent {
@@ -57,9 +54,7 @@ export module ThreadsView {
                                              onPageNumberChange: Views.PageNumberChangeCallback,
                                              getLinkForPage: Views.GetLinkForPageCallback,
                                              tagCallback: ITagCallback,
-                                             tagPrivileges: ITagPrivileges,
                                              userCallback: IUserCallback,
-                                             userPrivileges: IUserPrivileges,
                                              privilegesCallback: PageActions.IPrivilegesCallback) {
 
         collection = collection || ThreadRepository.defaultThreadCollection();
@@ -70,12 +65,11 @@ export module ThreadsView {
 
         if (info.tag) {
 
-            resultList.appendChild(TagsView.createTagPageHeader(info.tag, tagCallback, tagPrivileges,
-                privilegesCallback));
+            resultList.appendChild(TagsView.createTagPageHeader(info.tag, tagCallback, privilegesCallback));
         }
         else if (info.user) {
 
-            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges, privilegesCallback));
+            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, privilegesCallback));
         }
 
         resultList.appendChild(result.sortControls = createThreadListSortControls(info));
@@ -314,7 +308,6 @@ export module ThreadsView {
 
     export function createThreadPageHeader(thread: ThreadRepository.Thread,
                                            callback: IThreadCallback,
-                                           privileges: IThreadPrivileges,
                                            privilegesCallback: IPrivilegesCallback): HTMLElement {
 
         let element = document.createElement('div');
@@ -366,7 +359,7 @@ export module ThreadsView {
                 }
             });
 
-            if (privileges.canMergeThreads(thread.id)) {
+            if (Privileges.Thread.canMergeThreads(thread)) {
 
                 let link = EditViews.createEditLink('Merge threads', 'git-fork', []);
                 actions.appendChild(link);
@@ -381,18 +374,18 @@ export module ThreadsView {
                 });
             }
 
-            if (privileges.canViewThreadRequiredPrivileges(thread.id)
-                || privileges.canViewThreadAssignedPrivileges(thread.id)) {
+            if (Privileges.Thread.canViewThreadRequiredPrivileges(thread)
+                || Privileges.Thread.canViewThreadAssignedPrivileges(thread)) {
 
                 let link = EditViews.createEditLink('Privileges', 'settings', []);
                 actions.appendChild(link);
                 link.addEventListener('click', async () => {
 
-                    PrivilegesView.showThreadPrivileges(thread, privilegesCallback, privileges);
+                    PrivilegesView.showThreadPrivileges(thread, privilegesCallback);
                 });
             }
 
-            if (privileges.canDeleteThread(thread.id)) {
+            if (Privileges.Thread.canDeleteThread(thread)) {
 
                 let deleteLink = EditViews.createDeleteLink('Delete thread', '');
                 actions.appendChild(deleteLink);
@@ -411,7 +404,7 @@ export module ThreadsView {
             card.appendChild(title);
             title.classList.add('uk-align-left', 'thread-title');
 
-            if (privileges.canEditThreadPinDisplayOrder(thread.id)) {
+            if (Privileges.Thread.canEditThreadPinDisplayOrder(thread)) {
                 let link = EditViews.createEditLink('Edit thread display order when pinned', 'star');
                 title.appendChild(link);
                 link.addEventListener('click', () => {
@@ -427,7 +420,7 @@ export module ThreadsView {
             }
 
             let threadTitle = document.createElement('span');
-            if (privileges.canEditThreadName(thread.id)) {
+            if (Privileges.Thread.canEditThreadName(thread)) {
                 let link = EditViews.createEditLink('Edit thread name');
                 title.appendChild(link);
                 link.addEventListener('click', () => {
@@ -462,7 +455,7 @@ export module ThreadsView {
             card.appendChild(details);
             details.classList.add('thread-details', 'uk-align-left');
 
-            if (privileges.canEditThreadTags(thread.id)) {
+            if (Privileges.Thread.canEditThreadTags(thread)) {
 
                 let link = EditViews.createEditLink('Edit thread tags', 'tag');
                 details.appendChild(link);

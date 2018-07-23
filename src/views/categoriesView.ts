@@ -16,7 +16,6 @@ export module CategoriesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import ICategoryCallback = PageActions.ICategoryCallback;
-    import ICategoryPrivileges = Privileges.ICategoryPrivileges;
     import reloadIfOk = EditViews.reloadPageIfOk;
     import doIfOk = EditViews.doIfOk;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
@@ -35,8 +34,7 @@ export module CategoriesView {
     }
 
     export function createCategoriesTable(categories: CategoryRepository.Category[],
-                                          callback: ICategoryCallback,
-                                          privileges: ICategoryPrivileges): HTMLElement {
+                                          callback: ICategoryCallback): HTMLElement {
 
         let tableContainer = new DOMAppender('<div class="categories-table">', '</div>');
         let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
@@ -70,7 +68,7 @@ export module CategoriesView {
                 let nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
                 row.append(nameColumn);
 
-                if (privileges.canEditCategoryDisplayOrder(category.id)) {
+                if (Privileges.Category.canEditCategoryDisplayOrder(category)) {
 
                     const attributes = {
                         'data-category-id': category.id,
@@ -210,13 +208,12 @@ export module CategoriesView {
 
     export function createCategoryHeader(category: CategoryRepository.Category,
                                          callback: ICategoryCallback,
-                                         privileges: ICategoryPrivileges,
                                          privilegesCallback: IPrivilegesCallback): HTMLElement {
 
         let result = document.createElement('div');
         result.classList.add('categories-list-header');
 
-        if (privileges.canDeleteCategory(category.id)) {
+        if (Privileges.Category.canDeleteCategory(category)) {
 
             let deleteLink = EditViews.createDeleteLink('Delete category');
             result.appendChild(deleteLink);
@@ -270,7 +267,7 @@ export module CategoriesView {
         let nameElement = document.createElement('span');
         nameElement.innerText = category.name;
 
-        if (privileges.canEditCategoryParent(category.id)) {
+        if (Privileges.Category.canEditCategoryParent(category)) {
 
             let link = EditViews.createEditLink('Edit category parent', 'git-branch');
             element.appendChild(link);
@@ -296,7 +293,7 @@ export module CategoriesView {
             });
         }
 
-        if (privileges.canEditCategoryName(category.id)) {
+        if (Privileges.Category.canEditCategoryName(category)) {
 
             let link = EditViews.createEditLink('Edit category name');
             element.appendChild(link);
@@ -323,7 +320,7 @@ export module CategoriesView {
         descriptionElement.innerText = category.description || '';
         descriptionElement.classList.add('uk-text-meta');
 
-        if (privileges.canEditCategoryDescription(category.id)) {
+        if (Privileges.Category.canEditCategoryDescription(category)) {
 
             let link = EditViews.createEditLink('Edit category description');
             descriptionContainer.appendChild(link);
@@ -339,21 +336,21 @@ export module CategoriesView {
                 }
             });
         }
-        if (privileges.canViewCategoryRequiredPrivileges(category.id)
-            || privileges.canViewCategoryAssignedPrivileges(category.id)) {
+        if (Privileges.Category.canViewCategoryRequiredPrivileges(category)
+            || Privileges.Category.canViewCategoryAssignedPrivileges(category)) {
 
             let link = EditViews.createEditLink('Privileges', 'settings');
             result.appendChild(link);
 
             link.addEventListener('click', () => {
 
-                PrivilegesView.showCategoryPrivileges(category, privilegesCallback, privileges);
+                PrivilegesView.showCategoryPrivileges(category, privilegesCallback);
             });
         }
 
         descriptionContainer.appendChild(descriptionElement);
 
-        if (privileges.canEditCategoryTags(category.id)) {
+        if (Privileges.Category.canEditCategoryTags(category)) {
 
             let link = EditViews.createEditLink('Edit category tags', 'tag');
             result.appendChild(link);
@@ -384,13 +381,12 @@ export module CategoriesView {
     }
 
     export function createRootCategoriesDisplay(categories: CategoryRepository.Category[],
-                                                callback: ICategoryCallback,
-                                                privileges: ICategoryPrivileges): HTMLElement {
+                                                callback: ICategoryCallback): HTMLElement {
 
         let result = document.createElement('div');
-        result.appendChild(createCategoriesTable(categories, callback, privileges));
+        result.appendChild(createCategoriesTable(categories, callback));
 
-        if (privileges.canAddNewRootCategory()) {
+        if (Privileges.ForumWide.canAddNewRootCategory()) {
 
             result.appendChild(createAddNewRootCategoryElement(callback));
         }
@@ -401,21 +397,20 @@ export module CategoriesView {
     export function createCategoryDisplay(category: CategoryRepository.Category,
                                           threadList: HTMLElement,
                                           callback: ICategoryCallback,
-                                          privileges: ICategoryPrivileges,
                                           privilegesCallback: IPrivilegesCallback): HTMLElement {
 
         let result = document.createElement('div');
-        result.appendChild(createCategoryHeader(category, callback, privileges, privilegesCallback));
+        result.appendChild(createCategoryHeader(category, callback, privilegesCallback));
 
         let separatorNeeded = false;
 
         if (category.children && category.children.length) {
 
-            result.appendChild(createCategoriesTable(category.children, callback, privileges));
+            result.appendChild(createCategoriesTable(category.children, callback));
             separatorNeeded = true;
         }
 
-        if (privileges.canAddNewSubCategory(category.id)) {
+        if (Privileges.Category.canAddNewSubCategory(category)) {
 
             result.appendChild(createAddNewSubCategoryElement(category.id, callback));
         }

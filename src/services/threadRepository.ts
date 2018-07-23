@@ -7,7 +7,7 @@ import {ThreadMessageRepository} from "./threadMessageRepository";
 
 export module ThreadRepository {
 
-    export interface Thread {
+    export interface Thread extends CommonEntities.PrivilegesArray {
 
         id: string;
         name: string;

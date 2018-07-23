@@ -1,6 +1,7 @@
 import {RequestHandler} from './requestHandler'
 import {TagRepository} from "./tagRepository";
 import {UserRepository} from "./userRepository";
+import {CommonEntities} from "./commonEntities";
 
 export module CategoryRepository {
 
@@ -13,7 +14,7 @@ export module CategoryRepository {
         threadName: string;
     }
 
-    export interface Category {
+    export interface Category extends CommonEntities.PrivilegesArray {
         id: string;
         name: string;
         description: string;

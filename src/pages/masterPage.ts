@@ -58,24 +58,15 @@ export module MasterPage {
 
         setupSearch();
 
-        let forumWidePrivileges = Privileges.getForumWidePrivileges();
-        forumWidePrivileges.canViewAllComments().then((allowed) => {
+        if (Privileges.ForumWide.canViewAllComments()) {
 
-            if (allowed) {
+            document.getElementById('CommentsPageLink').classList.remove('uk-hidden');
+        }
 
-                document.getElementById('CommentsPageLink').classList.remove('uk-hidden');
-            }
-        });
-        Promise.all([
-            forumWidePrivileges.canViewForumWideRequiredPrivileges(),
-            forumWidePrivileges.canViewForumWideAssignedPrivileges()
-        ]).then((allowed) => {
+        if (Privileges.ForumWide.canViewForumWideRequiredPrivileges() || Privileges.ForumWide.canViewForumWideAssignedPrivileges()) {
 
-            if (allowed[0] || allowed[1]) {
-
-                document.getElementById('ForumWidePrivilegesLink').classList.remove('uk-hidden');
-            }
-        });
+            document.getElementById('ForumWidePrivilegesLink').classList.remove('uk-hidden');
+        }
 
         ViewsExtra.init();
         fixLinks();
@@ -364,8 +355,8 @@ export module MasterPage {
             const messages = await PageActions.getThreadMessageCallback().searchThreadMessagesByName(toSearch);
 
             return ThreadMessagesView.createThreadMessageList(messages,
-                PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
-                PageActions.getThreadCallback(), Privileges.getThreadPrivileges(), PageActions.getPrivilegesCallback());
+                PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(),
+                PageActions.getPrivilegesCallback());
         });
         ViewsExtra.refreshMath(resultsContainer);
     }
@@ -376,8 +367,7 @@ export module MasterPage {
 
             ev.preventDefault();
 
-            PrivilegesView.showForumWidePrivileges(PageActions.getPrivilegesCallback(),
-                Privileges.getForumWidePrivileges());
+            PrivilegesView.showForumWidePrivileges(PageActions.getPrivilegesCallback());
         })
     }
 }

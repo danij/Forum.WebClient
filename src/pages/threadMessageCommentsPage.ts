@@ -42,8 +42,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
                     user: this.user
                 }, (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber),
-                PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
-                PageActions.getUserCallback(), Privileges.getUserPrivileges(),
+                PageActions.getThreadMessageCallback(), PageActions.getUserCallback(),
                 PageActions.getThreadCallback(), PageActions.getPrivilegesCallback());
 
             this.setupSortControls(elements.sortControls);
@@ -127,8 +126,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
             this.bottomPaginationControl = newBottomPaginationControl;
 
             return ThreadMessagesView.createCommentsList(commentsCollection,
-                PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
-                PageActions.getThreadCallback(), this.user);
+                PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(), this.user);
         });
     }
 

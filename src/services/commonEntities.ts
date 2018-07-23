@@ -7,6 +7,11 @@ export module CommonEntities {
         totalCount: number;
     }
 
+    export interface PrivilegesArray {
+
+        privileges: string[];
+    }
+
     export function getPageCount(info: PaginationInfo): number {
 
         return Math.ceil(info.totalCount / Math.max(info.pageSize, 1));

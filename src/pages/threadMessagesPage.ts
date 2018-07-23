@@ -69,10 +69,8 @@ export class ThreadMessagesPage implements Pages.Page {
                 user: this.user
             }, (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber), this.thread,
-                PageActions.getThreadCallback(), Privileges.getThreadPrivileges(),
-                PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
-                PageActions.getUserCallback(), Privileges.getUserPrivileges(),
-                PageActions.getPrivilegesCallback(),
+                PageActions.getThreadCallback(), PageActions.getThreadMessageCallback(),
+                PageActions.getUserCallback(), PageActions.getPrivilegesCallback(),
                 this.thread ? (message) => this.quoteCallback(message) : null);
 
             this.setupSortControls(elements.sortControls);
@@ -183,8 +181,7 @@ export class ThreadMessagesPage implements Pages.Page {
             this.bottomPaginationControl = newBottomPaginationControl;
 
             return ThreadMessagesView.createThreadMessageList(messageCollection,
-                PageActions.getThreadMessageCallback(), Privileges.getThreadMessagePrivileges(),
-                PageActions.getThreadCallback(), Privileges.getThreadPrivileges(),
+                PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(),
                 PageActions.getPrivilegesCallback(), this.thread, (message) => this.quoteCallback(message));
         });
     }

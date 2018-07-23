@@ -18,12 +18,9 @@ import {PrivilegesView} from "./privilegesView";
 export module ThreadMessagesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
-    import IThreadPrivileges = Privileges.IThreadPrivileges;
     import IThreadCallback = PageActions.IThreadCallback;
-    import IUserPrivileges = Privileges.IUserPrivileges;
     import IUserCallback = PageActions.IUserCallback;
     import IThreadMessageCallback = PageActions.IThreadMessageCallback;
-    import IThreadMessagePrivileges = Privileges.IThreadMessagePrivileges;
     import reloadPageIfOk = EditViews.reloadPageIfOk;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
 
@@ -113,11 +110,8 @@ export module ThreadMessagesView {
                                                     getLinkForPage: Views.GetLinkForPageCallback,
                                                     thread: ThreadRepository.Thread,
                                                     threadCallback: IThreadCallback,
-                                                    threadPrivileges: IThreadPrivileges,
                                                     threadMessageCallback: IThreadMessageCallback,
-                                                    threadMessagePrivileges: IThreadMessagePrivileges,
                                                     userCallback: IUserCallback,
-                                                    userPrivileges: IUserPrivileges,
                                                     privilegesCallback: IPrivilegesCallback,
                                                     quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): ThreadMessagesPageContent {
 
@@ -129,24 +123,23 @@ export module ThreadMessagesView {
 
         if (info.thread) {
 
-            resultList.appendChild(ThreadsView.createThreadPageHeader(info.thread, threadCallback, threadPrivileges,
-                privilegesCallback));
+            resultList.appendChild(ThreadsView.createThreadPageHeader(info.thread, threadCallback, privilegesCallback));
         }
         else if (info.user) {
 
-            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges, privilegesCallback));
+            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, privilegesCallback));
             resultList.appendChild(result.sortControls = createThreadMessageListSortControls(info));
         }
 
         resultList.appendChild(result.paginationTop =
             Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        let editControl = thread ? createNewThreadMessageControl(thread.id, threadCallback, threadPrivileges) : null;
+        let editControl = thread ? createNewThreadMessageControl(thread, threadCallback) : null;
 
         let listContainer = document.createElement('div');
         listContainer.classList.add('thread-message-list');
-        listContainer.appendChild(createThreadMessageList(collection, threadMessageCallback, threadMessagePrivileges,
-            threadCallback, threadPrivileges, privilegesCallback, thread, quoteCallback));
+        listContainer.appendChild(createThreadMessageList(collection, threadMessageCallback, threadCallback,
+            privilegesCallback, thread, quoteCallback));
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
@@ -181,9 +174,7 @@ export module ThreadMessagesView {
 
     export function createThreadMessageList(collection: ThreadMessageRepository.ThreadMessageCollection,
                                             callback: IThreadMessageCallback,
-                                            privileges: IThreadMessagePrivileges,
                                             threadCallback: IThreadCallback,
-                                            threadPrivileges: IThreadPrivileges,
                                             privilegesCallback: IPrivilegesCallback,
                                             thread?: ThreadRepository.Thread,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): HTMLElement {
@@ -213,8 +204,8 @@ export module ThreadMessagesView {
 
             createThreadMessageHeader(messageContainer, message, collection, i, showParentThreadName);
             messageContainer.append(createThreadMessageDetails(message, showParentThreadName));
-            messageContainer.append(createThreadMessageAuthor(message, thread, privileges));
-            messageContainer.append(createThreadMessageActionLinks(message, privileges, quoteCallback));
+            messageContainer.append(createThreadMessageAuthor(message, thread));
+            messageContainer.append(createThreadMessageActionLinks(message, quoteCallback));
             messageContainer.append(createThreadMessageContent(message));
 
             if (i < (messages.length - 1)) {
@@ -232,7 +223,7 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
         setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback,
-            privileges, quoteCallback);
+            quoteCallback);
 
         return element;
     }
@@ -310,8 +301,7 @@ export module ThreadMessagesView {
     const VotedMark: string = ' ✓';
 
     function createThreadMessageAuthor(message: ThreadMessageRepository.ThreadMessage,
-                                       thread: ThreadRepository.Thread,
-                                       privileges: IThreadMessagePrivileges): DOMAppender {
+                                       thread: ThreadRepository.Thread): DOMAppender {
 
         let author = message.createdBy;
         let authorContainer = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
@@ -360,18 +350,18 @@ export module ThreadMessagesView {
 
             if ((undefined === message.voteStatus) || (0 == message.voteStatus)) {
 
-                if (privileges.canUpVoteThreadMessage(message.id)) {
+                if (Privileges.ThreadMessage.canUpVoteThreadMessage(message)) {
 
                     upVotesTooltip.push('Click to up vote message.');
                     upVoteData = ` data-upvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 }
-                if (privileges.canDownVoteThreadMessage(message.id)) {
+                if (Privileges.ThreadMessage.canDownVoteThreadMessage(message)) {
 
                     downVotesTooltip.push('Click to down vote message.');
                     downVoteData = ` data-downvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 }
             }
-            else if (privileges.canResetVoteOfThreadMessage(message.id)) {
+            else if (Privileges.ThreadMessage.canResetVoteOfThreadMessage(message)) {
 
                 if (-1 == message.voteStatus) {
 
@@ -415,30 +405,29 @@ export module ThreadMessagesView {
     }
 
     function createThreadMessageActionLinks(message: ThreadMessageRepository.ThreadMessage,
-                                            privileges: IThreadMessagePrivileges,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): DOMAppender {
 
         let actions = new DOMAppender('<div class="message-actions">', '</div>');
         let messageId = DOMHelpers.escapeStringForAttribute(message.id);
 
-        if (privileges.canEditThreadMessageContent(message.id)) {
+        if (Privileges.ThreadMessage.canEditThreadMessageContent(message)) {
 
             actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}" uk-tooltip></a>`);
         }
-        if (privileges.canViewThreadMessageRequiredPrivileges(message.id)
-            || privileges.canViewThreadMessageAssignedPrivileges(message.id)) {
+        if (Privileges.ThreadMessage.canViewThreadMessageRequiredPrivileges(message)
+            || Privileges.ThreadMessage.canViewThreadMessageAssignedPrivileges(message)) {
 
             actions.appendRaw(`<a uk-icon="icon: settings" class="show-thread-message-privileges-link" title="Privileges" data-message-id="${messageId}" uk-tooltip></a>`);
         }
-        if (privileges.canMoveThreadMessage(message.id)) {
+        if (Privileges.ThreadMessage.canMoveThreadMessage(message)) {
 
             actions.appendRaw(`<a uk-icon="icon: move" class="move-thread-message-link" title="Move to different thread" data-message-id="${messageId}" uk-tooltip></a>`);
         }
-        if (privileges.canDeleteThreadMessage(message.id)) {
+        if (Privileges.ThreadMessage.canDeleteThreadMessage(message)) {
 
             actions.appendRaw(`<a uk-icon="icon: trash" class="delete-thread-message-link" title="Delete message" data-message-id="${messageId}" uk-tooltip></a>`);
         }
-        if (privileges.canCommentThreadMessage(message.id)) {
+        if (Privileges.ThreadMessage.canCommentThreadMessage(message)) {
 
             actions.appendRaw(`<a uk-icon="icon: warning" class="comment-thread-message-link" title="Flag & comment" data-message-id="${messageId}" uk-tooltip></a>`);
         }
@@ -452,7 +441,6 @@ export module ThreadMessagesView {
     function setupThreadMessageActionEvents(element: HTMLElement, messagesById, callback: IThreadMessageCallback,
                                             threadCallback: IThreadCallback,
                                             privilegesCallback: IPrivilegesCallback,
-                                            privileges: IThreadMessagePrivileges,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void) {
 
         DOMHelpers.addEventListeners(element, 'edit-thread-message-content-link', 'click', async (ev) => {
@@ -567,7 +555,7 @@ export module ThreadMessagesView {
             let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
             let message = messagesById[messageId];
 
-            PrivilegesView.showThreadMessagePrivileges(message, privilegesCallback, privileges);
+            PrivilegesView.showThreadMessagePrivileges(message, privilegesCallback);
         });
     }
 
@@ -668,15 +656,15 @@ export module ThreadMessagesView {
         }
     }
 
-    function createNewThreadMessageControl(threadId: string,
-                                           callback: IThreadCallback, privileges: IThreadPrivileges): MessageEditControl {
+    function createNewThreadMessageControl(thread: ThreadRepository.Thread,
+                                           callback: IThreadCallback): MessageEditControl {
 
         let result = document.createElement('div');
         result.classList.add('reply-container');
 
         let editControl: EditViews.EditControl;
 
-        if (privileges.canAddNewThreadMessage(threadId)) {
+        if (Privileges.Thread.canAddNewThreadMessage(thread)) {
 
             editControl = new EditViews.EditControl(result);
 
@@ -691,7 +679,7 @@ export module ThreadMessagesView {
                 let text = editControl.getText();
                 if (text.trim().length < 1) return;
 
-                let newMessageId = await callback.addThreadMessage(threadId, text);
+                let newMessageId = await callback.addThreadMessage(thread.id, text);
                 if (newMessageId) {
 
                     (new ThreadMessagesPage()).displayForThreadMessage(newMessageId);
@@ -745,9 +733,7 @@ export module ThreadMessagesView {
                                               onPageNumberChange: Views.PageNumberChangeCallback,
                                               getLinkForPage: Views.GetLinkForPageCallback,
                                               threadMessageCallback: IThreadMessageCallback,
-                                              threadMessagePrivileges: IThreadMessagePrivileges,
                                               userCallback: IUserCallback,
-                                              userPrivileges: IUserPrivileges,
                                               threadCallback: IThreadCallback,
                                               privilegesCallback: PageActions.IPrivilegesCallback): ThreadMessageCommentsPageContent {
 
@@ -759,7 +745,7 @@ export module ThreadMessagesView {
 
         if (info.user) {
 
-            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, userPrivileges, privilegesCallback));
+            resultList.appendChild(UsersView.createUserPageHeader(info.user, userCallback, privilegesCallback));
         }
         else {
 
@@ -774,7 +760,7 @@ export module ThreadMessagesView {
 
         let listContainer = document.createElement('div');
         listContainer.classList.add('thread-message-comments-list');
-        listContainer.appendChild(createCommentsList(collection, threadMessageCallback, threadMessagePrivileges,
+        listContainer.appendChild(createCommentsList(collection, threadMessageCallback,
             threadCallback, info.user));
         resultList.appendChild(listContainer);
 
@@ -788,7 +774,6 @@ export module ThreadMessagesView {
 
     export function createCommentsList(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
                                        callback: IThreadMessageCallback,
-                                       privileges: IThreadMessagePrivileges,
                                        threadCallback: IThreadCallback,
                                        user?: UserRepository.User): HTMLElement {
 
@@ -827,8 +812,8 @@ export module ThreadMessagesView {
 
             createThreadMessageHeader(messageContainer, message, collection, i, true);
             messageContainer.append(createThreadMessageDetails(message, true));
-            messageContainer.append(createThreadMessageAuthor(message, null, privileges));
-            messageContainer.append(createThreadMessageActionLinks(message, privileges, null));
+            messageContainer.append(createThreadMessageAuthor(message, null));
+            messageContainer.append(createThreadMessageActionLinks(message, null));
             messageContainer.append(createThreadMessageContent(message));
 
             if (i < (comments.length - 1)) {
@@ -845,7 +830,7 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
-        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, null, privileges);
+        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, null);
 
         setupMessageCommentLinks(element, callback);
 
