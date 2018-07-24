@@ -1,11 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     entry: {
         app: './src/app.ts',
-        others: './src/others.ts'
+        others: './src/others.ts',
+        styles: './src/styles.ts',
     },
     output: {
         filename: '[name].bundle.js',
@@ -16,23 +18,61 @@ module.exports = {
             {
                 from: path.resolve(__dirname, 'node_modules/highlight.js/lib/highlight.pack.js'),
                 to: path.resolve(__dirname, 'dist/highlight.pack.js')
+            },
+            {
+                from: path.resolve(__dirname, 'node_modules/highlight.js/styles/default.css'),
+                to: path.resolve(__dirname, 'dist/highlight_js.css')
+            },
+            {
+                from: path.resolve(__dirname, 'node_modules/katex/dist/katex.min.css'),
+                to: path.resolve(__dirname, 'dist/katex.min.css')
+            },
+            {
+                from: path.resolve(__dirname, 'node_modules/katex/dist/fonts'),
+                to: path.resolve(__dirname, 'dist/fonts')
             }
-        ])
+        ]),
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css'
+        })
     ],
     resolve: {
         extensions: ['.webpack.js', '.web.js', '.ts', '.js']
     },
     module: {
         rules: [
-            {test: /\.ts$/, loader: 'ts-loader'},
             {
-                test: /\.(png|woff(2)?|eot|ttf|svg)$/, loader: 'file-loader', options: {
-                    name: '[name].[ext]',
-                    publicPath: 'dist/'
-                }
+                test: /\.ts$/, use: [{
+                    loader: 'ts-loader'
+                }]
             },
-            {test: /\.css$/, loader: ['style-loader', 'css-loader']},
-            {test: /\.less$/, loader: ['style-loader', 'css-loader', 'less-loader']}
+            {
+                test: /\.(png|woff(2)?|eot|ttf|svg)$/,
+
+                use: [{
+                    loader: 'file-loader',
+
+                    options: {
+                        name: '[name].[ext]',
+                        publicPath: 'dist/'
+                    }
+                }]
+            },
+            {
+                test: /\.css$/, use: [{
+                    loader: 'style-loader'
+                }, {
+                    loader: 'css-loader'
+                }]
+            },
+            {
+                test: /\.less$/, use: [MiniCssExtractPlugin.loader, {
+                    loader: 'css-loader'
+                }, {
+                    loader: 'less-loader'
+                }]
+            }
         ]
     }
 };
