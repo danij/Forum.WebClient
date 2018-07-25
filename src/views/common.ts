@@ -65,13 +65,7 @@ export module Views {
                 return;
             }
 
-            container.innerHTML = '';
-            container.appendChild(newPageContent);
-
-            if (refreshMath) {
-
-                ViewsExtra.refreshMath(container);
-            }
+            setContent(container, newPageContent, refreshMath);
         }
         finally {
             clearTimeout(timer);
@@ -546,5 +540,91 @@ export module Views {
         let element = appender.toElement();
 
         return element;
+    }
+
+    const animatedDisplaySelectorAttribute = 'animated-display-selector';
+    const nrOfElementsToAnimate = 20;
+
+    export function markElementForAnimatedDisplay(element: HTMLElement, selector: string): void {
+
+        element.setAttribute(animatedDisplaySelectorAttribute, selector);
+    }
+
+    export function getElementMarkedForAnimatedDisplay(element: HTMLElement): HTMLElement {
+
+        if (element.attributes.getNamedItem(animatedDisplaySelectorAttribute)) {
+
+            return element;
+        }
+
+        return element.querySelector(`[${animatedDisplaySelectorAttribute}]`) as HTMLElement;
+    }
+
+    export function setContent(container: HTMLElement, newPageContent: HTMLElement, refreshMath: boolean) {
+
+        container.innerHTML = '';
+
+        let elementWithAnimationDisplaySelector = getElementMarkedForAnimatedDisplay(newPageContent);
+
+        const animatedDisplaySelector = elementWithAnimationDisplaySelector
+            ? elementWithAnimationDisplaySelector.getAttribute(animatedDisplaySelectorAttribute)
+            : null;
+        if (animatedDisplaySelector && animatedDisplaySelector.length) {
+
+            setContentWithAnimation(container, newPageContent, animatedDisplaySelector, refreshMath);
+        }
+        else {
+            container.appendChild(newPageContent);
+
+            if (refreshMath) {
+
+                ViewsExtra.refreshMath(container);
+            }
+        }
+    }
+
+    function transferChildElementsToArray(container: HTMLElement): HTMLElement[] {
+
+        let result: HTMLElement[] = [];
+        while (container.lastChild) {
+
+            result.push(container.lastChild as HTMLElement);
+            container.removeChild(container.lastChild);
+        }
+        return result.reverse();
+    }
+
+    function setContentWithAnimation(container: HTMLElement, newPageContent: HTMLElement, selector: string,
+                                     refreshMath: boolean) {
+
+        let subContainer = newPageContent.querySelector(selector) as HTMLElement;
+
+        let subContainerChildren = transferChildElementsToArray(subContainer);
+
+        let toAnimate = subContainerChildren.slice(0, nrOfElementsToAnimate);
+        let toSimplyAdd = subContainerChildren.slice(nrOfElementsToAnimate, subContainerChildren.length);
+
+        setTimeout(() => {
+
+            for (let element of toAnimate) {
+
+                element.classList.add('uk-animation-fade', 'uk-animation-fast');
+                subContainer.appendChild(element);
+            }
+        }, 0);
+
+        setTimeout(() => {
+
+            for (let element of toSimplyAdd) {
+
+                subContainer.appendChild(element);
+            }
+            if (refreshMath) {
+
+                ViewsExtra.refreshMath(container);
+            }
+        }, 250);
+
+        container.appendChild(newPageContent);
     }
 }
