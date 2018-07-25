@@ -597,7 +597,7 @@ export module Views {
     function setContentWithAnimation(container: HTMLElement, newPageContent: HTMLElement, selector: string,
                                      refreshMath: boolean) {
 
-        let subContainer = newPageContent.querySelector(selector) as HTMLElement;
+        let subContainer = (newPageContent.querySelector(selector) as HTMLElement) || newPageContent;
 
         let subContainerChildren = transferChildElementsToArray(subContainer);
 
