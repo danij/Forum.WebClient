@@ -2,17 +2,9 @@ import {RequestHandler} from './requestHandler'
 import {TagRepository} from "./tagRepository";
 import {UserRepository} from "./userRepository";
 import {CommonEntities} from "./commonEntities";
+import {ThreadMessageRepository} from "./threadMessageRepository";
 
 export module CategoryRepository {
-
-    export interface LatestMessage {
-        id: string;
-        created: number;
-        createdBy: UserRepository.User;
-        content: string;
-        threadId: string;
-        threadName: string;
-    }
 
     export interface Category extends CommonEntities.PrivilegesArray {
         id: string;
@@ -24,7 +16,7 @@ export module CategoryRepository {
         messageCount: number;
         threadTotalCount: number;
         messageTotalCount: number;
-        latestMessage: LatestMessage;
+        latestMessage: ThreadMessageRepository.LatestMessage;
         tags: TagRepository.Tag[];
         children: Category[];
         privileges: string[];
@@ -44,7 +36,8 @@ export module CategoryRepository {
         category: Category;
     }
 
-    export function filterLatestMessage(latestMessage: LatestMessage): LatestMessage {
+    export function filterLatestMessage(latestMessage: ThreadMessageRepository.LatestMessage):
+        ThreadMessageRepository.LatestMessage {
 
         if (null == latestMessage) {
 
@@ -90,8 +83,7 @@ export module CategoryRepository {
 
         result.categories = (result.categories || []).filter(c => null != c);
 
-        for (let category of result.categories)
-        {
+        for (let category of result.categories) {
             filterCategoryNulls(category);
         }
 

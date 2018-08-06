@@ -11,6 +11,7 @@ import {Privileges} from "../services/privileges";
 import {EditViews} from "./edit";
 import {TagRepository} from "../services/tagRepository";
 import {PrivilegesView} from "./privilegesView";
+import {ThreadMessagesView} from "./threadMessagesView";
 
 export module CategoriesView {
 
@@ -146,48 +147,7 @@ export module CategoriesView {
                 row.appendRaw(statisticsColumn);
             }
             {
-                let latestMessageColumn = new DOMAppender('<td class="latest-message uk-text-center">', '</td>');
-                row.append(latestMessageColumn);
-
-                const latestMessage = category.latestMessage;
-
-                if (latestMessage) {
-
-                    latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
-                    latestMessageColumn.append(UsersView.createAuthorSmall(latestMessage.createdBy));
-
-                    let threadTitle = latestMessage.threadName || 'unknown';
-
-                    let href = Pages.getThreadMessagesOfThreadUrlFull({
-                        id: latestMessage.threadId,
-                        name: latestMessage.threadName
-                    } as ThreadRepository.Thread);
-
-                    let threadTitleElement = document.createElement('a');
-                    threadTitleElement.classList.add('recent-message-thread-link');
-                    threadTitleElement.setAttribute('href', href);
-                    threadTitleElement.setAttribute('title', threadTitle);
-                    threadTitleElement.setAttribute('data-threadmessagethreadid', latestMessage.threadId);
-                    threadTitleElement.innerText = threadTitle;
-                    latestMessageColumn.appendElement(threadTitleElement);
-
-                    let recentMessageTime = new DOMAppender('<div class="recent-message-time uk-text-meta">', '</div>');
-                    latestMessageColumn.append(recentMessageTime);
-
-                    let recentMessageTimeContent = document.createElement('span');
-                    recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
-                    recentMessageTime.appendElement(recentMessageTimeContent);
-
-                    let messageContent = latestMessage.content || 'empty';
-
-                    let messageLink = document.createElement('a');
-                    messageLink.classList.add('recent-message-link');
-                    messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
-                    messageLink.setAttribute('title', messageContent);
-                    messageLink.setAttribute('data-threadmessageid', latestMessage.id);
-                    messageLink.innerText = messageContent;
-                    latestMessageColumn.appendElement(messageLink);
-                }
+                row.append(ThreadMessagesView.createLatestMessageColumnView(category.latestMessage));
             }
         }
 

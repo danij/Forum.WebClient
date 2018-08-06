@@ -735,13 +735,17 @@ html {
         }
 
         .author {
-            float: left;
             display: block;
+            flex-grow: 1;
 
             a {
                 font-variant-numeric: oldstyle-nums;
                 padding-right: 10px;
             }
+        }
+
+        .recent-message-time {
+            display: block;
         }
 
         a.recent-message-link {
@@ -763,6 +767,10 @@ html {
             color: black;
         }
     }
+}
+
+.date-time-flex {
+    display: flex;
 }
 
 .spaced-number {
@@ -1019,8 +1027,8 @@ html {
         }
 
         .author {
-            float: left;
             display: block;
+            flex-grow: 1;
 
             a {
                 font-variant-numeric: oldstyle-nums;

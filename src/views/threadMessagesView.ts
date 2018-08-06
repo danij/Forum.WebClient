@@ -836,4 +836,52 @@ export module ThreadMessagesView {
 
         return element;
     }
+
+    export function createLatestMessageColumnView(latestMessage: ThreadMessageRepository.LatestMessage) {
+
+        let latestMessageColumn = new DOMAppender('<td class="latest-message">', '</td>');
+
+        if (latestMessage) {
+
+            latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
+
+            let threadTitle = latestMessage.threadName || 'unknown';
+
+            let href = Pages.getThreadMessagesOfThreadUrlFull({
+                id: latestMessage.threadId,
+                name: latestMessage.threadName
+            } as ThreadRepository.Thread);
+
+            let threadTitleElement = document.createElement('a');
+            threadTitleElement.classList.add('recent-message-thread-link');
+            threadTitleElement.setAttribute('href', href);
+            threadTitleElement.setAttribute('title', threadTitle);
+            threadTitleElement.setAttribute('data-threadmessagethreadid', latestMessage.threadId);
+            threadTitleElement.innerText = threadTitle;
+            latestMessageColumn.appendElement(threadTitleElement);
+
+            let timeFlex = new DOMAppender('<div class="date-time-flex">', '</div>');
+            latestMessageColumn.append(timeFlex);
+
+            timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
+            let recentMessageTime = new DOMAppender('<div class="recent-message-time uk-text-meta">', '</div>');
+            timeFlex.append(recentMessageTime);
+
+            let recentMessageTimeContent = document.createElement('span');
+            recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
+            recentMessageTime.appendElement(recentMessageTimeContent);
+
+            let messageContent = latestMessage.content || 'empty';
+
+            let messageLink = document.createElement('a');
+            messageLink.classList.add('recent-message-link');
+            messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
+            messageLink.setAttribute('title', messageContent);
+            messageLink.setAttribute('data-threadmessageid', latestMessage.id);
+            messageLink.innerText = messageContent;
+            latestMessageColumn.appendElement(messageLink);
+        }
+
+        return latestMessageColumn;
+    }
 }

@@ -17,7 +17,7 @@ export module ThreadRepository {
         subscribedUsersCount: number;
         createdBy: UserRepository.User;
         messageCount: number;
-        latestMessage: CategoryRepository.LatestMessage;
+        latestMessage: ThreadMessageRepository.LatestMessage;
         visitedSinceLastChange: boolean;
         tags: TagRepository.Tag[];
         categories: CategoryRepository.Category[];

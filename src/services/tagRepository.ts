@@ -1,6 +1,7 @@
 import {RequestHandler} from "./requestHandler";
 import {CategoryRepository} from "./categoryRepository";
 import {CommonEntities} from "./commonEntities";
+import {ThreadMessageRepository} from "./threadMessageRepository";
 
 export module TagRepository {
 
@@ -11,7 +12,7 @@ export module TagRepository {
         created: number;
         threadCount: number;
         messageCount: number;
-        latestMessage: CategoryRepository.LatestMessage;
+        latestMessage: ThreadMessageRepository.LatestMessage;
         categories: CategoryRepository.Category[];
         privileges: string[];
     }

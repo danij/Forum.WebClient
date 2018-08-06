@@ -5,6 +5,15 @@ import {ThreadRepository} from "./threadRepository";
 
 export module ThreadMessageRepository {
 
+    export interface LatestMessage {
+        id: string;
+        created: number;
+        createdBy: UserRepository.User;
+        content: string;
+        threadId: string;
+        threadName: string;
+    }
+
     export interface ThreadMessageVote {
 
         userId: string;
