@@ -67,7 +67,7 @@ export module DisplayHelpers {
             .map(v => padPositiveWithZeros(v, 2))
             .join(':');
 
-        return `${dateString} ${timeString}`;
+        return `<span class="date-time"><span class="date">${dateString}</span> ${timeString}</span>`;
     }
 
     export function getDateTimeLargeSeparator(epochTime: number): string {

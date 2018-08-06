@@ -226,7 +226,7 @@ export module ThreadsView {
 
                     let recentMessageTime = document.createElement('span');
                     recentMessageTime.classList.add('uk-text-meta');
-                    recentMessageTime.innerText = DisplayHelpers.getDateTime(latestMessage.created);
+                    recentMessageTime.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
                     authorElement.appendElement(recentMessageTime);
 
                     let messageContent = latestMessage.content || 'empty';

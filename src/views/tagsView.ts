@@ -178,7 +178,7 @@ export module TagsView {
                     latestMessageColumn.append(recentMessageTime);
 
                     let recentMessageTimeContent = document.createElement('span');
-                    recentMessageTimeContent.innerText = DisplayHelpers.getDateTime(latestMessage.created);
+                    recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
                     recentMessageTime.appendElement(recentMessageTimeContent);
 
                     let messageContent = latestMessage.content || 'empty';
