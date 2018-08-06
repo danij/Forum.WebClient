@@ -169,8 +169,20 @@ export module EditViews {
         private updateContent(text: string): void {
 
             this.resultContainer.innerHTML = ViewsExtra.expandContent(text);
+            this.adjustGeneratedContent(this.resultContainer);
+
             ViewsExtra.adjustMessageContent(this.resultContainer.parentNode as HTMLElement);
             ViewsExtra.refreshMath(this.resultContainer);
+        }
+
+        private adjustGeneratedContent(element: HTMLElement): void {
+
+            const tables = element.getElementsByTagName('table');
+            for (let i = 0; i < tables.length; ++i) {
+
+                const table = tables[i] as HTMLElement;
+                table.classList.add('uk-table', 'uk-table-small', 'uk-table-striped');
+            }
         }
 
         private createEditControls(): HTMLElement {
