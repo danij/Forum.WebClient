@@ -55,9 +55,9 @@ export module DisplayHelpers {
     //     return date.toString();
     // }
 
-    export function getDateTime(epochTime: number): string {
+    function getDateTimeInternal(epochTime: number): {date: string, time: string} {
 
-        if (epochTime < 1) return '–';
+        if (epochTime < 1) return null;
 
         const date = dateFromEpochTime(epochTime);
 
@@ -67,7 +67,23 @@ export module DisplayHelpers {
             .map(v => padPositiveWithZeros(v, 2))
             .join(':');
 
-        return `<span class="date-time"><span class="date">${dateString}</span> ${timeString}</span>`;
+        return {date: dateString, time: timeString};
+    }
+
+    export function getDateTime(epochTime: number): string {
+
+        const dateTime = getDateTimeInternal(epochTime);
+        if (null === dateTime) return '–';
+
+        return `<span class="date-time"><span class="date">${dateTime.date}</span> ${dateTime.time}</span>`;
+    }
+
+    export function getDateTimeText(epochTime: number): string {
+
+        const dateTime = getDateTimeInternal(epochTime);
+        if (null === dateTime) return '–';
+
+        return `${dateTime.date} ${dateTime.time}`;
     }
 
     export function getDateTimeLargeSeparator(epochTime: number): string {
