@@ -20,10 +20,10 @@ export class TagsPage implements Pages.Page {
 
         Pages.changePageDontRefreshMath(async () => {
 
-            let tagCollection = await this.getAllTags();
+            const tagCollection = await this.getAllTags();
             if (null == tagCollection) return;
 
-            let elements = TagsView.createTagsPageContent(tagCollection.tags, {
+            const elements = TagsView.createTagsPageContent(tagCollection.tags, {
                 orderBy: this.orderBy,
                 sortOrder: this.sortOrder
             }, PageActions.getTagCallback());
@@ -38,7 +38,7 @@ export class TagsPage implements Pages.Page {
 
         if (url.indexOf('tags/') != 0) return false;
 
-        let page = new TagsPage();
+        const page = new TagsPage();
 
         page.orderBy = Pages.getOrderBy(url) || page.orderBy;
         page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
@@ -59,7 +59,7 @@ export class TagsPage implements Pages.Page {
 
         Views.changeContent(document.querySelector('#pageContentContainer .tags-list'), async () => {
 
-            let tagCollection = await this.getAllTags();
+            const tagCollection = await this.getAllTags();
 
             if (null == tagCollection) return null;
 
@@ -69,7 +69,7 @@ export class TagsPage implements Pages.Page {
 
     private setupSortControls(controls: HTMLElement): void {
 
-        let radioElements = controls.querySelectorAll('input[type=radio]');
+        const radioElements = controls.querySelectorAll('input[type=radio]');
 
         for (let i = 0; i < radioElements.length; ++i) {
 
@@ -81,7 +81,7 @@ export class TagsPage implements Pages.Page {
             });
         }
 
-        let selectElements = controls.querySelectorAll("select[name='sortOrder']");
+        const selectElements = controls.querySelectorAll("select[name='sortOrder']");
 
         for (let i = 0; i < selectElements.length; ++i) {
 

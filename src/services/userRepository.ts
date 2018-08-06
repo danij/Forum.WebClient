@@ -105,7 +105,7 @@ export module UserRepository {
 
     export async function getUsersSubscribedToThread(threadId: string): Promise<User[]> {
 
-        let collection = (await RequestHandler.get({
+        const collection = (await RequestHandler.get({
             path: 'users/subscribed/thread/' + encodeURIComponent(threadId)
         }) as UserCollection);
 
@@ -179,14 +179,14 @@ export module UserRepository {
 
         if (name && name.length) {
 
-            let searchResult = await RequestHandler.get({
+            const searchResult = await RequestHandler.get({
                 path: 'users/search/' + encodeURIComponent(name),
                 query: {}
             }) as UserSearchResult;
             const pageNumber = Math.floor(searchResult.index / searchResult.pageSize);
             const firstIndexInPage = pageNumber * searchResult.pageSize;
 
-            let collectionPromises: Promise<UserCollection>[] = [
+            const collectionPromises: Promise<UserCollection>[] = [
 
                 getUsers({
                     page: pageNumber,
@@ -211,7 +211,7 @@ export module UserRepository {
 
             let users = collections[0].users.slice(searchResult.index - firstIndexInPage);
 
-            let remaining = searchResult.pageSize - users.length;
+            const remaining = searchResult.pageSize - users.length;
             if (remaining > 0) {
 
                 users = users.concat(collections[1].users.slice(0, remaining));

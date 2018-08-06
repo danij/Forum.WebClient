@@ -47,11 +47,11 @@ export module TagRepository {
 
     function filterNulls(value: any): TagCollection {
 
-        let result = value as TagCollection;
+        const result = value as TagCollection;
 
         result.tags = (result.tags || []).filter(t => null != t);
 
-        for (let tag of result.tags) {
+        for (const tag of result.tags) {
 
             filterTag(tag);
         }
@@ -61,7 +61,7 @@ export module TagRepository {
 
     export async function getTags(request: GetTagsRequest): Promise<TagCollection> {
 
-        let result = filterNulls(await RequestHandler.get({
+        const result = filterNulls(await RequestHandler.get({
             path: 'tags',
             query: request || {orderBy: 'name', sort: 'ascending'}
         }));

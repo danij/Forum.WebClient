@@ -29,7 +29,7 @@ export class HomePage implements Pages.Page {
 
         Pages.changePage(async () => {
 
-            let categories = await Pages.getOrShowError(CategoryRepository.getRootCategories());
+            const categories = await Pages.getOrShowError(CategoryRepository.getRootCategories());
             if (null == categories) return;
 
             return CategoriesView.createRootCategoriesDisplay(categories, PageActions.getCategoryCallback());
@@ -47,11 +47,11 @@ export class HomePage implements Pages.Page {
             this.category = await Pages.getOrShowError(CategoryRepository.getCategoryById(id));
             if (null == this.category) return;
 
-            let threadCollection = await this.getCategoryThreads(this.category);
+            const threadCollection = await this.getCategoryThreads(this.category);
             let threadList : HTMLElement = null;
 
             if (null != threadCollection) {
-                let threadElements = ThreadsView.createThreadsPageContent(threadCollection, {
+                const threadElements = ThreadsView.createThreadsPageContent(threadCollection, {
                     orderBy: this.orderBy,
                     sortOrder: this.sortOrder,
                 }, (value: number) => this.onPageNumberChange(value),
@@ -76,7 +76,7 @@ export class HomePage implements Pages.Page {
         const category = Pages.getCategory(url);
         if (category) {
 
-            let page = new HomePage();
+            const page = new HomePage();
             page.orderBy = Pages.getOrderBy(url) || page.orderBy;
             page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
             page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
@@ -104,7 +104,7 @@ export class HomePage implements Pages.Page {
 
     private setupSortControls(controls: HTMLElement): void {
 
-        let radioElements = controls.querySelectorAll('input[type=radio]');
+        const radioElements = controls.querySelectorAll('input[type=radio]');
 
         for (let i = 0; i < radioElements.length; ++i) {
 
@@ -116,7 +116,7 @@ export class HomePage implements Pages.Page {
             });
         }
 
-        let selectElements = controls.querySelectorAll("select[name='sortOrder']");
+        const selectElements = controls.querySelectorAll("select[name='sortOrder']");
 
         for (let i = 0; i < selectElements.length; ++i) {
 
@@ -140,17 +140,17 @@ export class HomePage implements Pages.Page {
 
         Views.changeContent(document.getElementsByClassName('threads-table')[0] as HTMLElement, async () => {
 
-            let threadCollection = await this.getCategoryThreads(this.category);
+            const threadCollection = await this.getCategoryThreads(this.category);
 
             if (null == threadCollection) return;
 
-            let newTopPaginationControl = Views.createPaginationControl(threadCollection,
+            const newTopPaginationControl = Views.createPaginationControl(threadCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            let newBottomPaginationControl = Views.createPaginationControl(threadCollection,
+            const newBottomPaginationControl = Views.createPaginationControl(threadCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
@@ -171,7 +171,7 @@ export class HomePage implements Pages.Page {
 
     private refreshUrl() {
 
-        let title = Views.addPageNumber(this.category.name, this.pageNumber);
+        const title = Views.addPageNumber(this.category.name, this.pageNumber);
 
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
 

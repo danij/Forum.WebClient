@@ -25,7 +25,7 @@ export module CategoriesView {
                                        addSpace: boolean = false,
                                        classes: string = 'uk-button uk-button-text'): DOMAppender {
 
-        let result = new DOMAppender(`<a class="${classes}" href="` + Pages.getCategoryFullUrl(category) +
+        const result = new DOMAppender(`<a class="${classes}" href="` + Pages.getCategoryFullUrl(category) +
             '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
             DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
 
@@ -37,8 +37,8 @@ export module CategoriesView {
     export function createCategoriesTable(categories: CategoryRepository.Category[],
                                           callback: ICategoryCallback): HTMLElement {
 
-        let tableContainer = new DOMAppender('<div class="categories-table">', '</div>');
-        let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
+        const tableContainer = new DOMAppender('<div class="categories-table">', '</div>');
+        const table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
         tableContainer.append(table);
 
         if (categories.length < 1) {
@@ -56,17 +56,17 @@ export module CategoriesView {
             '    </tr>\n' +
             '</thead>';
         table.appendRaw(tableHeader);
-        let tbody = new DOMAppender('<tbody>', '</tbody>');
+        const tbody = new DOMAppender('<tbody>', '</tbody>');
         table.append(tbody);
 
-        for (let category of categories) {
+        for (const category of categories) {
 
             if (null == category) continue;
 
-            let row = new DOMAppender('<tr>', '</tr>');
+            const row = new DOMAppender('<tr>', '</tr>');
             tbody.append(row);
             {
-                let nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
+                const nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
                 row.append(nameColumn);
 
                 if (Privileges.Category.canEditCategoryDisplayOrder(category)) {
@@ -85,17 +85,17 @@ export module CategoriesView {
                     nameColumn.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: folder">', '</span>'));
                 }
 
-                let nameLink = createCategoryLink(category, true);
+                const nameLink = createCategoryLink(category, true);
                 nameColumn.append(nameLink);
                 nameColumn.appendRaw('<br/>');
 
-                let description = new DOMAppender('<span class="category-description">', '</span>');
+                const description = new DOMAppender('<span class="category-description">', '</span>');
                 nameColumn.append(description);
                 description.appendString(category.description);
 
                 if (category.children && category.children.length) {
 
-                    let childCategoryElement = new DOMAppender('<span class="category-children uk-text-small">', '</span>');
+                    const childCategoryElement = new DOMAppender('<span class="category-children uk-text-small">', '</span>');
                     if (category.description && category.description.length) {
                         nameColumn.appendRaw('<span class="uk-text-meta"> · Subcategories:</span> ');
                     }
@@ -106,9 +106,9 @@ export module CategoriesView {
 
                     for (let i = 0; i < category.children.length; ++i) {
 
-                        let childCategory = category.children[i];
+                        const childCategory = category.children[i];
 
-                        let element = createCategoryLink(childCategory, false, '');
+                        const element = createCategoryLink(childCategory, false, '');
                         childCategoryElement.append(element);
 
                         if (i < (category.children.length - 1)) {
@@ -118,10 +118,10 @@ export module CategoriesView {
                 }
             }
             {
-                let tagColumn = new DOMAppender('<td class="uk-text-center uk-table-shrink">', '</td>');
+                const tagColumn = new DOMAppender('<td class="uk-text-center uk-table-shrink">', '</td>');
                 row.append(tagColumn);
 
-                for (let tag of category.tags) {
+                for (const tag of category.tags) {
 
                     if (null == tag) continue;
 
@@ -130,7 +130,7 @@ export module CategoriesView {
                 }
             }
             {
-                let statisticsColumn = ('<td class="category-statistics uk-table-shrink">\n' +
+                const statisticsColumn = ('<td class="category-statistics uk-table-shrink">\n' +
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +
@@ -151,7 +151,7 @@ export module CategoriesView {
             }
         }
 
-        let result = tableContainer.toElement();
+        const result = tableContainer.toElement();
 
         Views.setupThreadsWithTagsLinks(result);
         Views.setupThreadsOfUsersLinks(result);
@@ -170,12 +170,12 @@ export module CategoriesView {
                                          callback: ICategoryCallback,
                                          privilegesCallback: IPrivilegesCallback): HTMLElement {
 
-        let result = document.createElement('div');
+        const result = document.createElement('div');
         result.classList.add('categories-list-header');
 
         if (Privileges.Category.canDeleteCategory(category)) {
 
-            let deleteLink = EditViews.createDeleteLink('Delete category');
+            const deleteLink = EditViews.createDeleteLink('Delete category');
             result.appendChild(deleteLink);
 
             deleteLink.addEventListener('click', () => {
@@ -187,7 +187,7 @@ export module CategoriesView {
             });
         }
 
-        let breadcrumbsList = document.createElement('ul');
+        const breadcrumbsList = document.createElement('ul');
         result.appendChild(breadcrumbsList);
         breadcrumbsList.classList.add('uk-breadcrumb');
 
@@ -195,10 +195,10 @@ export module CategoriesView {
 
             if (value.parent) addToBreadCrumbs(value.parent);
 
-            let element = document.createElement('li');
+            const element = document.createElement('li');
             breadcrumbsList.appendChild(element);
 
-            let link = document.createElement('a');
+            const link = document.createElement('a');
             element.appendChild(link);
 
             link.href = Pages.getCategoryFullUrl(value);
@@ -221,15 +221,15 @@ export module CategoriesView {
         }
 
         //add the current element also
-        let element = document.createElement('li');
+        const element = document.createElement('li');
         breadcrumbsList.appendChild(element);
 
-        let nameElement = document.createElement('span');
+        const nameElement = document.createElement('span');
         nameElement.innerText = category.name;
 
         if (Privileges.Category.canEditCategoryParent(category)) {
 
-            let link = EditViews.createEditLink('Edit category parent', 'git-branch');
+            const link = EditViews.createEditLink('Edit category parent', 'git-branch');
             element.appendChild(link);
             link.addEventListener('click', async () => {
 
@@ -255,7 +255,7 @@ export module CategoriesView {
 
         if (Privileges.Category.canEditCategoryName(category)) {
 
-            let link = EditViews.createEditLink('Edit category name');
+            const link = EditViews.createEditLink('Edit category name');
             element.appendChild(link);
             link.addEventListener('click', () => {
 
@@ -272,17 +272,17 @@ export module CategoriesView {
 
         element.appendChild(nameElement);
 
-        let descriptionContainer = document.createElement('span');
+        const descriptionContainer = document.createElement('span');
         element.appendChild(descriptionContainer);
         descriptionContainer.classList.add('category-description');
 
-        let descriptionElement = document.createElement('span');
+        const descriptionElement = document.createElement('span');
         descriptionElement.innerText = category.description || '';
         descriptionElement.classList.add('uk-text-meta');
 
         if (Privileges.Category.canEditCategoryDescription(category)) {
 
-            let link = EditViews.createEditLink('Edit category description');
+            const link = EditViews.createEditLink('Edit category description');
             descriptionContainer.appendChild(link);
             link.addEventListener('click', () => {
 

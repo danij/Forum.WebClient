@@ -22,11 +22,11 @@ export class UsersPage implements Pages.Page {
 
         Pages.changePage(async () => {
 
-            let userCollection = await this.getAllUsers();
+            const userCollection = await this.getAllUsers();
 
             if (null == userCollection) return null;
 
-            let elements = UsersView.createUsersPageContent(userCollection, {
+            const elements = UsersView.createUsersPageContent(userCollection, {
                     orderBy: this.orderBy,
                     sortOrder: this.sortOrder
                 }, (value: number) => this.onPageNumberChange(value),
@@ -46,7 +46,7 @@ export class UsersPage implements Pages.Page {
 
         if (url.indexOf('users/') != 0) return false;
 
-        let page = new UsersPage();
+        const page = new UsersPage();
 
         page.orderBy = Pages.getOrderBy(url) || page.orderBy;
         page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
@@ -69,17 +69,17 @@ export class UsersPage implements Pages.Page {
 
         Views.changeContent(document.querySelector('#pageContentContainer .users-list'), async () => {
 
-            let userCollection = await this.getAllUsers();
+            const userCollection = await this.getAllUsers();
 
             if (null == userCollection) return null;
 
-            let newTopPaginationControl = Views.createPaginationControl(userCollection,
+            const newTopPaginationControl = Views.createPaginationControl(userCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            let newBottomPaginationControl = Views.createPaginationControl(userCollection,
+            const newBottomPaginationControl = Views.createPaginationControl(userCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
@@ -91,7 +91,7 @@ export class UsersPage implements Pages.Page {
 
     private setupSortControls(controls: HTMLElement): void {
 
-        let radioElements = controls.querySelectorAll('input[type=radio]');
+        const radioElements = controls.querySelectorAll('input[type=radio]');
 
         for (let i = 0; i < radioElements.length; ++i) {
 
@@ -103,7 +103,7 @@ export class UsersPage implements Pages.Page {
             });
         }
 
-        let selectElements = controls.querySelectorAll("select[name='sortOrder']");
+        const selectElements = controls.querySelectorAll("select[name='sortOrder']");
 
         for (let i = 0; i < selectElements.length; ++i) {
 
@@ -134,7 +134,7 @@ export class UsersPage implements Pages.Page {
 
     private refreshUrl() {
 
-        let title = Views.addPageNumber('Users', this.pageNumber);
+        const title = Views.addPageNumber('Users', this.pageNumber);
 
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
         document.getElementById('UsersPageLink').classList.add('uk-active');

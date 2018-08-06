@@ -126,7 +126,7 @@ export module ThreadsView {
 
         let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
 
-        let tableHeader = '<thead>\n' +
+        const tableHeader = '<thead>\n' +
             '    <tr>\n' +
             '        <th class="uk-table-expand">Thread</th>\n' +
             '        <th class="uk-text-center thread-created-header uk-table-shrink">Added</th>\n' +
@@ -136,27 +136,27 @@ export module ThreadsView {
             '</thead>';
         table.appendRaw(tableHeader);
 
-        let tbody = new DOMAppender('<tbody>', '</tbody>');
+        const tbody = new DOMAppender('<tbody>', '</tbody>');
         table.append(tbody);
 
-        for (let thread of threads) {
+        for (const thread of threads) {
 
             if (null == thread) continue;
 
-            let row = new DOMAppender('<tr>', '</tr>');
+            const row = new DOMAppender('<tr>', '</tr>');
             tbody.append(row);
             {
-                let nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
+                const nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
                 row.append(nameColumn);
 
                 if (thread.pinned) {
                     nameColumn.append(new DOMAppender(`<span class="uk-icon pinned-icon" uk-icon="icon: star; ratio: 1.5" title="Thread is pinned" uk-tooltip>`, '</span>'));
                 }
 
-                let threadLink = createThreadsLink(thread, true, true);
+                const threadLink = createThreadsLink(thread, true, true);
                 nameColumn.append(threadLink);
 
-                let details = new DOMAppender('<div class="thread-tags">', '</div>');
+                const details = new DOMAppender('<div class="thread-tags">', '</div>');
                 nameColumn.append(details);
 
                 if (thread.voteScore < 0) {
@@ -170,7 +170,7 @@ export module ThreadsView {
                 }
                 details.appendRaw(' ');
 
-                for (let tag of thread.tags) {
+                for (const tag of thread.tags) {
 
                     if (null == tag) continue;
 
@@ -179,7 +179,7 @@ export module ThreadsView {
                 }
             }
             {
-                let createdColumn = new DOMAppender('<td class="thread-created uk-text-center uk-table-shrink">', '</td>');
+                const createdColumn = new DOMAppender('<td class="thread-created uk-text-center uk-table-shrink">', '</td>');
                 row.append(createdColumn);
 
                 createdColumn.append(UsersView.createAuthorSmall(thread.createdBy));
@@ -190,7 +190,7 @@ export module ThreadsView {
                     .replace('{Added}', DisplayHelpers.getDateTime(thread.created)));
             }
             {
-                let statisticsColumn = ('<td class="thread-statistics uk-table-shrink">\n' +
+                const statisticsColumn = ('<td class="thread-statistics uk-table-shrink">\n' +
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
@@ -212,7 +212,7 @@ export module ThreadsView {
                 row.appendRaw(statisticsColumn);
             }
             {
-                let latestMessageColumn = new DOMAppender('<td class="latest-message uk-text-center">', '</td>');
+                const latestMessageColumn = new DOMAppender('<td class="latest-message uk-text-center">', '</td>');
                 row.append(latestMessageColumn);
 
                 const latestMessage = thread.latestMessage;

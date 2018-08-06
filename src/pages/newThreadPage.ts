@@ -17,7 +17,7 @@ export class NewThreadPage implements Pages.Page {
 
         Pages.changePage(async () => {
 
-            let allTags = await TagRepository.getTagsCached();
+            const allTags = await TagRepository.getTagsCached();
 
             return ThreadsView.createAddNewThreadContent(allTags, (name, tagIds, message) => {
 
@@ -33,7 +33,7 @@ export class NewThreadPage implements Pages.Page {
 
         if (url.indexOf(NewThreadPage.PageUrl) != 0) return false;
 
-        let page = new NewThreadPage();
+        const page = new NewThreadPage();
 
         page.display();
         return true;

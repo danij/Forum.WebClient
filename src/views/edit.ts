@@ -45,7 +45,7 @@ export module EditViews {
 
     export function createAddNewButton(title): HTMLButtonElement {
 
-        let result = document.createElement('button') as HTMLButtonElement;
+        const result = document.createElement('button') as HTMLButtonElement;
 
         result.classList.add('uk-button', 'uk-button-primary', 'uk-button-small');
         result.innerText = title;
@@ -55,7 +55,7 @@ export module EditViews {
 
     export function wrapAddElements(...elements: HTMLElement[]): HTMLElement {
 
-        let result = DOMHelpers.parseHTML('<div class="uk-flex uk-flex-center add-new-container"></div>');
+        const result = DOMHelpers.parseHTML('<div class="uk-flex uk-flex-center add-new-container"></div>');
 
         for (const element of elements) {
 
@@ -68,14 +68,14 @@ export module EditViews {
     export function createEditLink(tooltip: string, icon: string = 'file-edit',
                                    classes: string[] = ['edit-link']): HTMLAnchorElement {
 
-        let result = document.createElement('a');
+        const result = document.createElement('a');
 
-        let span = document.createElement('span');
+        const span = document.createElement('span');
 
         span.classList.add('uk-icon');
         if (classes && classes.length) {
 
-            for (let cls of classes) {
+            for (const cls of classes) {
 
                 span.classList.add(cls);
             }
@@ -91,9 +91,9 @@ export module EditViews {
 
     export function createDeleteLink(tooltip: string, classes: string = 'uk-float-right'): HTMLAnchorElement {
 
-        let result = document.createElement('a');
+        const result = document.createElement('a');
 
-        let span = document.createElement('span');
+        const span = document.createElement('span');
 
         span.classList.add('uk-icon');
         if (classes) {
@@ -119,18 +119,18 @@ export module EditViews {
             this.textArea.classList.add('uk-textarea');
             this.textArea.value = initialText;
 
-            let previewContainer = document.createElement('div');
+            const previewContainer = document.createElement('div');
             previewContainer.classList.add('edit-preview', 'message-content', 'render-math');
             previewContainer.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Message Preview</span>'));
 
             previewContainer.appendChild(this.resultContainer = document.createElement('div'));
 
-            let grid = document.createElement('div');
+            const grid = document.createElement('div');
             container.appendChild(grid);
             grid.classList.add('uk-grid');
             grid.setAttribute('uk-grid', '');
 
-            let textAreaContainer = document.createElement('div');
+            const textAreaContainer = document.createElement('div');
             textAreaContainer.classList.add('edit-control-container');
             textAreaContainer.appendChild(this.createEditControls());
             textAreaContainer.appendChild(this.textArea);
@@ -148,7 +148,7 @@ export module EditViews {
 
         insertQuote(message: ThreadMessageRepository.ThreadMessage): void {
 
-            let quotedContent = message.content.split(/\n/).map((line) => `> ${line}`).join('\n');
+            const quotedContent = message.content.split(/\n/).map((line) => `> ${line}`).join('\n');
             this.textArea.value += `\n\n|_${message.createdBy.name} @ ${DisplayHelpers.getDateTime(message.created)}_|\n|:-:|\n\n${quotedContent}\n\n`;
         }
 
@@ -157,7 +157,7 @@ export module EditViews {
             let previousText = '';
             setInterval(() => {
 
-                let currentText = this.getText();
+                const currentText = this.getText();
                 if (currentText != previousText) {
 
                     previousText = currentText;
@@ -175,10 +175,10 @@ export module EditViews {
 
         private createEditControls(): HTMLElement {
 
-            let list = document.createElement('ul');
+            const list = document.createElement('ul');
             list.classList.add('uk-iconnav');
 
-            let actions = [
+            const actions = [
                 {icon: 'bold', title: 'Make selection bold', callback: () => this.addBold()},
                 {icon: 'italic', title: 'Make selection italic', callback: () => this.addItalic()},
                 {icon: 'code', title: 'Make selection monospace', callback: () => this.addMonospace()},
@@ -192,14 +192,14 @@ export module EditViews {
                 {icon: 'image', title: 'Add image reference', callback: () => this.addImage()}
             ];
 
-            for (let action of actions) {
+            for (const action of actions) {
 
-                let listElement = document.createElement('li');
+                const listElement = document.createElement('li');
                 list.appendChild(listElement);
 
                 if (action) {
 
-                    let link = document.createElement('a');
+                    const link = document.createElement('a');
                     listElement.appendChild(link);
 
                     link.setAttribute('uk-icon', `icon: ${action.icon}`);
@@ -270,10 +270,10 @@ export module EditViews {
 
         private addLink(): void {
 
-            let link = getInput('Please enter the link to add');
+            const link = getInput('Please enter the link to add');
             if (link) {
 
-                let title = getInput('Please enter the title for the link');
+                const title = getInput('Please enter the title for the link');
 
                 if (title) {
 
@@ -288,11 +288,11 @@ export module EditViews {
 
         private addImage(): void {
 
-            let link = getInput('Please enter the link to the image');
+            const link = getInput('Please enter the link to the image');
             if (link) {
 
-                let title = getInput('Please enter the image title');
-                let altText = title || link;
+                const title = getInput('Please enter the image title');
+                const altText = title || link;
 
                 if (title) {
 
@@ -306,11 +306,11 @@ export module EditViews {
 
         private replaceTextAtCurrentPosition(replaceFn: (value: string) => string): void {
 
-            let selectionStart = this.textArea.selectionStart;
-            let selectionEnd = this.textArea.selectionEnd;
-            let currentSelection = this.textArea.value.substring(selectionStart, selectionEnd);
+            const selectionStart = this.textArea.selectionStart;
+            const selectionEnd = this.textArea.selectionEnd;
+            const currentSelection = this.textArea.value.substring(selectionStart, selectionEnd);
 
-            let replacement = replaceFn(currentSelection);
+            const replacement = replaceFn(currentSelection);
 
             this.textArea.value = this.textArea.value.substr(0, selectionStart) + replacement +
                 this.textArea.value.substring(selectionEnd);

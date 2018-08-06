@@ -84,16 +84,18 @@ export module Views {
 
         let classString = '';
         if (null != classes) {
+
             classString = `class="${classes}"`
         }
 
-        let element = new DOMAppender(`<div uk-dropdown="${propertiesString}" ${classString}>`, '</div>');
+        const element = new DOMAppender(`<div uk-dropdown="${propertiesString}" ${classString}>`, '</div>');
 
-        let nav = new DOMAppender('<ul class="uk-nav uk-dropdown-nav">', '</ul>');
+        const nav = new DOMAppender('<ul class="uk-nav uk-dropdown-nav">', '</ul>');
         element.append(nav);
 
         if (null != header) {
-            let headerElement = new DOMAppender('<li class="uk-nav-header">', '</li>');
+
+            const headerElement = new DOMAppender('<li class="uk-nav-header">', '</li>');
             nav.append(headerElement);
 
             if (header instanceof DOMAppender) {
@@ -116,7 +118,7 @@ export module Views {
                                             onPageNumberChange: PageNumberChangeCallback,
                                             getLinkForPage: GetLinkForPageCallback) {
 
-        let result = document.createElement('div');
+        const result = document.createElement('div');
 
         if (info.totalCount < 1) {
 

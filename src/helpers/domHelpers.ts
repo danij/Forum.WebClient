@@ -46,26 +46,26 @@ export module DOMHelpers {
 
     export function escapeStringForContent(value: string): string {
 
-        let element = document.createElement('div');
+        const element = document.createElement('div');
         element.innerText = value;
         return element.innerHTML;
     }
 
     export function escapeStringForAttribute(value: string): string {
 
-        let span = document.createElement('span');
+        const span = document.createElement('span');
         span.setAttribute('a', value);
 
-        let html = span.outerHTML;
-        let firstQuote = html.indexOf('"');
-        let lastQuote = html.lastIndexOf('"');
+        const html = span.outerHTML;
+        const firstQuote = html.indexOf('"');
+        const lastQuote = html.lastIndexOf('"');
 
         return html.substring(firstQuote + 1, lastQuote).replace(/\n/g, '&#013;');
     }
 
     export function parseHTML(html: string): HTMLElement {
 
-        let element = document.createElement('template');
+        const element = document.createElement('template');
         element.innerHTML = html;
         return element.content.firstChild as HTMLElement;
     }
@@ -93,7 +93,7 @@ export module DOMHelpers {
         if (null == element.parentNode) {
             return element;
         }
-        let newElement = element.cloneNode(true) as T;
+        const newElement = element.cloneNode(true) as T;
         element.parentNode.replaceChild(newElement, element);
 
         return newElement;
@@ -117,7 +117,7 @@ export module DOMHelpers {
     export function addEventListeners(element: HTMLElement, className: string, eventType: string,
                                       handler: (ev: Event) => void): void {
 
-        let elements = element.getElementsByClassName(className);
+        const elements = element.getElementsByClassName(className);
         for (let i = 0; i < elements.length; ++i) {
 
             elements[i].addEventListener(eventType, handler);
@@ -128,7 +128,7 @@ export module DOMHelpers {
                                       handler: (ev: Event, value: string) => void): void {
 
         const attribute = `data-${dataName}`;
-        let elements = element.querySelectorAll(`[${attribute}]`);
+        const elements = element.querySelectorAll(`[${attribute}]`);
 
         for (let i = 0; i < elements.length; ++i) {
 

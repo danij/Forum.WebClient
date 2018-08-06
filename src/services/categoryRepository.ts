@@ -60,7 +60,7 @@ export module CategoryRepository {
 
         category.tags = (category.tags || []).filter(t => null != t);
 
-        for (let tag of category.tags) {
+        for (const tag of category.tags) {
 
             TagRepository.filterTag(tag);
         }
@@ -69,7 +69,7 @@ export module CategoryRepository {
 
         category.children = (category.children || []).filter(c => null != c);
 
-        for (let childCategory of category.children) {
+        for (const childCategory of category.children) {
 
             filterCategoryNulls(childCategory);
         }
@@ -79,11 +79,11 @@ export module CategoryRepository {
 
     function filterNulls(value: any): CategoryCollection {
 
-        let result = value as CategoryCollection;
+        const result = value as CategoryCollection;
 
         result.categories = (result.categories || []).filter(c => null != c);
 
-        for (let category of result.categories) {
+        for (const category of result.categories) {
             filterCategoryNulls(category);
         }
 
@@ -92,7 +92,7 @@ export module CategoryRepository {
 
     export async function getRootCategories(): Promise<Category[]> {
 
-        let result = filterNulls(await RequestHandler.get({
+        const result = filterNulls(await RequestHandler.get({
             path: 'categories/root'
         })).categories;
 
@@ -102,7 +102,7 @@ export module CategoryRepository {
 
     export async function getAllCategories(): Promise<Category[]> {
 
-        let result = filterNulls(await RequestHandler.get({
+        const result = filterNulls(await RequestHandler.get({
             path: 'categories/'
         })).categories;
 
@@ -112,13 +112,13 @@ export module CategoryRepository {
 
     export async function getAllCategoriesAsTree(): Promise<Category[]> {
 
-        let allCategories = (await getAllCategories()).sort(compareCategoriesByDisplayOrder);
+        const allCategories = (await getAllCategories()).sort(compareCategoriesByDisplayOrder);
 
-        let rootCategories: Category[] = [];
+        const rootCategories: Category[] = [];
 
-        for (let category of allCategories) {
+        for (const category of allCategories) {
 
-            let parent = allCategories.find((c) => {
+            const parent = allCategories.find((c) => {
                 return c.id == category.parentId;
             });
 
@@ -138,7 +138,7 @@ export module CategoryRepository {
 
     export async function getCategoryById(id: string): Promise<Category> {
 
-        let result = filterCategoryNulls((await RequestHandler.get({
+        const result = filterCategoryNulls((await RequestHandler.get({
             path: 'category/' + encodeURIComponent(id)
         }) as SingleCategory).category);
 
@@ -162,7 +162,7 @@ export module CategoryRepository {
         if (null == categories) return null;
         categories.sort(compareCategoriesByDisplayOrder);
 
-        for (let category of categories) {
+        for (const category of categories) {
 
             if (category.children && category.children.length) {
 

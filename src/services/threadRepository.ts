@@ -78,7 +78,7 @@ export module ThreadRepository {
 
         thread.messages = thread.messages || [];
 
-        for (let message of thread.messages) {
+        for (const message of thread.messages) {
 
             ThreadMessageRepository.filterMessageNullsWithoutParentThread(message);
             message.parentThread = message.parentThread || thread;
@@ -90,13 +90,13 @@ export module ThreadRepository {
     export function filterThreadNulls(thread: Thread): Thread {
 
         thread.tags = (thread.tags || []).filter(t => null != t);
-        for (let tag of thread.tags) {
+        for (const tag of thread.tags) {
 
             TagRepository.filterTag(tag);
         }
 
         thread.categories = (thread.categories || []).filter(c => null != c);
-        for (let category of thread.categories) {
+        for (const category of thread.categories) {
 
             CategoryRepository.filterCategoryNulls(category);
         }
@@ -108,11 +108,11 @@ export module ThreadRepository {
 
     function filterNulls(value: any): ThreadCollection {
 
-        let result = value as ThreadCollection;
+        const result = value as ThreadCollection;
 
         result.threads = (result.threads || []).filter(t => null != t);
 
-        for (let thread of result.threads) {
+        for (const thread of result.threads) {
             filterThreadNulls(thread);
         }
 
@@ -121,15 +121,15 @@ export module ThreadRepository {
 
     function filterPinnedThreadNulls(value: any): PinnedThreadCollection {
 
-        let result = value as PinnedThreadCollection;
+        const result = value as PinnedThreadCollection;
 
         result.threads = (result.threads || []).filter(t => null != t);
         result.pinned_threads = (result.pinned_threads || []).filter(t => null != t);
 
-        for (let thread of result.threads) {
+        for (const thread of result.threads) {
             filterThreadNulls(thread);
         }
-        for (let thread of result.pinned_threads) {
+        for (const thread of result.pinned_threads) {
             filterThreadNulls(thread);
         }
 
@@ -155,14 +155,14 @@ export module ThreadRepository {
 
     export async function getThreadsOfUser(user: UserRepository.User, request: GetThreadsRequest): Promise<ThreadCollection> {
 
-        let result = filterNulls(await RequestHandler.get({
+        const result = filterNulls(await RequestHandler.get({
             path: 'threads/user/' + encodeURIComponent(user.id),
             query: request
         }));
 
         if (result.threads && result.threads.length) {
 
-            for (let thread of result.threads) {
+            for (const thread of result.threads) {
 
                 //createdBy might not be populated when querying threads of a user
                 thread.createdBy = thread.createdBy || user;
@@ -175,14 +175,14 @@ export module ThreadRepository {
     export async function getSubscribedThreadsOfUser(user: UserRepository.User,
                                                      request: GetThreadsRequest): Promise<ThreadCollection> {
 
-        let result = filterNulls(await RequestHandler.get({
+        const result = filterNulls(await RequestHandler.get({
             path: 'threads/subscribed/user/' + encodeURIComponent(user.id),
             query: request
         }));
 
         if (result.threads && result.threads.length) {
 
-            for (let thread of result.threads) {
+            for (const thread of result.threads) {
 
                 //createdBy might not be populated when querying threads of a user
                 thread.createdBy = thread.createdBy || user;
@@ -203,7 +203,7 @@ export module ThreadRepository {
 
     export async function getThreadById(id: string, request: GetThreadsRequest): Promise<ThreadWithMessagesResponse> {
 
-        let response = await RequestHandler.get({
+        const response = await RequestHandler.get({
             path: 'threads/id/' + encodeURIComponent(id),
             query: request
         }) as ThreadWithMessagesResponse;
@@ -226,14 +226,14 @@ export module ThreadRepository {
 
         if (name && name.length) {
 
-            let searchResult = await RequestHandler.get({
+            const searchResult = await RequestHandler.get({
                 path: 'threads/search/' + encodeURIComponent(name),
                 query: {}
             }) as ThreadSearchResult;
             const pageNumber = Math.floor(searchResult.index / searchResult.pageSize);
             const firstIndexInPage = pageNumber * searchResult.pageSize;
 
-            let collectionPromises: Promise<ThreadCollection>[] = [
+            const collectionPromises: Promise<ThreadCollection>[] = [
 
                 getThreads({
                     page: pageNumber,
@@ -258,7 +258,7 @@ export module ThreadRepository {
 
             let threads = collections[0].threads.slice(searchResult.index - firstIndexInPage);
 
-            let remaining = searchResult.pageSize - threads.length;
+            const remaining = searchResult.pageSize - threads.length;
             if (remaining > 0) {
 
                 threads = threads.concat(collections[1].threads.slice(0, remaining));
@@ -271,7 +271,7 @@ export module ThreadRepository {
 
     export async function searchThreadsByName(name: string): Promise<Thread[]> {
 
-        let idsResult = await RequestHandler.get({
+        const idsResult = await RequestHandler.get({
             path: '../search/threads?q=' + encodeURIComponent(name)
         });
 
@@ -286,18 +286,18 @@ export module ThreadRepository {
 
     function appendPinnedThreadCollection(collection: PinnedThreadCollection): ThreadCollection {
 
-        let oldThreads = collection.threads;
+        const oldThreads = collection.threads;
         collection.pinned_threads = collection.pinned_threads || [];
         collection.threads = collection.pinned_threads;
 
-        let pinnedThreadIds = {};
+        const pinnedThreadIds = {};
 
-        for (let thread of collection.pinned_threads) {
+        for (const thread of collection.pinned_threads) {
 
             pinnedThreadIds[thread.id] = true;
         }
 
-        for (let thread of oldThreads) {
+        for (const thread of oldThreads) {
 
             if (pinnedThreadIds.hasOwnProperty(thread.id)) continue;
 
