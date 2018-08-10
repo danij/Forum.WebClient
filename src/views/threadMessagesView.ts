@@ -839,11 +839,14 @@ export module ThreadMessagesView {
 
     export function createLatestMessageColumnView(latestMessage: ThreadMessageRepository.LatestMessage) {
 
-        let latestMessageColumn = new DOMAppender('<td class="latest-message">', '</td>');
+        const latestMessageColumn = new DOMAppender('<td class="latest-message">', '</td>');
 
         if (latestMessage) {
 
-            latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
+            const container = new DOMAppender('<div>', '</div>');
+            latestMessageColumn.append(container);
+
+            container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
             let threadTitle = latestMessage.threadName || 'unknown';
 
@@ -858,10 +861,10 @@ export module ThreadMessagesView {
             threadTitleElement.setAttribute('title', threadTitle);
             threadTitleElement.setAttribute('data-threadmessagethreadid', latestMessage.threadId);
             threadTitleElement.innerText = threadTitle;
-            latestMessageColumn.appendElement(threadTitleElement);
+            container.appendElement(threadTitleElement);
 
             let timeFlex = new DOMAppender('<div class="date-time-flex">', '</div>');
-            latestMessageColumn.append(timeFlex);
+            container.append(timeFlex);
 
             timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
             let recentMessageTime = new DOMAppender('<div class="recent-message-time uk-text-meta">', '</div>');
@@ -879,7 +882,7 @@ export module ThreadMessagesView {
             messageLink.setAttribute('title', messageContent);
             messageLink.setAttribute('data-threadmessageid', latestMessage.id);
             messageLink.innerText = messageContent;
-            latestMessageColumn.appendElement(messageLink);
+            container.appendElement(messageLink);
         }
 
         return latestMessageColumn;

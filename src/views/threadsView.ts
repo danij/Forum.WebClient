@@ -215,14 +215,17 @@ export module ThreadsView {
                 const latestMessageColumn = new DOMAppender('<td class="latest-message uk-text-center">', '</td>');
                 row.append(latestMessageColumn);
 
+                const container = new DOMAppender('<div>', '</div>');
+                latestMessageColumn.append(container);
+
                 const latestMessage = thread.latestMessage;
 
                 if (latestMessage) {
 
-                    latestMessageColumn.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
+                    container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
                     let authorElement = UsersView.createAuthorSmall(latestMessage.createdBy);
-                    latestMessageColumn.append(authorElement);
+                    container.append(authorElement);
 
                     let recentMessageTime = document.createElement('span');
                     recentMessageTime.classList.add('uk-text-meta');
@@ -237,7 +240,7 @@ export module ThreadsView {
                     messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
                     messageLink.setAttribute('data-threadmessageid', latestMessage.id);
                     messageLink.innerText = messageContent;
-                    latestMessageColumn.appendElement(messageLink);
+                    container.appendElement(messageLink);
                 }
             }
         }
