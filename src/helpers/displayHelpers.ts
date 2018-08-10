@@ -88,7 +88,7 @@ export module DisplayHelpers {
 
     export function getDateTimeLargeSeparator(epochTime: number): string {
 
-        return getDateTime(epochTime).replace(' ', '\u2002'); //using en-space for a better visual separation
+        return getDateTimeText(epochTime).replace(' ', '\u2002'); //using en-space for a better visual separation
     }
 
     export function getShortDate(epochTime: number): string {
