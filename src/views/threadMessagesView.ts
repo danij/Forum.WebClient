@@ -615,7 +615,7 @@ export module ThreadMessagesView {
 
         let time = new DOMAppender('<span class="message-time">', '</span>');
         contentDiv.append(time);
-        time.appendString(DisplayHelpers.getDateTime(comment.created));
+        time.appendRaw(DisplayHelpers.getDateTime(comment.created));
 
         let ip = new DOMAppender('<samp>', '</samp>');
         contentDiv.append(ip);
