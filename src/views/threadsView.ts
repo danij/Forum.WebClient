@@ -212,7 +212,7 @@ export module ThreadsView {
                 row.appendRaw(statisticsColumn);
             }
             {
-                const latestMessageColumn = new DOMAppender('<td class="latest-message uk-text-center">', '</td>');
+                const latestMessageColumn = new DOMAppender('<td class="latest-message">', '</td>');
                 row.append(latestMessageColumn);
 
                 const container = new DOMAppender('<div>', '</div>');
@@ -224,13 +224,15 @@ export module ThreadsView {
 
                     container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
-                    let authorElement = UsersView.createAuthorSmall(latestMessage.createdBy);
-                    container.append(authorElement);
+                    let timeFlex = new DOMAppender('<div class="date-time-flex">', '</div>');
+                    container.append(timeFlex);
+
+                    timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
 
                     let recentMessageTime = document.createElement('span');
                     recentMessageTime.classList.add('uk-text-meta');
                     recentMessageTime.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
-                    authorElement.appendElement(recentMessageTime);
+                    timeFlex.appendElement(recentMessageTime);
 
                     let messageContent = latestMessage.content || 'empty';
 

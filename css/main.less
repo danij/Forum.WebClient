@@ -871,6 +871,7 @@ html {
 
         .author {
             display: block;
+            flex-grow: 1;
 
             a {
                 display: block;
@@ -879,15 +880,18 @@ html {
             }
         }
 
+        .date-time-flex {
+            margin-top: -5px;
+        }
+
         a.recent-message-link {
             display: block;
             text-decoration: none;
-            white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
             color: black;
             font-size: 0.70rem;
-            max-height: 20px;
+            max-height: 50px;
         }
 
         a.recent-message-thread-link {
