@@ -624,13 +624,13 @@ export module ThreadMessagesView {
 
             contentDiv.appendRaw(solvedCommentSpan);
         }
-        else {
+        else if (Privileges.ThreadMessage.canSolveThreadMessageComment(comment.message)) {
 
-            let data = `data-comment-id="${DOMHelpers.escapeStringForAttribute(comment.id)}"`;
+            const data = `data-comment-id="${DOMHelpers.escapeStringForAttribute(comment.id)}"`;
             contentDiv.appendRaw(`<a class="solve-message-comment-link uk-float-right" ${data} title="Set comment to solved" uk-tooltip><span class="uk-icon" uk-icon="check"></span></a>`);
         }
 
-        let paragraph = dA('<p>');
+        const paragraph = dA('<p>');
         contentDiv.append(paragraph);
         paragraph.appendString(comment.content);
     }
