@@ -8,9 +8,9 @@ import {PrivilegesRepository} from "./privilegesRepository";
 
 export module Privileges {
 
-    function hasPrivilege(privileges: CommonEntities.PrivilegesArray, privilege: string): boolean {
+    function hasPrivilege(privilegesEntity: CommonEntities.PrivilegesArray, privilege: string): boolean {
 
-        return privileges.privileges.indexOf(privilege) >= 0;
+        return privilegesEntity.privileges && privilegesEntity.privileges.indexOf(privilege) >= 0;
     }
 
     export namespace Category {
