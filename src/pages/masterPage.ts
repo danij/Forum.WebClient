@@ -29,7 +29,7 @@ export module MasterPage {
     let recentThreadsLatestValue: string = '';
     let recentThreadMessagesLatestValue: string = '';
 
-    export function bootstrap(): void {
+    export async function bootstrap(): Promise<void> {
 
         MasterView.applyPageConfig(masterPageConfig);
 
@@ -56,7 +56,24 @@ export module MasterPage {
             return link;
         });
 
+        const loadForumWidePrivilegesPromise = Privileges.ForumWide.loadForumWidePrivileges();
+
         setupSearch();
+
+        ViewsExtra.init();
+        fixLinks();
+
+        window.onpopstate = () => onGoBack();
+
+        setupUpdates();
+        setupSettings();
+
+        await loadForumWidePrivilegesPromise;
+        afterGettingForumWidePrivileges();
+        loadCurrentPage();
+    }
+
+    function afterGettingForumWidePrivileges() : void {
 
         if (Privileges.ForumWide.canViewAllComments()) {
 
@@ -68,14 +85,10 @@ export module MasterPage {
             document.getElementById('ForumWidePrivilegesLink').classList.remove('uk-hidden');
         }
 
-        ViewsExtra.init();
-        fixLinks();
+        if (Privileges.ForumWide.canAddNewThread()) {
 
-        window.onpopstate = () => onGoBack();
-        loadCurrentPage();
-
-        setupUpdates();
-        setupSettings();
+            document.getElementById('NewThreadPageLink').classList.remove('uk-hidden');
+        }
     }
 
     function fixLinks() {

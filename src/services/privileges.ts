@@ -4,6 +4,7 @@ import {TagRepository} from "./tagRepository";
 import {ThreadRepository} from "./threadRepository";
 import {ThreadMessageRepository} from "./threadMessageRepository";
 import {UserRepository} from "./userRepository";
+import {PrivilegesRepository} from "./privilegesRepository";
 
 export module Privileges {
 
@@ -189,28 +190,35 @@ export module Privileges {
 
     export namespace ForumWide {
 
+        let forumWidePrivilegesOfCurrentUser: CommonEntities.PrivilegesArray;
+
         export function canViewAllComments(): boolean {
-            return true;
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, "TODO");
         }
 
         export function canViewForumWideRequiredPrivileges(): boolean {
-            return true;
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, "TODO");
         }
 
         export function canViewForumWideAssignedPrivileges(): boolean {
-            return true;
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, "TODO");
         }
 
         export function canAddNewRootCategory(): boolean {
-            return true;
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, "TODO");
         }
 
         export function canAddNewTag(): boolean {
-            return true;
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, "TODO");
         }
 
         export function canAddNewThread(): boolean {
-            return true;
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, "TODO");
+        }
+
+        export async function loadForumWidePrivileges(): Promise<void> {
+
+            forumWidePrivilegesOfCurrentUser = await PrivilegesRepository.getForumWidePrivilegesOfCurrentUser();
         }
     }
 }

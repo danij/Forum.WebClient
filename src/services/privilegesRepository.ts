@@ -1,4 +1,5 @@
 import {RequestHandler} from "./requestHandler";
+import {CommonEntities} from "./commonEntities";
 
 export module PrivilegesRepository {
 
@@ -133,5 +134,12 @@ export module PrivilegesRepository {
         return filterAssignedPrivilegesCollection(await RequestHandler.get({
             path: 'privileges/assigned/user/' + encodeURIComponent(userId)
         }));
+    }
+
+    export async function getForumWidePrivilegesOfCurrentUser() : Promise<CommonEntities.PrivilegesArray> {
+
+        return (await RequestHandler.get({
+            path: 'privileges/forum_wide/current_user'
+        }) as CommonEntities.PrivilegesArray);
     }
 }
