@@ -25,6 +25,7 @@ export module ThreadsView {
     import IUserCallback = PageActions.IUserCallback;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
     import dA = DOMHelpers.dA;
+    import cE = DOMHelpers.cE;
 
     export class ThreadsPageContent {
 
@@ -62,7 +63,7 @@ export module ThreadsView {
 
         let result = new ThreadsPageContent();
 
-        let resultList = document.createElement('div');
+        let resultList = cE('div');
 
         if (info.tag) {
 
@@ -77,7 +78,7 @@ export module ThreadsView {
         resultList.appendChild(
             result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        let tableContainer = document.createElement('div');
+        let tableContainer = cE('div');
         resultList.appendChild(tableContainer);
         tableContainer.classList.add('threads-table');
         tableContainer.appendChild(createThreadsTable(collection.threads));
@@ -230,14 +231,14 @@ export module ThreadsView {
 
                     timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
 
-                    let recentMessageTime = document.createElement('span');
+                    let recentMessageTime = cE('span');
                     recentMessageTime.classList.add('uk-text-meta');
                     recentMessageTime.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
                     timeFlex.appendElement(recentMessageTime);
 
                     let messageContent = latestMessage.content || 'empty';
 
-                    let messageLink = document.createElement('a');
+                    let messageLink = cE('a');
                     messageLink.classList.add('recent-message-link');
                     messageLink.setAttribute('title', messageContent);
                     messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
@@ -318,10 +319,10 @@ export module ThreadsView {
                                            callback: IThreadCallback,
                                            privilegesCallback: IPrivilegesCallback): HTMLElement {
 
-        let element = document.createElement('div');
+        let element = cE('div');
         element.classList.add('uk-container', 'uk-container-expand', 'thread-header');
 
-        let card = document.createElement('div');
+        let card = cE('div');
         element.appendChild(card);
         card.classList.add('uk-card', 'uk-card-body');
 
@@ -330,18 +331,18 @@ export module ThreadsView {
             <a uk-icon="icon: settings" href="editThreadPrivileges" title="Edit thread access" uk-tooltip
                uk-toggle="target: #privileges-modal"></a>
             */
-            let actions = document.createElement('div');
+            let actions = cE('div');
             card.appendChild(actions);
             actions.classList.add('thread-actions');
 
-            let subscribeToThread = document.createElement('button');
+            let subscribeToThread = cE('button');
             actions.appendChild(subscribeToThread);
             subscribeToThread.classList.add('uk-button', 'uk-button-primary', 'uk-button-small');
             subscribeToThread.innerText = 'Subscribe';
 
             actions.appendChild(document.createTextNode(' '));
 
-            let unSubscribeFromThread = document.createElement('button');
+            let unSubscribeFromThread = cE('button');
             actions.appendChild(unSubscribeFromThread);
             unSubscribeFromThread.classList.add('uk-button', 'uk-button-danger', 'uk-button-small');
             unSubscribeFromThread.innerText = 'Unsubscribe';
@@ -408,7 +409,7 @@ export module ThreadsView {
             }
         }
         {
-            let title = document.createElement('div');
+            let title = cE('div');
             card.appendChild(title);
             title.classList.add('uk-align-left', 'thread-title');
 
@@ -427,7 +428,7 @@ export module ThreadsView {
                 });
             }
 
-            let threadTitle = document.createElement('span');
+            let threadTitle = cE('span');
             if (Privileges.Thread.canEditThreadName(thread)) {
                 let link = EditViews.createEditLink('Edit thread name');
                 title.appendChild(link);
@@ -459,7 +460,7 @@ export module ThreadsView {
             card.appendChild(DOMHelpers.parseHTML('<div class="uk-clearfix"></div>'));
         }
         {
-            let details = document.createElement('div');
+            let details = cE('div');
             card.appendChild(details);
             details.classList.add('thread-details', 'uk-align-left');
 
@@ -510,7 +511,7 @@ export module ThreadsView {
             }
             details.appendChild(document.createTextNode(`${DisplayHelpers.intToString(thread.visited)} total views · `));
 
-            let subscribedUsersLink = document.createElement('a');
+            let subscribedUsersLink = cE('a');
             details.appendChild(subscribedUsersLink);
             subscribedUsersLink.innerText = `${DisplayHelpers.intToString(thread.subscribedUsersCount)} subscribed users`;
             subscribedUsersLink.addEventListener('click', (ev) => {
@@ -573,7 +574,7 @@ export module ThreadsView {
                 const threads = await callback.searchThreadsByInitial(searchByNameElement.value);
                 for (const thread of threads) {
 
-                    let option = document.createElement('option');
+                    let option = cE('option');
                     option.setAttribute('value', thread.id);
                     option.innerText = thread.name;
                     option.setAttribute('title', thread.createdBy.name + ' @ ' + DisplayHelpers.getDateTime(thread.created));
@@ -610,7 +611,7 @@ export module ThreadsView {
     export function createAddNewThreadContent(allTags: TagRepository.Tag[],
                                               callback: (name: string, tagIds: string[], message: string) => Promise<string>): HTMLElement {
 
-        let result = document.createElement('div');
+        let result = cE('div');
 
         result.appendChild(DOMHelpers.parseHTML('<h2>Add a New Thread</h2>'));
 

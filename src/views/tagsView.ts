@@ -16,6 +16,7 @@ export module TagsView {
     import DOMAppender = DOMHelpers.DOMAppender;
     import ITagCallback = PageActions.ITagCallback;
     import dA = DOMHelpers.dA;
+    import cE = DOMHelpers.cE;
 
     export function createTagElement(tag: TagRepository.Tag): DOMAppender {
 
@@ -46,7 +47,7 @@ export module TagsView {
 
         let result = new TagsPageContent();
 
-        let resultList = document.createElement("div");
+        let resultList = cE("div");
 
         resultList.appendChild(result.sortControls = createTagListSortControls(info));
 
@@ -55,7 +56,7 @@ export module TagsView {
             resultList.appendChild(createAddNewTagElement(callback));
         }
 
-        let tagsList = document.createElement('div');
+        let tagsList = cE('div');
         resultList.appendChild(tagsList);
 
         tagsList.classList.add('tags-list');
@@ -193,10 +194,10 @@ export module TagsView {
                                         callback: ITagCallback,
                                         privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
-        let container = document.createElement('div');
+        let container = cE('div');
         container.classList.add('uk-grid-small', 'tag-page-header');
 
-        let badge = document.createElement('span');
+        let badge = cE('span');
 
         if (Privileges.Tag.canEditTagName(tag)) {
 
@@ -215,7 +216,7 @@ export module TagsView {
             });
         }
 
-        let badgeContainer = document.createElement('div');
+        let badgeContainer = cE('div');
         container.appendChild(badgeContainer);
         badgeContainer.classList.add('uk-display-inline-block');
 
@@ -248,11 +249,11 @@ export module TagsView {
             });
         }
 
-        let threadCount = document.createElement('span');
+        let threadCount = cE('span');
         container.appendChild(threadCount);
         threadCount.innerText = `${DisplayHelpers.intToString(tag.threadCount)} threads`;
 
-        let messageCount = document.createElement('span');
+        let messageCount = cE('span');
         container.appendChild(messageCount);
         messageCount.innerText = `${DisplayHelpers.intToString(tag.messageCount)} messages`;
 
@@ -264,7 +265,7 @@ export module TagsView {
 
                 const category = tag.categories[i];
 
-                let element = document.createElement('a');
+                let element = cE('a');
                 container.appendChild(element);
 
                 element.setAttribute('href', Pages.getCategoryFullUrl(category));
@@ -305,7 +306,7 @@ export module TagsView {
 
         for (let tag of tags) {
 
-            let option = document.createElement('option');
+            let option = cE('option');
             option.setAttribute('value', tag.id);
             option.innerText = tag.name;
 

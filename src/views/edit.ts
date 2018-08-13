@@ -7,6 +7,8 @@ import {DisplayHelpers} from "../helpers/displayHelpers";
 
 export module EditViews {
 
+    import cE = DOMHelpers.cE;
+
     export function getInput(title: string, value: string = ''): string {
 
         return prompt(title, value);
@@ -45,7 +47,7 @@ export module EditViews {
 
     export function createAddNewButton(title): HTMLButtonElement {
 
-        const result = document.createElement('button') as HTMLButtonElement;
+        const result = cE('button') as HTMLButtonElement;
 
         result.classList.add('uk-button', 'uk-button-primary', 'uk-button-small');
         result.innerText = title;
@@ -68,9 +70,9 @@ export module EditViews {
     export function createEditLink(tooltip: string, icon: string = 'file-edit',
                                    classes: string[] = ['edit-link']): HTMLAnchorElement {
 
-        const result = document.createElement('a');
+        const result = cE('a') as HTMLAnchorElement;
 
-        const span = document.createElement('span');
+        const span = cE('span');
 
         span.classList.add('uk-icon');
         if (classes && classes.length) {
@@ -91,9 +93,9 @@ export module EditViews {
 
     export function createDeleteLink(tooltip: string, classes: string = 'uk-float-right'): HTMLAnchorElement {
 
-        const result = document.createElement('a');
+        const result = cE('a') as HTMLAnchorElement;
 
-        const span = document.createElement('span');
+        const span = cE('span');
 
         span.classList.add('uk-icon');
         if (classes) {
@@ -115,22 +117,22 @@ export module EditViews {
 
         constructor(container: HTMLElement, initialText: string = '') {
 
-            this.textArea = document.createElement('textarea');
+            this.textArea = cE('textarea') as HTMLTextAreaElement;
             this.textArea.classList.add('uk-textarea');
             this.textArea.value = initialText;
 
-            const previewContainer = document.createElement('div');
+            const previewContainer = cE('div');
             previewContainer.classList.add('edit-preview', 'message-content', 'render-math');
             previewContainer.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Message Preview</span>'));
 
-            previewContainer.appendChild(this.resultContainer = document.createElement('div'));
+            previewContainer.appendChild(this.resultContainer = cE('div') as HTMLDivElement);
 
-            const grid = document.createElement('div');
+            const grid = cE('div');
             container.appendChild(grid);
             grid.classList.add('uk-grid');
             grid.setAttribute('uk-grid', '');
 
-            const textAreaContainer = document.createElement('div');
+            const textAreaContainer = cE('div');
             textAreaContainer.classList.add('edit-control-container');
             textAreaContainer.appendChild(this.createEditControls());
             textAreaContainer.appendChild(this.textArea);
@@ -187,7 +189,7 @@ export module EditViews {
 
         private createEditControls(): HTMLElement {
 
-            const list = document.createElement('ul');
+            const list = cE('ul');
             list.classList.add('uk-iconnav');
 
             const actions = [
@@ -206,12 +208,12 @@ export module EditViews {
 
             for (const action of actions) {
 
-                const listElement = document.createElement('li');
+                const listElement = cE('li');
                 list.appendChild(listElement);
 
                 if (action) {
 
-                    const link = document.createElement('a');
+                    const link = cE('a');
                     listElement.appendChild(link);
 
                     link.setAttribute('uk-icon', `icon: ${action.icon}`);

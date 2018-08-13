@@ -24,6 +24,7 @@ export module ThreadMessagesView {
     import reloadPageIfOk = EditViews.reloadPageIfOk;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
     import dA = DOMHelpers.dA;
+    import cE = DOMHelpers.cE;
 
     export class ThreadMessagesPageContent {
 
@@ -120,7 +121,7 @@ export module ThreadMessagesView {
 
         let result = new ThreadMessagesPageContent();
 
-        let resultList = document.createElement('div');
+        let resultList = cE('div');
 
         if (info.thread) {
 
@@ -137,7 +138,7 @@ export module ThreadMessagesView {
 
         let editControl = thread ? createNewThreadMessageControl(thread, threadCallback) : null;
 
-        let listContainer = document.createElement('div');
+        let listContainer = cE('div');
         listContainer.classList.add('thread-message-list');
         listContainer.appendChild(createThreadMessageList(collection, threadMessageCallback, threadCallback,
             privilegesCallback, thread, quoteCallback));
@@ -660,7 +661,7 @@ export module ThreadMessagesView {
     function createNewThreadMessageControl(thread: ThreadRepository.Thread,
                                            callback: IThreadCallback): MessageEditControl {
 
-        let result = document.createElement('div');
+        let result = cE('div');
         result.classList.add('reply-container');
 
         let editControl: EditViews.EditControl;
@@ -669,7 +670,7 @@ export module ThreadMessagesView {
 
             editControl = new EditViews.EditControl(result);
 
-            let button = document.createElement('button');
+            let button = cE('button');
             result.appendChild(button);
             button.classList.add('uk-button', 'uk-button-primary', 'uk-align-center');
             button.innerText = 'Add new message';
@@ -742,7 +743,7 @@ export module ThreadMessagesView {
 
         let result = new ThreadMessagesPageContent();
 
-        let resultList = document.createElement('div');
+        let resultList = cE('div');
 
         if (info.user) {
 
@@ -750,7 +751,7 @@ export module ThreadMessagesView {
         }
         else {
 
-            let header = document.createElement('h2');
+            let header = cE('h2');
             header.innerText = 'All Thread Message Comments';
             resultList.appendChild(header);
         }
@@ -759,7 +760,7 @@ export module ThreadMessagesView {
         resultList.appendChild(result.paginationTop =
             Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        let listContainer = document.createElement('div');
+        let listContainer = cE('div');
         listContainer.classList.add('thread-message-comments-list');
         listContainer.appendChild(createCommentsList(collection, threadMessageCallback,
             threadCallback, info.user));
@@ -856,7 +857,7 @@ export module ThreadMessagesView {
                 name: latestMessage.threadName
             } as ThreadRepository.Thread);
 
-            let threadTitleElement = document.createElement('a');
+            let threadTitleElement = cE('a');
             threadTitleElement.classList.add('recent-message-thread-link');
             threadTitleElement.setAttribute('href', href);
             threadTitleElement.setAttribute('title', threadTitle);
@@ -871,13 +872,13 @@ export module ThreadMessagesView {
             let recentMessageTime = dA('<div class="recent-message-time uk-text-meta">');
             timeFlex.append(recentMessageTime);
 
-            let recentMessageTimeContent = document.createElement('span');
+            let recentMessageTimeContent = cE('span');
             recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
             recentMessageTime.appendElement(recentMessageTimeContent);
 
             let messageContent = latestMessage.content || 'empty';
 
-            let messageLink = document.createElement('a');
+            let messageLink = cE('a');
             messageLink.classList.add('recent-message-link');
             messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
             messageLink.setAttribute('title', messageContent);

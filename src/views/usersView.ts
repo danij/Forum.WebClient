@@ -17,6 +17,7 @@ export module UsersView {
     import IUserCallback = PageActions.IUserCallback;
     import reloadPageIfOk = EditViews.reloadPageIfOk;
     import dA = DOMHelpers.dA;
+    import cE = DOMHelpers.cE;
 
     function getUserLogoColor(id: string): string {
 
@@ -222,13 +223,13 @@ export module UsersView {
 
         let result = new UsersPageContent();
 
-        let resultList = document.createElement('div');
+        let resultList = cE('div');
 
         resultList.appendChild(result.sortControls = createUserListSortControls(info));
         resultList.appendChild(
             result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        let usersList = document.createElement('div');
+        let usersList = cE('div');
         resultList.appendChild(usersList);
         usersList.classList.add('users-list');
 

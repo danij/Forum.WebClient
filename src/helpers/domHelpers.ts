@@ -64,16 +64,21 @@ export module DOMHelpers {
         return new DOMAppender(start, `</${elementName}>`);
     }
 
+    export function cE(tagName: string) : HTMLElement {
+
+        return document.createElement(tagName);
+    }
+
     export function escapeStringForContent(value: string): string {
 
-        const element = document.createElement('div');
+        const element = cE('div');
         element.innerText = value;
         return element.innerHTML;
     }
 
     export function escapeStringForAttribute(value: string): string {
 
-        const span = document.createElement('span');
+        const span = cE('span');
         span.setAttribute('a', value);
 
         const html = span.outerHTML;
@@ -85,7 +90,7 @@ export module DOMHelpers {
 
     export function parseHTML(html: string): HTMLElement {
 
-        const element = document.createElement('template');
+        const element = cE('template') as HTMLTemplateElement;
         element.innerHTML = html;
         return element.content.firstChild as HTMLElement;
     }

@@ -12,6 +12,7 @@ export module Views {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import dA = DOMHelpers.dA;
+    import cE = DOMHelpers.cE;
 
     declare var UIkit: any;
     declare var jQuery: any;
@@ -119,7 +120,7 @@ export module Views {
                                             onPageNumberChange: PageNumberChangeCallback,
                                             getLinkForPage: GetLinkForPageCallback) {
 
-        const result = document.createElement('div');
+        const result = cE('div');
 
         if (info.totalCount < 1) {
 
@@ -151,10 +152,10 @@ export module Views {
 
         function addPageLink(pageNumber: number) {
 
-            let listElement = document.createElement('li');
+            let listElement = cE('li');
             container.appendChild(listElement);
 
-            let link = document.createElement('a');
+            let link = cE('a');
             listElement.appendChild(link);
             link.setAttribute('href', Pages.getUrl(getLinkForPage(pageNumber)));
             link.innerText = `${pageNumber + 1}`;
@@ -168,11 +169,11 @@ export module Views {
 
         function addEllipsis(): void {
 
-            let listElement = document.createElement('li');
+            let listElement = cE('li');
             container.appendChild(listElement);
             listElement.classList.add('pointer-cursor');
 
-            let span = document.createElement('span');
+            let span = cE('span');
             listElement.appendChild(span);
             span.innerText = '...';
 
@@ -251,7 +252,7 @@ export module Views {
             });
         }
 
-        let total = document.createElement('span');
+        let total = cE('span');
         result.appendChild(total);
         total.classList.add('uk-flex', 'uk-flex-center', 'uk-text-meta', 'pagination-total');
         total.innerText = `${DisplayHelpers.intToString(info.totalCount)} total`;

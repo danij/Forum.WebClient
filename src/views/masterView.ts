@@ -8,6 +8,7 @@ import {Pages} from "../pages/common";
 
 export module MasterView {
 
+    import cE = DOMHelpers.cE;
     const FooterSeparator = ' · ';
 
     export function applyPageConfig(config: Pages.MasterPageConfig) {
@@ -26,7 +27,7 @@ export module MasterView {
 
     function createFooterLink(link: Pages.PageLink) : HTMLAnchorElement {
 
-        let result = document.createElement('a') as HTMLAnchorElement;
+        let result = cE('a') as HTMLAnchorElement;
 
         result.setAttribute('href', link.link);
         result.innerText = link.title;

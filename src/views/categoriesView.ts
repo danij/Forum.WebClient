@@ -21,6 +21,7 @@ export module CategoriesView {
     import doIfOk = EditViews.doIfOk;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
     import dA = DOMHelpers.dA;
+    import cE = DOMHelpers.cE;
 
     export function createCategoryLink(category: CategoryRepository.Category,
                                        addSpace: boolean = false,
@@ -171,7 +172,7 @@ export module CategoriesView {
                                          callback: ICategoryCallback,
                                          privilegesCallback: IPrivilegesCallback): HTMLElement {
 
-        const result = document.createElement('div');
+        const result = cE('div');
         result.classList.add('categories-list-header');
 
         if (Privileges.Category.canDeleteCategory(category)) {
@@ -188,7 +189,7 @@ export module CategoriesView {
             });
         }
 
-        const breadcrumbsList = document.createElement('ul');
+        const breadcrumbsList = cE('ul');
         result.appendChild(breadcrumbsList);
         breadcrumbsList.classList.add('uk-breadcrumb');
 
@@ -196,10 +197,10 @@ export module CategoriesView {
 
             if (value.parent) addToBreadCrumbs(value.parent);
 
-            const element = document.createElement('li');
+            const element = cE('li');
             breadcrumbsList.appendChild(element);
 
-            const link = document.createElement('a');
+            const link = cE('a') as HTMLAnchorElement;
             element.appendChild(link);
 
             link.href = Pages.getCategoryFullUrl(value);
@@ -222,10 +223,10 @@ export module CategoriesView {
         }
 
         //add the current element also
-        const element = document.createElement('li');
+        const element = cE('li');
         breadcrumbsList.appendChild(element);
 
-        const nameElement = document.createElement('span');
+        const nameElement = cE('span');
         nameElement.innerText = category.name;
 
         if (Privileges.Category.canEditCategoryParent(category)) {
@@ -273,11 +274,11 @@ export module CategoriesView {
 
         element.appendChild(nameElement);
 
-        const descriptionContainer = document.createElement('span');
+        const descriptionContainer = cE('span');
         element.appendChild(descriptionContainer);
         descriptionContainer.classList.add('category-description');
 
-        const descriptionElement = document.createElement('span');
+        const descriptionElement = cE('span');
         descriptionElement.innerText = category.description || '';
         descriptionElement.classList.add('uk-text-meta');
 
@@ -344,7 +345,7 @@ export module CategoriesView {
     export function createRootCategoriesDisplay(categories: CategoryRepository.Category[],
                                                 callback: ICategoryCallback): HTMLElement {
 
-        let result = document.createElement('div');
+        let result = cE('div');
         result.appendChild(createCategoriesTable(categories, callback));
 
         if (Privileges.ForumWide.canAddNewRootCategory()) {
@@ -360,7 +361,7 @@ export module CategoriesView {
                                           callback: ICategoryCallback,
                                           privilegesCallback: IPrivilegesCallback): HTMLElement {
 
-        let result = document.createElement('div');
+        let result = cE('div');
         result.appendChild(createCategoryHeader(category, callback, privilegesCallback));
 
         let separatorNeeded = false;
@@ -379,7 +380,7 @@ export module CategoriesView {
         if (threadList) {
 
             if (separatorNeeded) {
-                let separator = document.createElement('hr');
+                let separator = cE('hr');
                 result.appendChild(separator);
 
                 separator.classList.add('uk-divider-icon');
@@ -468,17 +469,17 @@ export module CategoriesView {
 
         form.innerHTML = '';
 
-        let list = document.createElement('ul');
+        let list = cE('ul');
         list.classList.add('uk-list');
         form.appendChild(list);
 
         function addCategory(category: CategoryRepository.Category, level: number) {
 
-            let row = document.createElement('li');
+            let row = cE('li');
             list.appendChild(row);
             row.classList.add(`level${level}`);
 
-            let input = document.createElement('input');
+            let input = cE('input');
             row.appendChild(input);
 
             input.setAttribute('type', 'radio');
@@ -491,7 +492,7 @@ export module CategoriesView {
             }
             input.classList.add('uk-radio');
 
-            let label = document.createElement('label');
+            let label = cE('label');
             row.appendChild(label);
 
             label.setAttribute('for', 'categoryParentId-' + category.id);
