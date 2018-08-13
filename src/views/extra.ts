@@ -102,7 +102,7 @@ export module ViewsExtra {
         for (let i = 0; i < links.length; ++i) {
 
             const link = links[i];
-            link.setAttribute('rel', 'nofollow');
+            link.setAttribute('rel', 'nofollow noopener noreferrer');
         }
     }
 
