@@ -482,7 +482,7 @@ export module UsersView {
             ViewsExtra.expandAndAdjust(toRender[i] as HTMLElement);
         }
 
-        resultElement.getElementsByClassName('edit-user-name-link')[0].addEventListener('click', async (ev) =>{
+        Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-name-link')[0], async (ev) =>{
 
             ev.preventDefault();
             const name = EditViews.getInput('Edit user name', user.name);
@@ -494,7 +494,7 @@ export module UsersView {
                 }
             }
         });
-        resultElement.getElementsByClassName('edit-user-title-link')[0].addEventListener('click', (ev) =>{
+        Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-title-link')[0], (ev) =>{
 
             ev.preventDefault();
             const title = EditViews.getInput('Edit user title', user.title);
@@ -503,7 +503,7 @@ export module UsersView {
                 EditViews.reloadPageIfOk(callback.editUserTitle(user.id, title));
             }
         });
-        resultElement.getElementsByClassName('edit-user-info-link')[0].addEventListener('click', (ev) =>{
+        Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-info-link')[0], (ev) =>{
 
             ev.preventDefault();
             const info = EditViews.getInput('Edit user info', user.info);
@@ -512,7 +512,7 @@ export module UsersView {
                 EditViews.reloadPageIfOk(callback.editUserInfo(user.id, info));
             }
         });
-        resultElement.getElementsByClassName('edit-user-signature-link')[0].addEventListener('click', (ev) =>{
+        Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-signature-link')[0], (ev) =>{
 
             ev.preventDefault();
             const signature = EditViews.getInput('Edit user signature', user.signature);
@@ -521,7 +521,7 @@ export module UsersView {
                 EditViews.reloadPageIfOk(callback.editUserSignature(user.id, signature));
             }
         });
-        resultElement.getElementsByClassName('clear-user-logo-link')[0].addEventListener('click', (ev) =>{
+        Views.addClickIfElementExists(resultElement.getElementsByClassName('clear-user-logo-link')[0], (ev) =>{
 
             ev.preventDefault();
             if (EditViews.confirm('Are you sure you want to delete ' + user.name + "'s logo?")) {
@@ -529,7 +529,7 @@ export module UsersView {
                 EditViews.reloadPageIfOk(callback.deleteUserLogo(user.id));
             }
         });
-        resultElement.getElementsByClassName('edit-user-logo-link')[0].addEventListener('click', (ev) =>{
+        Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-logo-link')[0], (ev) =>{
 
             ev.preventDefault();
             let fileInput = document.getElementsByClassName('upload-user-logo')[0] as HTMLInputElement;
@@ -559,7 +559,7 @@ export module UsersView {
 
             fileInput.click();
         });
-        resultElement.getElementsByClassName('delete-user-link')[0].addEventListener('click', async (ev) =>{
+        Views.addClickIfElementExists(resultElement.getElementsByClassName('delete-user-link')[0], async (ev) =>{
 
             ev.preventDefault();
             if (EditViews.confirm('Are you sure you want to delete the user "' + user.name + '"?')) {
@@ -570,7 +570,7 @@ export module UsersView {
                 }
             }
         });
-        resultElement.getElementsByClassName('show-assigned-privileges-of-user')[0].addEventListener('click', (ev) => {
+        Views.addClickIfElementExists(resultElement.getElementsByClassName('show-assigned-privileges-of-user')[0], (ev) => {
 
             ev.preventDefault();
 

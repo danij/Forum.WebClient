@@ -629,4 +629,12 @@ export module Views {
 
         container.appendChild(newPageContent);
     }
+
+    export function addClickIfElementExists(element, listener): void {
+
+        if (element) {
+
+            element.addEventListener('click', listener);
+        }
+    }
 }
