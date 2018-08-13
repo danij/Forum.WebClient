@@ -16,6 +16,7 @@ export module UsersView {
     import DOMAppender = DOMHelpers.DOMAppender;
     import IUserCallback = PageActions.IUserCallback;
     import reloadPageIfOk = EditViews.reloadPageIfOk;
+    import dA = DOMHelpers.dA;
 
     function getUserLogoColor(id: string): string {
 
@@ -48,18 +49,18 @@ export module UsersView {
 
     export function createUserLogoSmall(user: UserRepository.User, position: string = 'bottom-right'): DOMAppender {
 
-        let container = new DOMAppender('<div>', '</div>');
+        let container = dA('<div>');
 
         if (user.hasLogo) {
 
-            let element = new DOMAppender(`<div class="author-logo pointer-cursor">`, '</div>');
+            let element = dA(`<div class="author-logo pointer-cursor">`);
             container.append(element);
-            let img = new DOMAppender(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`, '');
+            let img = dA(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`);
             element.append(img);
         }
         else {
 
-            let element = new DOMAppender(`<div class="author-text-logo pointer-cursor" style="color: ${getUserLogoColor(user.id)}">`, '</div>');
+            let element = dA(`<div class="author-text-logo pointer-cursor" style="color: ${getUserLogoColor(user.id)}">`);
             container.append(element);
             element.appendString(getUserLogoInitial(user.name));
         }
@@ -74,15 +75,15 @@ export module UsersView {
 
         if (user.hasLogo) {
 
-            let element = new DOMAppender(`<div class="logo">`, '</div>');
-            let img = new DOMAppender(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`, '');
+            let element = dA(`<div class="logo">`);
+            let img = dA(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`);
             element.append(img);
 
             return element;
         }
         else {
 
-            let element = new DOMAppender(`<div class="text-logo" style="color: ${getUserLogoColor(user.id)}">`, '</div>');
+            let element = dA(`<div class="text-logo" style="color: ${getUserLogoColor(user.id)}">`);
             element.appendString(getUserLogoInitial(user.name));
             return element;
         }
@@ -90,9 +91,9 @@ export module UsersView {
 
     export function createAuthorSmall(user: UserRepository.User): DOMAppender {
 
-        let element = new DOMAppender('<span class="author">', '</span>');
+        let element = dA('<span class="author">');
 
-        let link = new DOMAppender('<a ' + getThreadsOfUserLinkContent(user) + '>', '</a>');
+        let link = dA('<a ' + getThreadsOfUserLinkContent(user) + '>');
         element.append(link);
         link.appendString(user.name);
 
@@ -126,7 +127,7 @@ export module UsersView {
     export function createUserDropdown(user: UserRepository.User, classString?: string,
                                        position: string = 'bottom-right'): DOMAppender {
 
-        let content = new DOMAppender('<div>', '</div>');
+        let content = dA('<div>');
 
         let threadsOfUserLink = '';
         let threadMessagesOfUserLink = '';
@@ -266,7 +267,7 @@ export module UsersView {
 
     export function createUserListContent(users: UserRepository.User[]): HTMLElement {
 
-        let usersListGrid = new DOMAppender('<div class="uk-grid-match uk-text-center uk-flex uk-flex-center" uk-grid>', '</div>');
+        let usersListGrid = dA('<div class="uk-grid-match uk-text-center uk-flex uk-flex-center" uk-grid>');
 
         if (users && users.length) {
             for (let user of users) {
@@ -290,7 +291,7 @@ export module UsersView {
 
     export function createUserNameElement(user: UserRepository.User, extraClass: string = ''): DOMAppender {
 
-        let result = new DOMAppender(`<div class="username uk-text-small ${extraClass}">`, '</div>');
+        let result = dA(`<div class="username uk-text-small ${extraClass}">`);
         result.appendString(user.name);
 
         return result;
@@ -298,7 +299,7 @@ export module UsersView {
 
     export function createUserTitleElement(user: UserRepository.User): DOMAppender {
 
-        let result = new DOMAppender('<div class="usertitle uk-text-small">', '</div>');
+        let result = dA('<div class="usertitle uk-text-small">');
         result.appendString(user.title);
 
         return result;
@@ -306,12 +307,12 @@ export module UsersView {
 
     function createUserInList(user: UserRepository.User): DOMAppender {
 
-        let result = new DOMAppender('<div>', '</div>');
+        let result = dA('<div>');
 
-        let card = new DOMAppender('<div class="uk-card uk-card-default uk-card-body">', '</div>');
+        let card = dA('<div class="uk-card uk-card-default uk-card-body">');
         result.append(card);
 
-        let wrapper = new DOMAppender('<div class="user-in-list">', '</div>');
+        let wrapper = dA('<div class="user-in-list">');
         card.append(wrapper);
 
         wrapper.append(createUserLogoForList(user));
@@ -374,19 +375,19 @@ export module UsersView {
                                          callback: IUserCallback,
                                          privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
-        let result = new DOMAppender('<div class="user-header">', '</div>');
-        let left = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
+        let result = dA('<div class="user-header">');
+        let left = dA('<div class="message-author uk-float-left">');
         result.append(left);
 
         left.append(createUserLogoForList(user));
 
-        let name = new DOMAppender('<div class="username uk-text-small">', '</div>');
+        let name = dA('<div class="username uk-text-small">');
         left.append(name);
         name.appendString(user.name);
 
         if (user.title && user.title.length) {
 
-            let title = new DOMAppender('<div class="usertitle uk-text-small">', '</div>');
+            let title = dA('<div class="usertitle uk-text-small">');
             left.append(title);
             title.appendString(user.title);
         }
@@ -426,7 +427,7 @@ export module UsersView {
         );
         if (user.info && user.info.length) {
 
-            let info = new DOMAppender('<div class="uk-text-primary uk-text-small render-style">', '</div>');
+            let info = dA('<div class="uk-text-primary uk-text-small render-style">');
             result.append(info);
 
             info.appendString(user.info);
@@ -462,7 +463,7 @@ export module UsersView {
 
             if (editContent.length) {
 
-                let editParagraph = new DOMAppender('<p>', '<p>');
+                let editParagraph = dA('<p>');
                 result.append(editParagraph);
                 editParagraph.appendRaw(editContent.join(' · ') + '<input type="file" class="upload-user-logo" />');
             }

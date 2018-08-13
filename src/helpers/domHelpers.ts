@@ -2,7 +2,7 @@ export module DOMHelpers {
 
     export class DOMAppender {
 
-        private _end: string;
+        private readonly _end: string;
         private _values: any;
 
         public constructor(start: string, end: string) {
@@ -42,6 +42,26 @@ export module DOMHelpers {
             const html = this.toString();
             return parseHTML(html);
         }
+    }
+
+    export function dA(start: string): DOMAppender {
+
+        start = (start || '').trim();
+
+        if (0 == start.length) return null;
+
+        if ('<' != start[0]) {
+
+            return new DOMAppender(`<${start}>`, `</${start}>`);
+        }
+        if (start.endsWith('/>')) {
+
+            return new DOMAppender(start, '');
+        }
+
+        const elementName = start.match(/<[^a-zA-Z]*([a-zA-Z]+)[^a-zA-Z]+/)[1];
+
+        return new DOMAppender(start, `</${elementName}>`);
     }
 
     export function escapeStringForContent(value: string): string {
@@ -125,7 +145,7 @@ export module DOMHelpers {
     }
 
     export function addEventListenersData(element: HTMLElement, dataName: string, eventType: string,
-                                      handler: (ev: Event, value: string) => void): void {
+                                          handler: (ev: Event, value: string) => void): void {
 
         const attribute = `data-${dataName}`;
         const elements = element.querySelectorAll(`[${attribute}]`);

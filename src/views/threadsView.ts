@@ -24,6 +24,7 @@ export module ThreadsView {
     import reloadPageIfOk = EditViews.reloadPageIfOk;
     import IUserCallback = PageActions.IUserCallback;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
+    import dA = DOMHelpers.dA;
 
     export class ThreadsPageContent {
 
@@ -43,7 +44,7 @@ export module ThreadsView {
 
         const classes = showAsButton ? 'uk-button uk-button-text ' : '';
 
-        let result = new DOMAppender(`<a class="${classes}thread-name render-math ${visitedClass}" href="${href}" ${data}>`, '</a>');
+        let result = dA(`<a class="${classes}thread-name render-math ${visitedClass}" href="${href}" ${data}>`);
         result.appendString((addSpace ? ' ' : '') + thread.name);
 
         return result;
@@ -124,7 +125,7 @@ export module ThreadsView {
             return DOMHelpers.parseHTML('<span class="uk-text-warning">No threads found</span>');
         }
 
-        let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
+        let table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
 
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
@@ -136,27 +137,27 @@ export module ThreadsView {
             '</thead>';
         table.appendRaw(tableHeader);
 
-        const tbody = new DOMAppender('<tbody>', '</tbody>');
+        const tbody = dA('<tbody>');
         table.append(tbody);
 
         for (const thread of threads) {
 
             if (null == thread) continue;
 
-            const row = new DOMAppender('<tr>', '</tr>');
+            const row = dA('<tr>');
             tbody.append(row);
             {
-                const nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
+                const nameColumn = dA('<td class="uk-table-expand">');
                 row.append(nameColumn);
 
                 if (thread.pinned) {
-                    nameColumn.append(new DOMAppender(`<span class="uk-icon pinned-icon" uk-icon="icon: star; ratio: 1.5" title="Thread is pinned" uk-tooltip>`, '</span>'));
+                    nameColumn.append(dA(`<span class="uk-icon pinned-icon" uk-icon="icon: star; ratio: 1.5" title="Thread is pinned" uk-tooltip>`));
                 }
 
                 const threadLink = createThreadsLink(thread, true, true);
                 nameColumn.append(threadLink);
 
-                const details = new DOMAppender('<div class="thread-tags">', '</div>');
+                const details = dA('<div class="thread-tags">');
                 nameColumn.append(details);
 
                 if (thread.voteScore < 0) {
@@ -179,7 +180,7 @@ export module ThreadsView {
                 }
             }
             {
-                const createdColumn = new DOMAppender('<td class="thread-created uk-text-center uk-table-shrink">', '</td>');
+                const createdColumn = dA('<td class="thread-created uk-text-center uk-table-shrink">');
                 row.append(createdColumn);
 
                 createdColumn.append(UsersView.createAuthorSmall(thread.createdBy));
@@ -212,10 +213,10 @@ export module ThreadsView {
                 row.appendRaw(statisticsColumn);
             }
             {
-                const latestMessageColumn = new DOMAppender('<td class="latest-message">', '</td>');
+                const latestMessageColumn = dA('<td class="latest-message">');
                 row.append(latestMessageColumn);
 
-                const container = new DOMAppender('<div>', '</div>');
+                const container = dA('<div>');
                 latestMessageColumn.append(container);
 
                 const latestMessage = thread.latestMessage;
@@ -224,7 +225,7 @@ export module ThreadsView {
 
                     container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
-                    let timeFlex = new DOMAppender('<div class="date-time-flex">', '</div>');
+                    let timeFlex = dA('<div class="date-time-flex">');
                     container.append(timeFlex);
 
                     timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
@@ -264,13 +265,13 @@ export module ThreadsView {
 
     export function createRecentThreadsView(threads: ThreadRepository.Thread[]): HTMLElement {
 
-        let result = new DOMAppender('<div>', '</div>');
+        let result = dA('<div>');
 
         for (let thread of threads) {
 
             if (null === thread) continue;
 
-            let element = new DOMAppender('<div class="recent-thread">', '</div>');
+            let element = dA('<div class="recent-thread">');
             result.append(element);
 
             let score = DisplayHelpers.intToString(Math.abs(thread.voteScore));
@@ -287,10 +288,10 @@ export module ThreadsView {
                 element.appendRaw(`<span class="thread-vote up-vote" aria-expanded="false">+${score}</span>`);
             }
 
-            let user = new DOMAppender('<span class="author">', '</span>');
+            let user = dA('<span class="author">');
             element.append(user);
 
-            let userLink = new DOMAppender(`<a ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}>`, '</a>');
+            let userLink = dA(`<a ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}>`);
             user.append(userLink);
             userLink.appendString(thread.createdBy.name);
 
@@ -298,7 +299,7 @@ export module ThreadsView {
 
             let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
             let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
-            let link = new DOMAppender(`<a href="${href}" class="recent-thread-link render-math" title="${title}" ${data}>`, '</a>');
+            let link = dA(`<a href="${href}" class="recent-thread-link render-math" title="${title}" ${data}>`);
             element.append(link);
             link.appendString(thread.name);
         }

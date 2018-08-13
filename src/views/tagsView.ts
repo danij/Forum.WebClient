@@ -15,13 +15,14 @@ export module TagsView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import ITagCallback = PageActions.ITagCallback;
+    import dA = DOMHelpers.dA;
 
     export function createTagElement(tag: TagRepository.Tag): DOMAppender {
 
-        let container = new DOMAppender('<div class="uk-display-inline-block">', '</div>');
+        let container = dA('<div class="uk-display-inline-block">');
 
-        let tagElement = new DOMAppender('<a class="uk-badge uk-icon" uk-icon="icon: tag" ' +
-            getThreadsWithTagLinkContent(tag) + '>', '</a>');
+        let tagElement = dA('<a class="uk-badge uk-icon" uk-icon="icon: tag" ' +
+            getThreadsWithTagLinkContent(tag) + '>');
         container.append(tagElement);
         tagElement.appendString(tag.name);
 
@@ -71,8 +72,8 @@ export module TagsView {
 
     export function createTagsTable(tags: TagRepository.Tag[]): HTMLElement {
 
-        let tableContainer = new DOMAppender('<div class="tags-table">', '</div>');
-        let table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
+        let tableContainer = dA('<div class="tags-table">');
+        let table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
         tableContainer.append(table);
 
         if (tags.length < 1) {
@@ -89,29 +90,29 @@ export module TagsView {
             '    </tr>\n' +
             '</thead>';
         table.appendRaw(tableHeader);
-        let tbody = new DOMAppender('<tbody>', '</tbody>');
+        let tbody = dA('<tbody>');
         table.append(tbody);
 
         for (let tag of tags) {
 
             if (null == tag) continue;
 
-            let row = new DOMAppender('<tr>', '</tr>');
+            let row = dA('<tr>');
             tbody.append(row);
             {
-                let nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
+                let nameColumn = dA('<td class="uk-table-expand">');
                 row.append(nameColumn);
 
-                nameColumn.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: tag">', '</span>'));
+                nameColumn.append(dA('<span class="uk-icon" uk-icon="icon: tag">'));
 
-                let nameLink = new DOMAppender('<a class="uk-button uk-button-text" ' + getThreadsWithTagLinkContent(tag) + '>', '</a>');
+                let nameLink = dA('<a class="uk-button uk-button-text" ' + getThreadsWithTagLinkContent(tag) + '>');
                 nameColumn.append(nameLink);
                 nameLink.appendString(' ' + tag.name);
                 nameColumn.appendRaw('<br/>');
 
                 if (tag.categories && tag.categories.length) {
 
-                    let categoryElement = new DOMAppender('<span class="category-children uk-text-small">', '</span>');
+                    let categoryElement = dA('<span class="category-children uk-text-small">');
                     nameColumn.appendRaw('<span class="uk-text-meta">Referenced by:</span> ');
                     nameColumn.append(categoryElement);
 
@@ -119,10 +120,10 @@ export module TagsView {
 
                         let category = tag.categories[i];
 
-                        let element = new DOMAppender('<a href="' +
+                        let element = dA('<a href="' +
                             Pages.getCategoryFullUrl(category) +
                             '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
-                            DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
+                            DOMHelpers.escapeStringForAttribute(category.name) + '">');
                         categoryElement.append(element);
                         element.appendString(category.name);
 

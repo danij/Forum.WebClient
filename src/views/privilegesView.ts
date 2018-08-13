@@ -22,6 +22,7 @@ export module PrivilegesView {
     import TabEntry = Views.TabEntry;
     import AssignedPrivilegesCollection = PrivilegesRepository.AssignedPrivilegesCollection;
     import AssignedPrivilege = PrivilegesRepository.AssignedPrivilege;
+    import dA = DOMHelpers.dA;
 
     const ThreadMessagePrivilegeNames = [
 
@@ -161,7 +162,7 @@ export module PrivilegesView {
 
     function createPrivilegeLevelSpan(value: string) : DOMAppender {
 
-        let result = new DOMAppender('<span class="privilege-level">', '</span>');
+        let result = dA('<span class="privilege-level">');
         result.appendString(value);
 
         return result;
@@ -339,7 +340,7 @@ export module PrivilegesView {
     function createdRequiredPrivilegesTable(title: string, privilegeNames,
                                             values: RequiredPrivilegesCollection[], property: string): TabEntry {
 
-        let tableAppender = new DOMAppender('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">', '</table>');
+        let tableAppender = dA('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">');
 
         let result: TabEntry = {
 
@@ -373,10 +374,10 @@ export module PrivilegesView {
             }
         }
 
-        let tHead = new DOMAppender('<thead>', '</thead>');
+        let tHead = dA('<thead>');
         tableAppender.append(tHead);
         {
-            let row = new DOMAppender('<tr>', '</tr>');
+            let row = dA('<tr>');
             tHead.append(row);
 
             row.appendRaw('<th>Privilege</th>');
@@ -385,14 +386,14 @@ export module PrivilegesView {
 
                 if (columnValues[column[0]].length) {
 
-                    let cell = new DOMAppender('<th>', '</th>');
+                    let cell = dA('<th>');
                     row.append(cell);
                     cell.appendString(column[1]);
                 }
             }
         }
 
-        let tBody = new DOMAppender('<tbody>', '</tbody>');
+        let tBody = dA('<tbody>');
         tableAppender.append(tBody);
 
         function getValuesForPrivilege(privilegeName: string) {
@@ -433,10 +434,10 @@ export module PrivilegesView {
 
         for (let privilegeName of privilegeNames) {
 
-            let row = new DOMAppender('<tr>', '</tr>');
+            let row = dA('<tr>');
             tBody.append(row);
 
-            let nameCell = new DOMAppender('<td>', '</td>');
+            let nameCell = dA('<td>');
             row.append(nameCell);
             nameCell.appendString(privilegeName[1]);
 
@@ -444,7 +445,7 @@ export module PrivilegesView {
 
             for (const value of columnMaxValues) {
 
-                let cell = new DOMAppender('<td>', '</td>');
+                let cell = dA('<td>');
                 row.append(cell);
 
                 cell.append(value);
@@ -561,7 +562,7 @@ export module PrivilegesView {
                                            firstColumn: string,
                                            firstColumnCallback: (AssignedPrivilege) => DOMAppender): TabEntry {
 
-        let tableAppender = new DOMAppender('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">', '</table>');
+        let tableAppender = dA('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">');
 
         let result: TabEntry = {
 
@@ -569,10 +570,10 @@ export module PrivilegesView {
             content: tableAppender
         };
 
-        let tHead = new DOMAppender('<thead>', '</thead>');
+        let tHead = dA('<thead>');
         tableAppender.append(tHead);
         {
-            let row = new DOMAppender('<tr>', '</tr>');
+            let row = dA('<tr>');
             tHead.append(row);
 
             if (firstColumn && firstColumn.length) {
@@ -584,30 +585,30 @@ export module PrivilegesView {
             row.appendRaw('<th>Until</th>');
         }
 
-        let tBody = new DOMAppender('<tbody>', '</tbody>');
+        let tBody = dA('<tbody>');
         tableAppender.append(tBody);
 
         for (let assignedPrivilege of assignedPrivileges) {
 
-            let row = new DOMAppender('<tr>', '</tr>');
+            let row = dA('<tr>');
             tBody.append(row);
 
             if (firstColumnCallback) {
 
-                let firstCell = new DOMAppender('<td>', '</td>');
+                let firstCell = dA('<td>');
                 row.append(firstCell);
                 firstCell.append(firstColumnCallback(assignedPrivilege));
             }
 
-            let labelCell = new DOMAppender('<td>', '</td>');
+            let labelCell = dA('<td>');
             row.append(labelCell);
             labelCell.append(createPrivilegeLevelSpan(DisplayHelpers.intToStringLargeMinus(assignedPrivilege.value)));
 
-            let fromCell = new DOMAppender('<td>', '</td>');
+            let fromCell = dA('<td>');
             row.append(fromCell);
             fromCell.appendString(DisplayHelpers.getDateTimeLargeSeparator(assignedPrivilege.granted));
 
-            let untilCell = new DOMAppender('<td>', '</td>');
+            let untilCell = dA('<td>');
             row.append(untilCell);
             untilCell.appendString((0 == assignedPrivilege.expires)
                 ? '∞'

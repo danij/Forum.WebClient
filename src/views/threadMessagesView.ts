@@ -23,6 +23,7 @@ export module ThreadMessagesView {
     import IThreadMessageCallback = PageActions.IThreadMessageCallback;
     import reloadPageIfOk = EditViews.reloadPageIfOk;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
+    import dA = DOMHelpers.dA;
 
     export class ThreadMessagesPageContent {
 
@@ -60,19 +61,19 @@ export module ThreadMessagesView {
 
     export function createRecentThreadMessagesView(messages: ThreadMessageRepository.ThreadMessage[]): HTMLElement {
 
-        let result = new DOMAppender('<div>', '</div>');
+        let result = dA('<div>');
 
         for (let message of messages) {
 
             if (null === message) continue;
 
-            let element = new DOMAppender('<div class="recent-message">', '</div>');
+            let element = dA('<div class="recent-message">');
             result.append(element);
 
-            let user = new DOMAppender('<span class="author">', '</span>');
+            let user = dA('<span class="author">');
             element.append(user);
 
-            let userLink = new DOMAppender(`<a ${UsersView.getThreadsOfUserLinkContent(message.createdBy)}>`, '</a>');
+            let userLink = dA(`<a ${UsersView.getThreadsOfUserLinkContent(message.createdBy)}>`);
             user.append(userLink);
             userLink.appendString(message.createdBy.name);
 
@@ -80,7 +81,7 @@ export module ThreadMessagesView {
 
             let href = Pages.getThreadMessagesOfThreadUrlFull(message.parentThread);
             let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(message.parentThread.id)}"`;
-            let threadLink = new DOMAppender(`<a href="${href}" class="recent-message-thread-link render-math" title="${threadTitle}" ${data}>`, '</a>');
+            let threadLink = dA(`<a href="${href}" class="recent-message-thread-link render-math" title="${threadTitle}" ${data}>`);
             element.append(threadLink);
             threadLink.appendString(message.parentThread.name);
 
@@ -88,7 +89,7 @@ export module ThreadMessagesView {
 
             href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
             data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-            let link = new DOMAppender(`<a href="${href}" class="recent-message-link render-math" title="${messageTitle}" ${data}>`, '</a>');
+            let link = dA(`<a href="${href}" class="recent-message-link render-math" title="${messageTitle}" ${data}>`);
             element.append(link);
             link.appendRaw(ViewsExtra.expandContent(message.content));
         }
@@ -181,7 +182,7 @@ export module ThreadMessagesView {
 
         const messages = collection.messages || [];
 
-        let result = new DOMAppender('<div class="uk-container uk-container-expand">', '</div>');
+        let result = dA('<div class="uk-container uk-container-expand">');
 
         if (messages.length < 1) {
 
@@ -196,7 +197,7 @@ export module ThreadMessagesView {
             const message = messages[i];
             messagesById[message.id] = message;
 
-            let messageContainer = new DOMAppender('<div class="uk-card uk-card-body discussion-thread-message">', '</div>');
+            let messageContainer = dA('<div class="uk-card uk-card-body discussion-thread-message">');
             result.append(messageContainer);
 
             const showParentThreadName = !!(message.receivedParentThread && message.parentThread.name
@@ -237,10 +238,10 @@ export module ThreadMessagesView {
             let data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
             let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
 
-            let link = new DOMAppender(`<a id="${id}" href="${href}" ${data}>`, '</a>');
+            let link = dA(`<a id="${id}" href="${href}" ${data}>`);
             link.appendString(message.parentThread.name);
 
-            let container = new DOMAppender('<div class="message-parent-thread render-math uk-card-badge">', '</div>');
+            let container = dA('<div class="message-parent-thread render-math uk-card-badge">');
             container.append(link);
             messageContainer.append(container);
         }
@@ -257,7 +258,7 @@ export module ThreadMessagesView {
     function createThreadMessageDetails(message: ThreadMessageRepository.ThreadMessage, showParentThreadName: boolean) {
 
         const extraClass = showParentThreadName ? 'right' : '';
-        let messageDetailsContainer = new DOMAppender(`<div class="uk-card-badge message-time-container ${extraClass}">`, '</div>');
+        let messageDetailsContainer = dA(`<div class="uk-card-badge message-time-container ${extraClass}">`);
         messageDetailsContainer.appendRaw(`<span class="message-time">${DisplayHelpers.getDateTime(message.created)} </span>`);
 
         if (message.lastUpdated && message.lastUpdated.at) {
@@ -304,9 +305,9 @@ export module ThreadMessagesView {
                                        thread: ThreadRepository.Thread): DOMAppender {
 
         let author = message.createdBy;
-        let authorContainer = new DOMAppender('<div class="message-author uk-float-left">', '</div>');
+        let authorContainer = dA('<div class="message-author uk-float-left">');
         {
-            let userContainer = new DOMAppender('<div class="pointer-cursor">', '</div>');
+            let userContainer = dA('<div class="pointer-cursor">');
             authorContainer.append(userContainer);
 
             userContainer.append(UsersView.createUserLogoForList(author));
@@ -330,10 +331,10 @@ export module ThreadMessagesView {
         {
             author.signature = author.signature || '';
 
-            let signatureContainer = new DOMAppender('<div class="uk-text-center uk-float-left message-signature">', '</div>');
+            let signatureContainer = dA('<div class="uk-text-center uk-float-left message-signature">');
             authorContainer.append(signatureContainer);
 
-            let signature = new DOMAppender('<span title="User signature" uk-tooltip>', '</span>');
+            let signature = dA('<span title="User signature" uk-tooltip>');
             signatureContainer.append(signature);
             signature.appendString(author.signature);
         }
@@ -399,7 +400,7 @@ export module ThreadMessagesView {
 
     function createThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
 
-        let content = new DOMAppender('<div class="message-content render-math">', '</div>');
+        let content = dA('<div class="message-content render-math">');
         content.appendRaw(ViewsExtra.expandContent(message.content));
         return content;
     }
@@ -407,7 +408,7 @@ export module ThreadMessagesView {
     function createThreadMessageActionLinks(message: ThreadMessageRepository.ThreadMessage,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): DOMAppender {
 
-        let actions = new DOMAppender('<div class="message-actions">', '</div>');
+        let actions = dA('<div class="message-actions">');
         let messageId = DOMHelpers.escapeStringForAttribute(message.id);
 
         if (Privileges.ThreadMessage.canEditThreadMessageContent(message)) {
@@ -575,7 +576,7 @@ export module ThreadMessagesView {
 
         Views.showModal(modal);
 
-        let appender = new DOMAppender('<div>', '</div>');
+        let appender = dA('<div>');
 
         let comments = await callback.getCommentsOfThreadMessage(messageId) || [];
 
@@ -583,7 +584,7 @@ export module ThreadMessagesView {
 
             const comment = comments[i];
 
-            let card = new DOMAppender('<div class="uk-card uk-card-body message-comments-content">', '</div>');
+            let card = dA('<div class="uk-card uk-card-body message-comments-content">');
             appender.append(card);
 
             createMessageCommentInList(comment, card);
@@ -603,21 +604,21 @@ export module ThreadMessagesView {
 
     function createMessageCommentInList(comment: ThreadMessageRepository.ThreadMessageComment, container: DOMAppender) {
 
-        let author = new DOMAppender('<div class="message-comment-author uk-float-left">', '</div>');
+        let author = dA('<div class="message-comment-author uk-float-left">');
         container.append(author);
         author.append(UsersView.createUserLogoSmall(comment.createdBy, 'bottom-left'));
 
-        let content = new DOMAppender('<div class="comment-content">', '</div>');
+        let content = dA('<div class="comment-content">');
         container.append(content);
 
-        let contentDiv = new DOMAppender('<div>', '</div>');
+        let contentDiv = dA('<div>');
         content.append(contentDiv);
 
-        let time = new DOMAppender('<span class="message-time">', '</span>');
+        let time = dA('<span class="message-time">');
         contentDiv.append(time);
         time.appendRaw(DisplayHelpers.getDateTime(comment.created));
 
-        let ip = new DOMAppender('<samp>', '</samp>');
+        let ip = dA('<samp>');
         contentDiv.append(ip);
         ip.appendString(comment.ip);
 
@@ -631,7 +632,7 @@ export module ThreadMessagesView {
             contentDiv.appendRaw(`<a class="solve-message-comment-link uk-float-right" ${data} title="Set comment to solved" uk-tooltip><span class="uk-icon" uk-icon="check"></span></a>`);
         }
 
-        let paragraph = new DOMAppender('<p>', '</p>');
+        let paragraph = dA('<p>');
         contentDiv.append(paragraph);
         paragraph.appendString(comment.content);
     }
@@ -779,7 +780,7 @@ export module ThreadMessagesView {
 
         const comments = collection.messageComments || [];
 
-        let result = new DOMAppender('<div class="uk-container uk-container-expand">', '</div>');
+        let result = dA('<div class="uk-container uk-container-expand">');
 
         if (comments.length < 1) {
 
@@ -800,11 +801,11 @@ export module ThreadMessagesView {
 
             messagesById[message.id] = message;
 
-            let messageContainer = new DOMAppender('<div class="uk-card uk-card-body discussion-thread-message">', '</div>');
+            let messageContainer = dA('<div class="uk-card uk-card-body discussion-thread-message">');
             result.append(messageContainer);
 
             {
-                let container = new DOMAppender('<div class="message-comment-above-message">', '</div>');
+                let container = dA('<div class="message-comment-above-message">');
                 messageContainer.append(container);
 
                 createMessageCommentInList(comment, container);
@@ -839,11 +840,11 @@ export module ThreadMessagesView {
 
     export function createLatestMessageColumnView(latestMessage: ThreadMessageRepository.LatestMessage) {
 
-        const latestMessageColumn = new DOMAppender('<td class="latest-message">', '</td>');
+        const latestMessageColumn = dA('<td class="latest-message">');
 
         if (latestMessage) {
 
-            const container = new DOMAppender('<div>', '</div>');
+            const container = dA('<div>');
             latestMessageColumn.append(container);
 
             container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
@@ -863,11 +864,11 @@ export module ThreadMessagesView {
             threadTitleElement.innerText = threadTitle;
             container.appendElement(threadTitleElement);
 
-            let timeFlex = new DOMAppender('<div class="date-time-flex">', '</div>');
+            let timeFlex = dA('<div class="date-time-flex">');
             container.append(timeFlex);
 
             timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
-            let recentMessageTime = new DOMAppender('<div class="recent-message-time uk-text-meta">', '</div>');
+            let recentMessageTime = dA('<div class="recent-message-time uk-text-meta">');
             timeFlex.append(recentMessageTime);
 
             let recentMessageTimeContent = document.createElement('span');

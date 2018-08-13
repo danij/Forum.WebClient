@@ -11,6 +11,7 @@ import {ThreadMessageCommentsPage} from "../pages/threadMessageCommentsPage";
 export module Views {
 
     import DOMAppender = DOMHelpers.DOMAppender;
+    import dA = DOMHelpers.dA;
 
     declare var UIkit: any;
     declare var jQuery: any;
@@ -88,14 +89,14 @@ export module Views {
             classString = `class="${classes}"`
         }
 
-        const element = new DOMAppender(`<div uk-dropdown="${propertiesString}" ${classString}>`, '</div>');
+        const element = dA(`<div uk-dropdown="${propertiesString}" ${classString}>`);
 
-        const nav = new DOMAppender('<ul class="uk-nav uk-dropdown-nav">', '</ul>');
+        const nav = dA('<ul class="uk-nav uk-dropdown-nav">');
         element.append(nav);
 
         if (null != header) {
 
-            const headerElement = new DOMAppender('<li class="uk-nav-header">', '</li>');
+            const headerElement = dA('<li class="uk-nav-header">');
             nav.append(headerElement);
 
             if (header instanceof DOMAppender) {
@@ -516,32 +517,30 @@ export module Views {
 
     export function createTabs(entries: TabEntry[], selectedIndex: number = 0, alignment: string = 'left'): HTMLElement {
 
-        let appender = new DOMAppender('<div>', '</div>');
+        let appender = dA('<div>');
 
-        let header = new DOMAppender(`<ul uk-tab class="uk-flex-${alignment}">`, '</ul>');
+        let header = dA(`<ul uk-tab class="uk-flex-${alignment}">`);
         appender.append(header);
-        let content = new DOMAppender('<ul class="uk-switcher">', '</ul>');
+        let content = dA('<ul class="uk-switcher">');
         appender.append(content);
 
         for (let i = 0; i < entries.length; ++i) {
 
             const entry = entries[i];
 
-            let headerItem = new DOMAppender(selectedIndex == i ? '<li class="uk-active">' : '<li>', '</li>');
+            let headerItem = dA(selectedIndex == i ? '<li class="uk-active">' : '<li>');
             header.append(headerItem);
 
-            let headerLink = new DOMAppender('<a href="#">', '</a>');
+            let headerLink = dA('<a href="#">');
             headerItem.append(headerLink);
             headerLink.appendString(entry.title);
 
-            let contentItem = new DOMAppender('<li>', '</li>');
+            let contentItem = dA('<li>');
             content.append(contentItem);
             contentItem.append(entry.content);
         }
 
-        let element = appender.toElement();
-
-        return element;
+        return appender.toElement();
     }
 
     const animatedDisplaySelectorAttribute = 'animated-display-selector';

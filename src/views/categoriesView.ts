@@ -20,14 +20,15 @@ export module CategoriesView {
     import reloadIfOk = EditViews.reloadPageIfOk;
     import doIfOk = EditViews.doIfOk;
     import IPrivilegesCallback = PageActions.IPrivilegesCallback;
+    import dA = DOMHelpers.dA;
 
     export function createCategoryLink(category: CategoryRepository.Category,
                                        addSpace: boolean = false,
                                        classes: string = 'uk-button uk-button-text'): DOMAppender {
 
-        const result = new DOMAppender(`<a class="${classes}" href="` + Pages.getCategoryFullUrl(category) +
+        const result = dA(`<a class="${classes}" href="` + Pages.getCategoryFullUrl(category) +
             '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
-            DOMHelpers.escapeStringForAttribute(category.name) + '">', '</a>');
+            DOMHelpers.escapeStringForAttribute(category.name) + '">');
 
         result.appendString((addSpace ? ' ' : '') + category.name);
 
@@ -37,8 +38,8 @@ export module CategoriesView {
     export function createCategoriesTable(categories: CategoryRepository.Category[],
                                           callback: ICategoryCallback): HTMLElement {
 
-        const tableContainer = new DOMAppender('<div class="categories-table">', '</div>');
-        const table = new DOMAppender('<table class="uk-table uk-table-divider uk-table-middle">', '</table>');
+        const tableContainer = dA('<div class="categories-table">');
+        const table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
         tableContainer.append(table);
 
         if (categories.length < 1) {
@@ -56,17 +57,17 @@ export module CategoriesView {
             '    </tr>\n' +
             '</thead>';
         table.appendRaw(tableHeader);
-        const tbody = new DOMAppender('<tbody>', '</tbody>');
+        const tbody = dA('<tbody>');
         table.append(tbody);
 
         for (const category of categories) {
 
             if (null == category) continue;
 
-            const row = new DOMAppender('<tr>', '</tr>');
+            const row = dA('<tr>');
             tbody.append(row);
             {
-                const nameColumn = new DOMAppender('<td class="uk-table-expand">', '</td>');
+                const nameColumn = dA('<td class="uk-table-expand">');
                 row.append(nameColumn);
 
                 if (Privileges.Category.canEditCategoryDisplayOrder(category)) {
@@ -76,26 +77,26 @@ export module CategoriesView {
                         'data-category-display-order': category.displayOrder.toString()
                     };
                     const dataAttribute = DOMHelpers.concatAttributes(attributes);
-                    const link = new DOMAppender(`<a class="editDisplayOrderLink" ${dataAttribute}>`, '</a>');
+                    const link = dA(`<a class="editDisplayOrderLink" ${dataAttribute}>`);
                     nameColumn.append(link);
-                    link.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: move" uk-tooltip title="Edit category display order">', '</span>'))
+                    link.append(dA('<span class="uk-icon" uk-icon="icon: move" uk-tooltip title="Edit category display order">'))
                 }
                 else {
 
-                    nameColumn.append(new DOMAppender('<span class="uk-icon" uk-icon="icon: folder">', '</span>'));
+                    nameColumn.append(dA('<span class="uk-icon" uk-icon="icon: folder">'));
                 }
 
                 const nameLink = createCategoryLink(category, true);
                 nameColumn.append(nameLink);
                 nameColumn.appendRaw('<br/>');
 
-                const description = new DOMAppender('<span class="category-description">', '</span>');
+                const description = dA('<span class="category-description">');
                 nameColumn.append(description);
                 description.appendString(category.description);
 
                 if (category.children && category.children.length) {
 
-                    const childCategoryElement = new DOMAppender('<span class="category-children uk-text-small">', '</span>');
+                    const childCategoryElement = dA('<span class="category-children uk-text-small">');
                     if (category.description && category.description.length) {
                         nameColumn.appendRaw('<span class="uk-text-meta"> · Subcategories:</span> ');
                     }
@@ -118,7 +119,7 @@ export module CategoriesView {
                 }
             }
             {
-                const tagColumn = new DOMAppender('<td class="uk-text-center uk-table-shrink">', '</td>');
+                const tagColumn = dA('<td class="uk-text-center uk-table-shrink">');
                 row.append(tagColumn);
 
                 for (const tag of category.tags) {
