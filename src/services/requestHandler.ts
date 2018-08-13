@@ -67,7 +67,7 @@ export module RequestHandler {
 
         return new Promise((resolve, reject) => {
 
-            let xmlHttp = new XMLHttpRequest();
+            const xmlHttp = new XMLHttpRequest();
             xmlHttp.onreadystatechange = () => {
 
                 if (xmlHttp.readyState == XMLHttpRequest.DONE) {

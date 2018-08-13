@@ -155,7 +155,7 @@ export module Privileges {
 
     export namespace User {
 
-        let currentUserId = '00000000-0000-0000-0000-000000000000';
+        const currentUserId = '00000000-0000-0000-0000-000000000000';
 
         function checkForumWideUserPrivilege(user: UserRepository.User, whenCurrentUser: string, whenDifferentUser: string) {
 

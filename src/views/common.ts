@@ -43,10 +43,10 @@ export module Views {
     export async function changeContent(container: HTMLElement, handler: () => Promise<HTMLElement>,
                                         refreshMath: boolean = true): Promise<void> {
 
-        let spinner = DOMHelpers.parseHTML('<div class="spinner-element"><div uk-spinner></div></div>');
-        let disabledElement = DOMHelpers.parseHTML('<div class="disabled-element"></div>');
+        const spinner = DOMHelpers.parseHTML('<div class="spinner-element"><div uk-spinner></div></div>');
+        const disabledElement = DOMHelpers.parseHTML('<div class="disabled-element"></div>');
 
-        let timer = setTimeout(() => {
+        const timer = setTimeout(() => {
 
             container.appendChild(disabledElement);
             container.appendChild(spinner);
@@ -57,7 +57,7 @@ export module Views {
         try {
             container.scrollTop = 0;
 
-            let newPageContent = await handler();
+            const newPageContent = await handler();
 
             //no more need to show the spinner
             clearTimeout(timer);
@@ -127,15 +127,15 @@ export module Views {
             return result;
         }
 
-        let container = DOMHelpers.parseHTML(
+        const container = DOMHelpers.parseHTML(
             '<ul class="uk-pagination uk-flex-center uk-margin-remove-left uk-margin-remove-top uk-margin-remove-bottom" uk-margin></ul>');
         result.appendChild(container);
 
-        let pageCount = CommonEntities.getPageCount(info);
+        const pageCount = CommonEntities.getPageCount(info);
 
         if (info.page > 0) {
 
-            let previous = DOMHelpers.parseHTML('<li><a><span uk-pagination-previous></span></a></li>');
+            const previous = DOMHelpers.parseHTML('<li><a><span uk-pagination-previous></span></a></li>');
             container.appendChild(previous);
             previous.addEventListener('click', (ev) => {
 
@@ -152,10 +152,10 @@ export module Views {
 
         function addPageLink(pageNumber: number) {
 
-            let listElement = cE('li');
+            const listElement = cE('li');
             container.appendChild(listElement);
 
-            let link = cE('a');
+            const link = cE('a');
             listElement.appendChild(link);
             link.setAttribute('href', Pages.getUrl(getLinkForPage(pageNumber)));
             link.innerText = `${pageNumber + 1}`;
@@ -169,11 +169,11 @@ export module Views {
 
         function addEllipsis(): void {
 
-            let listElement = cE('li');
+            const listElement = cE('li');
             container.appendChild(listElement);
             listElement.classList.add('pointer-cursor');
 
-            let span = cE('span');
+            const span = cE('span');
             listElement.appendChild(span);
             span.innerText = '...';
 
@@ -228,7 +228,7 @@ export module Views {
             }
             addEllipsis();
 
-            let start = info.page - Math.floor(displayConfig.pageNumbersMiddle / 2);
+            const start = info.page - Math.floor(displayConfig.pageNumbersMiddle / 2);
             for (let i = 0; i < displayConfig.pageNumbersMiddle; ++i) {
 
                 addPageLink(start + i);
@@ -243,7 +243,7 @@ export module Views {
 
         if (info.page < (pageCount - 1)) {
 
-            let next = DOMHelpers.parseHTML('<li><a><span uk-pagination-next></span></a></li>');
+            const next = DOMHelpers.parseHTML('<li><a><span uk-pagination-next></span></a></li>');
             container.appendChild(next);
             next.addEventListener('click', (ev) => {
 
@@ -252,7 +252,7 @@ export module Views {
             });
         }
 
-        let total = cE('span');
+        const total = cE('span');
         result.appendChild(total);
         total.classList.add('uk-flex', 'uk-flex-center', 'uk-text-meta', 'pagination-total');
         total.innerText = `${DisplayHelpers.intToString(info.totalCount)} total`;
@@ -353,88 +353,88 @@ export module Views {
 
     export function setupThreadsWithTagsLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll(`[${ThreadsWithTagData}]`);
+        const links = element.querySelectorAll(`[${ThreadsWithTagData}]`);
 
         for (let i = 0; i < links.length; ++i) {
 
-            let link = links.item(i);
+            const link = links.item(i);
             link.addEventListener('click', threadsWithTagLinkClicked);
         }
     }
 
     export function setupThreadsOfUsersLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll(`[${UserThreadsData}]`);
+        const links = element.querySelectorAll(`[${UserThreadsData}]`);
 
         for (let i = 0; i < links.length; ++i) {
 
-            let link = links.item(i);
+            const link = links.item(i);
             link.addEventListener('click', threadsOfUserLinkClicked);
         }
     }
 
     export function setupSubscribedThreadsOfUsersLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll(`[${UserSubscribedThreadsData}]`);
+        const links = element.querySelectorAll(`[${UserSubscribedThreadsData}]`);
 
         for (let i = 0; i < links.length; ++i) {
 
-            let link = links.item(i);
+            const link = links.item(i);
             link.addEventListener('click', subscribedThreadsOfUserLinkClicked);
         }
     }
 
     export function setupThreadMessagesOfUsersLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll(`[${UserMessagesData}]`);
+        const links = element.querySelectorAll(`[${UserMessagesData}]`);
 
         for (let i = 0; i < links.length; ++i) {
 
-            let link = links.item(i);
+            const link = links.item(i);
             link.addEventListener('click', threadMessagesOfUserLinkClicked);
         }
     }
 
     export function setupThreadMessagesCommentsWrittenByUserLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll(`[${UserWrittenThreadMessageCommentsData}]`);
+        const links = element.querySelectorAll(`[${UserWrittenThreadMessageCommentsData}]`);
 
         for (let i = 0; i < links.length; ++i) {
 
-            let link = links.item(i);
+            const link = links.item(i);
             link.addEventListener('click', threadMessageCommentsWrittenByUserLinkClicked);
         }
     }
 
     export function setupThreadMessagesOfThreadsLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll('[data-threadmessagethreadid]');
+        const links = element.querySelectorAll('[data-threadmessagethreadid]');
 
         for (let i = 0; i < links.length; ++i) {
 
-            let link = links.item(i);
+            const link = links.item(i);
             link.addEventListener('click', threadMessagesOfThreadLinkClicked);
         }
     }
 
     export function setupThreadMessagesOfMessageParentThreadLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll('[data-threadmessageid]');
+        const links = element.querySelectorAll('[data-threadmessageid]');
 
         for (let i = 0; i < links.length; ++i) {
 
-            let link = links.item(i);
+            const link = links.item(i);
             link.addEventListener('click', threadMessagesOfParentThreadLinkClicked);
         }
     }
 
     export function setupCategoryLinks(element: HTMLElement): void {
 
-        let links = element.querySelectorAll('[data-categoryid]');
+        const links = element.querySelectorAll('[data-categoryid]');
 
         for (let i = 0; i < links.length; ++i) {
 
-            let link = links.item(i) as HTMLAnchorElement;
+            const link = links.item(i) as HTMLAnchorElement;
             setupCategoryLink(link);
         }
     }
@@ -448,8 +448,8 @@ export module Views {
 
         setTimeout(() => {
 
-            let element = document.getElementById(elementId);
-            let container = document.getElementById('pageContentContainer');
+            const element = document.getElementById(elementId);
+            const container = document.getElementById('pageContentContainer');
             if (element) {
 
                 const top = jQuery(element).offset().top - jQuery(container).offset().top;
@@ -518,25 +518,25 @@ export module Views {
 
     export function createTabs(entries: TabEntry[], selectedIndex: number = 0, alignment: string = 'left'): HTMLElement {
 
-        let appender = dA('<div>');
+        const appender = dA('<div>');
 
-        let header = dA(`<ul uk-tab class="uk-flex-${alignment}">`);
+        const header = dA(`<ul uk-tab class="uk-flex-${alignment}">`);
         appender.append(header);
-        let content = dA('<ul class="uk-switcher">');
+        const content = dA('<ul class="uk-switcher">');
         appender.append(content);
 
         for (let i = 0; i < entries.length; ++i) {
 
             const entry = entries[i];
 
-            let headerItem = dA(selectedIndex == i ? '<li class="uk-active">' : '<li>');
+            const headerItem = dA(selectedIndex == i ? '<li class="uk-active">' : '<li>');
             header.append(headerItem);
 
-            let headerLink = dA('<a href="#">');
+            const headerLink = dA('<a href="#">');
             headerItem.append(headerLink);
             headerLink.appendString(entry.title);
 
-            let contentItem = dA('<li>');
+            const contentItem = dA('<li>');
             content.append(contentItem);
             contentItem.append(entry.content);
         }
@@ -566,7 +566,7 @@ export module Views {
 
         container.innerHTML = '';
 
-        let elementWithAnimationDisplaySelector = getElementMarkedForAnimatedDisplay(newPageContent);
+        const elementWithAnimationDisplaySelector = getElementMarkedForAnimatedDisplay(newPageContent);
 
         const animatedDisplaySelector = elementWithAnimationDisplaySelector
             ? elementWithAnimationDisplaySelector.getAttribute(animatedDisplaySelectorAttribute)
@@ -587,7 +587,7 @@ export module Views {
 
     function transferChildElementsToArray(container: HTMLElement): HTMLElement[] {
 
-        let result: HTMLElement[] = [];
+        const result: HTMLElement[] = [];
         while (container.lastChild) {
 
             result.push(container.lastChild as HTMLElement);
@@ -599,12 +599,12 @@ export module Views {
     function setContentWithAnimation(container: HTMLElement, newPageContent: HTMLElement, selector: string,
                                      refreshMath: boolean) {
 
-        let subContainer = (newPageContent.querySelector(selector) as HTMLElement) || newPageContent;
+        const subContainer = (newPageContent.querySelector(selector) as HTMLElement) || newPageContent;
 
-        let subContainerChildren = transferChildElementsToArray(subContainer);
+        const subContainerChildren = transferChildElementsToArray(subContainer);
 
-        let toAnimate = subContainerChildren.slice(0, nrOfElementsToAnimate);
-        let toSimplyAdd = subContainerChildren.slice(nrOfElementsToAnimate, subContainerChildren.length);
+        const toAnimate = subContainerChildren.slice(0, nrOfElementsToAnimate);
+        const toSimplyAdd = subContainerChildren.slice(nrOfElementsToAnimate, subContainerChildren.length);
 
         setTimeout(() => {
 

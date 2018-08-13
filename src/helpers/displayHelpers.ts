@@ -41,7 +41,7 @@ export module DisplayHelpers {
 
     function dateFromEpochTime(epochTime: number): Date {
 
-        let result = new Date(0);
+        const result = new Date(0);
         result.setUTCSeconds(epochTime);
 
         return result;

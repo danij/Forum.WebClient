@@ -39,7 +39,7 @@ export module PrivilegesRepository {
 
     function filterAssignedPrivilegesCollection(value: any) {
 
-        let result = value as AssignedPrivilegesCollection;
+        const result = value as AssignedPrivilegesCollection;
 
         result.discussionThreadMessagePrivileges = filterAssignedPrivileges(result.discussionThreadMessagePrivileges);
         result.discussionThreadPrivileges = filterAssignedPrivileges(result.discussionThreadPrivileges);
