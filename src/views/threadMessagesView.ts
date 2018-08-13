@@ -760,7 +760,7 @@ export module ThreadMessagesView {
         let listContainer = cE('div');
         listContainer.classList.add('thread-message-comments-list');
         listContainer.appendChild(createCommentsList(collection, threadMessageCallback,
-            threadCallback, info.user));
+            threadCallback, privilegesCallback, info.user));
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
@@ -774,6 +774,7 @@ export module ThreadMessagesView {
     export function createCommentsList(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
                                        callback: PageActions.IThreadMessageCallback,
                                        threadCallback: PageActions.IThreadCallback,
+                                       privilegesCallback: PageActions.IPrivilegesCallback,
                                        user?: UserRepository.User): HTMLElement {
 
         const comments = collection.messageComments || [];
@@ -829,7 +830,7 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
 
-        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, null);
+        setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback);
 
         setupMessageCommentLinks(element, callback);
 

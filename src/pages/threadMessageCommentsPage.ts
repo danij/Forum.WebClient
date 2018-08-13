@@ -126,7 +126,8 @@ export class ThreadMessageCommentsPage implements Pages.Page {
             this.bottomPaginationControl = newBottomPaginationControl;
 
             return ThreadMessagesView.createCommentsList(commentsCollection,
-                PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(), this.user);
+                PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(),
+                PageActions.getPrivilegesCallback(), this.user);
         });
     }
 
