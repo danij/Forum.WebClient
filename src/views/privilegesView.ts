@@ -18,11 +18,10 @@ import {Privileges} from "../services/privileges";
 export module PrivilegesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
+    import dA = DOMHelpers.dA;
     import RequiredPrivilegesCollection = PrivilegesRepository.RequiredPrivilegesCollection;
-    import TabEntry = Views.TabEntry;
     import AssignedPrivilegesCollection = PrivilegesRepository.AssignedPrivilegesCollection;
     import AssignedPrivilege = PrivilegesRepository.AssignedPrivilege;
-    import dA = DOMHelpers.dA;
 
     const ThreadMessagePrivilegeNames = [
 
@@ -297,7 +296,7 @@ export module PrivilegesView {
 
         Views.changeContent(toReplace, async () => {
 
-            let tabEntries: TabEntry[] = [];
+            let tabEntries: Views.TabEntry[] = [];
 
             if (threadMessageRequiredPrivileges) {
 
@@ -338,11 +337,11 @@ export module PrivilegesView {
     }
 
     function createdRequiredPrivilegesTable(title: string, privilegeNames,
-                                            values: RequiredPrivilegesCollection[], property: string): TabEntry {
+                                            values: RequiredPrivilegesCollection[], property: string): Views.TabEntry {
 
         let tableAppender = dA('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">');
 
-        let result: TabEntry = {
+        let result: Views.TabEntry = {
 
             title: title,
             content: tableAppender
@@ -462,7 +461,7 @@ export module PrivilegesView {
 
         Views.changeContent(toReplace, async () => {
 
-            let tabEntries: TabEntry[] = [];
+            let tabEntries: Views.TabEntry[] = [];
 
             let collection = await promise;
 
@@ -560,11 +559,11 @@ export module PrivilegesView {
 
     function createAssignedPrivilegesTable(title: string, assignedPrivileges: AssignedPrivilege[],
                                            firstColumn: string,
-                                           firstColumnCallback: (AssignedPrivilege) => DOMAppender): TabEntry {
+                                           firstColumnCallback: (AssignedPrivilege) => DOMAppender): Views.TabEntry {
 
         let tableAppender = dA('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">');
 
-        let result: TabEntry = {
+        let result: Views.TabEntry = {
 
             title: title,
             content: tableAppender
@@ -644,7 +643,7 @@ export module PrivilegesView {
 
         Views.changeContent(toReplace, async () => {
 
-            let tabEntries: TabEntry[] = [];
+            let tabEntries: Views.TabEntry[] = [];
 
             let collection = await promise;
 

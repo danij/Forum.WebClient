@@ -14,8 +14,6 @@ import {PrivilegesView} from "./privilegesView";
 export module UsersView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
-    import IUserCallback = PageActions.IUserCallback;
-    import reloadPageIfOk = EditViews.reloadPageIfOk;
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
 
@@ -373,7 +371,7 @@ export module UsersView {
     }
 
     export function createUserPageHeader(user: UserRepository.User,
-                                         callback: IUserCallback,
+                                         callback: PageActions.IUserCallback,
                                          privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         let result = dA('<div class="user-header">');
@@ -502,7 +500,7 @@ export module UsersView {
             const title = EditViews.getInput('Edit user title', user.title);
             if ((null !== title) && (title != user.title)) {
 
-                reloadPageIfOk(callback.editUserTitle(user.id, title));
+                EditViews.reloadPageIfOk(callback.editUserTitle(user.id, title));
             }
         });
         resultElement.getElementsByClassName('edit-user-info-link')[0].addEventListener('click', (ev) =>{
@@ -511,7 +509,7 @@ export module UsersView {
             const info = EditViews.getInput('Edit user info', user.info);
             if ((null !== info) && (info != user.info)) {
 
-                reloadPageIfOk(callback.editUserInfo(user.id, info));
+                EditViews.reloadPageIfOk(callback.editUserInfo(user.id, info));
             }
         });
         resultElement.getElementsByClassName('edit-user-signature-link')[0].addEventListener('click', (ev) =>{
@@ -520,7 +518,7 @@ export module UsersView {
             const signature = EditViews.getInput('Edit user signature', user.signature);
             if ((null !== signature) && (signature != user.signature)) {
 
-                reloadPageIfOk(callback.editUserSignature(user.id, signature));
+                EditViews.reloadPageIfOk(callback.editUserSignature(user.id, signature));
             }
         });
         resultElement.getElementsByClassName('clear-user-logo-link')[0].addEventListener('click', (ev) =>{
@@ -528,7 +526,7 @@ export module UsersView {
             ev.preventDefault();
             if (EditViews.confirm('Are you sure you want to delete ' + user.name + "'s logo?")) {
 
-                reloadPageIfOk(callback.deleteUserLogo(user.id));
+                EditViews.reloadPageIfOk(callback.deleteUserLogo(user.id));
             }
         });
         resultElement.getElementsByClassName('edit-user-logo-link')[0].addEventListener('click', (ev) =>{
@@ -553,7 +551,7 @@ export module UsersView {
                     reader.onloadend = (ev) => {
 
                         ev.preventDefault();
-                        reloadPageIfOk(callback.uploadUserLogo(user.id, reader.result));
+                        EditViews.reloadPageIfOk(callback.uploadUserLogo(user.id, reader.result));
                     };
                     reader.readAsArrayBuffer(file);
                 }

@@ -3,8 +3,6 @@ import {DisplayHelpers} from "../helpers/displayHelpers";
 import {Views} from "./common";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
-import {UsersView} from "./usersView";
-import {ThreadRepository} from "../services/threadRepository";
 import {PageActions} from "../pages/action";
 import {Privileges} from "../services/privileges";
 import {EditViews} from "./edit";
@@ -14,7 +12,6 @@ import {ThreadMessagesView} from "./threadMessagesView";
 export module TagsView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
-    import ITagCallback = PageActions.ITagCallback;
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
 
@@ -43,7 +40,7 @@ export module TagsView {
     }
 
     export function createTagsPageContent(tags: TagRepository.Tag[], info: Views.SortInfo,
-                                          callback: ITagCallback): TagsPageContent {
+                                          callback: PageActions.ITagCallback): TagsPageContent {
 
         let result = new TagsPageContent();
 
@@ -191,7 +188,7 @@ export module TagsView {
     }
 
     export function createTagPageHeader(tag: TagRepository.Tag,
-                                        callback: ITagCallback,
+                                        callback: PageActions.ITagCallback,
                                         privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         let container = cE('div');
@@ -395,7 +392,7 @@ export module TagsView {
         populateTagsInSelect(selectElement, allTags);
     }
 
-    function createAddNewTagElement(callback: ITagCallback): HTMLElement {
+    function createAddNewTagElement(callback: PageActions.ITagCallback): HTMLElement {
 
         let button = EditViews.createAddNewButton('Add Tag');
 

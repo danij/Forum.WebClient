@@ -18,12 +18,6 @@ import {PrivilegesView} from "./privilegesView";
 export module ThreadsView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
-    import ITagCallback = PageActions.ITagCallback;
-    import IThreadCallback = PageActions.IThreadCallback;
-    import refreshMath = ViewsExtra.refreshMath;
-    import reloadPageIfOk = EditViews.reloadPageIfOk;
-    import IUserCallback = PageActions.IUserCallback;
-    import IPrivilegesCallback = PageActions.IPrivilegesCallback;
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
 
@@ -55,8 +49,8 @@ export module ThreadsView {
                                              info: ThreadPageDisplayInfo,
                                              onPageNumberChange: Views.PageNumberChangeCallback,
                                              getLinkForPage: Views.GetLinkForPageCallback,
-                                             tagCallback: ITagCallback,
-                                             userCallback: IUserCallback,
+                                             tagCallback: PageActions.ITagCallback,
+                                             userCallback: PageActions.IUserCallback,
                                              privilegesCallback: PageActions.IPrivilegesCallback) {
 
         collection = collection || ThreadRepository.defaultThreadCollection();
@@ -316,8 +310,8 @@ export module ThreadsView {
     }
 
     export function createThreadPageHeader(thread: ThreadRepository.Thread,
-                                           callback: IThreadCallback,
-                                           privilegesCallback: IPrivilegesCallback): HTMLElement {
+                                           callback: PageActions.IThreadCallback,
+                                           privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         let element = cE('div');
         element.classList.add('uk-container', 'uk-container-expand', 'thread-header');
@@ -440,7 +434,7 @@ export module ThreadsView {
                         EditViews.doIfOk(callback.editThreadName(thread.id, name), () => {
 
                             threadTitle.innerText = thread.name = name;
-                            refreshMath(threadTitle);
+                            ViewsExtra.refreshMath(threadTitle);
                         });
                     }
                 });
@@ -474,7 +468,7 @@ export module ThreadsView {
                     TagsView.showSelectTagsDialog(thread.tags, allTags,
                         (added: string[], removed: string[]) => {
 
-                            reloadPageIfOk(callback.editThreadTags(thread.id, added, removed));
+                            EditViews.reloadPageIfOk(callback.editThreadTags(thread.id, added, removed));
                         });
                 });
             }
@@ -532,7 +526,8 @@ export module ThreadsView {
         return element;
     }
 
-    export function showSelectSingleThreadDialog(callback: IThreadCallback, onSave: (selected: string) => void): void {
+    export function showSelectSingleThreadDialog(callback: PageActions.IThreadCallback,
+                                                 onSave: (selected: string) => void): void {
 
         let modal = document.getElementById('select-single-thread-modal');
         Views.showModal(modal);
@@ -594,7 +589,7 @@ export module ThreadsView {
         });
     }
 
-    async function showSubscribedUsers(threadId: string, callback: IThreadCallback) {
+    async function showSubscribedUsers(threadId: string, callback: PageActions.IThreadCallback) {
 
         let modal = document.getElementById('subscribed-users-modal');
         let content = modal.getElementsByClassName('subscribed-users-content')[0];

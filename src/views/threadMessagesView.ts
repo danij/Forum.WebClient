@@ -18,11 +18,6 @@ import {PrivilegesView} from "./privilegesView";
 export module ThreadMessagesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
-    import IThreadCallback = PageActions.IThreadCallback;
-    import IUserCallback = PageActions.IUserCallback;
-    import IThreadMessageCallback = PageActions.IThreadMessageCallback;
-    import reloadPageIfOk = EditViews.reloadPageIfOk;
-    import IPrivilegesCallback = PageActions.IPrivilegesCallback;
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
 
@@ -111,10 +106,10 @@ export module ThreadMessagesView {
                                                     onPageNumberChange: Views.PageNumberChangeCallback,
                                                     getLinkForPage: Views.GetLinkForPageCallback,
                                                     thread: ThreadRepository.Thread,
-                                                    threadCallback: IThreadCallback,
-                                                    threadMessageCallback: IThreadMessageCallback,
-                                                    userCallback: IUserCallback,
-                                                    privilegesCallback: IPrivilegesCallback,
+                                                    threadCallback: PageActions.IThreadCallback,
+                                                    threadMessageCallback: PageActions.IThreadMessageCallback,
+                                                    userCallback: PageActions.IUserCallback,
+                                                    privilegesCallback: PageActions.IPrivilegesCallback,
                                                     quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): ThreadMessagesPageContent {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCollection();
@@ -175,9 +170,9 @@ export module ThreadMessagesView {
     }
 
     export function createThreadMessageList(collection: ThreadMessageRepository.ThreadMessageCollection,
-                                            callback: IThreadMessageCallback,
-                                            threadCallback: IThreadCallback,
-                                            privilegesCallback: IPrivilegesCallback,
+                                            callback: PageActions.IThreadMessageCallback,
+                                            threadCallback: PageActions.IThreadCallback,
+                                            privilegesCallback: PageActions.IPrivilegesCallback,
                                             thread?: ThreadRepository.Thread,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): HTMLElement {
 
@@ -440,9 +435,10 @@ export module ThreadMessagesView {
         return actions;
     }
 
-    function setupThreadMessageActionEvents(element: HTMLElement, messagesById, callback: IThreadMessageCallback,
-                                            threadCallback: IThreadCallback,
-                                            privilegesCallback: IPrivilegesCallback,
+    function setupThreadMessageActionEvents(element: HTMLElement, messagesById,
+                                            callback: PageActions.IThreadMessageCallback,
+                                            threadCallback: PageActions.IThreadCallback,
+                                            privilegesCallback: PageActions.IPrivilegesCallback,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void) {
 
         DOMHelpers.addEventListeners(element, 'edit-thread-message-content-link', 'click', async (ev) => {
@@ -475,7 +471,7 @@ export module ThreadMessagesView {
 
             ThreadsView.showSelectSingleThreadDialog(threadCallback, async (selected: string) => {
 
-                reloadPageIfOk(callback.moveThreadMessage(messageId, selected));
+                EditViews.reloadPageIfOk(callback.moveThreadMessage(messageId, selected));
             });
         });
 
@@ -486,7 +482,7 @@ export module ThreadMessagesView {
 
             if (EditViews.confirm('Are you sure you want to delete the selected message?')) {
 
-                reloadPageIfOk(callback.deleteThreadMessage(messageId));
+                EditViews.reloadPageIfOk(callback.deleteThreadMessage(messageId));
             }
         });
 
@@ -568,7 +564,8 @@ export module ThreadMessagesView {
 
     const solvedCommentSpan = '<span class="uk-icon-button uk-float-right" uk-icon="check" title="Already solved" uk-tooltip></span>';
 
-    async function showThreadMessageComments(messageId: string, callback: IThreadMessageCallback): Promise<void> {
+    async function showThreadMessageComments(messageId: string,
+                                             callback: PageActions.IThreadMessageCallback): Promise<void> {
 
         let modal = document.getElementById('thread-message-comments-modal');
         let content = modal.getElementsByClassName('message-comments-container')[0];
@@ -638,7 +635,7 @@ export module ThreadMessagesView {
         paragraph.appendString(comment.content);
     }
 
-    function setupMessageCommentLinks(result: HTMLElement, callback: IThreadMessageCallback) {
+    function setupMessageCommentLinks(result: HTMLElement, callback: PageActions.IThreadMessageCallback) {
 
         let links = result.getElementsByClassName('solve-message-comment-link');
         for (let i = 0; i < links.length; ++i) {
@@ -659,7 +656,7 @@ export module ThreadMessagesView {
     }
 
     function createNewThreadMessageControl(thread: ThreadRepository.Thread,
-                                           callback: IThreadCallback): MessageEditControl {
+                                           callback: PageActions.IThreadCallback): MessageEditControl {
 
         let result = cE('div');
         result.classList.add('reply-container');
@@ -734,9 +731,9 @@ export module ThreadMessagesView {
                                               info: CommentsPageDisplayInfo,
                                               onPageNumberChange: Views.PageNumberChangeCallback,
                                               getLinkForPage: Views.GetLinkForPageCallback,
-                                              threadMessageCallback: IThreadMessageCallback,
-                                              userCallback: IUserCallback,
-                                              threadCallback: IThreadCallback,
+                                              threadMessageCallback: PageActions.IThreadMessageCallback,
+                                              userCallback: PageActions.IUserCallback,
+                                              threadCallback: PageActions.IThreadCallback,
                                               privilegesCallback: PageActions.IPrivilegesCallback): ThreadMessageCommentsPageContent {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCommentCollection();
@@ -775,8 +772,8 @@ export module ThreadMessagesView {
     }
 
     export function createCommentsList(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
-                                       callback: IThreadMessageCallback,
-                                       threadCallback: IThreadCallback,
+                                       callback: PageActions.IThreadMessageCallback,
+                                       threadCallback: PageActions.IThreadCallback,
                                        user?: UserRepository.User): HTMLElement {
 
         const comments = collection.messageComments || [];
