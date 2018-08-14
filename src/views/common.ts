@@ -481,7 +481,7 @@ export module Views {
     function showNotification(message: string, status: string, timeout: number = 3000): void {
 
         UIkit.notification({
-            message: message,
+            message: DOMHelpers.escapeStringForContent(message),
             status: status,
             timeout: timeout
         });
@@ -512,7 +512,7 @@ export module Views {
         content: DOMAppender;
     }
 
-    export function createTabs(entries: TabEntry[], selectedIndex: number = 0, alignment: string = 'left'): HTMLElement {
+    export function createTabs(entries: TabEntry[], selectedIndex: number = 0, alignment: string = 'left'): DOMAppender {
 
         const appender = dA('<div>');
 
@@ -537,7 +537,7 @@ export module Views {
             contentItem.append(entry.content);
         }
 
-        return appender.toElement();
+        return appender;
     }
 
     const animatedDisplaySelectorAttribute = 'animated-display-selector';
