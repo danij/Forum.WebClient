@@ -159,7 +159,7 @@ export module PrivilegesView {
         return modal;
     }
 
-    function createPrivilegeLevelSpan(value: string) : DOMAppender {
+    function createPrivilegeLevelSpan(value: string): DOMAppender {
 
         const result = dA('<span class="privilege-level">');
         result.appendString(value);
@@ -189,7 +189,7 @@ export module PrivilegesView {
         }
         if (Privileges.ThreadMessage.canViewThreadMessageAssignedPrivileges(message)) {
 
-            showAssignedPrivileges(modal, callback.getThreadMessageAssignedPrivileges(message.id));
+            showAssignedPrivileges(modal, callback.getThreadMessageAssignedPrivileges(message.id), message.id);
         }
     }
 
@@ -214,7 +214,7 @@ export module PrivilegesView {
         }
         if (Privileges.Thread.canViewThreadAssignedPrivileges(thread)) {
 
-            showAssignedPrivileges(modal, callback.getThreadAssignedPrivileges(thread.id));
+            showAssignedPrivileges(modal, callback.getThreadAssignedPrivileges(thread.id), thread.id);
         }
     }
 
@@ -235,7 +235,7 @@ export module PrivilegesView {
         }
         if (Privileges.Tag.canViewTagAssignedPrivileges(tag)) {
 
-            showAssignedPrivileges(modal, callback.getTagAssignedPrivileges(tag.id));
+            showAssignedPrivileges(modal, callback.getTagAssignedPrivileges(tag.id), tag.id);
         }
     }
 
@@ -257,7 +257,7 @@ export module PrivilegesView {
         }
         if (Privileges.Category.canViewCategoryAssignedPrivileges(category)) {
 
-            showAssignedPrivileges(modal, callback.getCategoryAssignedPrivileges(category.id));
+            showAssignedPrivileges(modal, callback.getCategoryAssignedPrivileges(category.id), category.id);
         }
     }
 
@@ -280,7 +280,7 @@ export module PrivilegesView {
         }
         if (Privileges.ForumWide.canViewForumWideAssignedPrivileges()) {
 
-            showAssignedPrivileges(modal, callback.getForumWideAssignedPrivileges());
+            showAssignedPrivileges(modal, callback.getForumWideAssignedPrivileges(), '');
         }
     }
 
@@ -329,7 +329,7 @@ export module PrivilegesView {
                     'forumWidePrivileges'));
             }
 
-            const result = Views.createTabs(tabEntries, 0, 'center');
+            const result = Views.createTabs(tabEntries, 0, 'center').toElement();
 
             return result;
 
@@ -454,7 +454,8 @@ export module PrivilegesView {
         return result;
     }
 
-    function showAssignedPrivileges(modal: HTMLElement, promise: Promise<AssignedPrivilegesCollection>): void {
+    function showAssignedPrivileges(modal: HTMLElement, promise: Promise<AssignedPrivilegesCollection>,
+                                    entityId: string): void {
 
         const toReplace = modal.getElementsByClassName('privileges-part2')[0] as HTMLElement;
         toReplace.innerText = '';
@@ -472,47 +473,14 @@ export module PrivilegesView {
                 || collection.discussionThreadPrivileges
                 || collection.discussionThreadMessagePrivileges;
 
-            if (0 == assignedPrivileges.length) {
 
-                return DOMHelpers.parseHTML('<span class="uk-text-warning">No privileges assigned</span>');
-            }
+            const appender = dA('div');
 
-            const granted: AssignedPrivilege[] = [];
-            const grantedExpired: AssignedPrivilege[] = [];
-            const revoked: AssignedPrivilege[] = [];
-            const revokedExpired: AssignedPrivilege[] = [];
-
-            assignedPrivileges.sort((first, second) => first.granted - second.granted);
+            appender.append(createAssignPrivilegeForm(collection, entityId));
 
             function expired(assignedPrivilege: AssignedPrivilege): boolean {
 
                 return (assignedPrivilege.expires > 0) && (assignedPrivilege.expires < now);
-            }
-
-            for (const assignedPrivilege of assignedPrivileges) {
-
-                if (assignedPrivilege.value > 0) {
-
-                    if (expired(assignedPrivilege)) {
-
-                        grantedExpired.push(assignedPrivilege);
-                    }
-                    else {
-
-                        granted.push(assignedPrivilege);
-                    }
-                }
-                else {
-
-                    if (expired(assignedPrivilege)) {
-
-                        revokedExpired.push(assignedPrivilege);
-                    }
-                    else {
-
-                        revoked.push(assignedPrivilege);
-                    }
-                }
             }
 
             function getUserLink(assignedPrivilege: AssignedPrivilege): DOMAppender {
@@ -524,31 +492,74 @@ export module PrivilegesView {
                 } as UserRepository.User);
             }
 
-            const columnName = 'User';
+            if (0 == assignedPrivileges.length) {
 
-            if (granted.length) {
-
-                tabEntries.push(createAssignedPrivilegesTable('Granted Levels', granted, columnName, getUserLink));
+                appender.appendRaw('<span class="uk-text-warning">No privileges assigned</span>');
             }
+            else {
 
-            if (grantedExpired.length) {
+                const granted: AssignedPrivilege[] = [];
+                const grantedExpired: AssignedPrivilege[] = [];
+                const revoked: AssignedPrivilege[] = [];
+                const revokedExpired: AssignedPrivilege[] = [];
 
-                tabEntries.push(createAssignedPrivilegesTable('Granted Levels (Expired)', grantedExpired,
-                    columnName, getUserLink));
+                assignedPrivileges.sort((first, second) => first.granted - second.granted);
+
+                for (const assignedPrivilege of assignedPrivileges) {
+
+                    if (assignedPrivilege.value > 0) {
+
+                        if (expired(assignedPrivilege)) {
+
+                            grantedExpired.push(assignedPrivilege);
+                        }
+                        else {
+
+                            granted.push(assignedPrivilege);
+                        }
+                    }
+                    else {
+
+                        if (expired(assignedPrivilege)) {
+
+                            revokedExpired.push(assignedPrivilege);
+                        }
+                        else {
+
+                            revoked.push(assignedPrivilege);
+                        }
+                    }
+                }
+
+                const columnName = 'User';
+
+                if (granted.length) {
+
+                    tabEntries.push(createAssignedPrivilegesTable('Granted Levels', granted, columnName, getUserLink));
+                }
+
+                if (grantedExpired.length) {
+
+                    tabEntries.push(createAssignedPrivilegesTable('Granted Levels (Expired)', grantedExpired,
+                        columnName, getUserLink));
+                }
+
+                if (revoked.length) {
+
+                    tabEntries.push(createAssignedPrivilegesTable('Revoked Levels', revoked, columnName, getUserLink));
+                }
+
+                if (revokedExpired.length) {
+
+                    tabEntries.push(createAssignedPrivilegesTable('Revoked Levels (Expired)', revokedExpired,
+                        columnName, getUserLink));
+                }
+
+                appender.append(Views.createTabs(tabEntries, 0, 'center'));
             }
+            const result = appender.toElement();
 
-            if (revoked.length) {
-
-                tabEntries.push(createAssignedPrivilegesTable('Revoked Levels', revoked, columnName, getUserLink));
-            }
-
-            if (revokedExpired.length) {
-
-                tabEntries.push(createAssignedPrivilegesTable('Revoked Levels (Expired)', revokedExpired,
-                    columnName, getUserLink));
-            }
-
-            const result = Views.createTabs(tabEntries, 0, 'center');
+            setupAssignPrivilegeForm(result);
 
             Views.setupThreadsOfUsersLinks(result);
 
@@ -615,6 +626,166 @@ export module PrivilegesView {
         }
 
         return result;
+    }
+
+    function createAssignPrivilegeForm(collection: AssignedPrivilegesCollection, entityId: string): DOMAppender {
+
+        if (! collection.allowAdjustPrivilege) {
+
+            return null;
+        }
+
+        let assignType = '';
+
+        if (collection.discussionThreadMessagePrivileges) {
+            assignType = 'thread-message';
+        }
+        else if (collection.discussionThreadPrivileges) {
+            assignType = 'thread';
+        }
+        else if (collection.discussionTagPrivileges) {
+            assignType = 'tag';
+        }
+        else if (collection.discussionCategoryPrivileges) {
+            assignType = 'category';
+        }
+        else if (collection.forumWidePrivileges) {
+            assignType = 'forum-wide';
+        }
+        else {
+            console.error('Invalid AssignedPrivilegesCollection');
+            return null;
+        }
+
+        const dataAssignType = `data-assign-type=${assignType}`;
+        const dataEntityId = `data-entity-id=${DOMHelpers.escapeStringForAttribute(entityId)}`;
+
+        const form = dA(`<form class="assign-privileges-form" ${dataAssignType} ${dataEntityId}>`);
+        const grid = dA('<div class="uk-grid-small uk-child-width-auto uk-grid">');
+        form.append(grid);
+
+        grid.appendRaw('<label for="user-input-assign-privilege">User name:</label><input type="text" id="user-input-assign-privilege" class="uk-input uk-form-small" />');
+        grid.appendRaw('<label for="value-input-assign-privilege">Level:</label><input type="text" id="value-input-assign-privilege" class="uk-input uk-form-small uk-text-right" value="0" />')
+        grid.appendRaw('<label for="duration-input-assign-privilege">Duration:</label><input type="text" id="duration-input-assign-privilege" class="uk-input uk-form-small uk-text-center" placeholder="unlimited" />')
+
+        const durationSelect = dA('<select id="duration-type-assign-privilege" class="uk-select uk-form-small">');
+        grid.append(durationSelect);
+
+        const durationTypes = [
+            [1, 'seconds'],
+            [60, 'minutes'],
+            [60 * 60, 'hours', true],
+            [60 * 60 * 24, 'days']
+        ];
+
+        for (const durationType of durationTypes) {
+
+            const selected = durationType.length > 2 && durationType[2] ? ' selected' : '';
+            durationSelect.appendRaw(`<option value="${durationType[0]}"${selected}>${durationType[1]}</option>`);
+        }
+
+        grid.appendRaw('<button id="save-assign-privilege" class="uk-button uk-button-default uk-button-small">Save</button>')
+
+        return form;
+    }
+
+    function setupAssignPrivilegeForm(element: HTMLElement) {
+
+        const query = element.getElementsByClassName('assign-privileges-form');
+        if (query.length < 1) return;
+
+        const form = query[0] as HTMLFormElement;
+
+        const saveButton = form.querySelector('#save-assign-privilege');
+        saveButton.addEventListener('click', async (ev) => {
+
+            ev.preventDefault();
+
+            const userName = (form.querySelector('#user-input-assign-privilege') as HTMLInputElement).value;
+
+            if (userName.trim().length < 1) {
+
+                Views.showWarningNotification('User name cannot be empty!');
+                return;
+            }
+
+            const valueMin = -32000;
+            const valueMax = 32000;
+
+            const valueString = (form.querySelector('#value-input-assign-privilege') as HTMLInputElement).value;
+            const value = parseInt(valueString);
+
+            if ((value.toString() != valueString) || (value < valueMin) || (value > valueMax)) {
+
+                Views.showWarningNotification(`Value must be between ${valueMin} and ${valueMax}!`);
+                return;
+            }
+
+            let durationString = (form.querySelector('#duration-input-assign-privilege') as HTMLInputElement).value;
+
+            if (! durationString) {
+                durationString = '0';
+            }
+            let duration = parseInt(durationString);
+
+            if (duration < 0) {
+
+                Views.showWarningNotification('Duration cannot be negative!');
+                return;
+            }
+
+            let durationMultiplier = (form.querySelector('#duration-type-assign-privilege') as HTMLSelectElement).value;
+
+            duration *= parseInt(durationMultiplier);
+
+            let user: UserRepository.User;
+
+            try {
+                user = await UserRepository.getUserByName(userName);
+            }
+            catch {
+                //skip
+            }
+            if (!user) {
+
+                Views.showWarningNotification('Cannot find user with name: ' + userName);
+                return;
+            }
+
+            const assignType = form.getAttribute('data-assign-type');
+            const elementId = form.getAttribute('data-entity-id');
+
+            try {
+                switch (assignType) {
+
+                    case 'thread-message':
+                        await PrivilegesRepository.assignThreadMessagePrivilege(elementId, user.id, value, duration);
+                        break;
+
+                    case 'thread':
+                        await PrivilegesRepository.assignThreadPrivilege(elementId, user.id, value, duration);
+                        break;
+
+                    case 'tag':
+                        await PrivilegesRepository.assignTagPrivilege(elementId, user.id, value, duration);
+                        break;
+
+                    case 'category':
+                        await PrivilegesRepository.assignCategoryPrivilege(elementId, user.id, value, duration);
+                        break;
+
+                    case 'forum-wide':
+                        await PrivilegesRepository.assignForumWidePrivilege(user.id, value, duration);
+                        break;
+                }
+
+                Views.showSuccessNotification('Assigned privilege will be displayed when reopening the modal.');
+            }
+            catch(ex) {
+
+                Views.showDangerNotification(`Could not assign privilege: ${ex}`);
+            }
+        });
     }
 
     export function showPrivilegesAssignedToUser(user: UserRepository.User,
@@ -715,7 +886,7 @@ export module PrivilegesView {
                 return DOMHelpers.parseHTML(`<span class="uk-text-warning">No privileges ${showRevoked ? 'revoked' : 'assigned'}</span>`);
             }
 
-            const result = Views.createTabs(tabEntries, 0, 'center');
+            const result = Views.createTabs(tabEntries, 0, 'center').toElement();
 
             Views.setupThreadMessagesOfThreadsLinks(result);
             Views.setupThreadsWithTagsLinks(result);

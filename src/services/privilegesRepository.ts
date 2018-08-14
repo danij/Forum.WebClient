@@ -35,6 +35,7 @@ export module PrivilegesRepository {
         discussionTagPrivileges?: AssignedPrivilege[];
         discussionCategoryPrivileges?: AssignedPrivilege[];
         forumWidePrivileges?: AssignedPrivilege[];
+        allowAdjustPrivilege: boolean;
     }
 
     function filterAssignedPrivilegesCollection(value: any) {
@@ -141,5 +142,48 @@ export module PrivilegesRepository {
         return (await RequestHandler.get({
             path: 'privileges/forum_wide/current_user'
         }) as CommonEntities.PrivilegesArray);
+    }
+
+    export async function assignThreadMessagePrivilege(messageId: string, userId: string,
+                                                       value: number, duration: number): Promise<void> {
+
+        return (await RequestHandler.post({
+            path: 'privileges/thread_message/assign/' +
+                [messageId, userId, value, duration].map(encodeURIComponent).join('/')
+        }));
+    }
+
+    export async function assignThreadPrivilege(threadId: string, userId: string,
+                                                value: number, duration: number): Promise<void> {
+
+        return (await RequestHandler.post({
+            path: 'privileges/thread/assign/' +
+                [threadId, userId, value, duration].map(encodeURIComponent).join('/')
+        }));
+    }
+
+    export async function assignTagPrivilege(tagId: string, userId: string,
+                                             value: number, duration: number): Promise<void> {
+
+        return (await RequestHandler.post({
+            path: 'privileges/tag/assign/' +
+                [tagId, userId, value, duration].map(encodeURIComponent).join('/')
+        }));
+    }
+
+    export async function assignCategoryPrivilege(categoryId: string, userId: string,
+                                                  value: number, duration: number): Promise<void> {
+
+        return (await RequestHandler.post({
+            path: 'privileges/category/assign/' +
+                [categoryId, userId, value, duration].map(encodeURIComponent).join('/')
+        }));
+    }
+
+    export async function assignForumWidePrivilege(userId: string, value: number, duration: number): Promise<void> {
+
+        return (await RequestHandler.post({
+            path: 'privileges/forum_wide/assign/' + [userId, value, duration].map(encodeURIComponent).join('/')
+        }));
     }
 }
