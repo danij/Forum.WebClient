@@ -23,7 +23,10 @@ export module DOMHelpers {
 
         public append(value: DOMAppender) {
 
-            this._values.push(value);
+            if (value) {
+                
+                this._values.push(value);
+            }
         }
 
         public appendElement(value: HTMLElement) {
