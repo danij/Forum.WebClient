@@ -140,7 +140,7 @@ export module ThreadMessageRepository {
 
     function filterNulls(value: any): ThreadMessageCollection {
 
-        let result = value as ThreadMessageCollection;
+        const result = value as ThreadMessageCollection;
 
         result.messages = (result.messages || []).filter(t => null != t);
 
@@ -154,7 +154,7 @@ export module ThreadMessageRepository {
 
     function filterCommentNulls(value: any, forceCreatedby?: UserRepository.User): ThreadMessageCommentCollection {
 
-        let result = value as ThreadMessageCommentCollection;
+        const result = value as ThreadMessageCommentCollection;
 
         result.messageComments = (result.messageComments || []).filter(t => null != t);
 
@@ -180,7 +180,7 @@ export module ThreadMessageRepository {
 
     export async function getThreadMessagesOfUser(user: UserRepository.User, request: GetThreadMessagesRequest): Promise<ThreadMessageCollection> {
 
-        let result = filterNulls(await RequestHandler.get({
+        const result = filterNulls(await RequestHandler.get({
             path: 'thread_messages/user/' + encodeURIComponent(user.id),
             query: request
         }));
@@ -236,7 +236,7 @@ export module ThreadMessageRepository {
 
     export async function searchThreadMessagesByName(name: string): Promise<ThreadMessageCollection> {
 
-        let idsResult = await RequestHandler.get({
+        const idsResult = await RequestHandler.get({
             path: '../search/thread_messages?q=' + encodeURIComponent(name)
         });
 

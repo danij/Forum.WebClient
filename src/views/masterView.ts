@@ -15,7 +15,7 @@ export module MasterView {
 
         document.title = config.title;
 
-        let footerLinks = document.getElementById('footer-links');
+        const footerLinks = document.getElementById('footer-links');
         footerLinks.innerHTML = '';
 
         for (let footerLink of config.footerLinks) {
@@ -27,7 +27,7 @@ export module MasterView {
 
     function createFooterLink(link: Pages.PageLink) : HTMLAnchorElement {
 
-        let result = cE('a') as HTMLAnchorElement;
+        const result = cE('a') as HTMLAnchorElement;
 
         result.setAttribute('href', link.link);
         result.innerText = link.title;
@@ -57,8 +57,8 @@ export module MasterView {
         link.addEventListener('click', (ev) => {
 
             ev.preventDefault();
-            let modal = document.getElementById('online-users-modal');
-            let content = modal.getElementsByClassName('online-users-content')[0];
+            const modal = document.getElementById('online-users-modal');
+            const content = modal.getElementsByClassName('online-users-content')[0];
 
             content.innerHTML = '';
 

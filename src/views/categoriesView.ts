@@ -295,7 +295,7 @@ export module CategoriesView {
         if (Privileges.Category.canViewCategoryRequiredPrivileges(category)
             || Privileges.Category.canViewCategoryAssignedPrivileges(category)) {
 
-            let link = EditViews.createEditLink('Privileges', 'settings');
+            const link = EditViews.createEditLink('Privileges', 'settings');
             result.appendChild(link);
 
             link.addEventListener('click', () => {
@@ -308,7 +308,7 @@ export module CategoriesView {
 
         if (Privileges.Category.canEditCategoryTags(category)) {
 
-            let link = EditViews.createEditLink('Edit category tags', 'tag');
+            const link = EditViews.createEditLink('Edit category tags', 'tag');
             result.appendChild(link);
             link.addEventListener('click', async () => {
 
@@ -339,7 +339,7 @@ export module CategoriesView {
     export function createRootCategoriesDisplay(categories: CategoryRepository.Category[],
                                                 callback: PageActions.ICategoryCallback): HTMLElement {
 
-        let result = cE('div');
+        const result = cE('div');
         result.appendChild(createCategoriesTable(categories, callback));
 
         if (Privileges.ForumWide.canAddNewRootCategory()) {
@@ -355,7 +355,7 @@ export module CategoriesView {
                                           callback: PageActions.ICategoryCallback,
                                           privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
-        let result = cE('div');
+        const result = cE('div');
         result.appendChild(createCategoryHeader(category, callback, privilegesCallback));
 
         let separatorNeeded = false;
@@ -374,7 +374,7 @@ export module CategoriesView {
         if (threadList) {
 
             if (separatorNeeded) {
-                let separator = cE('hr');
+                const separator = cE('hr');
                 result.appendChild(separator);
 
                 separator.classList.add('uk-divider-icon');
@@ -388,7 +388,7 @@ export module CategoriesView {
 
     function createAddNewRootCategoryElement(callback: PageActions.ICategoryCallback): HTMLElement {
 
-        let button = EditViews.createAddNewButton('Add Root Category');
+        const button = EditViews.createAddNewButton('Add Root Category');
 
         button.addEventListener('click', () => {
 
@@ -403,7 +403,7 @@ export module CategoriesView {
 
     function createAddNewSubCategoryElement(parentId: string, callback: PageActions.ICategoryCallback): HTMLElement {
 
-        let button = EditViews.createAddNewButton('Add Sub Category');
+        const button = EditViews.createAddNewButton('Add Sub Category');
 
         button.addEventListener('click', () => {
 
@@ -443,13 +443,13 @@ export module CategoriesView {
     function showSelectCategoryParentDialog(allCategories: CategoryRepository.Category[], currentParentId: string,
                                             onSave: (newParentId: string) => void): void {
 
-        let modal = document.getElementById('select-category-parent-modal');
+        const modal = document.getElementById('select-category-parent-modal');
         Views.showModal(modal);
 
-        let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
-        let form = modal.getElementsByTagName('form')[0] as HTMLFormElement;
+        const saveButton = DOMHelpers.removeEventListeners(
+            modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
+        const form = modal.getElementsByTagName('form')[0] as HTMLFormElement;
 
-        saveButton = DOMHelpers.removeEventListeners(saveButton);
         saveButton.addEventListener('click', (ev) => {
 
             ev.preventDefault();
@@ -463,17 +463,17 @@ export module CategoriesView {
 
         form.innerHTML = '';
 
-        let list = cE('ul');
+        const list = cE('ul');
         list.classList.add('uk-list');
         form.appendChild(list);
 
         function addCategory(category: CategoryRepository.Category, level: number) {
 
-            let row = cE('li');
+            const row = cE('li');
             list.appendChild(row);
             row.classList.add(`level${level}`);
 
-            let input = cE('input');
+            const input = cE('input');
             row.appendChild(input);
 
             input.setAttribute('type', 'radio');
@@ -486,18 +486,18 @@ export module CategoriesView {
             }
             input.classList.add('uk-radio');
 
-            let label = cE('label');
+            const label = cE('label');
             row.appendChild(label);
 
             label.setAttribute('for', 'categoryParentId-' + category.id);
             label.innerText = category.name;
 
-            for (let child of (category.children || [])) {
+            for (const child of (category.children || [])) {
                 addCategory(child, level + 1);
             }
         }
 
-        let rootCategory = {
+        const rootCategory = {
 
             id: CategoryRepository.EmptyCategoryId,
             name: 'Root',

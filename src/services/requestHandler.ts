@@ -77,7 +77,7 @@ export module RequestHandler {
                         reject(new Error(xmlHttp.statusText));
                     }
 
-                    let content = parseContent(xmlHttp.responseText);
+                    const content = parseContent(xmlHttp.responseText);
 
                     if (null == content) {
 

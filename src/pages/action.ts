@@ -221,7 +221,7 @@ export module PageActions {
 
         async createThread(name: string, tagIds: string[], content: string): Promise<string> {
 
-            let result = await Pages.getOrShowError(ThreadRepository.createThread(name));
+            const result = await Pages.getOrShowError(ThreadRepository.createThread(name));
 
             await Pages.trueOrShowErrorAndFalse(this.editThreadTags(result, tagIds, null));
 

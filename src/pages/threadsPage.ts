@@ -46,10 +46,10 @@ export class ThreadsPage implements Pages.Page {
                 this.subscribedByUser = await this.getUser(this.subscribedByUserName);
             }
 
-            let threadCollection = await this.getThreadCollection();
+            const threadCollection = await this.getThreadCollection();
             if (null == threadCollection) return;
 
-            let elements = ThreadsView.createThreadsPageContent(threadCollection, {
+            const elements = ThreadsView.createThreadsPageContent(threadCollection, {
                     orderBy: this.orderBy,
                     sortOrder: this.sortOrder,
                     tag: this.tag,
@@ -95,7 +95,7 @@ export class ThreadsPage implements Pages.Page {
 
         if (url.indexOf('threads/') != 0) return false;
 
-        let page = new ThreadsPage();
+        const page = new ThreadsPage();
 
         page.orderBy = Pages.getOrderBy(url) || page.orderBy;
         page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
@@ -169,17 +169,17 @@ export class ThreadsPage implements Pages.Page {
 
         Views.changeContent(document.querySelector('#pageContentContainer .threads-table'), async () => {
 
-            let threadCollection = await this.getThreadCollection();
+            const threadCollection = await this.getThreadCollection();
 
             if (null == threadCollection) return;
 
-            let newTopPaginationControl = Views.createPaginationControl(threadCollection,
+            const newTopPaginationControl = Views.createPaginationControl(threadCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            let newBottomPaginationControl = Views.createPaginationControl(threadCollection,
+            const newBottomPaginationControl = Views.createPaginationControl(threadCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
@@ -191,7 +191,7 @@ export class ThreadsPage implements Pages.Page {
 
     private setupSortControls(controls: HTMLElement): void {
 
-        let radioElements = controls.querySelectorAll('input[type=radio]');
+        const radioElements = controls.querySelectorAll('input[type=radio]');
 
         for (let i = 0; i < radioElements.length; ++i) {
 
@@ -203,7 +203,7 @@ export class ThreadsPage implements Pages.Page {
             });
         }
 
-        let selectElements = controls.querySelectorAll("select[name='sortOrder']");
+        const selectElements = controls.querySelectorAll("select[name='sortOrder']");
 
         for (let i = 0; i < selectElements.length; ++i) {
 

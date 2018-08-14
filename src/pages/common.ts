@@ -122,7 +122,7 @@ export module Pages {
 
     export function getOrderBy(url: string): string {
 
-        let match = url.match(orderByRegex);
+        const match = url.match(orderByRegex);
         if (match && match.length) {
 
             return match[1].trim();
@@ -132,7 +132,7 @@ export module Pages {
 
     export function getSortOrder(url: string): string {
 
-        let match = url.match(sortOrderRegex);
+        const match = url.match(sortOrderRegex);
         if (match && match.length) {
 
             return match[1].trim();
@@ -142,7 +142,7 @@ export module Pages {
 
     export function getPageNumber(url: string): number {
 
-        let match = url.match(pageNumberRegex);
+        const match = url.match(pageNumberRegex);
         if (match && match.length) {
 
             return Math.max(parseInt(match[1]) - 1, 0);
@@ -152,7 +152,7 @@ export module Pages {
 
     export function getTagName(url: string): string {
 
-        let match = url.match(tagNameRegex);
+        const match = url.match(tagNameRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[1]);
@@ -162,7 +162,7 @@ export module Pages {
 
     export function getThreadId(url: string): string {
 
-        let match = url.match(threadIdRegex);
+        const match = url.match(threadIdRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[2]);
@@ -172,7 +172,7 @@ export module Pages {
 
     export function getThreadMessageId(url: string): string {
 
-        let match = url.match(threadMessageIdRegex);
+        const match = url.match(threadMessageIdRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[1]);
@@ -182,7 +182,7 @@ export module Pages {
 
     export function getUserName(url: string): string {
 
-        let match = url.match(userNameRegex);
+        const match = url.match(userNameRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[1]);
@@ -192,7 +192,7 @@ export module Pages {
 
     export function getSubscribedByUserName(url: string): string {
 
-        let match = url.match(subscribedByUserNameRegex);
+        const match = url.match(subscribedByUserNameRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[1]);
@@ -202,7 +202,7 @@ export module Pages {
 
     export function getCategory(url: string): IdNamePair {
 
-        let match = url.match(categoryRootRegex);
+        const match = url.match(categoryRootRegex);
         if (match && match.length) {
 
             return {

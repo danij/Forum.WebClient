@@ -33,10 +33,10 @@ export class ThreadMessageCommentsPage implements Pages.Page {
                 this.user = await this.getUser(this.userName);
             }
 
-            let commentsCollection = await this.getCommentsCollection();
+            const commentsCollection = await this.getCommentsCollection();
             if (null == commentsCollection) return;
 
-            let elements = ThreadMessagesView.createCommentsPageContent(commentsCollection, {
+            const elements = ThreadMessagesView.createCommentsPageContent(commentsCollection, {
                     orderBy: null,
                     sortOrder: this.sortOrder,
                     user: this.user
@@ -67,7 +67,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
         if (url.indexOf(ThreadMessageCommentsPage.URL_PREFIX + '/') != 0) return false;
 
-        let page = new ThreadMessageCommentsPage();
+        const page = new ThreadMessageCommentsPage();
 
         page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
         page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
@@ -109,17 +109,17 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
         Views.changeContent(document.querySelector('#pageContentContainer .thread-message-comments-list'), async () => {
 
-            let commentsCollection = await this.getCommentsCollection();
+            const commentsCollection = await this.getCommentsCollection();
 
             if (null == commentsCollection) return;
 
-            let newTopPaginationControl = Views.createPaginationControl(commentsCollection,
+            const newTopPaginationControl = Views.createPaginationControl(commentsCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            let newBottomPaginationControl = Views.createPaginationControl(commentsCollection,
+            const newBottomPaginationControl = Views.createPaginationControl(commentsCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
@@ -135,7 +135,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
         if (controls) {
 
-            let selectElements = controls.querySelectorAll("select[name='sortOrder']");
+            const selectElements = controls.querySelectorAll("select[name='sortOrder']");
 
             for (let i = 0; i < selectElements.length; ++i) {
 

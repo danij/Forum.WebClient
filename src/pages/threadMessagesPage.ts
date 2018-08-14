@@ -37,7 +37,7 @@ export class ThreadMessagesPage implements Pages.Page {
 
             if (this.threadMessageId && this.threadMessageId.length) {
 
-                let rank = await ThreadMessageRepository.getThreadMessageRank(this.threadMessageId);
+                const rank = await ThreadMessageRepository.getThreadMessageRank(this.threadMessageId);
                 this.threadId = rank.parentId;
                 this.pageNumber = Math.floor(rank.rank / rank.pageSize);
 
@@ -56,13 +56,13 @@ export class ThreadMessagesPage implements Pages.Page {
 
             this.refreshUrl();
 
-            let messageCollection: ThreadMessageRepository.ThreadMessageCollection =
+            const messageCollection: ThreadMessageRepository.ThreadMessageCollection =
                 this.thread
                     ? this.thread as ThreadMessageRepository.ThreadMessageCollection
                     : await this.getThreadMessagesOfUser();
             if (null == messageCollection) return;
 
-            let elements = ThreadMessagesView.createThreadMessagesPageContent(messageCollection, {
+            const elements = ThreadMessagesView.createThreadMessagesPageContent(messageCollection, {
                 orderBy: 'created',
                 sortOrder: this.sortOrder,
                 thread: this.thread,
@@ -124,7 +124,7 @@ export class ThreadMessagesPage implements Pages.Page {
         if ((url.indexOf('thread_messages/') != 0)
             && (url.indexOf('thread/') != 0)) return false;
 
-        let page = new ThreadMessagesPage();
+        const page = new ThreadMessagesPage();
         page.sortOrder = Pages.getSortOrder(url) || page.sortOrder;
         page.pageNumber = Pages.getPageNumber(url) || page.pageNumber;
         page.threadId = Pages.getThreadId('/' + url);
@@ -160,21 +160,21 @@ export class ThreadMessagesPage implements Pages.Page {
 
         Views.changeContent(document.querySelector('#pageContentContainer .thread-message-list'), async () => {
 
-            let messageCollection: ThreadMessageRepository.ThreadMessageCollection =
+            const messageCollection: ThreadMessageRepository.ThreadMessageCollection =
                 this.thread
                     ? await this.getCurrentThread()
                     : await this.getThreadMessagesOfUser();
 
             if (null == messageCollection) return;
 
-            let newTopPaginationControl = Views.createPaginationControl(messageCollection,
+            const newTopPaginationControl = Views.createPaginationControl(messageCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
 
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            let newBottomPaginationControl = Views.createPaginationControl(messageCollection,
+            const newBottomPaginationControl = Views.createPaginationControl(messageCollection,
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
@@ -190,7 +190,7 @@ export class ThreadMessagesPage implements Pages.Page {
 
         if (controls) {
 
-            let elements = controls.querySelectorAll("select[name='sortOrder']");
+            const elements = controls.querySelectorAll("select[name='sortOrder']");
 
             for (let i = 0; i < elements.length; ++i) {
 
@@ -215,7 +215,7 @@ export class ThreadMessagesPage implements Pages.Page {
     private getLinkForPage(pageNumber: number): string {
 
         let url = 'thread_messages';
-        let title = 'Thread Messages';
+        const title = 'Thread Messages';
 
         if (this.threadId && this.threadId.length) {
 

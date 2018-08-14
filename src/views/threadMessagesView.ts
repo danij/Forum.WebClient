@@ -57,40 +57,40 @@ export module ThreadMessagesView {
 
     export function createRecentThreadMessagesView(messages: ThreadMessageRepository.ThreadMessage[]): HTMLElement {
 
-        let result = dA('<div>');
+        const result = dA('<div>');
 
         for (let message of messages) {
 
             if (null === message) continue;
 
-            let element = dA('<div class="recent-message">');
+            const element = dA('<div class="recent-message">');
             result.append(element);
 
-            let user = dA('<span class="author">');
+            const user = dA('<span class="author">');
             element.append(user);
 
-            let userLink = dA(`<a ${UsersView.getThreadsOfUserLinkContent(message.createdBy)}>`);
+            const userLink = dA(`<a ${UsersView.getThreadsOfUserLinkContent(message.createdBy)}>`);
             user.append(userLink);
             userLink.appendString(message.createdBy.name);
 
-            let threadTitle = DOMHelpers.escapeStringForAttribute(message.parentThread.name);
+            const threadTitle = DOMHelpers.escapeStringForAttribute(message.parentThread.name);
 
             let href = Pages.getThreadMessagesOfThreadUrlFull(message.parentThread);
             let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(message.parentThread.id)}"`;
-            let threadLink = dA(`<a href="${href}" class="recent-message-thread-link render-math" title="${threadTitle}" ${data}>`);
+            const threadLink = dA(`<a href="${href}" class="recent-message-thread-link render-math" title="${threadTitle}" ${data}>`);
             element.append(threadLink);
             threadLink.appendString(message.parentThread.name);
 
-            let messageTitle = DOMHelpers.escapeStringForAttribute(message.content);
+            const messageTitle = DOMHelpers.escapeStringForAttribute(message.content);
 
             href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
             data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-            let link = dA(`<a href="${href}" class="recent-message-link render-math" title="${messageTitle}" ${data}>`);
+            const link = dA(`<a href="${href}" class="recent-message-link render-math" title="${messageTitle}" ${data}>`);
             element.append(link);
             link.appendRaw(ViewsExtra.expandContent(message.content));
         }
 
-        let resultElement = result.toElement();
+        const resultElement = result.toElement();
 
         Views.setupThreadsOfUsersLinks(resultElement);
         Views.setupSubscribedThreadsOfUsersLinks(resultElement);
@@ -114,9 +114,9 @@ export module ThreadMessagesView {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCollection();
 
-        let result = new ThreadMessagesPageContent();
+        const result = new ThreadMessagesPageContent();
 
-        let resultList = cE('div');
+        const resultList = cE('div');
 
         if (info.thread) {
 
@@ -131,9 +131,9 @@ export module ThreadMessagesView {
         resultList.appendChild(result.paginationTop =
             Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        let editControl = thread ? createNewThreadMessageControl(thread, threadCallback) : null;
+        const editControl = thread ? createNewThreadMessageControl(thread, threadCallback) : null;
 
-        let listContainer = cE('div');
+        const listContainer = cE('div');
         listContainer.classList.add('thread-message-list');
         listContainer.appendChild(createThreadMessageList(collection, threadMessageCallback, threadCallback,
             privilegesCallback, thread, quoteCallback));
@@ -178,7 +178,7 @@ export module ThreadMessagesView {
 
         const messages = collection.messages || [];
 
-        let result = dA('<div class="uk-container uk-container-expand">');
+        const result = dA('<div class="uk-container uk-container-expand">');
 
         if (messages.length < 1) {
 
@@ -186,14 +186,14 @@ export module ThreadMessagesView {
             return result.toElement();
         }
 
-        let messagesById = {};
+        const messagesById = {};
 
         for (let i = 0; i < messages.length; ++i) {
 
             const message = messages[i];
             messagesById[message.id] = message;
 
-            let messageContainer = dA('<div class="uk-card uk-card-body discussion-thread-message">');
+            const messageContainer = dA('<div class="uk-card uk-card-body discussion-thread-message">');
             result.append(messageContainer);
 
             const showParentThreadName = !!(message.receivedParentThread && message.parentThread.name
@@ -211,7 +211,7 @@ export module ThreadMessagesView {
             }
         }
 
-        let element = result.toElement();
+        const element = result.toElement();
 
         ViewsExtra.adjustMessageContent(element);
         Views.setupThreadsOfUsersLinks(element);
@@ -230,23 +230,23 @@ export module ThreadMessagesView {
 
         if (showParentThreadName) {
 
-            let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
-            let data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-            let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
+            const href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
+            const data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+            const id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
 
-            let link = dA(`<a id="${id}" href="${href}" ${data}>`);
+            const link = dA(`<a id="${id}" href="${href}" ${data}>`);
             link.appendString(message.parentThread.name);
 
-            let container = dA('<div class="message-parent-thread render-math uk-card-badge">');
+            const container = dA('<div class="message-parent-thread render-math uk-card-badge">');
             container.append(link);
             messageContainer.append(container);
         }
         else {
 
             const number = collection.page * collection.pageSize + i + 1;
-            let href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
-            let data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-            let id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
+            const href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
+            const data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+            const id = DOMHelpers.escapeStringForAttribute('message-' + message.id);
             messageContainer.appendRaw(`<div class="message-number uk-text-meta"><a id="${id}" href="${href}" ${data}>#${DisplayHelpers.intToString(number)}</a></div>`);
         }
     }
@@ -254,7 +254,7 @@ export module ThreadMessagesView {
     function createThreadMessageDetails(message: ThreadMessageRepository.ThreadMessage, showParentThreadName: boolean) {
 
         const extraClass = showParentThreadName ? 'right' : '';
-        let messageDetailsContainer = dA(`<div class="uk-card-badge message-time-container ${extraClass}">`);
+        const messageDetailsContainer = dA(`<div class="uk-card-badge message-time-container ${extraClass}">`);
         messageDetailsContainer.appendRaw(`<span class="message-time">${DisplayHelpers.getDateTime(message.created)} </span>`);
 
         if (message.lastUpdated && message.lastUpdated.at) {
@@ -300,10 +300,10 @@ export module ThreadMessagesView {
     function createThreadMessageAuthor(message: ThreadMessageRepository.ThreadMessage,
                                        thread: ThreadRepository.Thread): DOMAppender {
 
-        let author = message.createdBy;
-        let authorContainer = dA('<div class="message-author uk-float-left">');
+        const author = message.createdBy;
+        const authorContainer = dA('<div class="message-author uk-float-left">');
         {
-            let userContainer = dA('<div class="pointer-cursor">');
+            const userContainer = dA('<div class="pointer-cursor">');
             authorContainer.append(userContainer);
 
             userContainer.append(UsersView.createUserLogoForList(author));
@@ -315,7 +315,7 @@ export module ThreadMessagesView {
 
                 extraClass = 'user-is-thread-author';
             }
-            let usernameElement = UsersView.createUserNameElement(author, extraClass);
+            const usernameElement = UsersView.createUserNameElement(author, extraClass);
 
             userContainer.append(usernameElement);
 
@@ -327,10 +327,10 @@ export module ThreadMessagesView {
         {
             author.signature = author.signature || '';
 
-            let signatureContainer = dA('<div class="uk-text-center uk-float-left message-signature">');
+            const signatureContainer = dA('<div class="uk-text-center uk-float-left message-signature">');
             authorContainer.append(signatureContainer);
 
-            let signature = dA('<span title="User signature" uk-tooltip>');
+            const signature = dA('<span title="User signature" uk-tooltip>');
             signatureContainer.append(signature);
             signature.appendString(author.signature);
         }
@@ -339,8 +339,8 @@ export module ThreadMessagesView {
             let upVotesNr = message.upVotes ? DisplayHelpers.intToString(message.upVotes.length) : '?';
             let downVotesNr = message.downVotes ? DisplayHelpers.intToString(message.downVotes.length) : '?';
 
-            let upVotesTooltip = [];
-            let downVotesTooltip = [];
+            const upVotesTooltip = [];
+            const downVotesTooltip = [];
 
             let upVoteData = '';
             let downVoteData = '';
@@ -396,7 +396,7 @@ export module ThreadMessagesView {
 
     function createThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
 
-        let content = dA('<div class="message-content render-math">');
+        const content = dA('<div class="message-content render-math">');
         content.appendRaw(ViewsExtra.expandContent(message.content));
         return content;
     }
@@ -404,8 +404,8 @@ export module ThreadMessagesView {
     function createThreadMessageActionLinks(message: ThreadMessageRepository.ThreadMessage,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): DOMAppender {
 
-        let actions = dA('<div class="message-actions">');
-        let messageId = DOMHelpers.escapeStringForAttribute(message.id);
+        const actions = dA('<div class="message-actions">');
+        const messageId = DOMHelpers.escapeStringForAttribute(message.id);
 
         if (Privileges.ThreadMessage.canEditThreadMessageContent(message)) {
 
@@ -444,8 +444,8 @@ export module ThreadMessagesView {
         DOMHelpers.addEventListeners(element, 'edit-thread-message-content-link', 'click', async (ev) => {
 
             ev.preventDefault();
-            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
-            let message = messagesById[messageId];
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const message = messagesById[messageId];
 
             showEditThreadMessageDialog(message.content, async (text: string, changeReason: string) => {
 
@@ -459,7 +459,7 @@ export module ThreadMessagesView {
         DOMHelpers.addEventListeners(element, 'show-thread-message-comments', 'click', async (ev) => {
 
             ev.preventDefault();
-            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
             showThreadMessageComments(messageId, callback);
         });
@@ -467,7 +467,7 @@ export module ThreadMessagesView {
         DOMHelpers.addEventListeners(element, 'move-thread-message-link', 'click', async (ev) => {
 
             ev.preventDefault();
-            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
             ThreadsView.showSelectSingleThreadDialog(threadCallback, async (selected: string) => {
 
@@ -478,7 +478,7 @@ export module ThreadMessagesView {
         DOMHelpers.addEventListeners(element, 'delete-thread-message-link', 'click', async (ev) => {
 
             ev.preventDefault();
-            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
             if (EditViews.confirm('Are you sure you want to delete the selected message?')) {
 
@@ -489,7 +489,7 @@ export module ThreadMessagesView {
         DOMHelpers.addEventListeners(element, 'comment-thread-message-link', 'click', async (ev) => {
 
             ev.preventDefault();
-            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
             const comment = EditViews.getInput('Please enter a comment for the selected message');
             if (comment && comment.length) {
@@ -504,8 +504,8 @@ export module ThreadMessagesView {
         DOMHelpers.addEventListeners(element, 'quote-thread-message-link', 'click', (ev) => {
 
             ev.preventDefault();
-            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
-            let message = messagesById[messageId];
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const message = messagesById[messageId];
 
             quoteCallback(message);
         });
@@ -516,7 +516,7 @@ export module ThreadMessagesView {
 
             if (await callback.upVote(messageId)) {
 
-                let element = ev.target as HTMLElement;
+                const element = ev.target as HTMLElement;
                 element.innerText = adjustVote(element.innerText, 1) + VotedMark;
                 DOMHelpers.removeEventListeners(element);
             }
@@ -528,7 +528,7 @@ export module ThreadMessagesView {
 
             if (await callback.downVote(messageId)) {
 
-                let element = ev.target as HTMLElement;
+                const element = ev.target as HTMLElement;
                 element.innerText = adjustVote(element.innerText, 1) + VotedMark;
                 DOMHelpers.removeEventListeners(element);
             }
@@ -540,7 +540,7 @@ export module ThreadMessagesView {
 
             if (await callback.resetVote(messageId)) {
 
-                let element = ev.target as HTMLElement;
+                const element = ev.target as HTMLElement;
                 element.innerText = adjustVote(element.innerText, -1).replace(VotedMark, '');
                 DOMHelpers.removeEventListeners(element);
             }
@@ -550,8 +550,8 @@ export module ThreadMessagesView {
 
             ev.preventDefault();
 
-            let messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
-            let message = messagesById[messageId];
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const message = messagesById[messageId];
 
             PrivilegesView.showThreadMessagePrivileges(message, privilegesCallback);
         });
@@ -567,22 +567,22 @@ export module ThreadMessagesView {
     async function showThreadMessageComments(messageId: string,
                                              callback: PageActions.IThreadMessageCallback): Promise<void> {
 
-        let modal = document.getElementById('thread-message-comments-modal');
-        let content = modal.getElementsByClassName('message-comments-container')[0];
+        const modal = document.getElementById('thread-message-comments-modal');
+        const content = modal.getElementsByClassName('message-comments-container')[0];
 
         content.innerHTML = '';
 
         Views.showModal(modal);
 
-        let appender = dA('<div>');
+        const appender = dA('<div>');
 
-        let comments = await callback.getCommentsOfThreadMessage(messageId) || [];
+        const comments = await callback.getCommentsOfThreadMessage(messageId) || [];
 
         for (let i = 0; i < comments.length; ++i) {
 
             const comment = comments[i];
 
-            let card = dA('<div class="uk-card uk-card-body message-comments-content">');
+            const card = dA('<div class="uk-card uk-card-body message-comments-content">');
             appender.append(card);
 
             createMessageCommentInList(comment, card);
@@ -593,7 +593,7 @@ export module ThreadMessagesView {
             }
         }
 
-        let result = appender.toElement();
+        const result = appender.toElement();
 
         setupMessageCommentLinks(result, callback);
 
@@ -602,21 +602,21 @@ export module ThreadMessagesView {
 
     function createMessageCommentInList(comment: ThreadMessageRepository.ThreadMessageComment, container: DOMAppender) {
 
-        let author = dA('<div class="message-comment-author uk-float-left">');
+        const author = dA('<div class="message-comment-author uk-float-left">');
         container.append(author);
         author.append(UsersView.createUserLogoSmall(comment.createdBy, 'bottom-left'));
 
-        let content = dA('<div class="comment-content">');
+        const content = dA('<div class="comment-content">');
         container.append(content);
 
-        let contentDiv = dA('<div>');
+        const contentDiv = dA('<div>');
         content.append(contentDiv);
 
-        let time = dA('<span class="message-time">');
+        const time = dA('<span class="message-time">');
         contentDiv.append(time);
         time.appendRaw(DisplayHelpers.getDateTime(comment.created));
 
-        let ip = dA('<samp>');
+        const ip = dA('<samp>');
         contentDiv.append(ip);
         ip.appendString(comment.ip);
 
@@ -637,14 +637,14 @@ export module ThreadMessagesView {
 
     function setupMessageCommentLinks(result: HTMLElement, callback: PageActions.IThreadMessageCallback) {
 
-        let links = result.getElementsByClassName('solve-message-comment-link');
+        const links = result.getElementsByClassName('solve-message-comment-link');
         for (let i = 0; i < links.length; ++i) {
 
-            let link = links[i];
+            const link = links[i];
             link.addEventListener('click', async (ev) => {
 
                 ev.preventDefault();
-                let link = DOMHelpers.getLink(ev);
+                const link = DOMHelpers.getLink(ev);
                 const commentId = link.getAttribute('data-comment-id');
 
                 if (await callback.solveThreadMessageComment(commentId)) {
@@ -658,7 +658,7 @@ export module ThreadMessagesView {
     function createNewThreadMessageControl(thread: ThreadRepository.Thread,
                                            callback: PageActions.IThreadCallback): MessageEditControl {
 
-        let result = cE('div');
+        const result = cE('div');
         result.classList.add('reply-container');
 
         let editControl: EditViews.EditControl;
@@ -667,7 +667,7 @@ export module ThreadMessagesView {
 
             editControl = new EditViews.EditControl(result);
 
-            let button = cE('button');
+            const button = cE('button');
             result.appendChild(button);
             button.classList.add('uk-button', 'uk-button-primary', 'uk-align-center');
             button.innerText = 'Add new message';
@@ -675,10 +675,10 @@ export module ThreadMessagesView {
             button.addEventListener('click', async (ev) => {
 
                 ev.preventDefault();
-                let text = editControl.getText();
+                const text = editControl.getText();
                 if (text.trim().length < 1) return;
 
-                let newMessageId = await callback.addThreadMessage(thread.id, text);
+                const newMessageId = await callback.addThreadMessage(thread.id, text);
                 if (newMessageId) {
 
                     (new ThreadMessagesPage()).displayForThreadMessage(newMessageId);
@@ -701,24 +701,24 @@ export module ThreadMessagesView {
     export function showEditThreadMessageDialog(initialText: string,
                                                 onSave: (text: string, changeReason: string) => void): void {
 
-        let modal = document.getElementById('edit-thread-message-modal');
+        const modal = document.getElementById('edit-thread-message-modal');
         Views.showModal(modal);
 
-        let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
-        let container = modal.getElementsByClassName('uk-modal-body')[0] as HTMLElement;
-        let changeReasonInput = modal.getElementsByClassName('change-reason-input')[0] as HTMLInputElement;
+        const saveButton = DOMHelpers.removeEventListeners(
+            modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
+        const container = modal.getElementsByClassName('uk-modal-body')[0] as HTMLElement;
+        const changeReasonInput = modal.getElementsByClassName('change-reason-input')[0] as HTMLInputElement;
 
         container.innerHTML = '';
         changeReasonInput.value = '';
 
-        let editControl = new EditViews.EditControl(container, initialText);
+        const editControl = new EditViews.EditControl(container, initialText);
 
-        saveButton = DOMHelpers.removeEventListeners(saveButton);
         saveButton.addEventListener('click', (ev) => {
 
             ev.preventDefault();
 
-            let currentText = editControl.getText();
+            const currentText = editControl.getText();
 
             if (currentText.length && (currentText != initialText)) {
 
@@ -738,9 +738,9 @@ export module ThreadMessagesView {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCommentCollection();
 
-        let result = new ThreadMessagesPageContent();
+        const result = new ThreadMessagesPageContent();
 
-        let resultList = cE('div');
+        const resultList = cE('div');
 
         if (info.user) {
 
@@ -748,7 +748,7 @@ export module ThreadMessagesView {
         }
         else {
 
-            let header = cE('h2');
+            const header = cE('h2');
             header.innerText = 'All Thread Message Comments';
             resultList.appendChild(header);
         }
@@ -757,7 +757,7 @@ export module ThreadMessagesView {
         resultList.appendChild(result.paginationTop =
             Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        let listContainer = cE('div');
+        const listContainer = cE('div');
         listContainer.classList.add('thread-message-comments-list');
         listContainer.appendChild(createCommentsList(collection, threadMessageCallback,
             threadCallback, privilegesCallback, info.user));
@@ -779,7 +779,7 @@ export module ThreadMessagesView {
 
         const comments = collection.messageComments || [];
 
-        let result = dA('<div class="uk-container uk-container-expand">');
+        const result = dA('<div class="uk-container uk-container-expand">');
 
         if (comments.length < 1) {
 
@@ -787,11 +787,11 @@ export module ThreadMessagesView {
             return result.toElement();
         }
 
-        let messagesById = {};
+        const messagesById = {};
 
         for (let i = 0; i < comments.length; ++i) {
 
-            let comment = comments[i];
+            const comment = comments[i];
             comment.createdBy = comment.createdBy || user;
 
             const message = comment.message;
@@ -800,11 +800,11 @@ export module ThreadMessagesView {
 
             messagesById[message.id] = message;
 
-            let messageContainer = dA('<div class="uk-card uk-card-body discussion-thread-message">');
+            const messageContainer = dA('<div class="uk-card uk-card-body discussion-thread-message">');
             result.append(messageContainer);
 
             {
-                let container = dA('<div class="message-comment-above-message">');
+                const container = dA('<div class="message-comment-above-message">');
                 messageContainer.append(container);
 
                 createMessageCommentInList(comment, container);
@@ -822,7 +822,7 @@ export module ThreadMessagesView {
             }
         }
 
-        let element = result.toElement();
+        const element = result.toElement();
 
         ViewsExtra.adjustMessageContent(element);
         Views.setupThreadsOfUsersLinks(element);
@@ -848,14 +848,14 @@ export module ThreadMessagesView {
 
             container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
-            let threadTitle = latestMessage.threadName || 'unknown';
+            const threadTitle = latestMessage.threadName || 'unknown';
 
-            let href = Pages.getThreadMessagesOfThreadUrlFull({
+            const href = Pages.getThreadMessagesOfThreadUrlFull({
                 id: latestMessage.threadId,
                 name: latestMessage.threadName
             } as ThreadRepository.Thread);
 
-            let threadTitleElement = cE('a');
+            const threadTitleElement = cE('a');
             threadTitleElement.classList.add('recent-message-thread-link');
             threadTitleElement.setAttribute('href', href);
             threadTitleElement.setAttribute('title', threadTitle);
@@ -863,20 +863,20 @@ export module ThreadMessagesView {
             threadTitleElement.innerText = threadTitle;
             container.appendElement(threadTitleElement);
 
-            let timeFlex = dA('<div class="date-time-flex">');
+            const timeFlex = dA('<div class="date-time-flex">');
             container.append(timeFlex);
 
             timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
-            let recentMessageTime = dA('<div class="recent-message-time uk-text-meta">');
+            const recentMessageTime = dA('<div class="recent-message-time uk-text-meta">');
             timeFlex.append(recentMessageTime);
 
-            let recentMessageTimeContent = cE('span');
+            const recentMessageTimeContent = cE('span');
             recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
             recentMessageTime.appendElement(recentMessageTimeContent);
 
-            let messageContent = latestMessage.content || 'empty';
+            const messageContent = latestMessage.content || 'empty';
 
-            let messageLink = cE('a');
+            const messageLink = cE('a');
             messageLink.classList.add('recent-message-link');
             messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
             messageLink.setAttribute('title', messageContent);

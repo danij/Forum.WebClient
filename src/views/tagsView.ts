@@ -17,9 +17,9 @@ export module TagsView {
 
     export function createTagElement(tag: TagRepository.Tag): DOMAppender {
 
-        let container = dA('<div class="uk-display-inline-block">');
+        const container = dA('<div class="uk-display-inline-block">');
 
-        let tagElement = dA('<a class="uk-badge uk-icon" uk-icon="icon: tag" ' +
+        const tagElement = dA('<a class="uk-badge uk-icon" uk-icon="icon: tag" ' +
             getThreadsWithTagLinkContent(tag) + '>');
         container.append(tagElement);
         tagElement.appendString(tag.name);
@@ -42,9 +42,9 @@ export module TagsView {
     export function createTagsPageContent(tags: TagRepository.Tag[], info: Views.SortInfo,
                                           callback: PageActions.ITagCallback): TagsPageContent {
 
-        let result = new TagsPageContent();
+        const result = new TagsPageContent();
 
-        let resultList = cE("div");
+        const resultList = cE("div");
 
         resultList.appendChild(result.sortControls = createTagListSortControls(info));
 
@@ -53,7 +53,7 @@ export module TagsView {
             resultList.appendChild(createAddNewTagElement(callback));
         }
 
-        let tagsList = cE('div');
+        const tagsList = cE('div');
         resultList.appendChild(tagsList);
 
         tagsList.classList.add('tags-list');
@@ -70,8 +70,8 @@ export module TagsView {
 
     export function createTagsTable(tags: TagRepository.Tag[]): HTMLElement {
 
-        let tableContainer = dA('<div class="tags-table">');
-        let table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
+        const tableContainer = dA('<div class="tags-table">');
+        const table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
         tableContainer.append(table);
 
         if (tags.length < 1) {
@@ -88,37 +88,37 @@ export module TagsView {
             '    </tr>\n' +
             '</thead>';
         table.appendRaw(tableHeader);
-        let tbody = dA('<tbody>');
+        const tbody = dA('<tbody>');
         table.append(tbody);
 
         for (let tag of tags) {
 
             if (null == tag) continue;
 
-            let row = dA('<tr>');
+            const row = dA('<tr>');
             tbody.append(row);
             {
-                let nameColumn = dA('<td class="uk-table-expand">');
+                const nameColumn = dA('<td class="uk-table-expand">');
                 row.append(nameColumn);
 
                 nameColumn.append(dA('<span class="uk-icon" uk-icon="icon: tag">'));
 
-                let nameLink = dA('<a class="uk-button uk-button-text" ' + getThreadsWithTagLinkContent(tag) + '>');
+                const nameLink = dA('<a class="uk-button uk-button-text" ' + getThreadsWithTagLinkContent(tag) + '>');
                 nameColumn.append(nameLink);
                 nameLink.appendString(' ' + tag.name);
                 nameColumn.appendRaw('<br/>');
 
                 if (tag.categories && tag.categories.length) {
 
-                    let categoryElement = dA('<span class="category-children uk-text-small">');
+                    const categoryElement = dA('<span class="category-children uk-text-small">');
                     nameColumn.appendRaw('<span class="uk-text-meta">Referenced by:</span> ');
                     nameColumn.append(categoryElement);
 
                     for (let i = 0; i < tag.categories.length; ++i) {
 
-                        let category = tag.categories[i];
+                        const category = tag.categories[i];
 
-                        let element = dA('<a href="' +
+                        const element = dA('<a href="' +
                             Pages.getCategoryFullUrl(category) +
                             '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
                             DOMHelpers.escapeStringForAttribute(category.name) + '">');
@@ -132,7 +132,7 @@ export module TagsView {
                 }
             }
             {
-                let statisticsColumn = ('<td class="tag-statistics uk-table-shrink">\n' +
+                const statisticsColumn = ('<td class="tag-statistics uk-table-shrink">\n' +
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +
@@ -153,7 +153,7 @@ export module TagsView {
             }
         }
 
-        let result = tableContainer.toElement();
+        const result = tableContainer.toElement();
 
         Views.setupCategoryLinks(result);
         Views.setupThreadsWithTagsLinks(result);
@@ -191,14 +191,14 @@ export module TagsView {
                                         callback: PageActions.ITagCallback,
                                         privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
-        let container = cE('div');
+        const container = cE('div');
         container.classList.add('uk-grid-small', 'tag-page-header');
 
-        let badge = cE('span');
+        const badge = cE('span');
 
         if (Privileges.Tag.canEditTagName(tag)) {
 
-            let link = EditViews.createEditLink('Edit tag name');
+            const link = EditViews.createEditLink('Edit tag name');
             container.appendChild(link);
             link.addEventListener('click', () => {
 
@@ -213,7 +213,7 @@ export module TagsView {
             });
         }
 
-        let badgeContainer = cE('div');
+        const badgeContainer = cE('div');
         container.appendChild(badgeContainer);
         badgeContainer.classList.add('uk-display-inline-block');
 
@@ -224,7 +224,7 @@ export module TagsView {
 
         if (Privileges.Tag.canMergeTags(tag)) {
 
-            let link = EditViews.createEditLink('Merge tags', 'git-fork');
+            const link = EditViews.createEditLink('Merge tags', 'git-fork');
             container.appendChild(link);
             link.addEventListener('click', async () => {
 
@@ -238,7 +238,7 @@ export module TagsView {
         if (Privileges.Tag.canViewTagRequiredPrivileges(tag)
             || Privileges.Tag.canViewTagAssignedPrivileges(tag)) {
 
-            let link = EditViews.createEditLink('Privileges', 'settings');
+            const link = EditViews.createEditLink('Privileges', 'settings');
             container.appendChild(link);
             link.addEventListener('click', async () => {
 
@@ -246,11 +246,11 @@ export module TagsView {
             });
         }
 
-        let threadCount = cE('span');
+        const threadCount = cE('span');
         container.appendChild(threadCount);
         threadCount.innerText = `${DisplayHelpers.intToString(tag.threadCount)} threads`;
 
-        let messageCount = cE('span');
+        const messageCount = cE('span');
         container.appendChild(messageCount);
         messageCount.innerText = `${DisplayHelpers.intToString(tag.messageCount)} messages`;
 
@@ -262,7 +262,7 @@ export module TagsView {
 
                 const category = tag.categories[i];
 
-                let element = cE('a');
+                const element = cE('a');
                 container.appendChild(element);
 
                 element.setAttribute('href', Pages.getCategoryFullUrl(category));
@@ -278,7 +278,7 @@ export module TagsView {
 
         if (Privileges.Tag.canDeleteTag(tag)) {
 
-            let deleteLink = EditViews.createDeleteLink('Delete tag');
+            const deleteLink = EditViews.createDeleteLink('Delete tag');
             container.appendChild(deleteLink);
 
             deleteLink.addEventListener('click', () => {
@@ -303,7 +303,7 @@ export module TagsView {
 
         for (let tag of tags) {
 
-            let option = cE('option');
+            const option = cE('option');
             option.setAttribute('value', tag.id);
             option.innerText = tag.name;
 
@@ -323,25 +323,25 @@ export module TagsView {
 
         TagRepository.sortByName(allTags);
 
-        let modal = document.getElementById('select-tags-modal');
+        const modal = document.getElementById('select-tags-modal');
         Views.showModal(modal);
 
-        let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
-        let selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
+        const saveButton = DOMHelpers.removeEventListeners(
+            modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
+        const selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
 
-        let previousTagIds = new Set();
+        const previousTagIds = new Set();
         for (let tag of currentTags) {
 
             previousTagIds.add(tag.id);
         }
 
-        saveButton = DOMHelpers.removeEventListeners(saveButton);
         saveButton.addEventListener('click', (ev) => {
 
             ev.preventDefault();
 
-            let selected = selectElement.selectedOptions;
-            let added = [], removed = [];
+            const selected = selectElement.selectedOptions;
+            const added = [], removed = [];
 
             for (let i = 0; i < selected.length; ++i) {
 
@@ -370,18 +370,18 @@ export module TagsView {
 
         TagRepository.sortByName(allTags);
 
-        let modal = document.getElementById('select-single-tag-modal');
+        const modal = document.getElementById('select-single-tag-modal');
         Views.showModal(modal);
 
-        let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
-        let selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
+        const saveButton = DOMHelpers.removeEventListeners(
+            modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
+        const selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
 
-        saveButton = DOMHelpers.removeEventListeners(saveButton);
         saveButton.addEventListener('click', (ev) => {
 
             ev.preventDefault();
 
-            let selected = selectElement.selectedOptions;
+            const selected = selectElement.selectedOptions;
             if (selected.length) {
 
                 const id = selected[0].getAttribute('value');
@@ -394,7 +394,7 @@ export module TagsView {
 
     function createAddNewTagElement(callback: PageActions.ITagCallback): HTMLElement {
 
-        let button = EditViews.createAddNewButton('Add Tag');
+        const button = EditViews.createAddNewButton('Add Tag');
 
         button.addEventListener('click', () => {
 

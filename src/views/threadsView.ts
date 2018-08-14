@@ -32,14 +32,14 @@ export module ThreadsView {
     export function createThreadsLink(thread: ThreadRepository.Thread, showAsButton: boolean = false,
                                       addSpace: boolean = false): DOMAppender {
 
-        let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
-        let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
+        const href = Pages.getThreadMessagesOfThreadUrlFull(thread);
+        const data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
 
         const visitedClass = thread.visitedSinceLastChange ? 'already-visited' : '';
 
         const classes = showAsButton ? 'uk-button uk-button-text ' : '';
 
-        let result = dA(`<a class="${classes}thread-name render-math ${visitedClass}" href="${href}" ${data}>`);
+        const result = dA(`<a class="${classes}thread-name render-math ${visitedClass}" href="${href}" ${data}>`);
         result.appendString((addSpace ? ' ' : '') + thread.name);
 
         return result;
@@ -55,9 +55,9 @@ export module ThreadsView {
 
         collection = collection || ThreadRepository.defaultThreadCollection();
 
-        let result = new ThreadsPageContent();
+        const result = new ThreadsPageContent();
 
-        let resultList = cE('div');
+        const resultList = cE('div');
 
         if (info.tag) {
 
@@ -72,7 +72,7 @@ export module ThreadsView {
         resultList.appendChild(
             result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        let tableContainer = cE('div');
+        const tableContainer = cE('div');
         resultList.appendChild(tableContainer);
         tableContainer.classList.add('threads-table');
         tableContainer.appendChild(createThreadsTable(collection.threads));
@@ -120,7 +120,7 @@ export module ThreadsView {
             return DOMHelpers.parseHTML('<span class="uk-text-warning">No threads found</span>');
         }
 
-        let table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
+        const table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
 
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
@@ -220,19 +220,19 @@ export module ThreadsView {
 
                     container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
-                    let timeFlex = dA('<div class="date-time-flex">');
+                    const timeFlex = dA('<div class="date-time-flex">');
                     container.append(timeFlex);
 
                     timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
 
-                    let recentMessageTime = cE('span');
+                    const recentMessageTime = cE('span');
                     recentMessageTime.classList.add('uk-text-meta');
                     recentMessageTime.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
                     timeFlex.appendElement(recentMessageTime);
 
-                    let messageContent = latestMessage.content || 'empty';
+                    const messageContent = latestMessage.content || 'empty';
 
-                    let messageLink = cE('a');
+                    const messageLink = cE('a');
                     messageLink.classList.add('recent-message-link');
                     messageLink.setAttribute('title', messageContent);
                     messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
@@ -243,7 +243,7 @@ export module ThreadsView {
             }
         }
 
-        let result = table.toElement();
+        const result = table.toElement();
 
         Views.setupCategoryLinks(result);
         Views.setupThreadsWithTagsLinks(result);
@@ -260,16 +260,16 @@ export module ThreadsView {
 
     export function createRecentThreadsView(threads: ThreadRepository.Thread[]): HTMLElement {
 
-        let result = dA('<div>');
+        const result = dA('<div>');
 
         for (let thread of threads) {
 
             if (null === thread) continue;
 
-            let element = dA('<div class="recent-thread">');
+            const element = dA('<div class="recent-thread">');
             result.append(element);
 
-            let score = DisplayHelpers.intToString(Math.abs(thread.voteScore));
+            const score = DisplayHelpers.intToString(Math.abs(thread.voteScore));
 
             if (0 === thread.voteScore) {
 
@@ -283,23 +283,23 @@ export module ThreadsView {
                 element.appendRaw(`<span class="thread-vote up-vote" aria-expanded="false">+${score}</span>`);
             }
 
-            let user = dA('<span class="author">');
+            const user = dA('<span class="author">');
             element.append(user);
 
-            let userLink = dA(`<a ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}>`);
+            const userLink = dA(`<a ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}>`);
             user.append(userLink);
             userLink.appendString(thread.createdBy.name);
 
-            let title = DOMHelpers.escapeStringForAttribute(thread.name);
+            const title = DOMHelpers.escapeStringForAttribute(thread.name);
 
-            let href = Pages.getThreadMessagesOfThreadUrlFull(thread);
-            let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
-            let link = dA(`<a href="${href}" class="recent-thread-link render-math" title="${title}" ${data}>`);
+            const href = Pages.getThreadMessagesOfThreadUrlFull(thread);
+            const data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
+            const link = dA(`<a href="${href}" class="recent-thread-link render-math" title="${title}" ${data}>`);
             element.append(link);
             link.appendString(thread.name);
         }
 
-        let resultElement = result.toElement();
+        const resultElement = result.toElement();
 
         Views.setupThreadsOfUsersLinks(resultElement);
         Views.setupSubscribedThreadsOfUsersLinks(resultElement);
@@ -313,10 +313,10 @@ export module ThreadsView {
                                            callback: PageActions.IThreadCallback,
                                            privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
-        let element = cE('div');
+        const element = cE('div');
         element.classList.add('uk-container', 'uk-container-expand', 'thread-header');
 
-        let card = cE('div');
+        const card = cE('div');
         element.appendChild(card);
         card.classList.add('uk-card', 'uk-card-body');
 
@@ -325,18 +325,18 @@ export module ThreadsView {
             <a uk-icon="icon: settings" href="editThreadPrivileges" title="Edit thread access" uk-tooltip
                uk-toggle="target: #privileges-modal"></a>
             */
-            let actions = cE('div');
+            const actions = cE('div');
             card.appendChild(actions);
             actions.classList.add('thread-actions');
 
-            let subscribeToThread = cE('button');
+            const subscribeToThread = cE('button');
             actions.appendChild(subscribeToThread);
             subscribeToThread.classList.add('uk-button', 'uk-button-primary', 'uk-button-small');
             subscribeToThread.innerText = 'Subscribe';
 
             actions.appendChild(document.createTextNode(' '));
 
-            let unSubscribeFromThread = cE('button');
+            const unSubscribeFromThread = cE('button');
             actions.appendChild(unSubscribeFromThread);
             unSubscribeFromThread.classList.add('uk-button', 'uk-button-danger', 'uk-button-small');
             unSubscribeFromThread.innerText = 'Unsubscribe';
@@ -364,7 +364,7 @@ export module ThreadsView {
 
             if (Privileges.Thread.canMergeThreads(thread)) {
 
-                let link = EditViews.createEditLink('Merge threads', 'git-fork', []);
+                const link = EditViews.createEditLink('Merge threads', 'git-fork', []);
                 actions.appendChild(link);
                 link.addEventListener('click', async () => {
 
@@ -380,7 +380,7 @@ export module ThreadsView {
             if (Privileges.Thread.canViewThreadRequiredPrivileges(thread)
                 || Privileges.Thread.canViewThreadAssignedPrivileges(thread)) {
 
-                let link = EditViews.createEditLink('Privileges', 'settings', []);
+                const link = EditViews.createEditLink('Privileges', 'settings', []);
                 actions.appendChild(link);
                 link.addEventListener('click', async () => {
 
@@ -390,7 +390,7 @@ export module ThreadsView {
 
             if (Privileges.Thread.canDeleteThread(thread)) {
 
-                let deleteLink = EditViews.createDeleteLink('Delete thread', '');
+                const deleteLink = EditViews.createDeleteLink('Delete thread', '');
                 actions.appendChild(deleteLink);
 
                 deleteLink.addEventListener('click', () => {
@@ -403,12 +403,12 @@ export module ThreadsView {
             }
         }
         {
-            let title = cE('div');
+            const title = cE('div');
             card.appendChild(title);
             title.classList.add('uk-align-left', 'thread-title');
 
             if (Privileges.Thread.canEditThreadPinDisplayOrder(thread)) {
-                let link = EditViews.createEditLink('Edit thread display order when pinned', 'star');
+                const link = EditViews.createEditLink('Edit thread display order when pinned', 'star');
                 title.appendChild(link);
                 link.addEventListener('click', () => {
 
@@ -422,9 +422,9 @@ export module ThreadsView {
                 });
             }
 
-            let threadTitle = cE('span');
+            const threadTitle = cE('span');
             if (Privileges.Thread.canEditThreadName(thread)) {
-                let link = EditViews.createEditLink('Edit thread name');
+                const link = EditViews.createEditLink('Edit thread name');
                 title.appendChild(link);
                 link.addEventListener('click', () => {
 
@@ -446,7 +446,7 @@ export module ThreadsView {
             threadTitle.innerText = thread.name;
             title.appendChild(document.createTextNode(' '));
 
-            let userLink = DOMHelpers.parseHTML(`<a class="author" ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}></a>`);
+            const userLink = DOMHelpers.parseHTML(`<a class="author" ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}></a>`);
             title.appendChild(userLink);
             userLink.innerText = thread.createdBy.name;
         }
@@ -454,13 +454,13 @@ export module ThreadsView {
             card.appendChild(DOMHelpers.parseHTML('<div class="uk-clearfix"></div>'));
         }
         {
-            let details = cE('div');
+            const details = cE('div');
             card.appendChild(details);
             details.classList.add('thread-details', 'uk-align-left');
 
             if (Privileges.Thread.canEditThreadTags(thread)) {
 
-                let link = EditViews.createEditLink('Edit thread tags', 'tag');
+                const link = EditViews.createEditLink('Edit thread tags', 'tag');
                 details.appendChild(link);
                 link.addEventListener('click', async () => {
 
@@ -489,7 +489,7 @@ export module ThreadsView {
                 thread.categories.sort(CategoryRepository.compareCategoriesByName);
                 for (let category of thread.categories) {
 
-                    let element = DOMHelpers.parseHTML('<a href="' +
+                    const element = DOMHelpers.parseHTML('<a href="' +
                         Pages.getCategoryFullUrl(category) +
                         '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
                         DOMHelpers.escapeStringForAttribute(category.name) + '"></a>');
@@ -505,7 +505,7 @@ export module ThreadsView {
             }
             details.appendChild(document.createTextNode(`${DisplayHelpers.intToString(thread.visited)} total views · `));
 
-            let subscribedUsersLink = cE('a');
+            const subscribedUsersLink = cE('a');
             details.appendChild(subscribedUsersLink);
             subscribedUsersLink.innerText = `${DisplayHelpers.intToString(thread.subscribedUsersCount)} subscribed users`;
             subscribedUsersLink.addEventListener('click', (ev) => {
@@ -529,24 +529,24 @@ export module ThreadsView {
     export function showSelectSingleThreadDialog(callback: PageActions.IThreadCallback,
                                                  onSave: (selected: string) => void): void {
 
-        let modal = document.getElementById('select-single-thread-modal');
+        const modal = document.getElementById('select-single-thread-modal');
         Views.showModal(modal);
 
-        let saveButton = modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement;
-        let searchByNameElement = document.getElementById('searchThreadByName') as HTMLInputElement;
+        const saveButton = DOMHelpers.removeEventListeners(
+            modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
+        const searchByNameElement = document.getElementById('searchThreadByName') as HTMLInputElement;
         let selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
-        let selectedIdElement = document.getElementById('selectedThreadId') as HTMLInputElement;
+        const selectedIdElement = document.getElementById('selectedThreadId') as HTMLInputElement;
 
         searchByNameElement.value = '';
         selectElement.innerHTML = '';
         selectedIdElement.value = '';
 
-        saveButton = DOMHelpers.removeEventListeners(saveButton);
         saveButton.addEventListener('click', (ev) => {
 
             ev.preventDefault();
 
-            let selectedId = selectedIdElement.value.trim();
+            const selectedId = selectedIdElement.value.trim();
             if (selectedId.length) {
 
                 onSave(selectedId);
@@ -569,7 +569,7 @@ export module ThreadsView {
                 const threads = await callback.searchThreadsByInitial(searchByNameElement.value);
                 for (const thread of threads) {
 
-                    let option = cE('option');
+                    const option = cE('option');
                     option.setAttribute('value', thread.id);
                     option.innerText = thread.name;
                     option.setAttribute('title', thread.createdBy.name + ' @ ' + DisplayHelpers.getDateTime(thread.created));
@@ -591,8 +591,8 @@ export module ThreadsView {
 
     async function showSubscribedUsers(threadId: string, callback: PageActions.IThreadCallback) {
 
-        let modal = document.getElementById('subscribed-users-modal');
-        let content = modal.getElementsByClassName('subscribed-users-content')[0];
+        const modal = document.getElementById('subscribed-users-modal');
+        const content = modal.getElementsByClassName('subscribed-users-content')[0];
 
         content.innerHTML = '';
 
@@ -606,11 +606,11 @@ export module ThreadsView {
     export function createAddNewThreadContent(allTags: TagRepository.Tag[],
                                               callback: (name: string, tagIds: string[], message: string) => Promise<string>): HTMLElement {
 
-        let result = cE('div');
+        const result = cE('div');
 
         result.appendChild(DOMHelpers.parseHTML('<h2>Add a New Thread</h2>'));
 
-        let form = DOMHelpers.parseHTML('<form class="uk-form-stacked"></form>');
+        const form = DOMHelpers.parseHTML('<form class="uk-form-stacked"></form>');
         result.appendChild(form);
 
         let input: HTMLInputElement;
@@ -618,17 +618,17 @@ export module ThreadsView {
         let editControl: EditViews.EditControl;
 
         {
-            let div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
+            const div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
             form.appendChild(div);
 
             div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label" for="addThreadName">Thread Name</label>'));
-            let formControl = DOMHelpers.parseHTML('<div class="uk-form-controls"></div>');
+            const formControl = DOMHelpers.parseHTML('<div class="uk-form-controls"></div>');
             div.appendChild(formControl);
             input = DOMHelpers.parseHTML('<input class="uk-input" id="addThreadName" />') as HTMLInputElement;
             formControl.appendChild(input);
         }
         {
-            let div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
+            const div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
             form.appendChild(div);
 
             div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Tags</label>'));
@@ -638,35 +638,35 @@ export module ThreadsView {
             TagsView.populateTagsInSelect(tagsSelect, allTags);
         }
         {
-            let div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
+            const div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
             form.appendChild(div);
 
             div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Message</label>'));
-            let newMessageContainer = DOMHelpers.parseHTML('<div class="reply-container"></div>');
+            const newMessageContainer = DOMHelpers.parseHTML('<div class="reply-container"></div>');
             div.appendChild(newMessageContainer);
 
             editControl = new EditViews.EditControl(newMessageContainer);
         }
 
-        let addButton = DOMHelpers.parseHTML('<button class="uk-button uk-button-primary uk-align-center">Add</button>');
+        const addButton = DOMHelpers.parseHTML('<button class="uk-button uk-button-primary uk-align-center">Add</button>');
         result.appendChild(addButton);
 
         addButton.addEventListener('click', async (ev) => {
 
             ev.preventDefault();
 
-            let name = input.value;
-            let tagIds: string[] = [];
+            const name = input.value;
+            const tagIds: string[] = [];
 
-            let selected = tagsSelect.selectedOptions;
+            const selected = tagsSelect.selectedOptions;
             for (let i = 0; i < selected.length; ++i) {
 
                 tagIds.push(selected[i].getAttribute('value'));
             }
 
-            let message = editControl.getText();
+            const message = editControl.getText();
 
-            let newThreadId = await callback(name, tagIds, message);
+            const newThreadId = await callback(name, tagIds, message);
             if (newThreadId && newThreadId.length) {
 
                 new ThreadMessagesPage().displayForThread(newThreadId);

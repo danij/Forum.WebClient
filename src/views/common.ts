@@ -78,11 +78,7 @@ export module Views {
 
     export function createDropdown(header: string | DOMAppender, content: any, properties?: any, classes?: any): DOMAppender {
 
-        let propertiesString = '';
-        if (null != properties) {
-
-            propertiesString = Object.keys(properties).map(key => `${key}: ${properties[key]}`).join('; ');
-        }
+        const propertiesString = Object.keys(properties || {}).map(key => `${key}: ${properties[key]}`).join('; ');
 
         let classString = '';
         if (null != classes) {

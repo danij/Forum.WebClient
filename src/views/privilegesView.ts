@@ -141,14 +141,14 @@ export module PrivilegesView {
 
     function showPrivilegesModal(title: string): HTMLElement {
 
-        let modal = document.getElementById('privileges-modal');
+        const modal = document.getElementById('privileges-modal');
 
-        let titleElement = modal.getElementsByClassName('uk-modal-title')[0] as HTMLElement;
+        const titleElement = modal.getElementsByClassName('uk-modal-title')[0] as HTMLElement;
         titleElement.innerText = title;
 
         for (let i = 0; i < 2; i++) {
 
-            let toReplace = modal.getElementsByClassName(`privileges-part${i + 1}`)[0] as HTMLElement;
+            const toReplace = modal.getElementsByClassName(`privileges-part${i + 1}`)[0] as HTMLElement;
             toReplace.innerText = '';
         }
 
@@ -161,7 +161,7 @@ export module PrivilegesView {
 
     function createPrivilegeLevelSpan(value: string) : DOMAppender {
 
-        let result = dA('<span class="privilege-level">');
+        const result = dA('<span class="privilege-level">');
         result.appendString(value);
 
         return result;
@@ -170,7 +170,7 @@ export module PrivilegesView {
     export function showThreadMessagePrivileges(message: ThreadMessageRepository.ThreadMessage,
                                                 callback: PageActions.IPrivilegesCallback): void {
 
-        let modal = showPrivilegesModal('Privileges For Thread Message');
+        const modal = showPrivilegesModal('Privileges For Thread Message');
 
         const threadMessageRequiredPrivilegesPromises = [
 
@@ -196,7 +196,7 @@ export module PrivilegesView {
     export function showThreadPrivileges(thread: ThreadRepository.Thread,
                                          callback: PageActions.IPrivilegesCallback): void {
 
-        let modal = showPrivilegesModal('Privileges For Thread: ' + thread.name);
+        const modal = showPrivilegesModal('Privileges For Thread: ' + thread.name);
 
         const requiredPrivilegesPromises = [
 
@@ -220,7 +220,7 @@ export module PrivilegesView {
 
     export function showTagPrivileges(tag: TagRepository.Tag, callback: PageActions.IPrivilegesCallback): void {
 
-        let modal = showPrivilegesModal('Privileges For Tag: ' + tag.name);
+        const modal = showPrivilegesModal('Privileges For Tag: ' + tag.name);
 
         const requiredPrivilegesPromises = [
 
@@ -242,7 +242,7 @@ export module PrivilegesView {
     export function showCategoryPrivileges(category: CategoryRepository.Category,
                                            callback: PageActions.IPrivilegesCallback): void {
 
-        let modal = showPrivilegesModal('Privileges For Category: ' + category.name);
+        const modal = showPrivilegesModal('Privileges For Category: ' + category.name);
 
         const requiredPrivilegesPromises = [
 
@@ -263,7 +263,7 @@ export module PrivilegesView {
 
     export function showForumWidePrivileges(callback: PageActions.IPrivilegesCallback): void {
 
-        let modal = showPrivilegesModal('Forum Wide Privileges');
+        const modal = showPrivilegesModal('Forum Wide Privileges');
 
         Views.showModal(modal);
 
@@ -272,7 +272,7 @@ export module PrivilegesView {
             callback.getForumWideRequiredPrivileges()
         ];
 
-        let promise = Promise.all(requiredPrivilegesPromises);
+        const promise = Promise.all(requiredPrivilegesPromises);
 
         if (Privileges.ForumWide.canViewForumWideRequiredPrivileges()) {
 
@@ -291,12 +291,12 @@ export module PrivilegesView {
                                     categoryRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>,
                                     forumWideRequiredPrivileges?: Promise<RequiredPrivilegesCollection[]>): void {
 
-        let toReplace = modal.getElementsByClassName('privileges-part1')[0] as HTMLElement;
+        const toReplace = modal.getElementsByClassName('privileges-part1')[0] as HTMLElement;
         toReplace.innerText = '';
 
         Views.changeContent(toReplace, async () => {
 
-            let tabEntries: Views.TabEntry[] = [];
+            const tabEntries: Views.TabEntry[] = [];
 
             if (threadMessageRequiredPrivileges) {
 
@@ -339,15 +339,15 @@ export module PrivilegesView {
     function createdRequiredPrivilegesTable(title: string, privilegeNames,
                                             values: RequiredPrivilegesCollection[], property: string): Views.TabEntry {
 
-        let tableAppender = dA('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">');
+        const tableAppender = dA('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">');
 
-        let result: Views.TabEntry = {
+        const result: Views.TabEntry = {
 
             title: title,
             content: tableAppender
         };
 
-        let columnValues = {};
+        const columnValues = {};
 
         for (const column of Columns) {
 
@@ -373,10 +373,10 @@ export module PrivilegesView {
             }
         }
 
-        let tHead = dA('<thead>');
+        const tHead = dA('<thead>');
         tableAppender.append(tHead);
         {
-            let row = dA('<tr>');
+            const row = dA('<tr>');
             tHead.append(row);
 
             row.appendRaw('<th>Privilege</th>');
@@ -385,25 +385,25 @@ export module PrivilegesView {
 
                 if (columnValues[column[0]].length) {
 
-                    let cell = dA('<th>');
+                    const cell = dA('<th>');
                     row.append(cell);
                     cell.appendString(column[1]);
                 }
             }
         }
 
-        let tBody = dA('<tbody>');
+        const tBody = dA('<tbody>');
         tableAppender.append(tBody);
 
         function getValuesForPrivilege(privilegeName: string) {
 
-            let result = [];
+            const result = [];
 
             for (const column of Columns) {
 
                 if (columnValues[column[0]].length) {
 
-                    let currentResultValues = [];
+                    const currentResultValues = [];
 
                     for (const values of columnValues[column[0]]) {
 
@@ -433,18 +433,18 @@ export module PrivilegesView {
 
         for (let privilegeName of privilegeNames) {
 
-            let row = dA('<tr>');
+            const row = dA('<tr>');
             tBody.append(row);
 
-            let nameCell = dA('<td>');
+            const nameCell = dA('<td>');
             row.append(nameCell);
             nameCell.appendString(privilegeName[1]);
 
-            let columnMaxValues = getValuesForPrivilege(privilegeName[0]);
+            const columnMaxValues = getValuesForPrivilege(privilegeName[0]);
 
             for (const value of columnMaxValues) {
 
-                let cell = dA('<td>');
+                const cell = dA('<td>');
                 row.append(cell);
 
                 cell.append(value);
@@ -456,17 +456,17 @@ export module PrivilegesView {
 
     function showAssignedPrivileges(modal: HTMLElement, promise: Promise<AssignedPrivilegesCollection>): void {
 
-        let toReplace = modal.getElementsByClassName('privileges-part2')[0] as HTMLElement;
+        const toReplace = modal.getElementsByClassName('privileges-part2')[0] as HTMLElement;
         toReplace.innerText = '';
 
         Views.changeContent(toReplace, async () => {
 
-            let tabEntries: Views.TabEntry[] = [];
+            const tabEntries: Views.TabEntry[] = [];
 
-            let collection = await promise;
+            const collection = await promise;
 
-            let now = collection.now;
-            let assignedPrivileges = collection.forumWidePrivileges
+            const now = collection.now;
+            const assignedPrivileges = collection.forumWidePrivileges
                 || collection.discussionCategoryPrivileges
                 || collection.discussionTagPrivileges
                 || collection.discussionThreadPrivileges
@@ -477,10 +477,10 @@ export module PrivilegesView {
                 return DOMHelpers.parseHTML('<span class="uk-text-warning">No privileges assigned</span>');
             }
 
-            let granted: AssignedPrivilege[] = [];
-            let grantedExpired: AssignedPrivilege[] = [];
-            let revoked: AssignedPrivilege[] = [];
-            let revokedExpired: AssignedPrivilege[] = [];
+            const granted: AssignedPrivilege[] = [];
+            const grantedExpired: AssignedPrivilege[] = [];
+            const revoked: AssignedPrivilege[] = [];
+            const revokedExpired: AssignedPrivilege[] = [];
 
             assignedPrivileges.sort((first, second) => first.granted - second.granted);
 
@@ -561,18 +561,18 @@ export module PrivilegesView {
                                            firstColumn: string,
                                            firstColumnCallback: (AssignedPrivilege) => DOMAppender): Views.TabEntry {
 
-        let tableAppender = dA('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">');
+        const tableAppender = dA('<table class="uk-column-divider uk-table uk-table-divier uk-table-small uk-table-striped">');
 
-        let result: Views.TabEntry = {
+        const result: Views.TabEntry = {
 
             title: title,
             content: tableAppender
         };
 
-        let tHead = dA('<thead>');
+        const tHead = dA('<thead>');
         tableAppender.append(tHead);
         {
-            let row = dA('<tr>');
+            const row = dA('<tr>');
             tHead.append(row);
 
             if (firstColumn && firstColumn.length) {
@@ -584,30 +584,30 @@ export module PrivilegesView {
             row.appendRaw('<th>Until</th>');
         }
 
-        let tBody = dA('<tbody>');
+        const tBody = dA('<tbody>');
         tableAppender.append(tBody);
 
-        for (let assignedPrivilege of assignedPrivileges) {
+        for (const assignedPrivilege of assignedPrivileges) {
 
-            let row = dA('<tr>');
+            const row = dA('<tr>');
             tBody.append(row);
 
             if (firstColumnCallback) {
 
-                let firstCell = dA('<td>');
+                const firstCell = dA('<td>');
                 row.append(firstCell);
                 firstCell.append(firstColumnCallback(assignedPrivilege));
             }
 
-            let labelCell = dA('<td>');
+            const labelCell = dA('<td>');
             row.append(labelCell);
             labelCell.append(createPrivilegeLevelSpan(DisplayHelpers.intToStringLargeMinus(assignedPrivilege.value)));
 
-            let fromCell = dA('<td>');
+            const fromCell = dA('<td>');
             row.append(fromCell);
             fromCell.appendString(DisplayHelpers.getDateTimeLargeSeparator(assignedPrivilege.granted));
 
-            let untilCell = dA('<td>');
+            const untilCell = dA('<td>');
             row.append(untilCell);
             untilCell.appendString((0 == assignedPrivilege.expires)
                 ? '∞'
@@ -620,11 +620,11 @@ export module PrivilegesView {
     export function showPrivilegesAssignedToUser(user: UserRepository.User,
                                                  callback: PageActions.IPrivilegesCallback): void {
 
-        let modal = showPrivilegesModal('Privileges Assigned To User: ' + user.name);
+        const modal = showPrivilegesModal('Privileges Assigned To User: ' + user.name);
 
         Views.showModal(modal);
 
-        let promise = callback.getPrivilegesAssignedToUser(user.id);
+        const promise = callback.getPrivilegesAssignedToUser(user.id);
 
         if (Privileges.User.canViewPrivilegesAssignedToUser(user)) {
 
@@ -643,11 +643,11 @@ export module PrivilegesView {
 
         Views.changeContent(toReplace, async () => {
 
-            let tabEntries: Views.TabEntry[] = [];
+            const tabEntries: Views.TabEntry[] = [];
 
-            let collection = await promise;
+            const collection = await promise;
 
-            let prefix = showRevoked ? 'Revoked' : 'Granted';
+            const prefix = showRevoked ? 'Revoked' : 'Granted';
 
             function compareFn(first: AssignedPrivilege, second: AssignedPrivilege): number {
 
@@ -659,16 +659,16 @@ export module PrivilegesView {
                 return showRevoked ? (assignedPrivilege.value < 0) : (assignedPrivilege.value >= 0);
             }
 
-            let discussionThreadPrivileges = collection.discussionThreadPrivileges.filter(filterFn);
+            const discussionThreadPrivileges = collection.discussionThreadPrivileges.filter(filterFn);
             discussionThreadPrivileges.sort(compareFn);
 
-            let discussionTagPrivileges = collection.discussionTagPrivileges.filter(filterFn);
+            const discussionTagPrivileges = collection.discussionTagPrivileges.filter(filterFn);
             discussionTagPrivileges.sort(compareFn);
 
-            let discussionCategoryPrivileges = collection.discussionCategoryPrivileges.filter(filterFn);
+            const discussionCategoryPrivileges = collection.discussionCategoryPrivileges.filter(filterFn);
             discussionCategoryPrivileges.sort(compareFn);
 
-            let forumWidePrivileges = collection.forumWidePrivileges.filter(filterFn);
+            const forumWidePrivileges = collection.forumWidePrivileges.filter(filterFn);
             forumWidePrivileges.sort(compareFn);
 
             if (discussionThreadPrivileges.length) {

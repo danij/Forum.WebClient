@@ -35,7 +35,7 @@ export module MasterPage {
 
         originalTitle = document.title;
 
-        let pages = [
+        const pages = [
 
             {linkId: 'HomePageLink', factory: () => new HomePage()},
             {linkId: 'TagsPageLink', factory: () => new TagsPage()},
@@ -47,7 +47,7 @@ export module MasterPage {
 
         linkElements = pages.map((page) => {
 
-            let link = document.getElementById(page.linkId);
+            const link = document.getElementById(page.linkId);
             link.addEventListener('click', (ev) => {
 
                 ev.preventDefault();
@@ -95,8 +95,8 @@ export module MasterPage {
 
         for (let element of linkElements) {
 
-            let link = element.getElementsByTagName('a')[0] as HTMLAnchorElement;
-            let href = link.getAttribute('data-href');
+            const link = element.getElementsByTagName('a')[0] as HTMLAnchorElement;
+            const href = link.getAttribute('data-href');
             link.href = Pages.getUrl(href);
         }
     }
@@ -193,12 +193,12 @@ export module MasterPage {
 
         StatisticsRepository.getEntityCount().then(value => {
 
-            let span = document.getElementById('entityCount');
+            const span = document.getElementById('entityCount');
             span.innerText = MasterView.getStatisticsText(value);
         });
         UserRepository.getOnlineUsers().then(users => {
 
-            let link = document.getElementById('usersOnline') as HTMLAnchorElement;
+            const link = document.getElementById('usersOnline') as HTMLAnchorElement;
             MasterView.showOnlineUsers(link, users || []);
         })
     }
@@ -214,12 +214,12 @@ export module MasterPage {
         ThreadRepository.getThreads(request).then(value => {
 
             value.threads = value.threads || [];
-            let latestValue = calculateRecentThreadsLatestValue(value.threads);
+            const latestValue = calculateRecentThreadsLatestValue(value.threads);
             if (latestValue == recentThreadsLatestValue) return;
 
             recentThreadsLatestValue = latestValue;
 
-            let panel = document.getElementsByClassName('recent-threads-content')[0] as HTMLElement;
+            const panel = document.getElementsByClassName('recent-threads-content')[0] as HTMLElement;
 
             panel.innerHTML = '';
             panel.appendChild(ThreadsView.createRecentThreadsView(value.threads));
@@ -230,7 +230,7 @@ export module MasterPage {
 
     function calculateRecentThreadsLatestValue(threads: ThreadRepository.Thread[]) {
 
-        let result = [];
+        const result = [];
         for (let thread of threads) {
 
             result.push(thread.id);
@@ -247,12 +247,12 @@ export module MasterPage {
         ThreadMessageRepository.getLatestThreadMessages().then(value => {
 
             value.messages = value.messages || [];
-            let latestValue = calculateRecentThreadMessagesLatestValue(value.messages);
+            const latestValue = calculateRecentThreadMessagesLatestValue(value.messages);
             if (latestValue == recentThreadMessagesLatestValue) return;
 
             recentThreadMessagesLatestValue = latestValue;
 
-            let panel = document.getElementsByClassName('recent-messages-content')[0] as HTMLElement;
+            const panel = document.getElementsByClassName('recent-messages-content')[0] as HTMLElement;
 
             panel.innerHTML = '';
             panel.appendChild(ThreadMessagesView.createRecentThreadMessagesView(value.messages));
@@ -263,7 +263,7 @@ export module MasterPage {
 
     function calculateRecentThreadMessagesLatestValue(messages: ThreadMessageRepository.ThreadMessage[]) {
 
-        let result = [];
+        const result = [];
         for (let message of messages) {
 
             result.push(message.id);
@@ -278,22 +278,22 @@ export module MasterPage {
 
     function setupSearch(): void {
 
-        let searchLink = document.getElementById('showSearchModal');
+        const searchLink = document.getElementById('showSearchModal');
         searchLink.addEventListener('click', (ev) => {
 
             ev.preventDefault();
 
-            let modal = document.getElementById('search-modal');
+            const modal = document.getElementById('search-modal');
             Views.showModal(modal);
 
-            let searchInput = document.getElementById('searchInput') as HTMLInputElement;
-            searchInput = DOMHelpers.removeEventListeners(searchInput);
+            const searchInput = DOMHelpers.removeEventListeners(
+                document.getElementById('searchInput') as HTMLInputElement);
             searchInput.focus();
 
-            let searchButton = document.getElementById('searchButton');
-            searchButton = DOMHelpers.removeEventListeners(searchButton);
+            const searchButton = DOMHelpers.removeEventListeners(
+                document.getElementById('searchButton'));
 
-            let searchFn = () => {
+            const searchFn = () => {
 
                 const input = searchInput.value;
                 if (input.trim().length < 1) return;
@@ -301,7 +301,7 @@ export module MasterPage {
                 const checkedSearchType = modal.querySelectorAll('input[name=searchFor]:checked');
                 if (checkedSearchType.length < 1) return;
 
-                let resultsContainer = modal.getElementsByClassName('search-results-container')[0] as HTMLElement;
+                const resultsContainer = modal.getElementsByClassName('search-results-container')[0] as HTMLElement;
 
                 switch ((checkedSearchType[0] as HTMLInputElement).value) {
 
@@ -340,7 +340,7 @@ export module MasterPage {
 
             const users = await PageActions.getUserCallback().searchUsersByName(toSearch);
 
-            let result = DOMHelpers.parseHTML('<div class="users-list"></div>');
+            const result = DOMHelpers.parseHTML('<div class="users-list"></div>');
             result.appendChild(UsersView.createUserListContent(users));
 
             return result;
@@ -353,7 +353,7 @@ export module MasterPage {
 
             const threads = await PageActions.getThreadCallback().searchThreadsByName(toSearch);
 
-            let result = DOMHelpers.parseHTML('<div class="threads-table uk-margin-left"></div>');
+            const result = DOMHelpers.parseHTML('<div class="threads-table uk-margin-left"></div>');
             result.appendChild(ThreadsView.createThreadsTable(threads));
 
             return result;

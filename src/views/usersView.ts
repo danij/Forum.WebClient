@@ -48,23 +48,23 @@ export module UsersView {
 
     export function createUserLogoSmall(user: UserRepository.User, position: string = 'bottom-right'): DOMAppender {
 
-        let container = dA('<div>');
+        const container = dA('<div>');
 
         if (user.hasLogo) {
 
-            let element = dA(`<div class="author-logo pointer-cursor">`);
+            const element = dA(`<div class="author-logo pointer-cursor">`);
             container.append(element);
-            let img = dA(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`);
+            const img = dA(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`);
             element.append(img);
         }
         else {
 
-            let element = dA(`<div class="author-text-logo pointer-cursor" style="color: ${getUserLogoColor(user.id)}">`);
+            const element = dA(`<div class="author-text-logo pointer-cursor" style="color: ${getUserLogoColor(user.id)}">`);
             container.append(element);
             element.appendString(getUserLogoInitial(user.name));
         }
 
-        let dropdown = createUserDropdown(user, 'user-info', position);
+        const dropdown = createUserDropdown(user, 'user-info', position);
         container.append(dropdown);
 
         return container;
@@ -74,15 +74,15 @@ export module UsersView {
 
         if (user.hasLogo) {
 
-            let element = dA(`<div class="logo">`);
-            let img = dA(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`);
+            const element = dA(`<div class="logo">`);
+            const img = dA(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`);
             element.append(img);
 
             return element;
         }
         else {
 
-            let element = dA(`<div class="text-logo" style="color: ${getUserLogoColor(user.id)}">`);
+            const element = dA(`<div class="text-logo" style="color: ${getUserLogoColor(user.id)}">`);
             element.appendString(getUserLogoInitial(user.name));
             return element;
         }
@@ -90,9 +90,9 @@ export module UsersView {
 
     export function createAuthorSmall(user: UserRepository.User): DOMAppender {
 
-        let element = dA('<span class="author">');
+        const element = dA('<span class="author">');
 
-        let link = dA('<a ' + getThreadsOfUserLinkContent(user) + '>');
+        const link = dA('<a ' + getThreadsOfUserLinkContent(user) + '>');
         element.append(link);
         link.appendString(user.name);
 
@@ -126,7 +126,7 @@ export module UsersView {
     export function createUserDropdown(user: UserRepository.User, classString?: string,
                                        position: string = 'bottom-right'): DOMAppender {
 
-        let content = dA('<div>');
+        const content = dA('<div>');
 
         let threadsOfUserLink = '';
         let threadMessagesOfUserLink = '';
@@ -219,15 +219,15 @@ export module UsersView {
 
         collection = collection || UserRepository.defaultUserCollection();
 
-        let result = new UsersPageContent();
+        const result = new UsersPageContent();
 
-        let resultList = cE('div');
+        const resultList = cE('div');
 
         resultList.appendChild(result.sortControls = createUserListSortControls(info));
         resultList.appendChild(
             result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
-        let usersList = cE('div');
+        const usersList = cE('div');
         resultList.appendChild(usersList);
         usersList.classList.add('users-list');
 
@@ -266,10 +266,10 @@ export module UsersView {
 
     export function createUserListContent(users: UserRepository.User[]): HTMLElement {
 
-        let usersListGrid = dA('<div class="uk-grid-match uk-text-center uk-flex uk-flex-center" uk-grid>');
+        const usersListGrid = dA('<div class="uk-grid-match uk-text-center uk-flex uk-flex-center" uk-grid>');
 
         if (users && users.length) {
-            for (let user of users) {
+            for (const user of users) {
                 if (null == user) continue;
 
                 usersListGrid.append(createUserInList(user));
@@ -279,7 +279,7 @@ export module UsersView {
             usersListGrid.appendRaw('<span class="uk-text-warning">No users found</span>');
         }
 
-        let result = usersListGrid.toElement();
+        const result = usersListGrid.toElement();
 
         Views.setupThreadsOfUsersLinks(result);
         Views.setupSubscribedThreadsOfUsersLinks(result);
@@ -290,7 +290,7 @@ export module UsersView {
 
     export function createUserNameElement(user: UserRepository.User, extraClass: string = ''): DOMAppender {
 
-        let result = dA(`<div class="username uk-text-small ${extraClass}">`);
+        const result = dA(`<div class="username uk-text-small ${extraClass}">`);
         result.appendString(user.name);
 
         return result;
@@ -298,7 +298,7 @@ export module UsersView {
 
     export function createUserTitleElement(user: UserRepository.User): DOMAppender {
 
-        let result = dA('<div class="usertitle uk-text-small">');
+        const result = dA('<div class="usertitle uk-text-small">');
         result.appendString(user.title);
 
         return result;
@@ -306,12 +306,12 @@ export module UsersView {
 
     function createUserInList(user: UserRepository.User): DOMAppender {
 
-        let result = dA('<div>');
+        const result = dA('<div>');
 
-        let card = dA('<div class="uk-card uk-card-default uk-card-body">');
+        const card = dA('<div class="uk-card uk-card-default uk-card-body">');
         result.append(card);
 
-        let wrapper = dA('<div class="user-in-list">');
+        const wrapper = dA('<div class="user-in-list">');
         card.append(wrapper);
 
         wrapper.append(createUserLogoForList(user));
@@ -374,26 +374,26 @@ export module UsersView {
                                          callback: PageActions.IUserCallback,
                                          privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
-        let result = dA('<div class="user-header">');
-        let left = dA('<div class="message-author uk-float-left">');
+        const result = dA('<div class="user-header">');
+        const left = dA('<div class="message-author uk-float-left">');
         result.append(left);
 
         left.append(createUserLogoForList(user));
 
-        let name = dA('<div class="username uk-text-small">');
+        const name = dA('<div class="username uk-text-small">');
         left.append(name);
         name.appendString(user.name);
 
         if (user.title && user.title.length) {
 
-            let title = dA('<div class="usertitle uk-text-small">');
+            const title = dA('<div class="usertitle uk-text-small">');
             left.append(title);
             title.appendString(user.title);
         }
 
-        let threadsLink = '<a ' + getThreadsOfUserLinkContent(user) + '>threads</a>';
-        let threadMessagesLink = '<a ' + getMessagesOfUserLinkContent(user) + '>messages</a>';
-        let subscribedThreadsLink = '<a ' + getSubscribedThreadsOfUserLinkContent(user) + '>subscribed threads</a>';
+        const threadsLink = '<a ' + getThreadsOfUserLinkContent(user) + '>threads</a>';
+        const threadMessagesLink = '<a ' + getMessagesOfUserLinkContent(user) + '>messages</a>';
+        const subscribedThreadsLink = '<a ' + getSubscribedThreadsOfUserLinkContent(user) + '>subscribed threads</a>';
 
         let messageCommentsLink = '';
 
@@ -401,7 +401,7 @@ export module UsersView {
 
             messageCommentsLink = ' · <a ' + getMessageCommentsWrittenByUserLinkContent(user) + '>show written comments</a>';
         }
-        let assignedPrivilegesLink = ' · <a class="show-assigned-privileges-of-user">show assigned privileges</a>';
+        const assignedPrivilegesLink = ' · <a class="show-assigned-privileges-of-user">show assigned privileges</a>';
 
         result.appendRaw(('<div>\n' +
             `    <p>{threadCount} ${threadsLink}` +
@@ -426,13 +426,13 @@ export module UsersView {
         );
         if (user.info && user.info.length) {
 
-            let info = dA('<div class="uk-text-primary uk-text-small render-style">');
+            const info = dA('<div class="uk-text-primary uk-text-small render-style">');
             result.append(info);
 
             info.appendString(user.info);
         }
         {
-            let editContent = [];
+            const editContent = [];
 
             if (Privileges.User.canEditUserName(user)) {
 
@@ -462,21 +462,21 @@ export module UsersView {
 
             if (editContent.length) {
 
-                let editParagraph = dA('<p>');
+                const editParagraph = dA('<p>');
                 result.append(editParagraph);
                 editParagraph.appendRaw(editContent.join(' · ') + '<input type="file" class="upload-user-logo" />');
             }
         }
         result.appendRaw('<div class="uk-clearfix"></div>');
 
-        let resultElement = result.toElement();
+        const resultElement = result.toElement();
 
         Views.setupThreadsOfUsersLinks(resultElement);
         Views.setupSubscribedThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfUsersLinks(resultElement);
         Views.setupThreadMessagesCommentsWrittenByUserLinks(resultElement);
 
-        let toRender = resultElement.getElementsByClassName('render-style');
+        const toRender = resultElement.getElementsByClassName('render-style');
         for (let i = 0; i < toRender.length; ++i) {
 
             ViewsExtra.expandAndAdjust(toRender[i] as HTMLElement);
@@ -532,8 +532,8 @@ export module UsersView {
         Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-logo-link')[0], (ev) =>{
 
             ev.preventDefault();
-            let fileInput = document.getElementsByClassName('upload-user-logo')[0] as HTMLInputElement;
-            fileInput = DOMHelpers.removeEventListeners(fileInput);
+            const fileInput = DOMHelpers.removeEventListeners(
+                document.getElementsByClassName('upload-user-logo')[0] as HTMLInputElement);
 
             fileInput.value = '';
             fileInput.addEventListener('change', (ev) =>
@@ -547,7 +547,7 @@ export module UsersView {
                         return;
                     }
 
-                    let reader = new FileReader();
+                    const reader = new FileReader();
                     reader.onloadend = (ev) => {
 
                         ev.preventDefault();
