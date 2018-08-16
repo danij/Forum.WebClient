@@ -24,7 +24,7 @@ export module DOMHelpers {
         public append(value: DOMAppender) {
 
             if (value) {
-                
+
                 this._values.push(value);
             }
         }
@@ -164,6 +164,59 @@ export module DOMHelpers {
 
                 handler(ev, elements[i].getAttribute(attribute));
             });
+        }
+    }
+
+    export function wrapIfMultiple(...appenders: DOMAppender[]) : DOMAppender {
+
+        const nonEmptyAppenders = appenders.filter(a => a);
+
+        if (0 == nonEmptyAppenders.length) {
+
+            return null;
+        }
+        else if (1 == nonEmptyAppenders.length) {
+
+            return nonEmptyAppenders[0];
+        }
+        else {
+
+            const result = dA('div');
+
+            for (let nonEmptyAppender of nonEmptyAppenders) {
+
+                result.append(nonEmptyAppender);
+            }
+
+            return result;
+        }
+    }
+
+    export function goUpUntil(element: HTMLElement, tagName: string): HTMLElement {
+
+        tagName = tagName.toLowerCase();
+
+        while ((element.tagName.toLowerCase() != tagName) && element.parentElement) {
+
+            element = element.parentElement;
+        }
+
+        return element.tagName.toLowerCase() == tagName ? element : null;
+    }
+
+    export function switchHidden(elements: HTMLElement[]): void {
+
+        const className = 'uk-hidden';
+
+        for (const element of elements) {
+
+            if (element.classList.contains(className)) {
+
+                element.classList.remove(className);
+            }
+            else {
+                element.classList.add(className);
+            }
         }
     }
 }

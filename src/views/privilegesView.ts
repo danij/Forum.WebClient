@@ -139,6 +139,35 @@ export module PrivilegesView {
         ['forumWidePrivileges', 'Forum Wide'],
     ];
 
+    const PrivilegeTypeMapping = {
+
+        'discussionThreadMessagePrivileges': 'thread_message',
+        'discussionThreadPrivileges': 'thread',
+        'discussionTagPrivileges': 'tag',
+        'discussionCategoryPrivileges': 'category',
+        'forumWidePrivileges': 'forum_wide',
+    };
+
+    const EntityToColumnMapping = {
+
+        'thread_message': 'discussionThreadMessagePrivileges',
+        'thread': 'discussionThreadPrivileges',
+        'tag': 'discussionTagPrivileges',
+        'category': 'discussionCategoryPrivileges',
+        'forum_wide': 'forumWidePrivileges'
+    };
+
+    const ValueMin = -32000;
+
+    const ValueMax = 32000;
+
+    interface ColumnEntityAllowEditRequired {
+
+        entityType: string;
+        entityId: string;
+        allowAdjustPrivilege: boolean;
+    }
+
     function showPrivilegesModal(title: string): HTMLElement {
 
         const modal = document.getElementById('privileges-modal');
@@ -165,6 +194,116 @@ export module PrivilegesView {
         result.appendString(value);
 
         return result;
+    }
+
+    function createEditPrivilegeRequiredValue(privilegeType: string, entityAllowEdit: ColumnEntityAllowEditRequired[],
+                                              privilegeName: string, currentValue: string): DOMAppender {
+
+        const allowEdit = entityAllowEdit && (1 == entityAllowEdit.length) && entityAllowEdit[0].allowAdjustPrivilege;
+
+        if (! allowEdit) {
+
+            return null;
+        }
+
+        const dataValues = {
+            'data-privilege-type': privilegeType,
+            'data-privilege-entity-type': entityAllowEdit[0].entityType,
+            'data-privilege-entity-id': entityAllowEdit[0].entityId || '',
+            'data-privilege-name': privilegeName,
+            'data-privilege-initial-value': currentValue
+        };
+
+        const result = dA('span');
+
+        const editButton = dA(`<span class="edit-required-privilege" title="Edit" ${DOMHelpers.concatAttributes(dataValues)}>`);
+        result.append(editButton);
+        editButton.appendRaw('<span uk-icon="pencil" class="edit-required-privilege-button pointer-cursor"></span>');
+
+        const editInput = dA(`<input class="edit-required-privilege-input uk-hidden" value="${currentValue.toString()}" />`);
+        result.append(editInput);
+
+        const saveButton = dA('<span class="edit-required-privilege-save uk-hidden" title="Save">');
+        result.append(saveButton);
+        saveButton.appendRaw('<span uk-icon="check" class="edit-required-privilege-button pointer-cursor"></span>');
+
+        const cancelButton = dA('<span class="edit-required-privilege-cancel uk-hidden" title="Cancel">');
+        result.append(cancelButton);
+        cancelButton.appendRaw('<span uk-icon="close" class="edit-required-privilege-button pointer-cursor"></span>');
+
+        return result;
+    }
+
+    function setupEditPrivilegeRequiredValueButtons(element: HTMLElement): void {
+
+        const editButtons = element.getElementsByClassName('edit-required-privilege');
+
+        for(let i = 0; i < editButtons.length; ++i) {
+
+            setupEditPrivilegeRequiredValueButton(editButtons[i] as HTMLElement);
+        }
+    }
+
+    function setupEditPrivilegeRequiredValueButton(editButton: HTMLElement): void {
+
+        const tableCell = DOMHelpers.goUpUntil(editButton, 'td');
+
+        const privilegeLevel = tableCell.getElementsByClassName('privilege-level')[0] as HTMLElement;
+        const editInput = tableCell.getElementsByClassName('edit-required-privilege-input')[0] as HTMLInputElement;
+        const saveButton = tableCell.getElementsByClassName('edit-required-privilege-save')[0] as HTMLElement;
+        const cancelButton = tableCell.getElementsByClassName('edit-required-privilege-cancel')[0] as HTMLElement;
+
+        const elements: HTMLElement[] = [privilegeLevel, editButton, editInput, saveButton, cancelButton];
+
+        const privilegeType = editButton.getAttribute('data-privilege-type');
+        const entityType = editButton.getAttribute('data-privilege-entity-type');
+        const entityId = editButton.getAttribute('data-privilege-entity-id');
+        const privilegeName = editButton.getAttribute('data-privilege-name');
+        const initialValue = editButton.getAttribute('data-privilege-initial-value');
+
+        editButton.addEventListener('click', ev => {
+
+            ev.preventDefault();
+
+            DOMHelpers.switchHidden(elements);
+        });
+
+        saveButton.addEventListener('click', async (ev) => {
+
+            ev.preventDefault();
+
+            const valueString = editInput.value.trim();
+            const value = parseInt(valueString);
+
+            if ((value.toString() != valueString) || (value < ValueMin) || (value > ValueMax)) {
+
+                Views.showWarningNotification(`Value must be between ${ValueMin} and ${ValueMax}!`);
+                return;
+            }
+
+            try {
+
+                if (valueString != initialValue) {
+
+                    await PrivilegesRepository.changeRequiredPrivilege(privilegeType, entityType, entityId,
+                        privilegeName, value);
+
+                    privilegeLevel.innerText = DisplayHelpers.intToStringLargeMinus(value);
+                }
+                DOMHelpers.switchHidden(elements);
+            }
+            catch (ex) {
+
+                Views.showDangerNotification(`Could not assign privilege: ${ex}`)
+            }
+        });
+
+        cancelButton.addEventListener('click', ev => {
+
+            ev.preventDefault();
+
+            DOMHelpers.switchHidden(elements);
+        });
     }
 
     export function showThreadMessagePrivileges(message: ThreadMessageRepository.ThreadMessage,
@@ -329,11 +468,11 @@ export module PrivilegesView {
                     'forumWidePrivileges'));
             }
 
-            const result = Views.createTabs(tabEntries, 0, 'center').toElement();
-
-            return result;
+            return Views.createTabs(tabEntries, 0, 'center').toElement();
 
         }, false);
+
+        setTimeout(() => setupEditPrivilegeRequiredValueButtons(toReplace), 1000);
     }
 
     function createdRequiredPrivilegesTable(title: string, privilegeNames,
@@ -352,6 +491,23 @@ export module PrivilegesView {
         for (const column of Columns) {
 
             columnValues[column[0]] = [];
+        }
+
+        const entityAllowEditPrivileges = {};
+
+        for (let column of Columns) {
+
+            entityAllowEditPrivileges[column[0]] = [];
+        }
+
+        for (const value of values) {
+
+            entityAllowEditPrivileges[EntityToColumnMapping[value.entityType]].push({
+
+                entityType: value.entityType,
+                entityId: value.entityId,
+                allowAdjustPrivilege: value.allowAdjustPrivilege
+            });
         }
 
         for (let collection of values) {
@@ -416,16 +572,24 @@ export module PrivilegesView {
                         }
                     }
 
-                    let value = '';
+                    let valueStringSimple = '';
+                    let valueString = '';
+
                     if (currentResultValues.length == 0) {
 
-                        value = '-';
+                        valueString = '-';
                     }
                     else {
 
-                        value = DisplayHelpers.intToStringLargeMinus(Math.max(...currentResultValues));
+                        const value = Math.max(...currentResultValues);
+                        valueStringSimple = value.toString();
+                        valueString = DisplayHelpers.intToStringLargeMinus(value);
                     }
-                    result.push(createPrivilegeLevelSpan(value));
+
+                    result.push(DOMHelpers.wrapIfMultiple(
+                        createPrivilegeLevelSpan(valueString),
+                        createEditPrivilegeRequiredValue(PrivilegeTypeMapping[property],
+                            entityAllowEditPrivileges[column[0]], privilegeName, valueStringSimple)));
                 }
             }
             return result;
@@ -630,7 +794,7 @@ export module PrivilegesView {
 
     function createAssignPrivilegeForm(collection: AssignedPrivilegesCollection, entityId: string): DOMAppender {
 
-        if (! collection.allowAdjustPrivilege) {
+        if (!collection.allowAdjustPrivilege) {
 
             return null;
         }
@@ -709,19 +873,16 @@ export module PrivilegesView {
                 return;
             }
 
-            const valueMin = -32000;
-            const valueMax = 32000;
-
-            const valueString = (form.querySelector('#value-input-assign-privilege') as HTMLInputElement).value;
+            const valueString = (form.querySelector('#value-input-assign-privilege') as HTMLInputElement).value.trim();
             const value = parseInt(valueString);
 
-            if ((value.toString() != valueString) || (value < valueMin) || (value > valueMax)) {
+            if ((value.toString() != valueString) || (value < ValueMin) || (value > ValueMax)) {
 
-                Views.showWarningNotification(`Value must be between ${valueMin} and ${valueMax}!`);
+                Views.showWarningNotification(`Value must be between ${ValueMin} and ${ValueMax}!`);
                 return;
             }
 
-            let durationString = (form.querySelector('#duration-input-assign-privilege') as HTMLInputElement).value;
+            let durationString = (form.querySelector('#duration-input-assign-privilege') as HTMLInputElement).value.trim();
 
             if (! durationString) {
                 durationString = '0';
@@ -746,7 +907,7 @@ export module PrivilegesView {
             catch {
                 //skip
             }
-            if (!user) {
+            if (! user) {
 
                 Views.showWarningNotification('Cannot find user with name: ' + userName);
                 return;
@@ -781,7 +942,7 @@ export module PrivilegesView {
 
                 Views.showSuccessNotification('Assigned privilege will be displayed when reopening the modal.');
             }
-            catch(ex) {
+            catch (ex) {
 
                 Views.showDangerNotification(`Could not assign privilege: ${ex}`);
             }

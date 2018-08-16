@@ -16,6 +16,9 @@ export module PrivilegesRepository {
         discussionTagPrivileges?: RequiredPrivilege[];
         discussionCategoryPrivileges?: RequiredPrivilege[];
         forumWidePrivileges?: RequiredPrivilege[];
+        allowAdjustPrivilege: boolean;
+        entityType? : string;
+        entityId?: string;
     }
 
     export interface AssignedPrivilege {
@@ -62,37 +65,56 @@ export module PrivilegesRepository {
 
     export async function getThreadMessageRequiredPrivileges(messageId: string): Promise<RequiredPrivilegesCollection> {
 
-        return (await RequestHandler.get({
+        const result = (await RequestHandler.get({
             path: 'privileges/required/thread_message/' + encodeURIComponent(messageId)
         }) as RequiredPrivilegesCollection);
+
+        result.entityType = result.entityType || 'thread_message';
+        result.entityId = result.entityId || messageId;
+        return result;
     }
 
     export async function getThreadRequiredPrivileges(threadId: string): Promise<RequiredPrivilegesCollection> {
 
-        return (await RequestHandler.get({
+        const result = await RequestHandler.get({
             path: 'privileges/required/thread/' + encodeURIComponent(threadId)
-        }) as RequiredPrivilegesCollection);
+        }) as RequiredPrivilegesCollection;
+
+        result.entityType = result.entityType || 'thread';
+        result.entityId = result.entityId || threadId;
+        return result;
     }
 
     export async function getTagRequiredPrivileges(tagId: string): Promise<RequiredPrivilegesCollection> {
 
-        return (await RequestHandler.get({
+        const result = await RequestHandler.get({
             path: 'privileges/required/tag/' + encodeURIComponent(tagId)
-        }) as RequiredPrivilegesCollection);
+        }) as RequiredPrivilegesCollection;
+
+        result.entityType = result.entityType || 'tag';
+        result.entityId = result.entityId || tagId;
+        return result;
     }
 
     export async function getCategoryRequiredPrivileges(categoryId: string): Promise<RequiredPrivilegesCollection> {
 
-        return (await RequestHandler.get({
+        const result = await RequestHandler.get({
             path: 'privileges/required/category/' + encodeURIComponent(categoryId)
-        }) as RequiredPrivilegesCollection);
+        }) as RequiredPrivilegesCollection;
+
+        result.entityType = result.entityType || 'category';
+        result.entityId = result.entityId || categoryId;
+        return result;
     }
 
     export async function getForumWideRequiredPrivileges(): Promise<RequiredPrivilegesCollection> {
 
-        return (await RequestHandler.get({
+        const result = await RequestHandler.get({
             path: 'privileges/required/forum_wide'
-        }) as RequiredPrivilegesCollection);
+        }) as RequiredPrivilegesCollection;
+
+        result.entityType = result.entityType || 'forum_wide';
+        return result;
     }
     
     export async function getThreadMessageAssignedPrivileges(messageId: string): Promise<AssignedPrivilegesCollection> {
@@ -184,6 +206,17 @@ export module PrivilegesRepository {
 
         return (await RequestHandler.post({
             path: 'privileges/forum_wide/assign/' + [userId, value, duration].map(encodeURIComponent).join('/')
+        }));
+    }
+
+    export async function changeRequiredPrivilege(privilegeType: string, entityType: string, entityId: string,
+                                                  privilegeName: string, value: number): Promise<void> {
+
+        const entityIdParameter = entityId.length ? ('/' + encodeURIComponent(entityId)) : '';
+
+        return (await RequestHandler.post({
+            path: `privileges/${privilegeType}/required/${entityType}${entityIdParameter}/`
+                + [privilegeName, value].map(encodeURIComponent).join('/')
         }));
     }
 }
