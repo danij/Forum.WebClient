@@ -69,9 +69,8 @@ export module ThreadMessagesView {
             const user = dA('<span class="author">');
             element.append(user);
 
-            const userLink = dA(`<a ${UsersView.getThreadsOfUserLinkContent(message.createdBy)}>`);
+            const userLink = UsersView.createAuthorSmall(message.createdBy);
             user.append(userLink);
-            userLink.appendString(message.createdBy.name);
 
             const threadTitle = DOMHelpers.escapeStringForAttribute(message.parentThread.name);
 

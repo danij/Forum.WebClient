@@ -92,14 +92,16 @@ export module UsersView {
 
         const element = dA('<span class="author">');
 
-        const link = dA('<a ' + getThreadsOfUserLinkContent(user) + '>');
+        const link = UserRepository.isValidUser(user)
+            ? dA('<a ' + getThreadsOfUserLinkContent(user) + '>')
+            : dA('<span>');
         element.append(link);
         link.appendString(user.name);
 
         return element;
     }
 
-    export function getThreadsOfUserLinkContent(user: UserRepository.User): string {
+    function getThreadsOfUserLinkContent(user: UserRepository.User): string {
 
         return 'href="' + Pages.getThreadsOfUserUrlFull(user) + '" ' + Views.UserThreadsData + '="' +
             DOMHelpers.escapeStringForAttribute(user.name) + '"';

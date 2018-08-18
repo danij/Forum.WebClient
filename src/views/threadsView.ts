@@ -286,9 +286,8 @@ export module ThreadsView {
             const user = dA('<span class="author">');
             element.append(user);
 
-            const userLink = dA(`<a ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}>`);
+            const userLink = UsersView.createAuthorSmall(thread.createdBy);
             user.append(userLink);
-            userLink.appendString(thread.createdBy.name);
 
             const title = DOMHelpers.escapeStringForAttribute(thread.name);
 
@@ -446,9 +445,7 @@ export module ThreadsView {
             threadTitle.innerText = thread.name;
             title.appendChild(document.createTextNode(' '));
 
-            const userLink = DOMHelpers.parseHTML(`<a class="author" ${UsersView.getThreadsOfUserLinkContent(thread.createdBy)}></a>`);
-            title.appendChild(userLink);
-            userLink.innerText = thread.createdBy.name;
+            title.appendChild(UsersView.createAuthorSmall(thread.createdBy).toElement());
         }
         {
             card.appendChild(DOMHelpers.parseHTML('<div class="uk-clearfix"></div>'));
