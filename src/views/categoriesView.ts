@@ -19,7 +19,7 @@ export module CategoriesView {
 
     export function createCategoryLink(category: CategoryRepository.Category,
                                        addSpace: boolean = false,
-                                       classes: string = 'uk-button uk-button-text'): DOMAppender {
+                                       classes: string = 'uk-button uk-button-text uk-text-bold'): DOMAppender {
 
         const result = dA(`<a class="${classes}" href="` + Pages.getCategoryFullUrl(category) +
             '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
