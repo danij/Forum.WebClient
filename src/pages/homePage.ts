@@ -25,7 +25,7 @@ export class HomePage implements Pages.Page {
 
         MasterPage.goTo('home', '');
 
-        document.getElementById('HomePageLink').classList.add('uk-active');
+        document.getElementById('home-page-link').classList.add('uk-active');
 
         Pages.changePage(async () => {
 
@@ -40,7 +40,7 @@ export class HomePage implements Pages.Page {
 
         MasterPage.goTo(Pages.getCategoryUrl(id, name), name);
 
-        document.getElementById('HomePageLink').classList.add('uk-active');
+        document.getElementById('home-page-link').classList.add('uk-active');
 
         Pages.changePage(async () => {
 
@@ -175,6 +175,6 @@ export class HomePage implements Pages.Page {
 
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
 
-        document.getElementById('HomePageLink').classList.add('uk-active');
+        document.getElementById('home-page-link').classList.add('uk-active');
     }
 }

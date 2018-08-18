@@ -57,7 +57,7 @@ export class TagsPage implements Pages.Page {
 
     private refreshList(): void {
 
-        Views.changeContent(document.querySelector('#pageContentContainer .tags-list'), async () => {
+        Views.changeContent(document.querySelector('#page-content-container .tags-list'), async () => {
 
             const tagCollection = await this.getAllTags();
 
@@ -100,6 +100,6 @@ export class TagsPage implements Pages.Page {
             orderBy: this.orderBy,
             sortOrder: this.sortOrder
         }), 'Tags');
-        document.getElementById('TagsPageLink').classList.add('uk-active');
+        document.getElementById('tags-page-link').classList.add('uk-active');
     }
 }

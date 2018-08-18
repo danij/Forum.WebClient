@@ -42,7 +42,7 @@ export module ConsentView {
             else {
 
                 document.getElementsByClassName('page-footer')[0].classList.add('uk-hidden');
-                document.getElementById('pageContentContainer').appendChild(DOMHelpers.parseHTML(
+                document.getElementById('page-content-container').appendChild(DOMHelpers.parseHTML(
                     '<h2 class="uk-cover">This website cannot function without HTTP cookies.</h2>'
                 ));
             }

@@ -167,7 +167,7 @@ export class ThreadsPage implements Pages.Page {
 
     private refreshList(): void {
 
-        Views.changeContent(document.querySelector('#pageContentContainer .threads-table'), async () => {
+        Views.changeContent(document.querySelector('#page-content-container .threads-table'), async () => {
 
             const threadCollection = await this.getThreadCollection();
 
@@ -268,6 +268,6 @@ export class ThreadsPage implements Pages.Page {
         title = Views.addPageNumber(title, this.pageNumber);
 
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
-        document.getElementById('ThreadsPageLink').classList.add('uk-active');
+        document.getElementById('threads-page-link').classList.add('uk-active');
     }
 }

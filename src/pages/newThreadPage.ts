@@ -42,6 +42,6 @@ export class NewThreadPage implements Pages.Page {
     private refreshUrl() {
 
         MasterPage.goTo(NewThreadPage.PageUrl, 'Add a New Thread');
-        document.getElementById('NewThreadPageLink').classList.add('uk-active');
+        document.getElementById('new-thread-page-link').classList.add('uk-active');
     }
 }

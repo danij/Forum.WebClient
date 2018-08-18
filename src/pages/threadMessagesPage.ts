@@ -158,7 +158,7 @@ export class ThreadMessagesPage implements Pages.Page {
 
     private refreshList(): void {
 
-        Views.changeContent(document.querySelector('#pageContentContainer .thread-message-list'), async () => {
+        Views.changeContent(document.querySelector('#page-content-container .thread-message-list'), async () => {
 
             const messageCollection: ThreadMessageRepository.ThreadMessageCollection =
                 this.thread
@@ -235,7 +235,7 @@ export class ThreadMessagesPage implements Pages.Page {
     private refreshUrl() {
 
         let title = 'Thread Messages';
-        let setActive = 'ThreadsPageLink';
+        let setActive = 'threads-page-link';
 
         if (this.threadId && this.threadId.length) {
 
@@ -244,7 +244,7 @@ export class ThreadMessagesPage implements Pages.Page {
         else if (this.userName && this.userName.length) {
 
             title = 'Thread messages added by ' + this.userName;
-            setActive = 'UsersPageLink';
+            setActive = 'users-page-link';
         }
 
         title = Views.addPageNumber(title, this.pageNumber);

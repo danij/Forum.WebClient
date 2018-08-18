@@ -65,12 +65,12 @@ export module MasterPage {
 
         const pages = [
 
-            {linkId: 'HomePageLink', factory: () => new HomePage()},
-            {linkId: 'TagsPageLink', factory: () => new TagsPage()},
-            {linkId: 'ThreadsPageLink', factory: () => new ThreadsPage()},
-            {linkId: 'UsersPageLink', factory: () => new UsersPage()},
-            {linkId: 'CommentsPageLink', factory: () => new ThreadMessageCommentsPage()},
-            {linkId: 'NewThreadPageLink', factory: () => new NewThreadPage()},
+            {linkId: 'home-page-link', factory: () => new HomePage()},
+            {linkId: 'tags-page-link', factory: () => new TagsPage()},
+            {linkId: 'threads-page-link', factory: () => new ThreadsPage()},
+            {linkId: 'users-page-link', factory: () => new UsersPage()},
+            {linkId: 'comments-page-link', factory: () => new ThreadMessageCommentsPage()},
+            {linkId: 'new-thread-page-link', factory: () => new NewThreadPage()},
         ];
 
         linkElements = pages.map((page) => {
@@ -94,17 +94,17 @@ export module MasterPage {
 
         if (Privileges.ForumWide.canViewAllComments()) {
 
-            document.getElementById('CommentsPageLink').classList.remove('uk-hidden');
+            document.getElementById('comments-page-link').classList.remove('uk-hidden');
         }
 
         if (Privileges.ForumWide.canViewForumWideRequiredPrivileges() || Privileges.ForumWide.canViewForumWideAssignedPrivileges()) {
 
-            document.getElementById('ForumWidePrivilegesLink').classList.remove('uk-hidden');
+            document.getElementById('forum-wide-privileges-link').classList.remove('uk-hidden');
         }
 
         if (Privileges.ForumWide.canAddNewThread()) {
 
-            document.getElementById('NewThreadPageLink').classList.remove('uk-hidden');
+            document.getElementById('new-thread-page-link').classList.remove('uk-hidden');
         }
     }
 
@@ -200,12 +200,12 @@ export module MasterPage {
 
         StatisticsRepository.getEntityCount().then(value => {
 
-            const span = document.getElementById('entityCount');
+            const span = document.getElementById('entity-count');
             span.innerText = MasterView.getStatisticsText(value);
         });
         UserRepository.getOnlineUsers().then(users => {
 
-            const link = document.getElementById('usersOnline') as HTMLAnchorElement;
+            const link = document.getElementById('users-online') as HTMLAnchorElement;
             MasterView.showOnlineUsers(link, users || []);
         })
     }
@@ -285,7 +285,7 @@ export module MasterPage {
 
     function setupSearch(): void {
 
-        const searchLink = document.getElementById('showSearchModal');
+        const searchLink = document.getElementById('show-search-modal');
         searchLink.addEventListener('click', (ev) => {
 
             ev.preventDefault();
@@ -383,7 +383,7 @@ export module MasterPage {
 
     function setupSettings() {
 
-        document.getElementById('Settings').addEventListener('click', (ev) => {
+        document.getElementById('settings').addEventListener('click', (ev) => {
 
             ev.preventDefault();
 

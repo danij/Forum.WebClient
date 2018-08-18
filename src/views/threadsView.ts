@@ -534,9 +534,9 @@ export module ThreadsView {
 
         const saveButton = DOMHelpers.removeEventListeners(
             modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
-        const searchByNameElement = document.getElementById('searchThreadByName') as HTMLInputElement;
+        const searchByNameElement = document.getElementById('search-thread-by-name') as HTMLInputElement;
         let selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
-        const selectedIdElement = document.getElementById('selectedThreadId') as HTMLInputElement;
+        const selectedIdElement = document.getElementById('selected-thread-id') as HTMLInputElement;
 
         searchByNameElement.value = '';
         selectElement.innerHTML = '';

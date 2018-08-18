@@ -67,7 +67,7 @@ export class UsersPage implements Pages.Page {
 
     private refreshList(): void {
 
-        Views.changeContent(document.querySelector('#pageContentContainer .users-list'), async () => {
+        Views.changeContent(document.querySelector('#page-content-container .users-list'), async () => {
 
             const userCollection = await this.getAllUsers();
 
@@ -137,6 +137,6 @@ export class UsersPage implements Pages.Page {
         const title = Views.addPageNumber('Users', this.pageNumber);
 
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
-        document.getElementById('UsersPageLink').classList.add('uk-active');
+        document.getElementById('users-page-link').classList.add('uk-active');
     }
 }

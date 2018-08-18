@@ -15,14 +15,14 @@ export module Pages {
 
         Views.hideOpenModals();
 
-        return Views.changeContent(document.getElementById('pageContentContainer'), handler);
+        return Views.changeContent(document.getElementById('page-content-container'), handler);
     }
 
     export function changePageDontRefreshMath(handler: () => Promise<HTMLElement>): Promise<void> {
 
         Views.hideOpenModals();
 
-        return Views.changeContent(document.getElementById('pageContentContainer'), handler, false);
+        return Views.changeContent(document.getElementById('page-content-container'), handler, false);
     }
 
     declare var UIkit: any;

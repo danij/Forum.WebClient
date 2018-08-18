@@ -445,7 +445,7 @@ export module Views {
         setTimeout(() => {
 
             const element = document.getElementById(elementId);
-            const container = document.getElementById('pageContentContainer');
+            const container = document.getElementById('page-content-container');
             if (element) {
 
                 const top = jQuery(element).offset().top - jQuery(container).offset().top;

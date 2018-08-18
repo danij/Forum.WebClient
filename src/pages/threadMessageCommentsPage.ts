@@ -107,7 +107,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
     private refreshList(): void {
 
-        Views.changeContent(document.querySelector('#pageContentContainer .thread-message-comments-list'), async () => {
+        Views.changeContent(document.querySelector('#page-content-container .thread-message-comments-list'), async () => {
 
             const commentsCollection = await this.getCommentsCollection();
 
@@ -183,6 +183,6 @@ export class ThreadMessageCommentsPage implements Pages.Page {
         title = Views.addPageNumber(title, this.pageNumber);
 
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
-        document.getElementById('CommentsPageLink').classList.add('uk-active');
+        document.getElementById('comments-page-link').classList.add('uk-active');
     }
 }
