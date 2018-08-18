@@ -35,6 +35,26 @@ export module MasterPage {
 
         originalTitle = document.title;
 
+        setupLinks();
+
+        const loadForumWidePrivilegesPromise = Privileges.ForumWide.loadForumWidePrivileges();
+
+        setupSearch();
+
+        ViewsExtra.init();
+
+        window.onpopstate = () => onGoBack();
+
+        setupUpdates();
+        setupSettings();
+
+        await loadForumWidePrivilegesPromise;
+        afterGettingForumWidePrivileges();
+        loadCurrentPage();
+    }
+
+    function setupLinks() : void {
+
         const pages = [
 
             {linkId: 'HomePageLink', factory: () => new HomePage()},
@@ -53,24 +73,13 @@ export module MasterPage {
                 ev.preventDefault();
                 page.factory().display();
             });
+
+            const linkElement = link.getElementsByTagName('a')[0] as HTMLAnchorElement;
+            const href = linkElement.getAttribute('data-href');
+            linkElement.href = Pages.getUrl(href);
+
             return link;
         });
-
-        const loadForumWidePrivilegesPromise = Privileges.ForumWide.loadForumWidePrivileges();
-
-        setupSearch();
-
-        ViewsExtra.init();
-        fixLinks();
-
-        window.onpopstate = () => onGoBack();
-
-        setupUpdates();
-        setupSettings();
-
-        await loadForumWidePrivilegesPromise;
-        afterGettingForumWidePrivileges();
-        loadCurrentPage();
     }
 
     function afterGettingForumWidePrivileges() : void {
@@ -88,16 +97,6 @@ export module MasterPage {
         if (Privileges.ForumWide.canAddNewThread()) {
 
             document.getElementById('NewThreadPageLink').classList.remove('uk-hidden');
-        }
-    }
-
-    function fixLinks() {
-
-        for (let element of linkElements) {
-
-            const link = element.getElementsByTagName('a')[0] as HTMLAnchorElement;
-            const href = link.getAttribute('data-href');
-            link.href = Pages.getUrl(href);
         }
     }
 
