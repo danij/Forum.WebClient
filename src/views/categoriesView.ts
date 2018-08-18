@@ -174,7 +174,7 @@ export module CategoriesView {
             const deleteLink = EditViews.createDeleteLink('Delete category');
             result.appendChild(deleteLink);
 
-            deleteLink.addEventListener('click', () => {
+            Views.onClick(deleteLink, () => {
 
                 if (EditViews.confirm(`Are you sure you want to delete the following category: ${category.name}?`)) {
 
@@ -227,7 +227,7 @@ export module CategoriesView {
 
             const link = EditViews.createEditLink('Edit category parent', 'git-branch');
             element.appendChild(link);
-            link.addEventListener('click', async () => {
+            Views.onClick(link, async () => {
 
                 const allCategories = await CategoryRepository.getAllCategoriesAsTree();
 
@@ -253,7 +253,7 @@ export module CategoriesView {
 
             const link = EditViews.createEditLink('Edit category name');
             element.appendChild(link);
-            link.addEventListener('click', () => {
+            Views.onClick(link, () => {
 
                 const name = EditViews.getInput('Edit category name', category.name);
                 if (name && name.length && (name != category.name)) {
@@ -280,7 +280,7 @@ export module CategoriesView {
 
             const link = EditViews.createEditLink('Edit category description');
             descriptionContainer.appendChild(link);
-            link.addEventListener('click', () => {
+            Views.onClick(link, () => {
 
                 const description = EditViews.getInput('Edit category description', category.description);
                 if (description && description.length && (description != category.description)) {
@@ -298,7 +298,7 @@ export module CategoriesView {
             const link = EditViews.createEditLink('Privileges', 'settings');
             result.appendChild(link);
 
-            link.addEventListener('click', () => {
+            Views.onClick(link, () => {
 
                 PrivilegesView.showCategoryPrivileges(category, privilegesCallback);
             });
@@ -310,7 +310,7 @@ export module CategoriesView {
 
             const link = EditViews.createEditLink('Edit category tags', 'tag');
             result.appendChild(link);
-            link.addEventListener('click', async () => {
+            Views.onClick(link, async () => {
 
                 const allTags = await callback.getAllTags();
                 TagsView.showSelectTagsDialog(category.tags, allTags,
@@ -390,7 +390,7 @@ export module CategoriesView {
 
         const button = EditViews.createAddNewButton('Add Root Category');
 
-        button.addEventListener('click', () => {
+        Views.onClick(button, () => {
 
             const name = EditViews.getInput('Enter the new category name');
             if ((null === name) || (name.length < 1)) return;
@@ -405,7 +405,7 @@ export module CategoriesView {
 
         const button = EditViews.createAddNewButton('Add Sub Category');
 
-        button.addEventListener('click', () => {
+        Views.onClick(button, () => {
 
             const name = EditViews.getInput('Enter the new sub category name');
             if ((null === name) || (name.length < 1)) return;
@@ -436,7 +436,7 @@ export module CategoriesView {
         const elements = container.getElementsByClassName('editDisplayOrderLink');
         for (let i = 0; i < elements.length; ++i) {
 
-            elements[i].addEventListener('click', (ev) => eventHandler(ev));
+            Views.onClick(elements[i] as HTMLElement, (ev) => eventHandler(ev));
         }
     }
 
@@ -450,9 +450,7 @@ export module CategoriesView {
             modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
         const form = modal.getElementsByTagName('form')[0] as HTMLFormElement;
 
-        saveButton.addEventListener('click', (ev) => {
-
-            ev.preventDefault();
+        Views.onClick(saveButton, () => {
 
             const selectedRadio = document.querySelector('input[name="categoryParentId"]:checked') as HTMLInputElement;
             if (selectedRadio && selectedRadio.value) {

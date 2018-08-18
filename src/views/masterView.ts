@@ -54,9 +54,8 @@ export module MasterView {
 
         link.innerText = DisplayHelpers.intToString(users.length) + ' users online';
 
-        link.addEventListener('click', (ev) => {
+        Views.onClick(link, () => {
 
-            ev.preventDefault();
             const modal = document.getElementById('online-users-modal');
             const content = modal.getElementsByClassName('online-users-content')[0];
 

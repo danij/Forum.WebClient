@@ -261,16 +261,9 @@ export module PrivilegesView {
         const privilegeName = editButton.getAttribute('data-privilege-name');
         const initialValue = editButton.getAttribute('data-privilege-initial-value');
 
-        editButton.addEventListener('click', ev => {
+        Views.onClick(editButton, () => { DOMHelpers.switchHidden(elements); });
 
-            ev.preventDefault();
-
-            DOMHelpers.switchHidden(elements);
-        });
-
-        saveButton.addEventListener('click', async (ev) => {
-
-            ev.preventDefault();
+        Views.onClick(saveButton, async () => {
 
             const valueString = editInput.value.trim();
             const value = parseInt(valueString);
@@ -298,12 +291,7 @@ export module PrivilegesView {
             }
         });
 
-        cancelButton.addEventListener('click', ev => {
-
-            ev.preventDefault();
-
-            DOMHelpers.switchHidden(elements);
-        });
+        Views.onClick(cancelButton, () => { DOMHelpers.switchHidden(elements); });
     }
 
     export function showThreadMessagePrivileges(message: ThreadMessageRepository.ThreadMessage,
@@ -860,10 +848,8 @@ export module PrivilegesView {
 
         const form = query[0] as HTMLFormElement;
 
-        const saveButton = form.querySelector('#save-assign-privilege');
-        saveButton.addEventListener('click', async (ev) => {
-
-            ev.preventDefault();
+        const saveButton = form.querySelector('#save-assign-privilege') as HTMLElement;
+        Views.onClick(saveButton, async () => {
 
             const userName = (form.querySelector('#user-input-assign-privilege') as HTMLInputElement).value;
 

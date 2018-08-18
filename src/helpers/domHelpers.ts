@@ -148,7 +148,11 @@ export module DOMHelpers {
         const elements = element.getElementsByClassName(className);
         for (let i = 0; i < elements.length; ++i) {
 
-            elements[i].addEventListener(eventType, handler);
+            elements[i].addEventListener(eventType, ev =>{
+
+                ev.preventDefault();
+                handler(ev);
+            });
         }
     }
 

@@ -133,11 +133,7 @@ export module Views {
 
             const previous = DOMHelpers.parseHTML('<li><a><span uk-pagination-previous></span></a></li>');
             container.appendChild(previous);
-            previous.addEventListener('click', (ev) => {
-
-                ev.preventDefault();
-                onPageNumberChange(info.page - 1);
-            });
+            Views.onClick(previous, () => { onPageNumberChange(info.page - 1); });
         }
 
         function pageClickCallback(ev) {
@@ -156,7 +152,7 @@ export module Views {
             link.setAttribute('href', Pages.getUrl(getLinkForPage(pageNumber)));
             link.innerText = `${pageNumber + 1}`;
 
-            link.addEventListener('click', pageClickCallback);
+            Views.onClick(link, pageClickCallback);
 
             if (pageNumber == info.page) {
                 link.classList.add('uk-text-bold');
@@ -173,7 +169,7 @@ export module Views {
             listElement.appendChild(span);
             span.innerText = '...';
 
-            span.addEventListener('click', () => {
+            Views.onClick(span, () => {
 
                 const pageNumber = parseInt(prompt("Please enter the page number:")) || 0;
                 if (pageNumber >= 1) {
@@ -241,11 +237,7 @@ export module Views {
 
             const next = DOMHelpers.parseHTML('<li><a><span uk-pagination-next></span></a></li>');
             container.appendChild(next);
-            next.addEventListener('click', (ev) => {
-
-                ev.preventDefault();
-                onPageNumberChange(info.page + 1);
-            });
+            Views.onClick(next, () => { onPageNumberChange(info.page + 1); });
         }
 
         const total = cE('span');
@@ -353,8 +345,8 @@ export module Views {
 
         for (let i = 0; i < links.length; ++i) {
 
-            const link = links.item(i);
-            link.addEventListener('click', threadsWithTagLinkClicked);
+            const link = links.item(i) as HTMLElement;
+            Views.onClick(link, threadsWithTagLinkClicked);
         }
     }
 
@@ -364,8 +356,8 @@ export module Views {
 
         for (let i = 0; i < links.length; ++i) {
 
-            const link = links.item(i);
-            link.addEventListener('click', threadsOfUserLinkClicked);
+            const link = links.item(i) as HTMLElement;
+            Views.onClick(link, threadsOfUserLinkClicked);
         }
     }
 
@@ -375,8 +367,8 @@ export module Views {
 
         for (let i = 0; i < links.length; ++i) {
 
-            const link = links.item(i);
-            link.addEventListener('click', subscribedThreadsOfUserLinkClicked);
+            const link = links.item(i) as HTMLElement;
+            Views.onClick(link, subscribedThreadsOfUserLinkClicked);
         }
     }
 
@@ -386,8 +378,8 @@ export module Views {
 
         for (let i = 0; i < links.length; ++i) {
 
-            const link = links.item(i);
-            link.addEventListener('click', threadMessagesOfUserLinkClicked);
+            const link = links.item(i) as HTMLElement;
+            Views.onClick(link, threadMessagesOfUserLinkClicked);
         }
     }
 
@@ -397,8 +389,8 @@ export module Views {
 
         for (let i = 0; i < links.length; ++i) {
 
-            const link = links.item(i);
-            link.addEventListener('click', threadMessageCommentsWrittenByUserLinkClicked);
+            const link = links.item(i) as HTMLElement;
+            Views.onClick(link, threadMessageCommentsWrittenByUserLinkClicked);
         }
     }
 
@@ -408,8 +400,8 @@ export module Views {
 
         for (let i = 0; i < links.length; ++i) {
 
-            const link = links.item(i);
-            link.addEventListener('click', threadMessagesOfThreadLinkClicked);
+            const link = links.item(i) as HTMLElement;
+            Views.onClick(link, threadMessagesOfThreadLinkClicked);
         }
     }
 
@@ -419,8 +411,8 @@ export module Views {
 
         for (let i = 0; i < links.length; ++i) {
 
-            const link = links.item(i);
-            link.addEventListener('click', threadMessagesOfParentThreadLinkClicked);
+            const link = links.item(i) as HTMLElement;
+            Views.onClick(link, threadMessagesOfParentThreadLinkClicked);
         }
     }
 
@@ -437,7 +429,7 @@ export module Views {
 
     export function setupCategoryLink(link: HTMLAnchorElement): void {
 
-        link.addEventListener('click', categoryLinkClicked);
+        Views.onClick(link, categoryLinkClicked);
     }
 
     export function scrollContainerToId(elementId: string): void {
@@ -630,7 +622,16 @@ export module Views {
 
         if (element) {
 
-            element.addEventListener('click', listener);
+            Views.onClick(element, listener);
         }
+    }
+
+    export function onClick(element: HTMLElement, callback: (ev) => void): void {
+
+        element.addEventListener('click', ev => {
+
+            ev.preventDefault();
+            callback(ev);
+        });
     }
 }

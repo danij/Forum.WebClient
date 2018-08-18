@@ -344,7 +344,7 @@ export module ThreadsView {
 
             DOMHelpers.hide(thread.subscribedToThread ? subscribeToThread : unSubscribeFromThread);
 
-            subscribeToThread.addEventListener('click', async () => {
+            Views.onClick(subscribeToThread, async () => {
 
                 if (await callback.subscribeToThread(thread.id)) {
 
@@ -352,7 +352,7 @@ export module ThreadsView {
                     DOMHelpers.unHide(unSubscribeFromThread);
                 }
             });
-            unSubscribeFromThread.addEventListener('click', async () => {
+            Views.onClick(unSubscribeFromThread, async () => {
 
                 if (await callback.unSubscribeFromThread(thread.id)) {
 
@@ -365,7 +365,7 @@ export module ThreadsView {
 
                 const link = EditViews.createEditLink('Merge threads', 'git-fork', []);
                 actions.appendChild(link);
-                link.addEventListener('click', async () => {
+                Views.onClick(link, async () => {
 
                     showSelectSingleThreadDialog(callback, async (selected: string) => {
 
@@ -381,7 +381,7 @@ export module ThreadsView {
 
                 const link = EditViews.createEditLink('Privileges', 'settings', []);
                 actions.appendChild(link);
-                link.addEventListener('click', async () => {
+                Views.onClick(link, async () => {
 
                     PrivilegesView.showThreadPrivileges(thread, privilegesCallback);
                 });
@@ -392,7 +392,7 @@ export module ThreadsView {
                 const deleteLink = EditViews.createDeleteLink('Delete thread', '');
                 actions.appendChild(deleteLink);
 
-                deleteLink.addEventListener('click', () => {
+                Views.onClick(deleteLink, () => {
 
                     if (EditViews.confirm(`Are you sure you want to delete the following thread: ${thread.name}?`)) {
 
@@ -409,7 +409,7 @@ export module ThreadsView {
             if (Privileges.Thread.canEditThreadPinDisplayOrder(thread)) {
                 const link = EditViews.createEditLink('Edit thread display order when pinned', 'star');
                 title.appendChild(link);
-                link.addEventListener('click', () => {
+                Views.onClick(link, () => {
 
                     const newValue = parseInt(EditViews.getInput('Edit thread display order when pinned', (thread.pinDisplayOrder || 0).toString()));
 
@@ -425,7 +425,7 @@ export module ThreadsView {
             if (Privileges.Thread.canEditThreadName(thread)) {
                 const link = EditViews.createEditLink('Edit thread name');
                 title.appendChild(link);
-                link.addEventListener('click', () => {
+                Views.onClick(link, () => {
 
                     const name = EditViews.getInput('Edit thread name', thread.name);
                     if (name && name.length && (name != thread.name)) {
@@ -459,7 +459,7 @@ export module ThreadsView {
 
                 const link = EditViews.createEditLink('Edit thread tags', 'tag');
                 details.appendChild(link);
-                link.addEventListener('click', async () => {
+                Views.onClick(link, async () => {
 
                     const allTags = await callback.getAllTags();
                     TagsView.showSelectTagsDialog(thread.tags, allTags,
@@ -505,11 +505,8 @@ export module ThreadsView {
             const subscribedUsersLink = cE('a');
             details.appendChild(subscribedUsersLink);
             subscribedUsersLink.innerText = `${DisplayHelpers.intToString(thread.subscribedUsersCount)} subscribed users`;
-            subscribedUsersLink.addEventListener('click', (ev) => {
 
-                ev.preventDefault();
-                showSubscribedUsers(thread.id, callback);
-            })
+            Views.onClick(subscribedUsersLink, () => { showSubscribedUsers(thread.id, callback); });
         }
         {
             card.appendChild(DOMHelpers.parseHTML('<div class="uk-clearfix"></div>'));
@@ -539,9 +536,7 @@ export module ThreadsView {
         selectElement.innerHTML = '';
         selectedIdElement.value = '';
 
-        saveButton.addEventListener('click', (ev) => {
-
-            ev.preventDefault();
+        Views.onClick(saveButton, () => {
 
             const selectedId = selectedIdElement.value.trim();
             if (selectedId.length) {
@@ -648,9 +643,7 @@ export module ThreadsView {
         const addButton = DOMHelpers.parseHTML('<button class="uk-button uk-button-primary uk-align-center">Add</button>');
         result.appendChild(addButton);
 
-        addButton.addEventListener('click', async (ev) => {
-
-            ev.preventDefault();
+        Views.onClick(addButton, async () => {
 
             const name = input.value;
             const tagIds: string[] = [];

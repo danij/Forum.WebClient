@@ -200,7 +200,7 @@ export module TagsView {
 
             const link = EditViews.createEditLink('Edit tag name');
             container.appendChild(link);
-            link.addEventListener('click', () => {
+            Views.onClick(link, () => {
 
                 const name = EditViews.getInput('Edit tag name', tag.name);
                 if (name && name.length && (name != tag.name)) {
@@ -226,7 +226,7 @@ export module TagsView {
 
             const link = EditViews.createEditLink('Merge tags', 'git-fork');
             container.appendChild(link);
-            link.addEventListener('click', async () => {
+            Views.onClick(link, async () => {
 
                 const allTags = await callback.getAllTags();
                 TagsView.showSelectSingleTagDialog(allTags, (selected: string) => {
@@ -240,7 +240,7 @@ export module TagsView {
 
             const link = EditViews.createEditLink('Privileges', 'settings');
             container.appendChild(link);
-            link.addEventListener('click', async () => {
+            Views.onClick(link, async () => {
 
                 PrivilegesView.showTagPrivileges(tag, privilegesCallback);
             });
@@ -281,7 +281,7 @@ export module TagsView {
             const deleteLink = EditViews.createDeleteLink('Delete tag');
             container.appendChild(deleteLink);
 
-            deleteLink.addEventListener('click', () => {
+            Views.onClick(deleteLink, () => {
 
                 if (EditViews.confirm(`Are you sure you want to delete the following tag: ${tag.name}?`)) {
 
@@ -336,9 +336,7 @@ export module TagsView {
             previousTagIds.add(tag.id);
         }
 
-        saveButton.addEventListener('click', (ev) => {
-
-            ev.preventDefault();
+        Views.onClick(saveButton, () => {
 
             const selected = selectElement.selectedOptions;
             const added = [], removed = [];
@@ -377,9 +375,7 @@ export module TagsView {
             modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
         const selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
 
-        saveButton.addEventListener('click', (ev) => {
-
-            ev.preventDefault();
+        Views.onClick(saveButton, () => {
 
             const selected = selectElement.selectedOptions;
             if (selected.length) {
@@ -396,7 +392,7 @@ export module TagsView {
 
         const button = EditViews.createAddNewButton('Add Tag');
 
-        button.addEventListener('click', () => {
+        Views.onClick(button, () => {
 
             const name = EditViews.getInput('Enter the new tag name');
             if ((null === name) || (name.length < 1)) return;

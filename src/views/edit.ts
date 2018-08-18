@@ -219,11 +219,8 @@ export module EditViews {
                     link.setAttribute('uk-icon', `icon: ${action.icon}`);
                     link.setAttribute('title', action.title);
                     link.setAttribute('uk-tooltip', '');
-                    link.addEventListener('click', (ev) => {
 
-                        ev.preventDefault();
-                        action.callback();
-                    });
+                    Views.onClick(link, () => { action.callback(); });
                 }
             }
 

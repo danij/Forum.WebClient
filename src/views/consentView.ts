@@ -29,9 +29,7 @@ export module ConsentView {
 
         const saveConsentButton = document.getElementById('save-consent');
 
-        saveConsentButton.addEventListener('click', ev => {
-
-            ev.preventDefault();
+        Views.onClick(saveConsentButton, () => {
 
             const cookiesConsent = (document.getElementById('consent-cookies') as HTMLInputElement).checked;
 

@@ -76,9 +76,8 @@ export module MasterPage {
         linkElements = pages.map((page) => {
 
             const link = document.getElementById(page.linkId);
-            link.addEventListener('click', (ev) => {
+            Views.onClick(link, () => {
 
-                ev.preventDefault();
                 page.factory().display();
             });
 
@@ -286,9 +285,7 @@ export module MasterPage {
     function setupSearch(): void {
 
         const searchLink = document.getElementById('show-search-modal');
-        searchLink.addEventListener('click', (ev) => {
-
-            ev.preventDefault();
+        Views.onClick(searchLink, () => {
 
             const modal = document.getElementById('search-modal');
             Views.showModal(modal);
@@ -333,9 +330,8 @@ export module MasterPage {
                 }
             });
 
-            searchButton.addEventListener('click', (ev) => {
+            Views.onClick(searchButton, () => {
 
-                ev.preventDefault();
                 searchFn();
             });
         });
@@ -383,9 +379,7 @@ export module MasterPage {
 
     function setupSettings() {
 
-        document.getElementById('settings').addEventListener('click', (ev) => {
-
-            ev.preventDefault();
+        Views.onClick(document.getElementById('settings'), () => {
 
             PrivilegesView.showForumWidePrivileges(PageActions.getPrivilegesCallback());
         })

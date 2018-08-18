@@ -442,7 +442,6 @@ export module ThreadMessagesView {
 
         DOMHelpers.addEventListeners(element, 'edit-thread-message-content-link', 'click', async (ev) => {
 
-            ev.preventDefault();
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
             const message = messagesById[messageId];
 
@@ -457,7 +456,6 @@ export module ThreadMessagesView {
 
         DOMHelpers.addEventListeners(element, 'show-thread-message-comments', 'click', async (ev) => {
 
-            ev.preventDefault();
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
             const message = messagesById[messageId];
 
@@ -466,7 +464,6 @@ export module ThreadMessagesView {
 
         DOMHelpers.addEventListeners(element, 'move-thread-message-link', 'click', async (ev) => {
 
-            ev.preventDefault();
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
             ThreadsView.showSelectSingleThreadDialog(threadCallback, async (selected: string) => {
@@ -477,7 +474,6 @@ export module ThreadMessagesView {
 
         DOMHelpers.addEventListeners(element, 'delete-thread-message-link', 'click', async (ev) => {
 
-            ev.preventDefault();
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
             if (EditViews.confirm('Are you sure you want to delete the selected message?')) {
@@ -488,7 +484,6 @@ export module ThreadMessagesView {
 
         DOMHelpers.addEventListeners(element, 'comment-thread-message-link', 'click', async (ev) => {
 
-            ev.preventDefault();
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
             const comment = EditViews.getInput('Please enter a comment for the selected message');
@@ -503,7 +498,6 @@ export module ThreadMessagesView {
 
         DOMHelpers.addEventListeners(element, 'quote-thread-message-link', 'click', (ev) => {
 
-            ev.preventDefault();
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
             const message = messagesById[messageId];
 
@@ -511,8 +505,6 @@ export module ThreadMessagesView {
         });
 
         DOMHelpers.addEventListenersData(element, 'upvote-id', 'click', async (ev, messageId) => {
-
-            ev.preventDefault();
 
             if (await callback.upVote(messageId)) {
 
@@ -524,8 +516,6 @@ export module ThreadMessagesView {
 
         DOMHelpers.addEventListenersData(element, 'downvote-id', 'click', async (ev, messageId) => {
 
-            ev.preventDefault();
-
             if (await callback.downVote(messageId)) {
 
                 const element = ev.target as HTMLElement;
@@ -536,8 +526,6 @@ export module ThreadMessagesView {
 
         DOMHelpers.addEventListenersData(element, 'resetvote-id', 'click', async (ev, messageId) => {
 
-            ev.preventDefault();
-
             if (await callback.resetVote(messageId)) {
 
                 const element = ev.target as HTMLElement;
@@ -547,8 +535,6 @@ export module ThreadMessagesView {
         });
 
         DOMHelpers.addEventListeners(element, 'show-thread-message-privileges-link', 'click', async (ev) => {
-
-            ev.preventDefault();
 
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
             const message = messagesById[messageId];
@@ -642,10 +628,9 @@ export module ThreadMessagesView {
         const links = result.getElementsByClassName('solve-message-comment-link');
         for (let i = 0; i < links.length; ++i) {
 
-            const link = links[i];
-            link.addEventListener('click', async (ev) => {
+            const link = links[i] as HTMLElement;
+            Views.onClick(link, async (ev) => {
 
-                ev.preventDefault();
                 const link = DOMHelpers.getLink(ev);
                 const commentId = link.getAttribute('data-comment-id');
 
@@ -674,9 +659,8 @@ export module ThreadMessagesView {
             button.classList.add('uk-button', 'uk-button-primary', 'uk-align-center');
             button.innerText = 'Add new message';
 
-            button.addEventListener('click', async (ev) => {
+            Views.onClick(button, async () => {
 
-                ev.preventDefault();
                 const text = editControl.getText();
                 if (text.trim().length < 1) return;
 
@@ -716,9 +700,7 @@ export module ThreadMessagesView {
 
         const editControl = new EditViews.EditControl(container, initialText);
 
-        saveButton.addEventListener('click', (ev) => {
-
-            ev.preventDefault();
+        Views.onClick(saveButton, () => {
 
             const currentText = editControl.getText();
 
