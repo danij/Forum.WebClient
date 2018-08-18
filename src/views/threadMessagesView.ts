@@ -626,9 +626,8 @@ export module ThreadMessagesView {
     function setupMessageCommentLinks(result: HTMLElement, callback: PageActions.IThreadMessageCallback) {
 
         const links = result.getElementsByClassName('solve-message-comment-link');
-        for (let i = 0; i < links.length; ++i) {
+        DOMHelpers.forEach(links, link => {
 
-            const link = links[i] as HTMLElement;
             Views.onClick(link, async (ev) => {
 
                 const link = DOMHelpers.getLink(ev);
@@ -639,7 +638,7 @@ export module ThreadMessagesView {
                     DOMHelpers.replaceElementWith(link, DOMHelpers.parseHTML(solvedCommentSpan));
                 }
             });
-        }
+        });
     }
 
     function createNewThreadMessageControl(thread: ThreadRepository.Thread,

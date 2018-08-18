@@ -137,15 +137,15 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
             const selectElements = controls.querySelectorAll("select[name='sortOrder']");
 
-            for (let i = 0; i < selectElements.length; ++i) {
+            DOMHelpers.forEach(selectElements, selectElement => {
 
-                selectElements[i].addEventListener('change', (ev) => {
+                selectElement.addEventListener('change', (ev) => {
 
                     this.sortOrder = (ev.target as HTMLSelectElement).value;
                     this.refreshUrl();
                     this.refreshList();
                 });
-            }
+            });
         }
     }
 

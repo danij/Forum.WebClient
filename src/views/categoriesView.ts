@@ -434,10 +434,10 @@ export module CategoriesView {
         };
 
         const elements = container.getElementsByClassName('editDisplayOrderLink');
-        for (let i = 0; i < elements.length; ++i) {
+        DOMHelpers.forEach(elements, element => {
 
-            Views.onClick(elements[i] as HTMLElement, (ev) => eventHandler(ev));
-        }
+            Views.onClick(element, (ev) => eventHandler(ev));
+        });
     }
 
     function showSelectCategoryParentDialog(allCategories: CategoryRepository.Category[], currentParentId: string,

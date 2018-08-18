@@ -146,14 +146,14 @@ export module DOMHelpers {
                                       handler: (ev: Event) => void): void {
 
         const elements = element.getElementsByClassName(className);
-        for (let i = 0; i < elements.length; ++i) {
+        DOMHelpers.forEach(elements, element => {
 
-            elements[i].addEventListener(eventType, ev =>{
+            element.addEventListener(eventType, ev => {
 
                 ev.preventDefault();
                 handler(ev);
             });
-        }
+        });
     }
 
     export function addEventListenersData(element: HTMLElement, dataName: string, eventType: string,
@@ -162,13 +162,13 @@ export module DOMHelpers {
         const attribute = `data-${dataName}`;
         const elements = element.querySelectorAll(`[${attribute}]`);
 
-        for (let i = 0; i < elements.length; ++i) {
+        DOMHelpers.forEach(elements, element => {
 
-            elements[i].addEventListener(eventType, (ev) => {
+            element.addEventListener(eventType, (ev) => {
 
-                handler(ev, elements[i].getAttribute(attribute));
+                handler(ev, element.getAttribute(attribute));
             });
-        }
+        });
     }
 
     export function wrapIfMultiple(...appenders: DOMAppender[]) : DOMAppender {
@@ -221,6 +221,16 @@ export module DOMHelpers {
             else {
                 element.classList.add(className);
             }
+        }
+    }
+
+    export function forEach<T extends HTMLElement = HTMLElement>(collection: any,
+                                                                 callback: (element: T) => void): void {
+
+        for (let i = 0; i < collection.length; ++i) {
+
+            const element = collection[i] as T;
+            callback(element);
         }
     }
 }

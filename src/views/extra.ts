@@ -1,3 +1,5 @@
+import {DOMHelpers} from "../helpers/domHelpers";
+
 export module ViewsExtra {
 
     let remarkable: any;
@@ -68,17 +70,17 @@ export module ViewsExtra {
         setTimeout(() => {
 
             const elements = document.getElementsByClassName('render-math');
-            for (let i = 0; i < elements.length; ++i) {
+            DOMHelpers.forEach(elements, element => {
 
                 try {
 
-                    renderMathInElement(elements[i] as HTMLElement, katexRenderOptions);
+                    renderMathInElement(element, katexRenderOptions);
                 }
                 catch (ex) {
 
                     console.log(ex);
                 }
-            }
+            });
         }, 10);
     }
 
@@ -86,9 +88,7 @@ export module ViewsExtra {
 
         const contentElements = container.querySelectorAll('.message-content');
 
-        for (let i = 0; i < contentElements.length; ++i) {
-
-            const element = contentElements[i];
+        DOMHelpers.forEach(contentElements, element => {
 
             const tables = element.querySelectorAll('table');
             for (let ti = 0; ti < tables.length; ++ti) {
@@ -96,14 +96,13 @@ export module ViewsExtra {
                 const table = tables[ti];
                 table.classList.add('uk-table', 'uk-table-small', 'uk-table-striped');
             }
-        }
+        });
 
         const links = container.getElementsByTagName('a');
-        for (let i = 0; i < links.length; ++i) {
+        DOMHelpers.forEach(links, link => {
 
-            const link = links[i];
             link.setAttribute('rel', 'nofollow noopener noreferrer');
-        }
+        });
     }
 
     export function expandAndAdjust(container: HTMLElement): void {

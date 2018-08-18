@@ -240,10 +240,7 @@ export module PrivilegesView {
 
         const editButtons = element.getElementsByClassName('edit-required-privilege');
 
-        for(let i = 0; i < editButtons.length; ++i) {
-
-            setupEditPrivilegeRequiredValueButton(editButtons[i] as HTMLElement);
-        }
+        DOMHelpers.forEach(editButtons, setupEditPrivilegeRequiredValueButton);
     }
 
     function setupEditPrivilegeRequiredValueButton(editButton: HTMLElement): void {

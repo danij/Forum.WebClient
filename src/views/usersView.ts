@@ -479,10 +479,7 @@ export module UsersView {
         Views.setupThreadMessagesCommentsWrittenByUserLinks(resultElement);
 
         const toRender = resultElement.getElementsByClassName('render-style');
-        for (let i = 0; i < toRender.length; ++i) {
-
-            ViewsExtra.expandAndAdjust(toRender[i] as HTMLElement);
-        }
+        DOMHelpers.forEach(toRender, ViewsExtra.expandAndAdjust);
 
         Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-name-link')[0], async (ev) =>{
 

@@ -180,11 +180,10 @@ export module EditViews {
         private adjustGeneratedContent(element: HTMLElement): void {
 
             const tables = element.getElementsByTagName('table');
-            for (let i = 0; i < tables.length; ++i) {
+            DOMHelpers.forEach(tables, table => {
 
-                const table = tables[i] as HTMLElement;
                 table.classList.add('uk-table', 'uk-table-small', 'uk-table-striped');
-            }
+            });
         }
 
         private createEditControls(): HTMLElement {

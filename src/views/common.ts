@@ -343,88 +343,59 @@ export module Views {
 
         const links = element.querySelectorAll(`[${ThreadsWithTagData}]`);
 
-        for (let i = 0; i < links.length; ++i) {
+        DOMHelpers.forEach(links, link => {
 
-            const link = links.item(i) as HTMLElement;
             Views.onClick(link, threadsWithTagLinkClicked);
-        }
+        });
     }
 
     export function setupThreadsOfUsersLinks(element: HTMLElement): void {
 
         const links = element.querySelectorAll(`[${UserThreadsData}]`);
 
-        for (let i = 0; i < links.length; ++i) {
-
-            const link = links.item(i) as HTMLElement;
-            Views.onClick(link, threadsOfUserLinkClicked);
-        }
+        DOMHelpers.forEach(links, link => { Views.onClick(link, threadsOfUserLinkClicked); });
     }
 
     export function setupSubscribedThreadsOfUsersLinks(element: HTMLElement): void {
 
         const links = element.querySelectorAll(`[${UserSubscribedThreadsData}]`);
 
-        for (let i = 0; i < links.length; ++i) {
-
-            const link = links.item(i) as HTMLElement;
-            Views.onClick(link, subscribedThreadsOfUserLinkClicked);
-        }
+        DOMHelpers.forEach(links, link => { Views.onClick(link, subscribedThreadsOfUserLinkClicked); });
     }
 
     export function setupThreadMessagesOfUsersLinks(element: HTMLElement): void {
 
         const links = element.querySelectorAll(`[${UserMessagesData}]`);
 
-        for (let i = 0; i < links.length; ++i) {
-
-            const link = links.item(i) as HTMLElement;
-            Views.onClick(link, threadMessagesOfUserLinkClicked);
-        }
+        DOMHelpers.forEach(links, link => { Views.onClick(link, threadMessagesOfUserLinkClicked); });
     }
 
     export function setupThreadMessagesCommentsWrittenByUserLinks(element: HTMLElement): void {
 
         const links = element.querySelectorAll(`[${UserWrittenThreadMessageCommentsData}]`);
 
-        for (let i = 0; i < links.length; ++i) {
-
-            const link = links.item(i) as HTMLElement;
-            Views.onClick(link, threadMessageCommentsWrittenByUserLinkClicked);
-        }
+        DOMHelpers.forEach(links, link => { Views.onClick(link, threadMessageCommentsWrittenByUserLinkClicked); });
     }
 
     export function setupThreadMessagesOfThreadsLinks(element: HTMLElement): void {
 
         const links = element.querySelectorAll('[data-threadmessagethreadid]');
 
-        for (let i = 0; i < links.length; ++i) {
-
-            const link = links.item(i) as HTMLElement;
-            Views.onClick(link, threadMessagesOfThreadLinkClicked);
-        }
+        DOMHelpers.forEach(links, link => { Views.onClick(link, threadMessagesOfThreadLinkClicked); });
     }
 
     export function setupThreadMessagesOfMessageParentThreadLinks(element: HTMLElement): void {
 
         const links = element.querySelectorAll('[data-threadmessageid]');
 
-        for (let i = 0; i < links.length; ++i) {
-
-            const link = links.item(i) as HTMLElement;
-            Views.onClick(link, threadMessagesOfParentThreadLinkClicked);
-        }
+        DOMHelpers.forEach(links, link => { Views.onClick(link, threadMessagesOfParentThreadLinkClicked); });
     }
 
     export function setupCategoryLinks(element: HTMLElement): void {
 
         const links = element.querySelectorAll('[data-categoryid]');
 
-        for (let i = 0; i < links.length; ++i) {
-
-            const link = links.item(i) as HTMLAnchorElement;
-            setupCategoryLink(link);
-        }
+        DOMHelpers.forEach(links, setupCategoryLink);
     }
 
     export function setupCategoryLink(link: HTMLAnchorElement): void {
@@ -463,11 +434,7 @@ export module Views {
     export function hideOpenModals(): void {
 
         const modals = document.querySelectorAll('.uk-modal.uk-open');
-        for (let i = 0; i < modals.length; ++i) {
-
-            const modal = modals.item(i);
-            UIkit.modal(modal).hide();
-        }
+        DOMHelpers.forEach(modals, modal => UIkit.modal(modal).hide());
     }
 
     function showNotification(message: string, status: string, timeout: number = 3000): void {

@@ -19,13 +19,11 @@ export module ConsentView {
 
         const links = modal.getElementsByTagName('a');
 
-        for (let i = 0; i < links.length; ++i) {
-
-            const link = links[i] as HTMLAnchorElement;
+        DOMHelpers.forEach<HTMLAnchorElement>(links, link => {
 
             link.setAttribute('target', '_blank');
             link.setAttribute('rel', 'nofollow noopener noreferrer');
-        }
+        });
 
         const saveConsentButton = document.getElementById('save-consent');
 

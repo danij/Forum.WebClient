@@ -106,27 +106,27 @@ export class HomePage implements Pages.Page {
 
         const radioElements = controls.querySelectorAll('input[type=radio]');
 
-        for (let i = 0; i < radioElements.length; ++i) {
+        DOMHelpers.forEach(radioElements, radioElement => {
 
-            radioElements[i].addEventListener('change', (ev) => {
+            radioElement.addEventListener('change', (ev) => {
 
                 this.orderBy = (ev.target as HTMLInputElement).value;
                 this.refreshUrl();
                 this.refreshList();
             });
-        }
+        });
 
         const selectElements = controls.querySelectorAll("select[name='sortOrder']");
 
-        for (let i = 0; i < selectElements.length; ++i) {
+        DOMHelpers.forEach(selectElements, selectElement => {
 
-            selectElements[i].addEventListener('change', (ev) => {
+            selectElement.addEventListener('change', (ev) => {
 
                 this.sortOrder = (ev.target as HTMLSelectElement).value;
                 this.refreshUrl();
                 this.refreshList();
             });
-        }
+        });
     }
 
     private onPageNumberChange(newPageNumber: number): void {

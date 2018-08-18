@@ -192,15 +192,15 @@ export class ThreadMessagesPage implements Pages.Page {
 
             const elements = controls.querySelectorAll("select[name='sortOrder']");
 
-            for (let i = 0; i < elements.length; ++i) {
+            DOMHelpers.forEach(elements, element => {
 
-                elements[i].addEventListener('change', (ev) => {
+                element.addEventListener('change', (ev) => {
 
                     this.sortOrder = (ev.target as HTMLSelectElement).value;
                     this.refreshUrl();
                     this.refreshList();
                 });
-            }
+            });
         }
     }
 
