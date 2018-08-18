@@ -14,6 +14,7 @@ import {CategoriesView} from "./categoriesView";
 import {TagsView} from "./tagsView";
 import {ThreadsView} from "./threadsView";
 import {Privileges} from "../services/privileges";
+import {Debug} from "../services/debug";
 
 export module PrivilegesView {
 
@@ -199,7 +200,8 @@ export module PrivilegesView {
     function createEditPrivilegeRequiredValue(privilegeType: string, entityAllowEdit: ColumnEntityAllowEditRequired[],
                                               privilegeName: string, currentValue: string): DOMAppender {
 
-        const allowEdit = entityAllowEdit && (1 == entityAllowEdit.length) && entityAllowEdit[0].allowAdjustPrivilege;
+        const allowEdit = entityAllowEdit && (1 == entityAllowEdit.length)
+            && (entityAllowEdit[0].allowAdjustPrivilege || Debug.enableAllPrivileges());
 
         if (! allowEdit) {
 
@@ -782,7 +784,7 @@ export module PrivilegesView {
 
     function createAssignPrivilegeForm(collection: AssignedPrivilegesCollection, entityId: string): DOMAppender {
 
-        if (!collection.allowAdjustPrivilege) {
+        if (! (collection.allowAdjustPrivilege || Debug.enableAllPrivileges())) {
 
             return null;
         }

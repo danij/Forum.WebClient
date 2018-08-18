@@ -5,12 +5,14 @@ import {ThreadRepository} from "./threadRepository";
 import {ThreadMessageRepository} from "./threadMessageRepository";
 import {UserRepository} from "./userRepository";
 import {PrivilegesRepository} from "./privilegesRepository";
+import {Debug} from "./debug";
 
 export module Privileges {
 
     function hasPrivilege(privilegesEntity: CommonEntities.PrivilegesArray, privilege: string): boolean {
 
-        return privilegesEntity.privileges && privilegesEntity.privileges.indexOf(privilege) >= 0;
+        return Debug.enableAllPrivileges() ||
+            (privilegesEntity.privileges && privilegesEntity.privileges.indexOf(privilege) >= 0);
     }
 
     export namespace Category {

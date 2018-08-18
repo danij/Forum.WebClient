@@ -31,3 +31,8 @@ window.masterPageConfig = {
         link: "#"
     }]
 };
+
+window.debugConfig = {
+
+    enableAllPrivileges: false
+};
