@@ -306,6 +306,48 @@
     </div>
 </div>
 
+<div id="consent-modal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Consent Required</h2>
+
+        <ul uk-tab class="uk-flex-center uk-tab">
+            <li class="uk-active" aria-expanded="true">
+                <a href="#">Cookies</a>
+            </li>
+        </ul>
+        <ul class="uk-switcher">
+            <li class="uk-active">
+                <p>This website needs to store the following
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">HTTP cookies</a>
+                    in your browser in order to function property.</p>
+                <table class="uk-table uk-table-small uk-table-striped">
+                    <thead>
+                    <tr><th>Name</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>csrfToken</td>
+                        <td>Protects against <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">Cross-Site Request Forgery</a> attacks.</td>
+                    </tr>
+                    <tr>
+                        <td>auth</td>
+                        <td>Remembers who you are logged in as so that you do not have to log in every time you reload the page.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+        </ul>
+        <hr class="uk-divider-icon">
+        <form>
+            <input type="checkbox" id="consent-cookies" class="uk-checkbox" />
+            <label for="consent-cookies">I agree to the website storing the above cookies in my browser.</label>
+
+            <button id="save-consent" class="uk-button uk-button-primary uk-align-center">Save</button>
+        </form>
+    </div>
+</div>
+
 <div class="page-footer">
     <span>
         <span id="footer-links"></span>
