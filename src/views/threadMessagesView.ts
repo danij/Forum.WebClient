@@ -459,8 +459,9 @@ export module ThreadMessagesView {
 
             ev.preventDefault();
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const message = messagesById[messageId];
 
-            showThreadMessageComments(messageId, callback);
+            showThreadMessageComments(message, callback);
         });
 
         DOMHelpers.addEventListeners(element, 'move-thread-message-link', 'click', async (ev) => {
@@ -563,7 +564,7 @@ export module ThreadMessagesView {
 
     const solvedCommentSpan = '<span class="uk-icon-button uk-float-right" uk-icon="check" title="Already solved" uk-tooltip></span>';
 
-    async function showThreadMessageComments(messageId: string,
+    async function showThreadMessageComments(message: ThreadMessageRepository.ThreadMessage,
                                              callback: PageActions.IThreadMessageCallback): Promise<void> {
 
         const modal = document.getElementById('thread-message-comments-modal');
@@ -575,11 +576,13 @@ export module ThreadMessagesView {
 
         const appender = dA('<div>');
 
-        const comments = await callback.getCommentsOfThreadMessage(messageId) || [];
+        const comments = await callback.getCommentsOfThreadMessage(message.id) || [];
 
         for (let i = 0; i < comments.length; ++i) {
 
             const comment = comments[i];
+
+            comment.message = comment.message || message;
 
             const card = dA('<div class="uk-card uk-card-body message-comments-content">');
             appender.append(card);
