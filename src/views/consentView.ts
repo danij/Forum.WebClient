@@ -26,7 +26,10 @@ export module ConsentView {
         });
 
         document.getElementById('page-content-container').appendChild(DOMHelpers.parseHTML(
-            '<h2 class="uk-cover">This website cannot function without HTTP cookies.</h2>'
+            '<div class="uk-cover uk-text-center">' +
+            '<h2>This website cannot function without HTTP cookies.</h2>' +
+            '<a id="reopen-consent-modal">Reopen Consent Modal</a>' +
+            '</div>'
         ));
         document.getElementsByClassName('page-footer')[0].classList.add('uk-hidden');
 
@@ -44,5 +47,8 @@ export module ConsentView {
 
             Views.hideOpenModals();
         });
+
+        const reopenConsentLink = document.getElementById('reopen-consent-modal');
+        Views.onClick(reopenConsentLink, () => { Views.showModal(modal); });
     }
 }
