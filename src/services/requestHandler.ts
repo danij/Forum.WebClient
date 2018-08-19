@@ -1,4 +1,5 @@
 import {PathHelpers} from "../helpers/pathHelpers";
+import {ConsentRepository} from "./consentRepository";
 
 export module RequestHandler {
 
@@ -6,6 +7,7 @@ export module RequestHandler {
 
         path: string;
         extra?: string[];
+        extraHeaders?: {};
         query?: any;
         type?: string;
         stringData?: string;
@@ -63,7 +65,40 @@ export module RequestHandler {
         return 'Unknown';
     }
 
-    function ajax(method: string, request: Request): Promise<any> {
+    let getDoubleSubmitCookiePromise: Promise<string>;
+
+    async function getDoubleSubmitCookie(): Promise<string> {
+
+        await ConsentRepository.getCookieConsent();
+
+        if ( ! getDoubleSubmitCookiePromise) {
+
+            getDoubleSubmitCookiePromise = loadDoubleSubmitCookie();
+        }
+
+        return await getDoubleSubmitCookiePromise;
+    }
+
+    async function loadDoubleSubmitCookie() : Promise<string> {
+
+        let result = await ajaxSimple('GET', {
+            path: '../auth/double_submit_cookie'
+        });
+
+        return result.double_submit;
+    }
+
+    async function ajax(method: string, request: Request) : Promise<any> {
+
+        const doubleSubmitCookie = await getDoubleSubmitCookie();
+
+        request.extraHeaders = request.extraHeaders || {};
+        request.extraHeaders['X-Double-Submit'] = doubleSubmitCookie;
+
+        return await ajaxSimple(method, request);
+    }
+
+    function ajaxSimple(method: string, request: Request): Promise<any> {
 
         return new Promise((resolve, reject) => {
 
@@ -94,6 +129,14 @@ export module RequestHandler {
 
             xmlHttp.open(method, getUrl(request));
             xmlHttp.setRequestHeader('Content-Type', request.type ? request.type : 'application/json');
+
+            if (request.extraHeaders) {
+
+                for (let ownPropertyName of Object.getOwnPropertyNames(request.extraHeaders)) {
+
+                    xmlHttp.setRequestHeader(ownPropertyName, request.extraHeaders[ownPropertyName]);
+                }
+            }
 
             if (request.stringData) {
 
