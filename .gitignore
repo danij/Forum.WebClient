@@ -3,6 +3,7 @@ dist
 js
 node_modules
 Prototype
+Temp
 src/**/*.js
 css/**/*.css
 *.map

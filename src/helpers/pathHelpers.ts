@@ -22,4 +22,16 @@ export module PathHelpers {
 
         return elements.map(trimPathSeparator).join('/');
     }
+
+    export function queryParameters(input: any, appendPrefix: boolean): string {
+
+        let result = Object.getOwnPropertyNames(input)
+            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(input[key])}`).join('&');
+
+        if (result.length && appendPrefix) {
+
+            result = '?' + result;
+        }
+        return result;
+    }
 }

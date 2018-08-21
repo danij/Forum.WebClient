@@ -55,7 +55,7 @@ module.exports = {
 
                     options: {
                         name: '[name].[ext]',
-                        publicPath: 'dist/'
+                        publicPath: ''
                     }
                 }]
             },

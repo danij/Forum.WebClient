@@ -22,6 +22,7 @@ import {DOMHelpers} from "../helpers/domHelpers";
 import {PrivilegesView} from "../views/privilegesView";
 import {ConsentRepository} from "../services/consentRepository";
 import {ConsentView} from "../views/consentView";
+import {LoginView} from "../views/loginView";
 
 export module MasterPage {
 
@@ -87,6 +88,8 @@ export module MasterPage {
 
             return link;
         });
+
+        LoginView.setupLogin();
     }
 
     function afterGettingForumWidePrivileges() : void {

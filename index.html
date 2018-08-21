@@ -81,7 +81,7 @@
     </div>
     <div class="uk-navbar-right">
         <ul class="uk-navbar-nav">
-            <li><a data-href="#" class="uk-text-center">
+            <li><a data-href="#" id="login-link" class="uk-text-center">
                 <div><span uk-icon="icon: sign-in"></span>
                     <div class="uk-navbar-subtitle">Login</div>
                 </div>
@@ -296,7 +296,7 @@
 <div id="privileges-modal" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <button class="uk-modal-close-default" type="button" uk-close></button>
-        <h2 class="uk-modal-title render-math">Privileges</h2>
+        <h2 class="uk-modal-title">Privileges</h2>
 
         <div class="privileges-part1">
         </div>
@@ -327,12 +327,20 @@
                     </thead>
                     <tbody>
                     <tr>
+                        <td>auth</td>
+                        <td>Remembers who you are logged in as so that you do not have to log in every time you reload the page.</td>
+                    </tr>
+                    <tr>
                         <td>double_submit</td>
                         <td>Protects against <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">Cross-Site Request Forgery</a> attacks.</td>
                     </tr>
                     <tr>
-                        <td>auth</td>
-                        <td>Remembers who you are logged in as so that you do not have to log in every time you reload the page.</td>
+                        <td>login_redirect</td>
+                        <td>Temporarily stores the url to which to redirect after logging in.</td>
+                    </tr>
+                    <tr>
+                        <td>show_my_user_in_users_online</td>
+                        <td>Stores whether to display the user name you are logged in with in the list of online users.</td>
                     </tr>
                     </tbody>
                 </table>
@@ -345,6 +353,23 @@
 
             <button id="save-consent" class="uk-button uk-button-primary uk-align-center">Save</button>
         </form>
+    </div>
+</div>
+
+<div id="login-modal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Login</h2>
+
+        <div>
+            <input type="checkbox" id="show-in-online-users" class="uk-checkbox" />
+            <label for="show-in-online-users">Display my user name in the public list of <emph>online users</emph></label>
+        </div>
+        <hr class="uk-divider-icon">
+        <div class="uk-text-center">
+            <!--https://developers.google.com/identity/branding-guidelines-->
+            <a id="login-with-google"></a>
+        </div>
     </div>
 </div>
 
