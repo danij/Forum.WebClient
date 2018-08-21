@@ -395,20 +395,18 @@ export module UsersView {
 
         const threadsLink = '<a ' + getThreadsOfUserLinkContent(user) + '>threads</a>';
         const threadMessagesLink = '<a ' + getMessagesOfUserLinkContent(user) + '>messages</a>';
-        const subscribedThreadsLink = '<a ' + getSubscribedThreadsOfUserLinkContent(user) + '>subscribed threads</a>';
-
-        let messageCommentsLink = '';
-
-        if (Privileges.User.canViewUserComments(user)) {
-
-            messageCommentsLink = ' · <a ' + getMessageCommentsWrittenByUserLinkContent(user) + '>show written comments</a>';
-        }
+        const subscribedThreadsLink = (user.subscribedThreadCount >= 0)
+            ? ` · {subscribedThreadCount} <a ${getSubscribedThreadsOfUserLinkContent(user)}>subscribed threads</a>`
+            : '';
+        const messageCommentsLink = Privileges.User.canViewUserComments(user)
+            ? ' · <a ' + getMessageCommentsWrittenByUserLinkContent(user) + '>show written comments</a>'
+             :'';
         const assignedPrivilegesLink = ' · <a class="show-assigned-privileges-of-user">show assigned privileges</a>';
 
         result.appendRaw(('<div>\n' +
             `    <p>{threadCount} ${threadsLink}` +
             ` · {messageCount} ${threadMessagesLink}` +
-            ` · {subscribedThreadCount} ${subscribedThreadsLink}${messageCommentsLink}${assignedPrivilegesLink}` +
+            `${subscribedThreadsLink}${messageCommentsLink}${assignedPrivilegesLink}` +
             ` <span class="uk-label score-up">+ {upVotes}</span>` +
             ` <span class="uk-label score-down">− {downVotes}</span></p>\n` +
             '    <p>Joined <span class="uk-text-meta">{joined}</span>' +
