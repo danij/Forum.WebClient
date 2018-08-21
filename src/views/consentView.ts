@@ -26,7 +26,7 @@ export module ConsentView {
         });
 
         document.getElementById('page-content-container').appendChild(DOMHelpers.parseHTML(
-            '<div class="uk-cover uk-text-center">' +
+            '<div class="uk-cover uk-text-center" id="cookies-needed-message">' +
             '<h2>This website cannot function without HTTP cookies.</h2>' +
             '<a id="reopen-consent-modal">Reopen Consent Modal</a>' +
             '</div>'
@@ -42,6 +42,7 @@ export module ConsentView {
             if (cookiesConsent) {
 
                 document.getElementsByClassName('page-footer')[0].classList.remove('uk-hidden');
+                document.getElementById('cookies-needed-message').remove();
                 ConsentRepository.consentToUsingCookies();
             }
 
