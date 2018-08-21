@@ -40,8 +40,8 @@ export module ThreadMessageRepository {
         parentThread: ThreadRepository.Thread;
         receivedParentThread: boolean;
         ip: string;
-        upVotes: ThreadMessageVote[];
-        downVotes: ThreadMessageVote[];
+        nrOfUpVotes: number;
+        nrOfDownVotes: number;
         lastUpdated: ThreadMessageLastUpdated;
         privileges: string[];
         voteStatus: number;

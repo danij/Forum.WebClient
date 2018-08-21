@@ -335,8 +335,11 @@ export module ThreadMessagesView {
         }
         {
 
-            let upVotesNr = message.upVotes ? DisplayHelpers.intToString(message.upVotes.length) : '?';
-            let downVotesNr = message.downVotes ? DisplayHelpers.intToString(message.downVotes.length) : '?';
+            let upVotesNr = (message.nrOfUpVotes || (message.nrOfUpVotes == 0))
+                ? DisplayHelpers.intToString(message.nrOfUpVotes)
+                : '?';
+            let downVotesNr = (message.nrOfDownVotes || (message.nrOfDownVotes == 0))
+                ? DisplayHelpers.intToString(message.nrOfDownVotes) : '?';
 
             const upVotesTooltip = [];
             const downVotesTooltip = [];
@@ -371,15 +374,6 @@ export module ThreadMessagesView {
                     upVotesNr += VotedMark;
                     upVoteData = ` data-resetvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 }
-            }
-
-            if (message.upVotes && message.upVotes.length) {
-
-                upVotesTooltip.push('Other voters: ' + getUsersWhoVotedTooltip(message.upVotes));
-            }
-            if (message.downVotes && message.downVotes.length) {
-
-                downVotesTooltip.push('Other voters: ' + getUsersWhoVotedTooltip(message.downVotes));
             }
 
             authorContainer.appendRaw('<div class="uk-text-center uk-float-left message-up-vote">' +
