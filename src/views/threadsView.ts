@@ -502,11 +502,18 @@ export module ThreadsView {
             }
             details.appendChild(document.createTextNode(`${DisplayHelpers.intToString(thread.visited)} total views · `));
 
-            const subscribedUsersLink = cE('a');
+            let subscribedUsersLink;
+            if (Privileges.Thread.canViewThreadSubscribedUsers(thread)) {
+
+                subscribedUsersLink = cE('a');
+                Views.onClick(subscribedUsersLink, () => { showSubscribedUsers(thread.id, callback); });
+            }
+            else {
+
+                subscribedUsersLink = cE('span');
+            }
             details.appendChild(subscribedUsersLink);
             subscribedUsersLink.innerText = `${DisplayHelpers.intToString(thread.subscribedUsersCount)} subscribed users`;
-
-            Views.onClick(subscribedUsersLink, () => { showSubscribedUsers(thread.id, callback); });
         }
         {
             card.appendChild(DOMHelpers.parseHTML('<div class="uk-clearfix"></div>'));

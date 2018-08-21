@@ -110,6 +110,10 @@ export module Privileges {
         export function canViewThreadAssignedPrivileges(thread: ThreadRepository.Thread): boolean {
             return hasPrivilege(thread, 'view_assigned_privileges');
         }
+
+        export function canViewThreadSubscribedUsers(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, 'get_subscribed_users');
+        }
     }
 
     export namespace ThreadMessage {

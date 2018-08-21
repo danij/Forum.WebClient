@@ -49,6 +49,7 @@ export module PrivilegesView {
         ['view', 'View'],
         ['view_required_privileges', 'View Required Privileges'],
         ['view_assigned_privileges', 'View Assigned Privileges'],
+        ['get_subscribed_users', 'Get Users Subscribed to Thread'],
         ['subscribe', 'Subscribe'],
         ['unsubscribe', 'Unsubscribe'],
         ['add_message', 'Add Message'],
