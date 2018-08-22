@@ -44,6 +44,6 @@ export module LoginView {
             extra['show-in-users-online'] = true
         }
 
-        self.location.href = Pages.getUrl('auth/google/' + PathHelpers.queryParameters(extra, true));
+        self.location.href = Pages.getUrl('auth/provider/google/' + PathHelpers.queryParameters(extra, true));
     }
 }
