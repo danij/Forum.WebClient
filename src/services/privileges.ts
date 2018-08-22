@@ -114,6 +114,14 @@ export module Privileges {
         export function canViewThreadSubscribedUsers(thread: ThreadRepository.Thread): boolean {
             return hasPrivilege(thread, 'get_subscribed_users');
         }
+
+        export function canSubscribeToThread(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, 'subscribe');
+        }
+
+        export function canUnsubscribeToThread(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, 'unsubscribe');
+        }
     }
 
     export namespace ThreadMessage {

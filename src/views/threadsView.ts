@@ -328,38 +328,48 @@ export module ThreadsView {
             card.appendChild(actions);
             actions.classList.add('thread-actions');
 
-            const subscribeToThread = cE('button');
-            actions.appendChild(subscribeToThread);
-            subscribeToThread.classList.add('uk-button', 'uk-button-primary', 'uk-button-small');
-            subscribeToThread.innerText = 'Subscribe';
+            let subscribeToThread, unSubscribeFromThread: HTMLElement;
 
-            actions.appendChild(document.createTextNode(' '));
+            if (Privileges.Thread.canSubscribeToThread(thread)) {
 
-            const unSubscribeFromThread = cE('button');
-            actions.appendChild(unSubscribeFromThread);
-            unSubscribeFromThread.classList.add('uk-button', 'uk-button-danger', 'uk-button-small');
-            unSubscribeFromThread.innerText = 'Unsubscribe';
+                subscribeToThread = cE('button');
+                actions.appendChild(subscribeToThread);
+                subscribeToThread.classList.add('uk-button', 'uk-button-primary', 'uk-button-small');
+                subscribeToThread.innerText = 'Subscribe';
 
-            actions.appendChild(document.createTextNode(' '));
+                actions.appendChild(document.createTextNode(' '));
 
-            DOMHelpers.hide(thread.subscribedToThread ? subscribeToThread : unSubscribeFromThread);
+                Views.onClick(subscribeToThread, async () => {
 
-            Views.onClick(subscribeToThread, async () => {
+                    if (await callback.subscribeToThread(thread.id)) {
 
-                if (await callback.subscribeToThread(thread.id)) {
+                        if (subscribeToThread) DOMHelpers.hide(subscribeToThread);
+                        if (unSubscribeFromThread) DOMHelpers.unHide(unSubscribeFromThread);
+                    }
+                });
 
-                    DOMHelpers.hide(subscribeToThread);
-                    DOMHelpers.unHide(unSubscribeFromThread);
-                }
-            });
-            Views.onClick(unSubscribeFromThread, async () => {
+                if (thread.subscribedToThread) DOMHelpers.hide(subscribeToThread);
+            }
+            if (Privileges.Thread.canUnsubscribeToThread(thread)) {
 
-                if (await callback.unSubscribeFromThread(thread.id)) {
+                unSubscribeFromThread = cE('button');
+                actions.appendChild(unSubscribeFromThread);
+                unSubscribeFromThread.classList.add('uk-button', 'uk-button-danger', 'uk-button-small');
+                unSubscribeFromThread.innerText = 'Unsubscribe';
 
-                    DOMHelpers.hide(unSubscribeFromThread);
-                    DOMHelpers.unHide(subscribeToThread);
-                }
-            });
+                actions.appendChild(document.createTextNode(' '));
+
+                Views.onClick(unSubscribeFromThread, async () => {
+
+                    if (await callback.unSubscribeFromThread(thread.id)) {
+
+                        if (unSubscribeFromThread) DOMHelpers.hide(unSubscribeFromThread);
+                        if (subscribeToThread) DOMHelpers.unHide(subscribeToThread);
+                    }
+                });
+
+                if ( ! thread.subscribedToThread) DOMHelpers.hide(unSubscribeFromThread);
+            }
 
             if (Privileges.Thread.canMergeThreads(thread)) {
 
