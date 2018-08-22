@@ -16,13 +16,10 @@ export module MasterView {
         document.title = config.title;
 
         const footerLinks = document.getElementById('subnav-links');
-        let insertBefore = footerLinks.children[0];
 
-        for (let footerLink of config.footerLinks.reverse()) {
+        for (let footerLink of config.footerLinks) {
 
-            const newLink = createFooterLink(footerLink);
-            footerLinks.insertBefore(newLink, insertBefore);
-            insertBefore = newLink;
+            footerLinks.appendChild(createFooterLink(footerLink));
         }
     }
 
