@@ -818,49 +818,46 @@ export module ThreadMessagesView {
 
         const latestMessageColumn = dA('<td class="latest-message">');
 
-        if (latestMessage) {
+        const container = dA('<div>');
+        latestMessageColumn.append(container);
 
-            const container = dA('<div>');
-            latestMessageColumn.append(container);
+        container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
-            container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
+        const threadTitle = latestMessage.threadName || 'unknown';
 
-            const threadTitle = latestMessage.threadName || 'unknown';
+        const href = Pages.getThreadMessagesOfThreadUrlFull({
+            id: latestMessage.threadId,
+            name: latestMessage.threadName
+        } as ThreadRepository.Thread);
 
-            const href = Pages.getThreadMessagesOfThreadUrlFull({
-                id: latestMessage.threadId,
-                name: latestMessage.threadName
-            } as ThreadRepository.Thread);
+        const threadTitleElement = cE('a');
+        threadTitleElement.classList.add('recent-message-thread-link');
+        threadTitleElement.setAttribute('href', href);
+        threadTitleElement.setAttribute('title', threadTitle);
+        threadTitleElement.setAttribute('data-threadmessagethreadid', latestMessage.threadId);
+        threadTitleElement.innerText = threadTitle;
+        container.appendElement(threadTitleElement);
 
-            const threadTitleElement = cE('a');
-            threadTitleElement.classList.add('recent-message-thread-link');
-            threadTitleElement.setAttribute('href', href);
-            threadTitleElement.setAttribute('title', threadTitle);
-            threadTitleElement.setAttribute('data-threadmessagethreadid', latestMessage.threadId);
-            threadTitleElement.innerText = threadTitle;
-            container.appendElement(threadTitleElement);
+        const timeFlex = dA('<div class="date-time-flex">');
+        container.append(timeFlex);
 
-            const timeFlex = dA('<div class="date-time-flex">');
-            container.append(timeFlex);
+        timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
+        const recentMessageTime = dA('<div class="recent-message-time uk-text-meta">');
+        timeFlex.append(recentMessageTime);
 
-            timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
-            const recentMessageTime = dA('<div class="recent-message-time uk-text-meta">');
-            timeFlex.append(recentMessageTime);
+        const recentMessageTimeContent = cE('span');
+        recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
+        recentMessageTime.appendElement(recentMessageTimeContent);
 
-            const recentMessageTimeContent = cE('span');
-            recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
-            recentMessageTime.appendElement(recentMessageTimeContent);
+        const messageContent = latestMessage.content || 'empty';
 
-            const messageContent = latestMessage.content || 'empty';
-
-            const messageLink = cE('a');
-            messageLink.classList.add('recent-message-link');
-            messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
-            messageLink.setAttribute('title', messageContent);
-            messageLink.setAttribute('data-threadmessageid', latestMessage.id);
-            messageLink.innerText = messageContent;
-            container.appendElement(messageLink);
-        }
+        const messageLink = cE('a');
+        messageLink.classList.add('recent-message-link');
+        messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
+        messageLink.setAttribute('title', messageContent);
+        messageLink.setAttribute('data-threadmessageid', latestMessage.id);
+        messageLink.innerText = messageContent;
+        container.appendElement(messageLink);
 
         return latestMessageColumn;
     }
