@@ -15,22 +15,26 @@ export module MasterView {
 
         document.title = config.title;
 
-        const footerLinks = document.getElementById('footer-links');
-        footerLinks.innerHTML = '';
+        const footerLinks = document.getElementById('subnav-links');
+        let insertBefore = footerLinks.children[0];
 
-        for (let footerLink of config.footerLinks) {
+        for (let footerLink of config.footerLinks.reverse()) {
 
-            footerLinks.appendChild(createFooterLink(footerLink));
-            footerLinks.appendChild(document.createTextNode(FooterSeparator));
+            const newLink = createFooterLink(footerLink);
+            footerLinks.insertBefore(newLink, insertBefore);
+            insertBefore = newLink;
         }
     }
 
-    function createFooterLink(link: Pages.PageLink) : HTMLAnchorElement {
+    function createFooterLink(link: Pages.PageLink) : HTMLLIElement {
 
-        const result = cE('a') as HTMLAnchorElement;
+        const linkElement = cE('a') as HTMLAnchorElement;
+        linkElement.setAttribute('href', link.link);
 
-        result.setAttribute('href', link.link);
-        result.innerText = link.title;
+        linkElement.innerText = link.title;
+
+        const result = cE('li') as HTMLLIElement;
+        result.appendChild(linkElement);
 
         return result;
     }
