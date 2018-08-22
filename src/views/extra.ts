@@ -101,7 +101,7 @@ export module ViewsExtra {
         const links = container.getElementsByTagName('a');
         DOMHelpers.forEach(links, link => {
 
-            link.setAttribute('rel', 'nofollow noopener noreferrer');
+            DOMHelpers.addRelAttribute(link as HTMLAnchorElement);
         });
     }
 

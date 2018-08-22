@@ -1,18 +1,32 @@
 import {Pages} from "../pages/common";
 import {Views} from "./common";
 import {PathHelpers} from "../helpers/pathHelpers";
+import {ConsentRepository} from "../services/consentRepository";
+import {ConsentView} from "./consentView";
 
 export module LoginView {
 
     export function setupLogin(): void {
 
         const loginLink = document.getElementById('login-link');
-        const loginModal = document.getElementById('login-modal');
 
-        Views.onClick(loginLink, () => Views.showModal(loginModal));
+        Views.onClick(loginLink, showLoginModal);
 
         const loginWithGoogleLink = document.getElementById('login-with-google');
         Views.onClick(loginWithGoogleLink, loginWithGoogle);
+    }
+
+    function showLoginModal() {
+
+        if (ConsentRepository.alreadyConsentedToUsingCookies()) {
+
+            const loginModal = document.getElementById('login-modal');
+            Views.showModal(loginModal);
+        }
+        else {
+
+            ConsentView.showConsentModal(() => setTimeout(() => showLoginModal(), 500));
+        }
     }
 
     function showInOnlineUsers() : boolean {

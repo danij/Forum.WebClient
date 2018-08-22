@@ -30,6 +30,7 @@ export module MasterView {
 
         const linkElement = cE('a') as HTMLAnchorElement;
         linkElement.setAttribute('href', link.link);
+        DOMHelpers.addRelAttribute(linkElement);
 
         linkElement.innerText = link.title;
 

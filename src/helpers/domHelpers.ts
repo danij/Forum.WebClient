@@ -233,4 +233,9 @@ export module DOMHelpers {
             callback(element);
         }
     }
+
+    export function addRelAttribute(link: HTMLAnchorElement): void {
+
+        link.setAttribute('rel', 'nofollow noopener noreferrer');
+    }
 }

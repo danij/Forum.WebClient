@@ -69,7 +69,10 @@ export module RequestHandler {
 
     async function getDoubleSubmitCookie(): Promise<string> {
 
-        await ConsentRepository.getCookieConsent();
+        if ( ! ConsentRepository.alreadyConsentedToUsingCookies()) {
+
+            return '';
+        }
 
         if ( ! getDoubleSubmitCookiePromise) {
 
@@ -82,19 +85,28 @@ export module RequestHandler {
     async function loadDoubleSubmitCookie() : Promise<string> {
 
         let result = await ajaxSimple('GET', {
+
             path: '../auth/double_submit_cookie'
         });
 
         return result.double_submit;
     }
 
+    export function onConsentedToUsingCookies() {
+
+        getDoubleSubmitCookiePromise = null;
+        getDoubleSubmitCookie();
+    }
+
     async function ajax(method: string, request: Request) : Promise<any> {
 
         const doubleSubmitCookie = await getDoubleSubmitCookie();
 
-        request.extraHeaders = request.extraHeaders || {};
-        request.extraHeaders['X-Double-Submit'] = doubleSubmitCookie;
+        if (doubleSubmitCookie) {
 
+            request.extraHeaders = request.extraHeaders || {};
+            request.extraHeaders['X-Double-Submit'] = doubleSubmitCookie;
+        }
         return await ajaxSimple(method, request);
     }
 

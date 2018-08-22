@@ -20,7 +20,6 @@ import {PageActions} from "./action";
 import {UsersView} from "../views/usersView";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {PrivilegesView} from "../views/privilegesView";
-import {ConsentRepository} from "../services/consentRepository";
 import {ConsentView} from "../views/consentView";
 import {LoginView} from "../views/loginView";
 
@@ -38,11 +37,7 @@ export module MasterPage {
 
         originalTitle = document.title;
 
-        if ( ! ConsentRepository.alreadyConsentedToUsingCookies()) {
-
-            ConsentView.showConsentModal();
-        }
-        await ConsentRepository.getCookieConsent();
+        ConsentView.init();
 
         setupLinks();
 

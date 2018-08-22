@@ -98,7 +98,7 @@
 <div class="page-content">
     <div class="uk-nav-sub uk-flex uk-flex-center">
         <ul class="uk-subnav uk-subnav-divider" id="subnav-links">
-            <li><a href="#">Consent</a></li>
+            <li><a href="#" id="reopen-consent-modal">Consent</a></li>
         </ul>
     </div>
     <div id="page-content-container">
@@ -326,7 +326,7 @@
         </ul>
         <ul class="uk-switcher">
             <li class="uk-active">
-                <p>This website needs to store the following
+                <p>This website needs to store the following first-party
                     <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">HTTP cookies</a>
                     in your browser in order to function property.</p>
                 <table class="uk-table uk-table-small uk-table-striped">
@@ -334,6 +334,10 @@
                     <tr><th>Name</th><th>Description</th></tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <td>allow_cookies_fp</td>
+                        <td>Remembers your consent to allow first-party cookies.</td>
+                    </tr>
                     <tr>
                         <td>auth</td>
                         <td>Remembers who you are logged in as so that you do not have to log in every time you reload the page.</td>
@@ -356,8 +360,8 @@
         </ul>
         <hr class="uk-divider-icon">
         <form>
-            <input type="checkbox" id="consent-cookies" class="uk-checkbox" />
-            <label for="consent-cookies">I agree to the website storing the above cookies in my browser.</label>
+            <input type="checkbox" id="consent-fp-cookies" class="uk-checkbox" />
+            <label for="consent-fp-cookies">I agree to the website storing the above first party cookies in my browser.</label>
 
             <button id="save-consent" class="uk-button uk-button-primary uk-align-center">Save</button>
         </form>
@@ -374,6 +378,7 @@
             <label for="show-in-online-users">Display my user name in the public list of <emph>online users</emph></label>
         </div>
         <hr class="uk-divider-icon">
+        <p>Login with a different provider:</p>
         <div class="uk-text-center">
             <!--https://developers.google.com/identity/branding-guidelines-->
             <a id="login-with-google"></a>

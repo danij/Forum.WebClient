@@ -1,31 +1,41 @@
+import {RequestHandler} from "./requestHandler";
+
 export module ConsentRepository {
 
-    const consentedCookieStorageKey = 'consented-cookies';
-    let cookieConsentPromiseResolve: any;
+    export async function consentToUsingCookies(): Promise<void> {
 
-    const cookieConsentPromise = new Promise<void>(((resolve, reject) => {
+        await RequestHandler.post({
 
-        cookieConsentPromiseResolve = resolve;
-    }));
-
-    export function getCookieConsent() : Promise<void> {
-
-        return cookieConsentPromise;
+            path : '../auth/consent/consent_fp_cookies'
+        });
+        RequestHandler.onConsentedToUsingCookies();
     }
 
-    export function consentToUsingCookies() {
+    export async function removeConsentToUsingCookies(): Promise<void> {
 
-        localStorage.setItem(consentedCookieStorageKey, 'true');
-        cookieConsentPromiseResolve();
+        await RequestHandler.requestDelete({
+
+            path : '../auth/consent/consent_fp_cookies'
+        });
+    }
+
+    function getCookieValue(name: string): string {
+
+        const nameValuePairs = document.cookie
+            .split(';')
+            .map(p => p.trim().split('='));
+
+        for (let nameValuePair of nameValuePairs) {
+
+            if (nameValuePair[0] == name) {
+
+                return nameValuePair[1];
+            }
+        }
     }
 
     export function alreadyConsentedToUsingCookies(): boolean {
 
-        return localStorage.getItem(consentedCookieStorageKey) == 'true';
-    }
-
-    if (alreadyConsentedToUsingCookies()) {
-
-        consentToUsingCookies();
+        return getCookieValue('allow_cookies_fp') === 'yes';
     }
 }

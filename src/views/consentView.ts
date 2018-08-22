@@ -4,7 +4,11 @@ import {DOMHelpers} from "../helpers/domHelpers";
 
 export module ConsentView {
 
-    export function showConsentModal(): HTMLElement {
+    let onConsentCallback: () => void;
+
+    export function showConsentModal(onConsent?: () => void): HTMLElement {
+
+        onConsentCallback = onConsent;
 
         const modal = document.getElementById('consent-modal');
 
@@ -15,41 +19,51 @@ export module ConsentView {
         return modal;
     }
 
+    let consentModalInitialized: boolean = false;
+
     function initConsentModal(modal: HTMLElement): void {
+
+        if (consentModalInitialized) return;
+        consentModalInitialized = true;
 
         const links = modal.getElementsByTagName('a');
 
         DOMHelpers.forEach<HTMLAnchorElement>(links, link => {
 
             link.setAttribute('target', '_blank');
-            link.setAttribute('rel', 'nofollow noopener noreferrer');
+            DOMHelpers.addRelAttribute(link);
         });
 
-        document.getElementById('page-content-container').appendChild(DOMHelpers.parseHTML(
-            '<div class="uk-cover uk-text-center" id="cookies-needed-message">' +
-            '<h2>This website cannot function without HTTP cookies.</h2>' +
-            '<a id="reopen-consent-modal">Reopen Consent Modal</a>' +
-            '</div>'
-        ));
-        document.getElementsByClassName('page-footer')[0].classList.add('uk-hidden');
+        const cookiesFpConsentCheckbox = (document.getElementById('consent-fp-cookies') as HTMLInputElement);
+        cookiesFpConsentCheckbox.checked = ConsentRepository.alreadyConsentedToUsingCookies();
 
         const saveConsentButton = document.getElementById('save-consent');
 
-        Views.onClick(saveConsentButton, () => {
+        Views.onClick(saveConsentButton, async () => {
 
-            const cookiesConsent = (document.getElementById('consent-cookies') as HTMLInputElement).checked;
+            if (cookiesFpConsentCheckbox.checked) {
 
-            if (cookiesConsent) {
+                await ConsentRepository.consentToUsingCookies();
+                Views.hideOpenModals();
 
-                document.getElementsByClassName('page-footer')[0].classList.remove('uk-hidden');
-                document.getElementById('cookies-needed-message').remove();
-                ConsentRepository.consentToUsingCookies();
+                if (onConsentCallback) {
+
+                    onConsentCallback();
+                    onConsentCallback = null;
+                }
             }
+            else {
 
-            Views.hideOpenModals();
+                await ConsentRepository.removeConsentToUsingCookies();
+                location.reload();
+            }
         });
+    }
+
+    export function init() {
 
         const reopenConsentLink = document.getElementById('reopen-consent-modal');
-        Views.onClick(reopenConsentLink, () => { Views.showModal(modal); });
+
+        Views.onClick(reopenConsentLink, () => showConsentModal());
     }
 }
