@@ -319,6 +319,7 @@ export module ThreadsView {
         element.appendChild(card);
         card.classList.add('uk-card', 'uk-card-body');
 
+        const threadTitle = cE('span');
         {
             /* append to card:
             <a uk-icon="icon: settings" href="editThreadPrivileges" title="Edit thread access" uk-tooltip
@@ -371,6 +372,40 @@ export module ThreadsView {
                 if ( ! thread.subscribedToThread) DOMHelpers.hide(unSubscribeFromThread);
             }
 
+            if (Privileges.Thread.canEditThreadPinDisplayOrder(thread)) {
+
+                const link = EditViews.createEditLink('Edit thread display order when pinned', 'star');
+                actions.appendChild(link);
+                Views.onClick(link, () => {
+
+                    const newValue = parseInt(EditViews.getInput('Edit thread display order when pinned', (thread.pinDisplayOrder || 0).toString()));
+
+                    if ((newValue >= 0) && (newValue != thread.pinDisplayOrder)) {
+
+                        thread.pinDisplayOrder = newValue;
+                        callback.editThreadPinDisplayOrder(thread.id, newValue);
+                    }
+                });
+            }
+
+            if (Privileges.Thread.canEditThreadName(thread)) {
+
+                const link = EditViews.createEditLink('Edit thread name');
+                actions.appendChild(link);
+                Views.onClick(link, () => {
+
+                    const name = EditViews.getInput('Edit thread name', thread.name);
+                    if (name && name.length && (name != thread.name)) {
+
+                        EditViews.doIfOk(callback.editThreadName(thread.id, name), () => {
+
+                            threadTitle.innerText = thread.name = name;
+                            ViewsExtra.refreshMath(threadTitle);
+                        });
+                    }
+                });
+            }
+
             if (Privileges.Thread.canMergeThreads(thread)) {
 
                 const link = EditViews.createEditLink('Merge threads', 'git-fork', []);
@@ -416,39 +451,6 @@ export module ThreadsView {
             card.appendChild(title);
             title.classList.add('uk-align-left', 'thread-title');
 
-            if (Privileges.Thread.canEditThreadPinDisplayOrder(thread)) {
-                const link = EditViews.createEditLink('Edit thread display order when pinned', 'star');
-                title.appendChild(link);
-                Views.onClick(link, () => {
-
-                    const newValue = parseInt(EditViews.getInput('Edit thread display order when pinned', (thread.pinDisplayOrder || 0).toString()));
-
-                    if ((newValue >= 0) && (newValue != thread.pinDisplayOrder)) {
-
-                        thread.pinDisplayOrder = newValue;
-                        callback.editThreadPinDisplayOrder(thread.id, newValue);
-                    }
-                });
-            }
-
-            const threadTitle = cE('span');
-            if (Privileges.Thread.canEditThreadName(thread)) {
-                const link = EditViews.createEditLink('Edit thread name');
-                title.appendChild(link);
-                Views.onClick(link, () => {
-
-                    const name = EditViews.getInput('Edit thread name', thread.name);
-                    if (name && name.length && (name != thread.name)) {
-
-                        EditViews.doIfOk(callback.editThreadName(thread.id, name), () => {
-
-                            threadTitle.innerText = thread.name = name;
-                            ViewsExtra.refreshMath(threadTitle);
-                        });
-                    }
-                });
-
-            }
             title.appendChild(threadTitle);
             threadTitle.classList.add('uk-logo', 'render-math');
 
