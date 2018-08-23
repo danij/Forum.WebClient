@@ -4,9 +4,10 @@ import {DOMHelpers} from "../helpers/domHelpers";
 
 export module ConsentView {
 
-    let onConsentCallback: () => void;
+    type ConsentCallback = (value: boolean) => void;
+    let onConsentCallback: ConsentCallback;
 
-    export function showConsentModal(onConsent?: () => void): HTMLElement {
+    export function showConsentModal(onConsent?: ConsentCallback): HTMLElement {
 
         onConsentCallback = onConsent;
 
@@ -20,6 +21,16 @@ export module ConsentView {
     }
 
     let consentModalInitialized: boolean = false;
+
+    function rememberCurrentChecked(element: HTMLInputElement): void {
+
+        element.setAttribute('data-was-checked', element.checked.toString());
+    }
+
+    function getPreviousChecked(element: HTMLInputElement): boolean {
+
+        return element.getAttribute('data-was-checked') === 'true';
+    }
 
     function initConsentModal(modal: HTMLElement): void {
 
@@ -36,10 +47,25 @@ export module ConsentView {
 
         const cookiesFpConsentCheckbox = (document.getElementById('consent-fp-cookies') as HTMLInputElement);
         cookiesFpConsentCheckbox.checked = ConsentRepository.alreadyConsentedToUsingCookies();
+        rememberCurrentChecked(cookiesFpConsentCheckbox);
 
         const saveConsentButton = document.getElementById('save-consent');
 
         Views.onClick(saveConsentButton, async () => {
+
+            if (getPreviousChecked(cookiesFpConsentCheckbox) == cookiesFpConsentCheckbox.checked) {
+
+                //no change
+                if (onConsentCallback) {
+
+                    onConsentCallback(cookiesFpConsentCheckbox.checked);
+                    onConsentCallback = null;
+                }
+                Views.hideOpenModals();
+                return;
+            }
+
+            rememberCurrentChecked(cookiesFpConsentCheckbox);
 
             if (cookiesFpConsentCheckbox.checked) {
 
@@ -48,7 +74,7 @@ export module ConsentView {
 
                 if (onConsentCallback) {
 
-                    onConsentCallback();
+                    onConsentCallback(cookiesFpConsentCheckbox.checked);
                     onConsentCallback = null;
                 }
             }

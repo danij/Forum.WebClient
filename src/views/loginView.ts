@@ -25,7 +25,17 @@ export module LoginView {
         }
         else {
 
-            ConsentView.showConsentModal(() => setTimeout(() => showLoginModal(), 500));
+            ConsentView.showConsentModal((value) => {
+
+                if (value) {
+
+                    setTimeout(() => showLoginModal(), 500);
+                }
+                else {
+
+                    Views.showWarningNotification('Consent for storing cookies is required to be able to log in.');
+                }
+            });
         }
     }
 
