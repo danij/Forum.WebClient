@@ -346,6 +346,8 @@ export module ThreadMessagesView {
 
             let upVoteData = '';
             let downVoteData = '';
+            let upVoteExtraClass = '';
+            let downVoteExtraClass = '';
 
             if ((undefined === message.voteStatus) || (0 == message.voteStatus)) {
 
@@ -353,11 +355,13 @@ export module ThreadMessagesView {
 
                     upVotesTooltip.push('Click to up vote message.');
                     upVoteData = ` data-upvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+                    upVoteExtraClass = 'pointer-cursor';
                 }
                 if (Privileges.ThreadMessage.canDownVoteThreadMessage(message)) {
 
                     downVotesTooltip.push('Click to down vote message.');
                     downVoteData = ` data-downvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+                    downVoteExtraClass = 'pointer-cursor';
                 }
             }
             else if (Privileges.ThreadMessage.canResetVoteOfThreadMessage(message)) {
@@ -376,10 +380,10 @@ export module ThreadMessagesView {
                 }
             }
 
-            authorContainer.appendRaw('<div class="uk-text-center uk-float-left message-up-vote">' +
+            authorContainer.appendRaw(`<div class="uk-text-center uk-float-left message-up-vote ${upVoteExtraClass}">` +
                 `<span class="uk-label" ${upVoteData} title="${DOMHelpers.escapeStringForAttribute(upVotesTooltip.join('\n'))}">` +
                 `&plus; ${upVotesNr}</span></div>`);
-            authorContainer.appendRaw('<div class="uk-text-center uk-float-right message-down-vote">' +
+            authorContainer.appendRaw(`<div class="uk-text-center uk-float-right message-down-vote ${downVoteExtraClass}">` +
                 `<span class="uk-label" ${downVoteData} title="${DOMHelpers.escapeStringForAttribute(downVotesTooltip.join('\n'))}">` +
                 `&minus; ${downVotesNr}</span></div>`);
         }
