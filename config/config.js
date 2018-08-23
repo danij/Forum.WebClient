@@ -23,6 +23,7 @@ window.masterPageConfig = {
 
     baseUri: "http://dani.forum:8080/",
     allowedAuthProviders: [
+        "custom",
         "google"
     ],
     title: "Fast Forum",

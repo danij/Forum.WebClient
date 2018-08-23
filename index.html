@@ -377,16 +377,38 @@
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <h2 class="uk-modal-title">Login</h2>
 
-        <div>
+        <div class="uk-margin">
             <input type="checkbox" id="show-in-online-users" class="uk-checkbox" />
             <label for="show-in-online-users">Display my user name in the public list of <emph>online users</emph></label>
         </div>
         <hr class="uk-divider-icon">
-        <div id="login-different-providers" class="uk-hidden"></div>
-        <p>Login with a different provider:</p>
-        <div class="uk-text-center uk-hidden" id="login-container-google">
-            <!--https://developers.google.com/identity/branding-guidelines-->
-            <a id="login-with-google"></a>
+        <div id="login-container-custom" class="uk-hidden">
+            <div class="uk-margin">
+                <span>Login with an account created on this site:</span>
+                <span class="uk-align-right uk-margin-remove">
+                    <a href="#">Register</a> ·
+                    <a href="#">Forgot the password?</a>
+                </span>
+            </div>
+            <form>
+                <div class="uk-margin">
+                    <input type="text" id="login-custom-email" class="uk-input" placeholder="email" />
+                </div>
+                <div class="uk-margin">
+                    <input type="password" id="login-custom-password" class="uk-input" placeholder="password" />
+                </div>
+                <div class="uk-margin uk-text-center">
+                    <button id="login-custom-button" class="uk-button uk-button-primary">Log in</button>
+                </div>
+            </form>
+        </div>
+        <hr class="uk-divider-icon">
+        <div id="login-different-providers" class="uk-hidden">
+            <p>Login with a different provider:</p>
+            <div class="uk-text-center uk-hidden" id="login-container-google">
+                <!--https://developers.google.com/identity/branding-guidelines-->
+                <a id="login-with-google"></a>
+            </div>
         </div>
     </div>
 </div>
