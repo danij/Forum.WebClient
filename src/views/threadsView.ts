@@ -269,6 +269,10 @@ export module ThreadsView {
             const element = dA('<div class="recent-thread">');
             result.append(element);
 
+            const time = dA('<span class="time-ago">');
+            element.append(time);
+            time.appendString(DisplayHelpers.getAgoTimeShort(thread.created));
+
             const score = DisplayHelpers.intToString(Math.abs(thread.voteScore));
 
             if (0 === thread.voteScore) {

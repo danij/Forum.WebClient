@@ -135,31 +135,31 @@ export module DisplayHelpers {
     //     return `${intToString(days)} ${days != 1 ? 'days' : 'day'}, ${hours} ${hours != 1 ? 'hours' : 'hour'} ago`;
     // }
     //
-    // export function getAgoTimeShort(epochTime: number): string {
-    //
-    //     const difference = getCurrentEpochTime() - epochTime;
-    //
-    //     if (difference < 2) {
-    //         return '1 second ago';
-    //     }
-    //     else if (difference < 60) {
-    //         return `{difference} seconds ago`;
-    //     }
-    //     else if (difference < 3600) {
-    //
-    //         const minutes = Math.floor(difference / 60);
-    //
-    //         return `${minutes} ${minutes != 1 ? 'minutes' : 'minute'} ago`;
-    //     }
-    //     else if (difference < 24 * 3600) {
-    //
-    //         const hours = Math.floor(difference / 3600);
-    //
-    //         return `${hours} ${hours != 1 ? 'hours' : 'hour'} ago`;
-    //     }
-    //
-    //     const days = Math.floor(difference / (24 * 3600));
-    //
-    //     return `${intToString(days)} ${days != 1 ? 'days' : 'day'} ago`;
-    // }
+    export function getAgoTimeShort(epochTime: number): string {
+
+        const difference = getCurrentEpochTime() - epochTime;
+
+        if (difference < 2) {
+            return '1 second ago';
+        }
+        else if (difference < 60) {
+            return `{difference} seconds ago`;
+        }
+        else if (difference < 3600) {
+
+            const minutes = Math.floor(difference / 60);
+
+            return `${minutes} ${minutes != 1 ? 'minutes' : 'minute'} ago`;
+        }
+        else if (difference < 24 * 3600) {
+
+            const hours = Math.floor(difference / 3600);
+
+            return `${hours} ${hours != 1 ? 'hours' : 'hour'} ago`;
+        }
+
+        const days = Math.floor(difference / (24 * 3600));
+
+        return `${intToString(days)} ${days != 1 ? 'days' : 'day'} ago`;
+    }
 }
