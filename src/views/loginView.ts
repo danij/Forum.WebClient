@@ -3,6 +3,7 @@ import {Views} from "./common";
 import {PathHelpers} from "../helpers/pathHelpers";
 import {ConsentRepository} from "../services/consentRepository";
 import {ConsentView} from "./consentView";
+import {DOMHelpers} from "../helpers/domHelpers";
 
 export module LoginView {
 
@@ -14,6 +15,26 @@ export module LoginView {
 
         const loginWithGoogleLink = document.getElementById('login-with-google');
         Views.onClick(loginWithGoogleLink, loginWithGoogle);
+
+        setupEnabledAuthProviders(Pages.getAllowedAuthProviders());
+    }
+
+    function setupEnabledAuthProviders(providers: string[]): void {
+
+        let allowCustomProviders: boolean = false;
+
+        for (let provider of providers) {
+
+            DOMHelpers.unHide(document.getElementById(`login-container-${provider}`));
+            if ('custom' != provider) {
+
+                allowCustomProviders = true;
+            }
+        }
+        if (allowCustomProviders) {
+
+            DOMHelpers.unHide(document.getElementById('login-different-providers'));
+        }
     }
 
     function showLoginModal() {

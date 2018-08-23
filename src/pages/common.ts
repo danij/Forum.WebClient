@@ -37,7 +37,8 @@ export module Pages {
 
         baseUri: string
         title: string
-        footerLinks: PageLink[]
+        footerLinks: PageLink[],
+        allowedAuthProviders: string[]
     }
 
     declare const masterPageConfig: MasterPageConfig;
@@ -60,6 +61,11 @@ export module Pages {
     export function getApiUrl(relative: string): string {
 
         return `${masterPageConfig.baseUri}/api/${relative}`;
+    }
+
+    export function getAllowedAuthProviders(): string[] {
+
+        return masterPageConfig.allowedAuthProviders || [];
     }
 
     function showError(message: string): void {

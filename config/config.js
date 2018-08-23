@@ -22,6 +22,9 @@ window.displayConfig = {
 window.masterPageConfig = {
 
     baseUri: "http://dani.forum:8080/",
+    allowedAuthProviders: [
+        "google"
+    ],
     title: "Fast Forum",
     footerLinks: [{
         title: "Help",
