@@ -91,17 +91,17 @@ export module MasterPage {
 
         if (Privileges.ForumWide.canViewAllComments()) {
 
-            document.getElementById('comments-page-link').classList.remove('uk-hidden');
+            DOMHelpers.unHide(document.getElementById('comments-page-link'));
         }
 
         if (Privileges.ForumWide.canViewForumWideRequiredPrivileges() || Privileges.ForumWide.canViewForumWideAssignedPrivileges()) {
 
-            document.getElementById('forum-wide-privileges-link').classList.remove('uk-hidden');
+            DOMHelpers.unHide(document.getElementById('forum-wide-privileges-link'));
         }
 
         if (Privileges.ForumWide.canAddNewThread()) {
 
-            document.getElementById('new-thread-page-link').classList.remove('uk-hidden');
+            DOMHelpers.unHide(document.getElementById('new-thread-page-link'));
         }
     }
 
