@@ -74,12 +74,16 @@ export module DOMHelpers {
 
     export function escapeStringForContent(value: string): string {
 
+        if (value.length < 1) { return value; }
+
         const element = cE('div');
         element.innerText = value;
         return element.innerHTML;
     }
 
     export function escapeStringForAttribute(value: string): string {
+
+        if (value.length < 1) { return value; }
 
         const span = cE('span');
         span.setAttribute('a', value);
