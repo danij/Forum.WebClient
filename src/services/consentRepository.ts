@@ -19,6 +19,22 @@ export module ConsentRepository {
         });
     }
 
+    export async function consentToLoadingExternalImages(): Promise<void> {
+
+        await RequestHandler.post({
+
+            path : '../auth/consent/consent_external_images'
+        });
+    }
+
+    export async function removeConsentToLoadingExternalImages(): Promise<void> {
+
+        await RequestHandler.requestDelete({
+
+            path : '../auth/consent/consent_external_images'
+        });
+    }
+
     function getCookieValue(name: string): string {
 
         const nameValuePairs = document.cookie
@@ -34,8 +50,13 @@ export module ConsentRepository {
         }
     }
 
-    export function alreadyConsentedToUsingCookies(): boolean {
+    export function hasConsentedToUsingCookies(): boolean {
 
         return getCookieValue('allow_cookies_fp') === 'yes';
+    }
+
+    export function hasConsentedToLoadingExternalImages(): boolean {
+
+        return getCookieValue('allow_external_images') === 'yes';
     }
 }

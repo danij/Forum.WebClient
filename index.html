@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'">
+
     <script type="text/javascript" src="/config/config.js"></script>
     <script type="text/javascript" src="/dist/others.bundle.js"></script>
     <script type="text/javascript" src="/dist/highlight.pack.js"></script>
@@ -323,6 +324,9 @@
             <li class="uk-active" aria-expanded="true">
                 <a href="#">Cookies</a>
             </li>
+            <li aria-expanded="false">
+                <a href="#">External Images</a>
+            </li>
         </ul>
         <ul class="uk-switcher">
             <li class="uk-active">
@@ -337,6 +341,10 @@
                     <tr>
                         <td>allow_cookies_fp</td>
                         <td>Remembers your consent to allow first-party cookies.</td>
+                    </tr>
+                    <tr>
+                        <td>allow_external_images</td>
+                        <td>Remembers your consent to allow loading externally linked images.</td>
                     </tr>
                     <tr>
                         <td>auth</td>
@@ -361,11 +369,23 @@
                     </tbody>
                 </table>
             </li>
+            <li>
+                <p>Messages on the forum can include images stored on external sites.</p>
+                <p>In order to prevent external sites from logging your visit should such images be loaded automatically,
+                    the images are by default converted to links which must be explicitly opened for the images to load.</p>
+                <p>If you don't mind loading the images automatically, you can express your consent below.</p>
+            </li>
         </ul>
         <hr class="uk-divider-icon">
         <form>
-            <input type="checkbox" id="consent-fp-cookies" class="uk-checkbox" />
-            <label for="consent-fp-cookies">I agree to the website storing the above first party cookies in my browser.</label>
+            <div class="uk-margin">
+                <input type="checkbox" id="consent-fp-cookies" class="uk-checkbox" />
+                <label for="consent-fp-cookies">I agree to the website storing the above first party cookies in my browser.</label>
+            </div>
+            <div class="uk-margin">
+                <input type="checkbox" id="consent-external-images" class="uk-checkbox" />
+                <label for="consent-external-images">I agree to the website automatically loading externally linked images.</label>
+            </div>
 
             <button id="save-consent" class="uk-button uk-button-primary uk-align-center">Save</button>
         </form>

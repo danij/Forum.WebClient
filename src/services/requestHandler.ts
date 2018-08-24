@@ -69,7 +69,7 @@ export module RequestHandler {
 
     async function getDoubleSubmitCookie(): Promise<string> {
 
-        if ( ! ConsentRepository.alreadyConsentedToUsingCookies()) {
+        if ( ! ConsentRepository.hasConsentedToUsingCookies()) {
 
             return '';
         }

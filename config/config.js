@@ -33,7 +33,8 @@ window.masterPageConfig = {
     }, {
         title: "Terms of Service",
         link: "#"
-    }]
+    }],
+    externalImagesWarningFormat: 'External link: {title}'
 };
 
 window.debugConfig = {

@@ -39,7 +39,7 @@ export module LoginView {
 
     function showLoginModal() {
 
-        if (ConsentRepository.alreadyConsentedToUsingCookies()) {
+        if (ConsentRepository.hasConsentedToUsingCookies()) {
 
             const loginModal = document.getElementById('login-modal');
             Views.showModal(loginModal);

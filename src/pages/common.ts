@@ -38,7 +38,8 @@ export module Pages {
         baseUri: string
         title: string
         footerLinks: PageLink[],
-        allowedAuthProviders: string[]
+        allowedAuthProviders: string[],
+        externalImagesWarningFormat: string
     }
 
     declare const masterPageConfig: MasterPageConfig;
@@ -46,6 +47,11 @@ export module Pages {
     while (masterPageConfig.baseUri.endsWith('/')) {
 
         masterPageConfig.baseUri = masterPageConfig.baseUri.substr(0, masterPageConfig.baseUri.length - 1);
+    }
+
+    export function getConfig(): MasterPageConfig {
+
+        return masterPageConfig;
     }
 
     export function getHomeUrl(): string {
@@ -66,6 +72,11 @@ export module Pages {
     export function getAllowedAuthProviders(): string[] {
 
         return masterPageConfig.allowedAuthProviders || [];
+    }
+
+    export function isLocalUrl(url: string): boolean {
+
+        return url.startsWith(masterPageConfig.baseUri + '/');
     }
 
     function showError(message: string): void {

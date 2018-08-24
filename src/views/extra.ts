@@ -1,6 +1,10 @@
 import {DOMHelpers} from "../helpers/domHelpers";
+import {Pages} from "../pages/common";
+import {ConsentRepository} from "../services/consentRepository";
 
 export module ViewsExtra {
+
+    import cE = DOMHelpers.cE;
 
     let remarkable: any;
 
@@ -21,6 +25,17 @@ export module ViewsExtra {
                 quotes: '“”‘’',
                 highlight: highlightCode
             });
+            remarkable.renderer.rules.image = (tokens, index) => {
+
+                //set the src of the image as data- so as not to load it until further processed
+                const token = tokens[index];
+
+                const src = DOMHelpers.escapeStringForAttribute(token.src || "");
+                const title = DOMHelpers.escapeStringForAttribute(token.title || "");
+                const alt = DOMHelpers.escapeStringForAttribute(token.alt || "");
+
+                return `<img data-src="${src}" title="${title}" alt="${alt}" />`;
+            };
         }
         catch (ex) {
         }
@@ -103,6 +118,50 @@ export module ViewsExtra {
 
             DOMHelpers.addRelAttribute(link as HTMLAnchorElement);
         });
+
+        const imgs = container.getElementsByTagName('img');
+        DOMHelpers.forEach(imgs, img => {
+
+            adjustImageInMessage(img as HTMLImageElement);
+        });
+    }
+
+    function adjustImageInMessage(element: HTMLImageElement): void {
+
+        const src = element.getAttribute('data-src');
+
+        if (Pages.isLocalUrl(src)) {
+
+            return;
+        }
+
+        if (ConsentRepository.hasConsentedToLoadingExternalImages()) {
+
+            loadImage(element, src);
+        }
+        else {
+
+            replaceImageWithLink(element, src);
+        }
+    }
+
+    function loadImage(element: HTMLImageElement, src: string): void {
+
+        element.src = src;
+    }
+
+    function replaceImageWithLink(element: HTMLImageElement, src: string): void {
+
+        const linkTitle = Pages.getConfig().externalImagesWarningFormat
+            .replace(/{title}/g, element.alt || src);
+
+        const link = cE('a') as HTMLAnchorElement;
+        link.href = src;
+        link.innerText = linkTitle;
+        link.setAttribute('target', '_blank');
+        DOMHelpers.addRelAttribute(link);
+
+        DOMHelpers.replaceElementWith(element, link);
     }
 
     export function expandAndAdjust(container: HTMLElement): void {

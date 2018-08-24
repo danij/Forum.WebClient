@@ -5,11 +5,11 @@ import {DOMHelpers} from "../helpers/domHelpers";
 export module ConsentView {
 
     type ConsentCallback = (value: boolean) => void;
-    let onConsentCallback: ConsentCallback;
+    let onCookieConsentChangeCallback: ConsentCallback;
 
-    export function showConsentModal(onConsent?: ConsentCallback): HTMLElement {
+    export function showConsentModal(onCookieConsentChange?: ConsentCallback): HTMLElement {
 
-        onConsentCallback = onConsent;
+        onCookieConsentChangeCallback = onCookieConsentChange;
 
         const modal = document.getElementById('consent-modal');
 
@@ -46,44 +46,78 @@ export module ConsentView {
         });
 
         const cookiesFpConsentCheckbox = (document.getElementById('consent-fp-cookies') as HTMLInputElement);
-        cookiesFpConsentCheckbox.checked = ConsentRepository.alreadyConsentedToUsingCookies();
+        cookiesFpConsentCheckbox.checked = ConsentRepository.hasConsentedToUsingCookies();
         rememberCurrentChecked(cookiesFpConsentCheckbox);
+
+        const externalImagesConsentCheckbox = (document.getElementById('consent-external-images') as HTMLInputElement);
+        externalImagesConsentCheckbox.checked = ConsentRepository.hasConsentedToLoadingExternalImages();
+        rememberCurrentChecked(externalImagesConsentCheckbox);
 
         const saveConsentButton = document.getElementById('save-consent');
 
         Views.onClick(saveConsentButton, async () => {
 
-            if (getPreviousChecked(cookiesFpConsentCheckbox) == cookiesFpConsentCheckbox.checked) {
+            await Promise.all([
+                saveFpCookiesConsent(cookiesFpConsentCheckbox),
+                saveExternalImagesConsent(externalImagesConsentCheckbox)
+            ]);
 
-                //no change
-                if (onConsentCallback) {
-
-                    onConsentCallback(cookiesFpConsentCheckbox.checked);
-                    onConsentCallback = null;
-                }
-                Views.hideOpenModals();
-                return;
-            }
-
-            rememberCurrentChecked(cookiesFpConsentCheckbox);
-
-            if (cookiesFpConsentCheckbox.checked) {
-
-                await ConsentRepository.consentToUsingCookies();
-                Views.hideOpenModals();
-
-                if (onConsentCallback) {
-
-                    onConsentCallback(cookiesFpConsentCheckbox.checked);
-                    onConsentCallback = null;
-                }
-            }
-            else {
-
-                await ConsentRepository.removeConsentToUsingCookies();
-                location.reload();
-            }
+            Views.hideOpenModals();
         });
+    }
+
+    async function saveFpCookiesConsent(cookiesFpConsentCheckbox: HTMLInputElement): Promise<void> {
+
+        if (getPreviousChecked(cookiesFpConsentCheckbox) == cookiesFpConsentCheckbox.checked) {
+
+            //no change
+            if (onCookieConsentChangeCallback) {
+
+                onCookieConsentChangeCallback(cookiesFpConsentCheckbox.checked);
+                onCookieConsentChangeCallback = null;
+            }
+            return;
+        }
+
+        rememberCurrentChecked(cookiesFpConsentCheckbox);
+
+        if (cookiesFpConsentCheckbox.checked) {
+
+            await ConsentRepository.consentToUsingCookies();
+            Views.hideOpenModals();
+
+            if (onCookieConsentChangeCallback) {
+
+                onCookieConsentChangeCallback(cookiesFpConsentCheckbox.checked);
+                onCookieConsentChangeCallback = null;
+            }
+        }
+        else {
+
+            await ConsentRepository.removeConsentToUsingCookies();
+            location.reload();
+        }
+    }
+
+    async function saveExternalImagesConsent(externalImagesConsentCheckbox: HTMLInputElement): Promise<void> {
+
+        if (getPreviousChecked(externalImagesConsentCheckbox) == externalImagesConsentCheckbox.checked) {
+
+            //no change
+            return;
+        }
+
+        rememberCurrentChecked(externalImagesConsentCheckbox);
+
+        if (externalImagesConsentCheckbox.checked) {
+
+            await ConsentRepository.consentToLoadingExternalImages();
+        }
+        else {
+
+            await ConsentRepository.removeConsentToLoadingExternalImages();
+        }
+        location.reload();
     }
 
     export function init() {
