@@ -227,11 +227,14 @@ export module DOMHelpers {
     export function forEach<T extends HTMLElement = HTMLElement>(collection: any,
                                                                  callback: (element: T) => void): void {
 
+        //make a copy of the collection as it might mutate while iterating
+        const elements: T[] = [];
+
         for (let i = 0; i < collection.length; ++i) {
 
-            const element = collection[i] as T;
-            callback(element);
+            elements.push(collection[i] as T);
         }
+        elements.forEach(callback);
     }
 
     export function addRelAttribute(link: HTMLAnchorElement): void {
