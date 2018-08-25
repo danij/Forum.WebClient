@@ -30,14 +30,15 @@ export module Pages {
     export interface PageLink {
 
         title: string,
-        link: string
+        link: string,
+        docName: string
     }
 
     export interface MasterPageConfig {
 
         baseUri: string
         title: string
-        footerLinks: PageLink[],
+        navLinks: PageLink[],
         allowedAuthProviders: string[],
         externalImagesWarningFormat: string
     }

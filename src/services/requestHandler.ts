@@ -12,6 +12,7 @@ export module RequestHandler {
         type?: string;
         stringData?: string;
         binaryData?: ArrayBuffer;
+        doNotParse?: boolean;
     }
 
     interface ServiceConfig {
@@ -124,7 +125,9 @@ export module RequestHandler {
                         reject(new Error(xmlHttp.statusText));
                     }
 
-                    const content = parseContent(xmlHttp.responseText);
+                    const content = request.doNotParse
+                        ? xmlHttp.responseText
+                        : parseContent(xmlHttp.responseText);
 
                     if (null == content) {
 

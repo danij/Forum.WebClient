@@ -5,6 +5,7 @@ import {UsersView} from "./usersView";
 import {UserRepository} from "../services/userRepository";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
+import {DocumentationView} from "./documentationView";
 
 export module MasterView {
 
@@ -17,18 +18,25 @@ export module MasterView {
 
         const footerLinks = document.getElementById('subnav-links');
 
-        for (let footerLink of config.footerLinks) {
+        for (let footerLink of config.navLinks) {
 
-            footerLinks.appendChild(createFooterLink(footerLink));
+            footerLinks.appendChild(createNavLink(footerLink));
         }
     }
 
-    function createFooterLink(link: Pages.PageLink) : HTMLLIElement {
+    function createNavLink(link: Pages.PageLink) : HTMLLIElement {
 
         const linkElement = cE('a') as HTMLAnchorElement;
-        linkElement.setAttribute('href', link.link);
-        DOMHelpers.addRelAttribute(linkElement);
 
+        if (link.link) {
+
+            linkElement.setAttribute('href', link.link);
+            DOMHelpers.addRelAttribute(linkElement);
+        }
+        else if (link.docName) {
+
+            Views.onClick(linkElement, () => DocumentationView.showDocumentation(link.docName));
+        }
         linkElement.innerText = link.title;
 
         const result = cE('li') as HTMLLIElement;

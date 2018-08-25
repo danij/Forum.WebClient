@@ -16,7 +16,9 @@ window.displayConfig = {
     updateRecentThreadMessagesEveryMilliSeconds: 30000,
     searchThreadWaitMilliseconds: 100,
     renderMessagePreviewEveryMilliseconds: 2000,
-    useDashesForThreadNameInUrl: true
+    useDashesForThreadNameInUrl: true,
+    privacyPolicyDocName: 'privacy.md',
+    termsOfServiceDocName: 'tos.md'
 };
 
 window.masterPageConfig = {
@@ -27,12 +29,15 @@ window.masterPageConfig = {
         "google"
     ],
     title: "Fast Forum",
-    footerLinks: [{
+    navLinks: [{
         title: "Help",
         link: "#"
     }, {
+        title: "Privacy Policy",
+        docName: window.displayConfig.privacyPolicyDocName
+    }, {
         title: "Terms of Service",
-        link: "#"
+        docName: window.displayConfig.termsOfServiceDocName
     }],
     externalImagesWarningFormat: 'External link: {title}'
 };

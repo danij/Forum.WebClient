@@ -38,6 +38,10 @@ module.exports = {
             {
                 from: path.resolve(__dirname, 'config/config.js'),
                 to: path.resolve(__dirname, 'dist/config/config.js')
+            },
+            {
+                from: path.resolve(__dirname, 'doc'),
+                to: path.resolve(__dirname, 'dist/doc')
             }
         ]),
         new MiniCssExtractPlugin({

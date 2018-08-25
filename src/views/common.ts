@@ -29,6 +29,8 @@ export module Views {
         searchThreadWaitMilliseconds: number;
         renderMessagePreviewEveryMilliseconds: number;
         useDashesForThreadNameInUrl: boolean;
+        privacyPolicyDocName: string;
+        termsOfServiceDocName: string;
     }
 
     declare const displayConfig: DisplayConfig;
