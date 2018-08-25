@@ -7,6 +7,7 @@ import {ThreadMessagesPage} from "../pages/threadMessagesPage";
 import {ViewsExtra} from "./extra";
 import {Pages} from "../pages/common";
 import {ThreadMessageCommentsPage} from "../pages/threadMessageCommentsPage";
+import {DocumentationView} from "./documentationView";
 
 export module Views {
 
@@ -602,5 +603,22 @@ export module Views {
             ev.preventDefault();
             callback(ev);
         });
+    }
+
+    export function setupKnownDocumentationLinks(element: HTMLElement): void {
+
+        const knownClasses = {
+
+            "privacy-link": displayConfig.privacyPolicyDocName,
+            "tos-link": displayConfig.termsOfServiceDocName
+        };
+
+        for (let className of Object.getOwnPropertyNames(knownClasses)) {
+
+            DOMHelpers.forEach(element.getElementsByClassName(className), element => {
+
+               onClick(element, () => DocumentationView.showDocumentation(knownClasses[className]));
+            });
+        }
     }
 }

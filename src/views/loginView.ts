@@ -42,6 +42,7 @@ export module LoginView {
         if (ConsentRepository.hasConsentedToUsingCookies()) {
 
             const loginModal = document.getElementById('login-modal');
+            Views.setupKnownDocumentationLinks(loginModal);
             Views.showModal(loginModal);
         }
         else {
@@ -66,9 +67,26 @@ export module LoginView {
         return checkBox.checked;
     }
 
+    function checkAgreePrivacyToS(): boolean {
+
+        const checkBox = document.getElementById('accept-privacy-and-tos') as HTMLInputElement;
+
+        if ( ! checkBox.checked) {
+
+            Views.showWarningNotification('Cannot log in without accepting the privacy policy and terms of service');
+        }
+
+        return checkBox.checked;
+    }
+
     function loginWithGoogle():void  {
 
-        const extra = {};
+        if ( ! checkAgreePrivacyToS()) return;
+
+        const extra = {
+
+            'accepted-privacy-policy-and-tos': true
+        };
 
         if (showInOnlineUsers()) {
 
