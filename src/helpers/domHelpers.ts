@@ -200,16 +200,21 @@ export module DOMHelpers {
         }
     }
 
-    export function goUpUntil(element: HTMLElement, tagName: string): HTMLElement {
+    export function goUpUntilTag(element: HTMLElement, tagName: string): HTMLElement {
 
         tagName = tagName.toLowerCase();
 
-        while ((element.tagName.toLowerCase() != tagName) && element.parentElement) {
+        return goUpUntil(element, currentElement => currentElement.tagName.toLowerCase() == tagName);
+    }
+
+    export function goUpUntil(element: HTMLElement, match: (HTMLElement) => boolean): HTMLElement {
+
+        while ( ! match(element) && element.parentElement) {
 
             element = element.parentElement;
         }
 
-        return element.tagName.toLowerCase() == tagName ? element : null;
+        return match(element) ? element : null;
     }
 
     export function switchHidden(elements: HTMLElement[]): void {
