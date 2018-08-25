@@ -137,6 +137,6 @@ export class UsersPage implements Pages.Page {
         const title = Views.addPageNumber('Users', this.pageNumber);
 
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
-        document.getElementById('users-page-link').classList.add('uk-active');
+        DOMHelpers.addClasses(document.getElementById('users-page-link'), 'uk-active');
     }
 }

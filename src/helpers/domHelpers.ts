@@ -133,12 +133,12 @@ export module DOMHelpers {
 
     export function hide(element: HTMLElement): void {
 
-        element.classList.add('uk-hidden');
+        DOMHelpers.addClasses(element, 'uk-hidden');
     }
 
     export function unHide(element: HTMLElement): void {
 
-        element.classList.remove('uk-hidden');
+        DOMHelpers.removeClasses(element, 'uk-hidden');
     }
 
     export function replaceElementWith(element: HTMLElement, replaceWith: HTMLElement): void {
@@ -220,10 +220,10 @@ export module DOMHelpers {
 
             if (element.classList.contains(className)) {
 
-                element.classList.remove(className);
+                DOMHelpers.removeClasses(element, className);
             }
             else {
-                element.classList.add(className);
+                DOMHelpers.addClasses(element, className);
             }
         }
     }
@@ -244,5 +244,21 @@ export module DOMHelpers {
     export function addRelAttribute(link: HTMLAnchorElement): void {
 
         link.setAttribute('rel', 'nofollow noopener noreferrer');
+    }
+
+    export function addClasses(element: HTMLElement, ...classes: string[]): void {
+
+        for (let value of classes) {
+
+            element.classList.add(value);
+        }
+    }
+
+    export function removeClasses(element: HTMLElement, ...classes: string[]): void {
+
+        for (let value of classes) {
+
+            element.classList.remove(value);
+        }
     }
 }

@@ -100,6 +100,6 @@ export class TagsPage implements Pages.Page {
             orderBy: this.orderBy,
             sortOrder: this.sortOrder
         }), 'Tags');
-        document.getElementById('tags-page-link').classList.add('uk-active');
+        DOMHelpers.addClasses(document.getElementById('tags-page-link'), 'uk-active');
     }
 }

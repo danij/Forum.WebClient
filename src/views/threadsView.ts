@@ -74,7 +74,7 @@ export module ThreadsView {
 
         const tableContainer = cE('div');
         resultList.appendChild(tableContainer);
-        tableContainer.classList.add('threads-table');
+        DOMHelpers.addClasses(tableContainer, 'threads-table');
         tableContainer.appendChild(createThreadsTable(collection.threads));
 
         resultList.appendChild(
@@ -226,14 +226,14 @@ export module ThreadsView {
                     timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
 
                     const recentMessageTime = cE('span');
-                    recentMessageTime.classList.add('uk-text-meta');
+                    DOMHelpers.addClasses(recentMessageTime, 'uk-text-meta');
                     recentMessageTime.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
                     timeFlex.appendElement(recentMessageTime);
 
                     const messageContent = latestMessage.content || 'empty';
 
                     const messageLink = cE('a');
-                    messageLink.classList.add('recent-message-link');
+                    DOMHelpers.addClasses(messageLink, 'recent-message-link');
                     messageLink.setAttribute('title', messageContent);
                     messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
                     messageLink.setAttribute('data-threadmessageid', latestMessage.id);
@@ -317,11 +317,11 @@ export module ThreadsView {
                                            privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         const element = cE('div');
-        element.classList.add('uk-container', 'uk-container-expand', 'thread-header');
+        DOMHelpers.addClasses(element, 'uk-container', 'uk-container-expand', 'thread-header');
 
         const card = cE('div');
         element.appendChild(card);
-        card.classList.add('uk-card', 'uk-card-body');
+        DOMHelpers.addClasses(card, 'uk-card', 'uk-card-body');
 
         const threadTitle = cE('span');
         {
@@ -331,7 +331,7 @@ export module ThreadsView {
             */
             const actions = cE('div');
             card.appendChild(actions);
-            actions.classList.add('thread-actions');
+            DOMHelpers.addClasses(actions, 'thread-actions');
 
             let subscribeToThread, unSubscribeFromThread: HTMLElement;
 
@@ -339,7 +339,7 @@ export module ThreadsView {
 
                 subscribeToThread = cE('button');
                 actions.appendChild(subscribeToThread);
-                subscribeToThread.classList.add('uk-button', 'uk-button-primary', 'uk-button-small');
+                DOMHelpers.addClasses(subscribeToThread, 'uk-button', 'uk-button-primary', 'uk-button-small');
                 subscribeToThread.innerText = 'Subscribe';
 
                 actions.appendChild(document.createTextNode(' '));
@@ -359,7 +359,7 @@ export module ThreadsView {
 
                 unSubscribeFromThread = cE('button');
                 actions.appendChild(unSubscribeFromThread);
-                unSubscribeFromThread.classList.add('uk-button', 'uk-button-danger', 'uk-button-small');
+                DOMHelpers.addClasses(unSubscribeFromThread, 'uk-button', 'uk-button-danger', 'uk-button-small');
                 unSubscribeFromThread.innerText = 'Unsubscribe';
 
                 actions.appendChild(document.createTextNode(' '));
@@ -453,10 +453,10 @@ export module ThreadsView {
         {
             const title = cE('div');
             card.appendChild(title);
-            title.classList.add('uk-align-left', 'thread-title');
+            DOMHelpers.addClasses(title, 'uk-align-left', 'thread-title');
 
             title.appendChild(threadTitle);
-            threadTitle.classList.add('uk-logo', 'render-math');
+            DOMHelpers.addClasses(threadTitle, 'uk-logo', 'render-math');
 
             threadTitle.innerText = thread.name;
             title.appendChild(document.createTextNode(' '));
@@ -469,7 +469,7 @@ export module ThreadsView {
         {
             const details = cE('div');
             card.appendChild(details);
-            details.classList.add('thread-details', 'uk-align-left');
+            DOMHelpers.addClasses(details, 'thread-details', 'uk-align-left');
 
             if (Privileges.Thread.canEditThreadTags(thread)) {
 

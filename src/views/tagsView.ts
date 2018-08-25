@@ -56,7 +56,7 @@ export module TagsView {
         const tagsList = cE('div');
         resultList.appendChild(tagsList);
 
-        tagsList.classList.add('tags-list');
+        DOMHelpers.addClasses(tagsList, 'tags-list');
         tagsList.appendChild(this.createTagsTable(tags));
 
         if (Privileges.ForumWide.canAddNewTag()) {
@@ -192,7 +192,7 @@ export module TagsView {
                                         privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         const container = cE('div');
-        container.classList.add('uk-grid-small', 'tag-page-header');
+        DOMHelpers.addClasses(container, 'uk-grid-small', 'tag-page-header');
 
         const badge = cE('span');
 
@@ -215,10 +215,10 @@ export module TagsView {
 
         const badgeContainer = cE('div');
         container.appendChild(badgeContainer);
-        badgeContainer.classList.add('uk-display-inline-block');
+        DOMHelpers.addClasses(badgeContainer, 'uk-display-inline-block');
 
         badgeContainer.appendChild(badge);
-        badge.classList.add('uk-badge', 'uk-icon');
+        DOMHelpers.addClasses(badge, 'uk-badge', 'uk-icon');
         badge.setAttribute('uk-icon', 'icon: tag');
         badge.innerText = tag.name;
 

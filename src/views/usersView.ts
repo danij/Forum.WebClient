@@ -231,7 +231,7 @@ export module UsersView {
 
         const usersList = cE('div');
         resultList.appendChild(usersList);
-        usersList.classList.add('users-list');
+        DOMHelpers.addClasses(usersList, 'users-list');
 
         usersList.appendChild(createUserListContent(collection.users));
 

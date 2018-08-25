@@ -268,6 +268,6 @@ export class ThreadsPage implements Pages.Page {
         title = Views.addPageNumber(title, this.pageNumber);
 
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
-        document.getElementById('threads-page-link').classList.add('uk-active');
+        DOMHelpers.addClasses(document.getElementById('threads-page-link'), 'uk-active');
     }
 }

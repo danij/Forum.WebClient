@@ -167,7 +167,7 @@ export module CategoriesView {
                                          privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         const result = cE('div');
-        result.classList.add('categories-list-header');
+        DOMHelpers.addClasses(result, 'categories-list-header');
 
         if (Privileges.Category.canDeleteCategory(category)) {
 
@@ -185,7 +185,7 @@ export module CategoriesView {
 
         const breadcrumbsList = cE('ul');
         result.appendChild(breadcrumbsList);
-        breadcrumbsList.classList.add('uk-breadcrumb');
+        DOMHelpers.addClasses(breadcrumbsList, 'uk-breadcrumb');
 
         function addToBreadCrumbs(value: CategoryRepository.Category): void {
 
@@ -270,11 +270,11 @@ export module CategoriesView {
 
         const descriptionContainer = cE('span');
         element.appendChild(descriptionContainer);
-        descriptionContainer.classList.add('category-description');
+        DOMHelpers.addClasses(descriptionContainer, 'category-description');
 
         const descriptionElement = cE('span');
         descriptionElement.innerText = category.description || '';
-        descriptionElement.classList.add('uk-text-meta');
+        DOMHelpers.addClasses(descriptionElement, 'uk-text-meta');
 
         if (Privileges.Category.canEditCategoryDescription(category)) {
 
@@ -377,7 +377,7 @@ export module CategoriesView {
                 const separator = cE('hr');
                 result.appendChild(separator);
 
-                separator.classList.add('uk-divider-icon');
+                DOMHelpers.addClasses(separator, 'uk-divider-icon');
             }
 
             result.appendChild(threadList);
@@ -462,14 +462,14 @@ export module CategoriesView {
         form.innerHTML = '';
 
         const list = cE('ul');
-        list.classList.add('uk-list');
+        DOMHelpers.addClasses(list, 'uk-list');
         form.appendChild(list);
 
         function addCategory(category: CategoryRepository.Category, level: number) {
 
             const row = cE('li');
             list.appendChild(row);
-            row.classList.add(`level${level}`);
+            DOMHelpers.addClasses(row, `level${level}`);
 
             const input = cE('input');
             row.appendChild(input);
@@ -482,7 +482,7 @@ export module CategoriesView {
             if (category.id == currentParentId) {
                 input.setAttribute('checked', '');
             }
-            input.classList.add('uk-radio');
+            DOMHelpers.addClasses(input, 'uk-radio');
 
             const label = cE('label');
             row.appendChild(label);

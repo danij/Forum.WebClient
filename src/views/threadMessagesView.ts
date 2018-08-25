@@ -133,7 +133,7 @@ export module ThreadMessagesView {
         const editControl = thread ? createNewThreadMessageControl(thread, threadCallback) : null;
 
         const listContainer = cE('div');
-        listContainer.classList.add('thread-message-list');
+        DOMHelpers.addClasses(listContainer, 'thread-message-list');
         listContainer.appendChild(createThreadMessageList(collection, threadMessageCallback, threadCallback,
             privilegesCallback, thread, quoteCallback));
         resultList.appendChild(listContainer);
@@ -643,7 +643,7 @@ export module ThreadMessagesView {
                                            callback: PageActions.IThreadCallback): MessageEditControl {
 
         const result = cE('div');
-        result.classList.add('reply-container');
+        DOMHelpers.addClasses(result, 'reply-container');
 
         let editControl: EditViews.EditControl;
 
@@ -653,7 +653,7 @@ export module ThreadMessagesView {
 
             const button = cE('button');
             result.appendChild(button);
-            button.classList.add('uk-button', 'uk-button-primary', 'uk-align-center');
+            DOMHelpers.addClasses(button, 'uk-button', 'uk-button-primary', 'uk-align-center');
             button.innerText = 'Add new message';
 
             Views.onClick(button, async () => {
@@ -739,7 +739,7 @@ export module ThreadMessagesView {
             Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
 
         const listContainer = cE('div');
-        listContainer.classList.add('thread-message-comments-list');
+        DOMHelpers.addClasses(listContainer, 'thread-message-comments-list');
         listContainer.appendChild(createCommentsList(collection, threadMessageCallback,
             threadCallback, privilegesCallback, info.user));
         resultList.appendChild(listContainer);
@@ -835,7 +835,7 @@ export module ThreadMessagesView {
         } as ThreadRepository.Thread);
 
         const threadTitleElement = cE('a');
-        threadTitleElement.classList.add('recent-message-thread-link');
+        DOMHelpers.addClasses(threadTitleElement, 'recent-message-thread-link');
         threadTitleElement.setAttribute('href', href);
         threadTitleElement.setAttribute('title', threadTitle);
         threadTitleElement.setAttribute('data-threadmessagethreadid', latestMessage.threadId);
@@ -856,7 +856,7 @@ export module ThreadMessagesView {
         const messageContent = latestMessage.content || 'empty';
 
         const messageLink = cE('a');
-        messageLink.classList.add('recent-message-link');
+        DOMHelpers.addClasses(messageLink, 'recent-message-link');
         messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
         messageLink.setAttribute('title', messageContent);
         messageLink.setAttribute('data-threadmessageid', latestMessage.id);

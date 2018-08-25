@@ -158,7 +158,8 @@ export module Views {
             Views.onClick(link, pageClickCallback);
 
             if (pageNumber == info.page) {
-                link.classList.add('uk-text-bold');
+
+                DOMHelpers.addClasses(link, 'uk-text-bold');
             }
         }
 
@@ -166,7 +167,7 @@ export module Views {
 
             const listElement = cE('li');
             container.appendChild(listElement);
-            listElement.classList.add('pointer-cursor');
+            DOMHelpers.addClasses(listElement, 'pointer-cursor');
 
             const span = cE('span');
             listElement.appendChild(span);
@@ -245,7 +246,7 @@ export module Views {
 
         const total = cE('span');
         result.appendChild(total);
-        total.classList.add('uk-flex', 'uk-flex-center', 'uk-text-meta', 'pagination-total');
+        DOMHelpers.addClasses(total, 'uk-flex', 'uk-flex-center', 'uk-text-meta', 'pagination-total');
         total.innerText = `${DisplayHelpers.intToString(info.totalCount)} total`;
 
         return result;
@@ -568,7 +569,7 @@ export module Views {
 
             for (let element of toAnimate) {
 
-                element.classList.add('uk-animation-fade', 'uk-animation-fast');
+                DOMHelpers.addClasses(element, 'uk-animation-fade', 'uk-animation-fast');
                 subContainer.appendChild(element);
             }
         }, 0);

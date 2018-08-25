@@ -183,6 +183,6 @@ export class ThreadMessageCommentsPage implements Pages.Page {
         title = Views.addPageNumber(title, this.pageNumber);
 
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
-        document.getElementById('comments-page-link').classList.add('uk-active');
+        DOMHelpers.addClasses(document.getElementById('comments-page-link'), 'uk-active');
     }
 }

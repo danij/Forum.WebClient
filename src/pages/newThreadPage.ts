@@ -3,6 +3,7 @@ import {ThreadsView} from "../views/threadsView";
 import {MasterPage} from "./masterPage";
 import {TagRepository} from "../services/tagRepository";
 import {PageActions} from "./action";
+import {DOMHelpers} from "../helpers/domHelpers";
 
 /**
  * Displays page for creating a new thread
@@ -42,6 +43,6 @@ export class NewThreadPage implements Pages.Page {
     private refreshUrl() {
 
         MasterPage.goTo(NewThreadPage.PageUrl, 'Add a New Thread');
-        document.getElementById('new-thread-page-link').classList.add('uk-active');
+        DOMHelpers.addClasses(document.getElementById('new-thread-page-link'), 'uk-active');
     }
 }

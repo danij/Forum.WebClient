@@ -120,7 +120,7 @@ export module MasterPage {
 
         for (let link of linkElements) {
 
-            link.classList.remove('uk-active');
+            DOMHelpers.removeClasses(link, 'uk-active');
         }
 
         const fullTitle = getTitle(title);

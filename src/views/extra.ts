@@ -109,7 +109,7 @@ export module ViewsExtra {
             for (let ti = 0; ti < tables.length; ++ti) {
 
                 const table = tables[ti];
-                table.classList.add('uk-table', 'uk-table-small', 'uk-table-striped');
+                DOMHelpers.addClasses(table, 'uk-table', 'uk-table-small', 'uk-table-striped');
             }
         });
 

@@ -49,7 +49,7 @@ export module EditViews {
 
         const result = cE('button') as HTMLButtonElement;
 
-        result.classList.add('uk-button', 'uk-button-primary', 'uk-button-small');
+        DOMHelpers.addClasses(result, 'uk-button', 'uk-button-primary', 'uk-button-small');
         result.innerText = title;
 
         return result;
@@ -74,13 +74,10 @@ export module EditViews {
 
         const span = cE('span');
 
-        span.classList.add('uk-icon');
+        DOMHelpers.addClasses(span, 'uk-icon');
         if (classes && classes.length) {
 
-            for (const cls of classes) {
-
-                span.classList.add(cls);
-            }
+            DOMHelpers.addClasses(span, ...classes);
         }
         span.setAttribute('uk-icon', 'icon: ' + icon);
         span.setAttribute('uk-tooltip', '');
@@ -97,9 +94,10 @@ export module EditViews {
 
         const span = cE('span');
 
-        span.classList.add('uk-icon');
+        DOMHelpers.addClasses(span, 'uk-icon');
         if (classes) {
-            span.classList.add(...classes.trim().split(' '));
+
+            DOMHelpers.addClasses(span, ...classes.trim().split(' '));
         }
         span.setAttribute('uk-icon', 'icon: trash');
         span.setAttribute('uk-tooltip', '');
@@ -118,22 +116,22 @@ export module EditViews {
         constructor(container: HTMLElement, initialText: string = '') {
 
             this.textArea = cE('textarea') as HTMLTextAreaElement;
-            this.textArea.classList.add('uk-textarea');
+            DOMHelpers.addClasses(this.textArea, 'uk-textarea');
             this.textArea.value = initialText;
 
             const previewContainer = cE('div');
-            previewContainer.classList.add('edit-preview', 'message-content', 'render-math');
+            DOMHelpers.addClasses(previewContainer, 'edit-preview', 'message-content', 'render-math');
             previewContainer.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Message Preview</span>'));
 
             previewContainer.appendChild(this.resultContainer = cE('div') as HTMLDivElement);
 
             const grid = cE('div');
             container.appendChild(grid);
-            grid.classList.add('uk-grid');
+            DOMHelpers.addClasses(grid, 'uk-grid');
             grid.setAttribute('uk-grid', '');
 
             const textAreaContainer = cE('div');
-            textAreaContainer.classList.add('edit-control-container');
+            DOMHelpers.addClasses(textAreaContainer, 'edit-control-container');
             textAreaContainer.appendChild(this.createEditControls());
             textAreaContainer.appendChild(this.textArea);
 
@@ -182,14 +180,14 @@ export module EditViews {
             const tables = element.getElementsByTagName('table');
             DOMHelpers.forEach(tables, table => {
 
-                table.classList.add('uk-table', 'uk-table-small', 'uk-table-striped');
+                DOMHelpers.addClasses(table, 'uk-table', 'uk-table-small', 'uk-table-striped');
             });
         }
 
         private createEditControls(): HTMLElement {
 
             const list = cE('ul');
-            list.classList.add('uk-iconnav');
+            DOMHelpers.addClasses(list, 'uk-iconnav');
 
             const actions = [
                 {icon: 'bold', title: 'Make selection bold', callback: () => this.addBold()},

@@ -250,6 +250,6 @@ export class ThreadMessagesPage implements Pages.Page {
         title = Views.addPageNumber(title, this.pageNumber);
 
         MasterPage.goTo(this.getLinkForPage(this.pageNumber), title);
-        document.getElementById(setActive).classList.add('uk-active');
+        DOMHelpers.addClasses(document.getElementById(setActive), 'uk-active');
     }
 }
