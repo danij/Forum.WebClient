@@ -20,9 +20,8 @@ export module DocumentationView {
             if ( ! content) return;
 
             const container = document.getElementById('documentation-container');
-            container.innerText = content;
 
-            ViewsExtra.expandAndAdjust(container);
+            ViewsExtra.expandAndAdjust(container, content);
 
             Views.showModal(document.getElementById('documentation-modal'));
         });

@@ -164,9 +164,9 @@ export module ViewsExtra {
         DOMHelpers.replaceElementWith(element, link);
     }
 
-    export function expandAndAdjust(container: HTMLElement): void {
+    export function expandAndAdjust(container: HTMLElement, source?: string): void {
 
-        container.innerHTML = expandContent(container.innerText);
+        container.innerHTML = expandContent(source || container.innerText);
         adjustMessageContent(container);
     }
 }
