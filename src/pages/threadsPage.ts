@@ -173,13 +173,13 @@ export class ThreadsPage implements Pages.Page {
 
             if (null == threadCollection) return;
 
-            const newTopPaginationControl = Views.createPaginationControl(threadCollection,
+            const newTopPaginationControl = Views.createPaginationControl(threadCollection, 'threads',
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            const newBottomPaginationControl = Views.createPaginationControl(threadCollection,
+            const newBottomPaginationControl = Views.createPaginationControl(threadCollection, 'threads',
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);

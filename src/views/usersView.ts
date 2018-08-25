@@ -227,7 +227,8 @@ export module UsersView {
 
         resultList.appendChild(result.sortControls = createUserListSortControls(info));
         resultList.appendChild(
-            result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+            result.paginationTop = Views.createPaginationControl(collection, 'users',
+                onPageNumberChange, getLinkForPage));
 
         const usersList = cE('div');
         resultList.appendChild(usersList);
@@ -236,7 +237,8 @@ export module UsersView {
         usersList.appendChild(createUserListContent(collection.users));
 
         resultList.appendChild(
-            result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+            result.paginationBottom = Views.createPaginationControl(collection, 'users',
+                onPageNumberChange, getLinkForPage));
 
         result.list = resultList;
         return result;

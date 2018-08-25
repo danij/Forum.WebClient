@@ -70,7 +70,8 @@ export module ThreadsView {
 
         resultList.appendChild(result.sortControls = createThreadListSortControls(info));
         resultList.appendChild(
-            result.paginationTop = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+            result.paginationTop = Views.createPaginationControl(collection, 'threads',
+                onPageNumberChange, getLinkForPage));
 
         const tableContainer = cE('div');
         resultList.appendChild(tableContainer);
@@ -78,7 +79,8 @@ export module ThreadsView {
         tableContainer.appendChild(createThreadsTable(collection.threads));
 
         resultList.appendChild(
-            result.paginationBottom = Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+            result.paginationBottom = Views.createPaginationControl(collection, 'threads',
+                onPageNumberChange, getLinkForPage));
 
         result.list = resultList;
         return result;

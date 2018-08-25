@@ -115,7 +115,7 @@ export module Views {
     export declare type PageNumberChangeCallback = (value: number) => void;
     export declare type GetLinkForPageCallback = (value: number) => string;
 
-    export function createPaginationControl(info: CommonEntities.PaginationInfo,
+    export function createPaginationControl(info: CommonEntities.PaginationInfo, totalString: string,
                                             onPageNumberChange: PageNumberChangeCallback,
                                             getLinkForPage: GetLinkForPageCallback) {
 
@@ -127,7 +127,9 @@ export module Views {
         }
 
         const container = DOMHelpers.parseHTML(
-            '<ul class="uk-pagination uk-flex-center uk-margin-remove-left uk-margin-remove-top uk-margin-remove-bottom" uk-margin></ul>');
+            '<ul class="uk-pagination uk-flex-center uk-margin-remove-left uk-margin-remove-top uk-margin-remove-bottom" uk-margin>' +
+            '<li>Page:</li>' +
+            '</ul>');
         result.appendChild(container);
 
         const pageCount = CommonEntities.getPageCount(info);
@@ -247,7 +249,7 @@ export module Views {
         const total = cE('span');
         result.appendChild(total);
         DOMHelpers.addClasses(total, 'uk-flex', 'uk-flex-center', 'uk-text-meta', 'pagination-total');
-        total.innerText = `${DisplayHelpers.intToString(info.totalCount)} total`;
+        total.innerText = `${DisplayHelpers.intToString(info.totalCount)} ${totalString}`;
 
         return result;
     }

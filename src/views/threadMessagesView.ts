@@ -128,7 +128,7 @@ export module ThreadMessagesView {
         }
 
         resultList.appendChild(result.paginationTop =
-            Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+            Views.createPaginationControl(collection, 'thread messages', onPageNumberChange, getLinkForPage));
 
         const editControl = thread ? createNewThreadMessageControl(thread, threadCallback) : null;
 
@@ -139,7 +139,7 @@ export module ThreadMessagesView {
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
-            Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+            Views.createPaginationControl(collection, 'thread messages', onPageNumberChange, getLinkForPage));
 
         if (editControl) {
 
@@ -736,7 +736,7 @@ export module ThreadMessagesView {
         resultList.appendChild(result.sortControls = createThreadMessageListSortControls(info));
 
         resultList.appendChild(result.paginationTop =
-            Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+            Views.createPaginationControl(collection, 'thread message comments', onPageNumberChange, getLinkForPage));
 
         const listContainer = cE('div');
         DOMHelpers.addClasses(listContainer, 'thread-message-comments-list');
@@ -745,7 +745,7 @@ export module ThreadMessagesView {
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
-            Views.createPaginationControl(collection, onPageNumberChange, getLinkForPage));
+            Views.createPaginationControl(collection, 'thread message comments', onPageNumberChange, getLinkForPage));
 
         result.list = resultList;
 

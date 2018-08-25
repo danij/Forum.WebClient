@@ -73,13 +73,13 @@ export class UsersPage implements Pages.Page {
 
             if (null == userCollection) return null;
 
-            const newTopPaginationControl = Views.createPaginationControl(userCollection,
+            const newTopPaginationControl = Views.createPaginationControl(userCollection, 'users',
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            const newBottomPaginationControl = Views.createPaginationControl(userCollection,
+            const newBottomPaginationControl = Views.createPaginationControl(userCollection, 'users',
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);

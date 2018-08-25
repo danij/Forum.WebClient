@@ -113,13 +113,13 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
             if (null == commentsCollection) return;
 
-            const newTopPaginationControl = Views.createPaginationControl(commentsCollection,
+            const newTopPaginationControl = Views.createPaginationControl(commentsCollection, 'message comments',
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            const newBottomPaginationControl = Views.createPaginationControl(commentsCollection,
+            const newBottomPaginationControl = Views.createPaginationControl(commentsCollection, 'message comments',
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);

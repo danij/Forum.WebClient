@@ -167,14 +167,14 @@ export class ThreadMessagesPage implements Pages.Page {
 
             if (null == messageCollection) return;
 
-            const newTopPaginationControl = Views.createPaginationControl(messageCollection,
+            const newTopPaginationControl = Views.createPaginationControl(messageCollection, 'messages',
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
 
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            const newBottomPaginationControl = Views.createPaginationControl(messageCollection,
+            const newBottomPaginationControl = Views.createPaginationControl(messageCollection, 'messages',
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
