@@ -169,6 +169,7 @@ export module MasterPage {
                 location = location + '/';
             }
         }
+        location = location.split('#')[0];
 
         for (let fn of functions) {
 
