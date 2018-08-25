@@ -105,7 +105,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
         return Pages.getOrShowError(UserRepository.getUserByName(userName));
     }
 
-    private refreshList(): void {
+    private async refreshList(scrollDirection: Pages.ScrollDirection): Promise<void> {
 
         Views.changeContent(document.querySelector('#page-content-container .thread-message-comments-list'), async () => {
 
@@ -129,6 +129,8 @@ export class ThreadMessageCommentsPage implements Pages.Page {
                 PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(),
                 PageActions.getPrivilegesCallback(), this.user);
         });
+
+        Pages.scrollPage(scrollDirection);
     }
 
     private setupSortControls(controls: HTMLElement): void {
@@ -143,7 +145,10 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
                     this.sortOrder = (ev.target as HTMLSelectElement).value;
                     this.refreshUrl();
-                    this.refreshList();
+                    this.refreshList({
+
+                        top: true
+                    });
                 });
             });
         }
@@ -151,9 +156,11 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
     private onPageNumberChange(newPageNumber: number): void {
 
+        const scrollDirection = Pages.getScrollDirection(newPageNumber, this.pageNumber);
+
         this.pageNumber = newPageNumber;
         this.refreshUrl();
-        this.refreshList();
+        this.refreshList(scrollDirection);
     }
 
     private getLinkForPage(pageNumber: number): string {

@@ -11,6 +11,12 @@ export module Pages {
         display(): void;
     }
 
+    export interface ScrollDirection {
+
+        top?: boolean;
+        bottom?: boolean;
+    }
+
     export function changePage(handler: () => Promise<HTMLElement>): Promise<void> {
 
         Views.hideOpenModals();
@@ -351,5 +357,40 @@ export module Pages {
     export function getUserLogoSrc(user: UserRepository.User): string {
 
         return getApiUrl(`users/logo/${user.id}`);
+    }
+
+    export function getScrollDirection(newPage: number, oldPage: number): ScrollDirection {
+
+        const result: Pages.ScrollDirection = {};
+
+        if (newPage > oldPage) {
+
+            result.top = true;
+        }
+        else if (newPage < oldPage) {
+
+            result.bottom = true;
+        }
+        return result;
+    }
+
+    export function scrollPage(scrollDirection: ScrollDirection): void {
+
+        if ( ! scrollDirection.top && ! scrollDirection.bottom) return;
+
+        setTimeout(() => {
+
+            const paginationElements = document.getElementsByClassName('uk-pagination');
+
+            if (scrollDirection.top) {
+
+                document.getElementsByClassName('page-content')[0].children[0].scrollIntoView();
+            }
+            else if (scrollDirection.bottom && paginationElements.length > 1) {
+
+                paginationElements[1].scrollIntoView();
+            }
+
+        }, 500);
     }
 }

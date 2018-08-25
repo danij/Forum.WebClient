@@ -5,7 +5,6 @@ import {Views} from "../views/common";
 import {MasterPage} from "./masterPage";
 import {TagRepository} from "../services/tagRepository";
 import {UserRepository} from "../services/userRepository";
-import {Privileges} from "../services/privileges";
 import {PageActions} from "./action";
 import {DOMHelpers} from "../helpers/domHelpers";
 
@@ -165,9 +164,9 @@ export class ThreadsPage implements Pages.Page {
         return Pages.getOrShowError(UserRepository.getUserByName(userName));
     }
 
-    private refreshList(): void {
+    private async refreshList(scrollDirection: Pages.ScrollDirection): Promise<void> {
 
-        Views.changeContent(document.querySelector('#page-content-container .threads-table'), async () => {
+        await Views.changeContent(document.querySelector('#page-content-container .threads-table'), async () => {
 
             const threadCollection = await this.getThreadCollection();
 
@@ -187,6 +186,8 @@ export class ThreadsPage implements Pages.Page {
 
             return ThreadsView.createThreadsTable(threadCollection.threads);
         });
+
+        Pages.scrollPage(scrollDirection);
     }
 
     private setupSortControls(controls: HTMLElement): void {
@@ -199,7 +200,10 @@ export class ThreadsPage implements Pages.Page {
 
                 this.orderBy = (ev.target as HTMLInputElement).value;
                 this.refreshUrl();
-                this.refreshList();
+                this.refreshList({
+
+                    top: true
+                });
             });
         });
 
@@ -211,18 +215,21 @@ export class ThreadsPage implements Pages.Page {
 
                 this.sortOrder = (ev.target as HTMLSelectElement).value;
                 this.refreshUrl();
-                this.refreshList();
+                this.refreshList({
+                    top: true
+                });
             });
         });
     }
 
     private onPageNumberChange(newPageNumber: number): void {
 
+        const scrollDirection = Pages.getScrollDirection(newPageNumber, this.pageNumber);
+
         this.pageNumber = newPageNumber;
         this.refreshUrl();
-        this.refreshList();
+        this.refreshList(scrollDirection);
     }
-
 
     private getLinkForPage(pageNumber: number): string {
 
