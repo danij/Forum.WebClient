@@ -608,6 +608,43 @@ export module Views {
         });
     }
 
+    export function onClickWithSpinner<T>(element: HTMLButtonElement, callback: (ev) => Promise<T>): void {
+
+        if (element.classList.contains('uk-disabled')) return;
+
+        if (element.children.length) {
+
+            console.error('onClickWithSpinner only works with elements without children');
+            return;
+        }
+
+        onClick(element, async (ev) => {
+
+            const text = element.innerText;
+            const primaryButton = element.classList.contains('uk-button-primary');
+
+            try {
+
+                DOMHelpers.addClasses(element, 'uk-disabled');
+                DOMHelpers.removeClasses(element, 'uk-button-primary');
+
+                element.innerText = '';
+                element.appendChild(DOMHelpers.parseHTML('<div uk-spinner></div>'))
+
+                await callback(ev);
+            }
+            finally {
+
+                element.innerText = text;
+                DOMHelpers.removeClasses(element, 'uk-disabled');
+                if (primaryButton) {
+
+                    DOMHelpers.addClasses(element, 'uk-button-primary');
+                }
+            }
+        });
+    }
+
     export function setupKnownDocumentationLinks(element: HTMLElement): void {
 
         const knownClasses = {

@@ -53,9 +53,9 @@ export module ConsentView {
         externalImagesConsentCheckbox.checked = ConsentRepository.hasConsentedToLoadingExternalImages();
         rememberCurrentChecked(externalImagesConsentCheckbox);
 
-        const saveConsentButton = document.getElementById('save-consent');
+        const saveConsentButton = document.getElementById('save-consent') as HTMLButtonElement;
 
-        Views.onClick(saveConsentButton, async () => {
+        Views.onClickWithSpinner(saveConsentButton, async () => {
 
             await Promise.all([
                 saveFpCookiesConsent(cookiesFpConsentCheckbox),
