@@ -4,6 +4,7 @@
   "description": "Fast Forum WebClient",
   "main": "index.js",
   "dependencies": {
+    "@webcomponents/template": "^1.4.0",
     "es6-promise": "^4.2.4",
     "highlight.js": "^9.12.0",
     "jquery": "^3.3.1",

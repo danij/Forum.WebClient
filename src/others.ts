@@ -5,6 +5,7 @@ import 'es6-promise/auto';
 import * as Remarkable from 'remarkable';
 import 'katex';
 import * as renderMathInElement from 'katex/dist/contrib/auto-render';
+import '@webcomponents/template';
 
 (<any>window).jQuery = jQuery;
 (<any>window).UIkit = UIkit;
