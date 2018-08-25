@@ -29,3 +29,11 @@ if ( ! String.prototype.endsWith) {
         return this.substring(this.length - search.length, this.length) === search;
     };
 }
+
+if ( ! Math.sign) {
+
+    Math.sign = function(value) {
+
+        return value < 0 ? -1 : (value == 0 ? 0 : 1);
+    }
+}
