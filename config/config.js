@@ -15,7 +15,7 @@ window.displayConfig = {
     updateRecentThreadsEveryMilliSeconds: 60000,
     updateRecentThreadMessagesEveryMilliSeconds: 30000,
     searchThreadWaitMilliseconds: 100,
-    renderNewMessageEveryMilliseconds: 2000,
+    renderMessagePreviewEveryMilliseconds: 2000,
     useDashesForThreadNameInUrl: true
 };
 

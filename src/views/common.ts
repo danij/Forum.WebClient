@@ -27,7 +27,7 @@ export module Views {
         updateRecentThreadsEveryMilliSeconds: number;
         updateRecentThreadMessagesEveryMilliSeconds: number;
         searchThreadWaitMilliseconds: number;
-        renderNewMessageEveryMilliseconds: number;
+        renderMessagePreviewEveryMilliseconds: number;
         useDashesForThreadNameInUrl: boolean;
     }
 

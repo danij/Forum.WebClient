@@ -165,7 +165,7 @@ export module EditViews {
                     previousText = currentText;
                     this.updateContent(currentText);
                 }
-            }, Views.DisplayConfig.renderNewMessageEveryMilliseconds);
+            }, Views.DisplayConfig.renderMessagePreviewEveryMilliseconds);
         }
 
         private updateContent(text: string): void {
