@@ -406,32 +406,33 @@
             <label for="accept-privacy-and-tos">I agree to the <a class="privacy-link">Privacy Policy</a> and <a class="tos-link">Terms of Service</a></label>
         </div>
         <hr class="uk-divider-icon">
-        <div id="login-container-custom" class="uk-hidden">
-            <div class="uk-margin">
-                <span>Log in with an account created on this site:</span>
-                <span class="uk-align-right uk-margin-remove">
-                    <a href="#">Register</a> ·
-                    <a href="#">Forgot the password?</a>
+        <div class="uk-column-1-2 uk-column-divider">
+            <div id="login-container-custom" class="uk-hidden">
+                <div class="uk-margin">
+                    <span>With an account created on this site:</span>
+                </div>
+                <form>
+                    <div class="uk-margin">
+                        <input type="text" id="login-custom-email" class="uk-input" placeholder="email" />
+                    </div>
+                    <div class="uk-margin">
+                        <input type="password" id="login-custom-password" class="uk-input" placeholder="password" />
+                    </div>
+                    <div class="uk-margin uk-text-center">
+                        <button id="login-custom-button" class="uk-button uk-button-primary">Log in</button>
+                    </div>
+                </form>
+                <span>
+                    <a href="#" class="uk-align-left uk-margin-remove">Create new account</a>
+                    <a href="#" class="uk-align-right uk-margin-remove">Forgot the password?</a>
                 </span>
             </div>
-            <form>
-                <div class="uk-margin">
-                    <input type="text" id="login-custom-email" class="uk-input" placeholder="email" />
+            <div id="login-different-providers" class="uk-hidden">
+                <p>With a different provider:</p>
+                <div class="uk-text-center uk-hidden" id="login-container-google">
+                    <!--https://developers.google.com/identity/branding-guidelines-->
+                    <a id="login-with-google"></a>
                 </div>
-                <div class="uk-margin">
-                    <input type="password" id="login-custom-password" class="uk-input" placeholder="password" />
-                </div>
-                <div class="uk-margin uk-text-center">
-                    <button id="login-custom-button" class="uk-button uk-button-primary">Log in</button>
-                </div>
-            </form>
-        </div>
-        <div id="login-different-providers" class="uk-hidden">
-            <hr class="uk-divider-icon">
-            <p>Log in with a different provider:</p>
-            <div class="uk-text-center uk-hidden" id="login-container-google">
-                <!--https://developers.google.com/identity/branding-guidelines-->
-                <a id="login-with-google"></a>
             </div>
         </div>
     </div>
