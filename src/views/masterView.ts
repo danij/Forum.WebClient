@@ -45,7 +45,7 @@ export module MasterView {
         return result;
     }
 
-    export function getStatisticsText(statistics: StatisticsRepository.EntityCount): string {
+    function getStatisticsText(statistics: StatisticsRepository.EntityCount): string {
 
         const values = [
             ['users', DisplayHelpers.intToString(statistics.users)],
@@ -57,7 +57,7 @@ export module MasterView {
         return values.map(t => `${t[1]} ${t[0]}`).join(FooterSeparator);
     }
 
-    export function showOnlineUsers(link: HTMLAnchorElement, users: UserRepository.User[]) {
+    function showOnlineUsers(link: HTMLAnchorElement, users: UserRepository.User[]) {
 
         link.innerText = '';
         link = DOMHelpers.removeEventListeners(link);
@@ -75,5 +75,19 @@ export module MasterView {
 
             content.appendChild(UsersView.createUserListContent(users));
         });
+    }
+
+    export function updateStatistics(): void {
+
+        StatisticsRepository.getEntityCount().then(value => {
+
+            const span = document.getElementById('entity-count');
+            span.innerText = getStatisticsText(value);
+        });
+        UserRepository.getOnlineUsers().then(users => {
+
+            const link = document.getElementById('users-online') as HTMLAnchorElement;
+            showOnlineUsers(link, users || []);
+        })
     }
 }

@@ -196,16 +196,7 @@ export module MasterPage {
 
     function updateStatistics(): void {
 
-        StatisticsRepository.getEntityCount().then(value => {
-
-            const span = document.getElementById('entity-count');
-            span.innerText = MasterView.getStatisticsText(value);
-        });
-        UserRepository.getOnlineUsers().then(users => {
-
-            const link = document.getElementById('users-online') as HTMLAnchorElement;
-            MasterView.showOnlineUsers(link, users || []);
-        })
+        MasterView.updateStatistics();
     }
 
     function updateRecentThreads(): void {
