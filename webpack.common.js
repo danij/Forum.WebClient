@@ -30,6 +30,14 @@ module.exports = {
             {
                 from: path.resolve(__dirname, 'node_modules/katex/dist/fonts'),
                 to: path.resolve(__dirname, 'dist/fonts')
+            },
+            {
+                from: path.resolve(__dirname, 'index.html'),
+                to: path.resolve(__dirname, 'dist/index.html')
+            },
+            {
+                from: path.resolve(__dirname, 'config/config.js'),
+                to: path.resolve(__dirname, 'dist/config/config.js')
             }
         ]),
         new MiniCssExtractPlugin({
@@ -55,7 +63,8 @@ module.exports = {
 
                     options: {
                         name: '[name].[ext]',
-                        publicPath: ''
+                        publicPath: 'img/',
+                        outputPath: 'img/',
                     }
                 }]
             },
