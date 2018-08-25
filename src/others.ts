@@ -31,6 +31,21 @@ if ( ! String.prototype.endsWith) {
     };
 }
 
+if ( ! String.prototype.repeat) {
+
+    String.prototype.repeat = function(count) {
+
+        const input = '' + this;
+        let result = '';
+
+        for (let i = 0; i < count; ++i) {
+
+            result += input;
+        }
+        return result;
+    }
+}
+
 if ( ! Math.sign) {
 
     Math.sign = function(value) {
