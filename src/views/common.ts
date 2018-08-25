@@ -16,7 +16,6 @@ export module Views {
     import cE = DOMHelpers.cE;
 
     declare var UIkit: any;
-    declare var jQuery: any;
 
     interface DisplayConfig {
 
@@ -414,13 +413,9 @@ export module Views {
         setTimeout(() => {
 
             const element = document.getElementById(elementId);
-            const container = document.getElementById('page-content-container');
-            if (element) {
 
-                const top = jQuery(element).offset().top - jQuery(container).offset().top;
-                container.scrollTo(0, top);
-            }
-        }, 100);
+            element.scrollIntoView();
+        }, 500);
     }
 
     export function addPageNumber(title: string, pageNumber: number): string {

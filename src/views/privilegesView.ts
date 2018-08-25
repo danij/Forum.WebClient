@@ -246,7 +246,7 @@ export module PrivilegesView {
 
     function setupEditPrivilegeRequiredValueButton(editButton: HTMLElement): void {
 
-        const tableCell = DOMHelpers.goUpUntil(editButton, 'td');
+        const tableCell = DOMHelpers.goUpUntilTag(editButton, 'td');
 
         const privilegeLevel = tableCell.getElementsByClassName('privilege-level')[0] as HTMLElement;
         const editInput = tableCell.getElementsByClassName('edit-required-privilege-input')[0] as HTMLInputElement;
