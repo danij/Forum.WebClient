@@ -171,10 +171,13 @@ export module ThreadMessageRepository {
         return result;
     }
 
-    export async function getLatestThreadMessages(): Promise<ThreadMessageCollection> {
+    export async function getLatestThreadMessages(pageNumber: number): Promise<ThreadMessageCollection> {
 
         return filterNulls(await RequestHandler.get({
             path: 'thread_messages/latest',
+            query: {
+                page: pageNumber
+            },
             cacheSeconds: CommonEntities.getCacheConfig().latestMessages
         }));
     }

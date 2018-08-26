@@ -11,6 +11,7 @@ import {ThreadsView} from "./threadsView";
 import {ViewsExtra} from "./extra";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "./threadMessagesView";
+import {ScrollSpy} from "./scrollSpy";
 
 export module MasterView {
 
@@ -96,53 +97,110 @@ export module MasterView {
         })
     }
 
-    function updateRecentThreads(): void {
+    function updateRecentPage(className: string, getResult: (number) => Promise<HTMLElement>, pageNumber?: number): void {
 
-        const request: ThreadRepository.GetThreadsRequest = {
-            page: 0,
-            orderBy: 'created',
-            sort: 'descending',
-        };
+        pageNumber = pageNumber || 0;
 
-        const container = document.getElementsByClassName('recent-threads-content')[0] as HTMLElement;
+        if (0 == pageNumber) {
+
+            //clear all other pages
+            let i = 0;
+            DOMHelpers.forEach(document.getElementsByClassName(className), element => {
+
+                if (0 < i++) {
+
+                    element.parentElement.removeChild(element);
+                }
+            });
+        }
+
+        const container = document.getElementsByClassName(className)[pageNumber] as HTMLElement;
         container.innerHTML = '';
 
         Views.changeContent(container, async () => {
+
+            const result = await getResult(pageNumber);
+
+            if (0 == pageNumber) {
+
+                return result;
+            }
+
+            const wrapper = cE('div');
+            wrapper.appendChild(DOMHelpers.parseHTML('<hr class="uk-divider-icon" />'));
+            wrapper.appendChild(result);
+
+            return wrapper;
+
+        }).then(() => {
+
+            ViewsExtra.refreshMath(container);
+        });
+    }
+
+    function updateRecentThreads(pageNumber?: number): void {
+
+        updateRecentPage('recent-threads-content', async (page) => {
+
+            const request: ThreadRepository.GetThreadsRequest = {
+                page: page,
+                orderBy: 'created',
+                sort: 'descending',
+            };
 
             const value = await ThreadRepository.getThreads(request);
 
             value.threads = value.threads || [];
 
             return ThreadsView.createRecentThreadsView(value.threads);
-        }).then(() => {
 
-            ViewsExtra.refreshMath(container);
-        });
+        }, pageNumber);
     }
 
-    function updateRecentThreadMessages(): void {
+    function loadNewRecentThreadsPage(): void {
 
-        const container = document.getElementsByClassName('recent-messages-content')[0] as HTMLElement;
-        container.innerHTML = '';
+        const allPages = document.getElementsByClassName('recent-threads-content');
 
-        Views.changeContent(container, async () => {
+        const newPageNumber = allPages.length;
 
-            const value = await ThreadMessageRepository.getLatestThreadMessages();
+        const newPage = DOMHelpers.parseHTML('<div class="recent-threads-content"></div>');
+        allPages[0].parentElement.appendChild(newPage);
+
+        updateRecentThreads(newPageNumber);
+    }
+
+    function updateRecentThreadMessages(pageNumber?: number): void {
+
+        updateRecentPage('recent-messages-content', async (page) => {
+
+            const value = await ThreadMessageRepository.getLatestThreadMessages(page);
 
             value.messages = value.messages || [];
 
             return ThreadMessagesView.createRecentThreadMessagesView(value.messages);
-        }).then(() => {
 
-            ViewsExtra.refreshMath(container);
-        });
+        }, pageNumber);
+    }
+
+    function loadNewRecentThreadMessagesPage(): void {
+
+        const allPages = document.getElementsByClassName('recent-messages-content');
+
+        const newPageNumber = allPages.length;
+
+        const newPage = DOMHelpers.parseHTML('<div class="recent-messages-content"></div>');
+        allPages[0].parentElement.appendChild(newPage);
+
+        updateRecentThreadMessages(newPageNumber);
     }
 
     export function showRecentThreadsModal(): void {
 
         const recentThreadsModal = document.getElementById('recent-threads-modal');
-
         updateRecentThreads();
+
+        const dialog = recentThreadsModal.getElementsByClassName('uk-modal-dialog')[0] as HTMLElement;
+        ScrollSpy.enableScrollSpy(dialog, loadNewRecentThreadsPage);
 
         Views.showModal(recentThreadsModal);
     }
@@ -150,8 +208,10 @@ export module MasterView {
     export function showRecentThreadMessagesModal(): void {
 
         const recentThreadMessagesModal = document.getElementById('recent-thread-messages-modal');
-
         updateRecentThreadMessages();
+
+        const dialog = recentThreadMessagesModal.getElementsByClassName('uk-modal-dialog')[0] as HTMLElement;
+        ScrollSpy.enableScrollSpy(dialog, loadNewRecentThreadMessagesPage);
 
         Views.showModal(recentThreadMessagesModal);
     }
