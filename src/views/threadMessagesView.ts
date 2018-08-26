@@ -66,7 +66,7 @@ export module ThreadMessagesView {
             const element = dA('<div class="recent-message">');
             result.append(element);
 
-            element.append(createMessageShortView(message));
+            element.append(createMessageShortView(message, false));
         }
 
         const resultElement = result.toElement();
@@ -811,11 +811,19 @@ export module ThreadMessagesView {
     }
 
     function createMessageShortView(
-        message: ThreadMessageRepository.ThreadMessage | ThreadMessageRepository.LatestMessage): DOMAppender {
+        message: ThreadMessageRepository.ThreadMessage | ThreadMessageRepository.LatestMessage,
+        createAuthorDropdown: boolean): DOMAppender {
 
         const container = dA('<div>');
 
-        container.append(UsersView.createUserLogoSmall(message.createdBy));
+        if (createAuthorDropdown) {
+
+            container.append(UsersView.createUserLogoSmall(message.createdBy));
+        }
+        else {
+
+            container.append(UsersView.createUserLogoSmall(message.createdBy, null));
+        }
 
         const anyMessage = <any>message;
 
@@ -875,7 +883,7 @@ export module ThreadMessagesView {
 
         const latestMessageColumn = dA('<td class="latest-message">');
 
-        latestMessageColumn.append(createMessageShortView(latestMessage));
+        latestMessageColumn.append(createMessageShortView(latestMessage, true));
 
         return latestMessageColumn;
     }

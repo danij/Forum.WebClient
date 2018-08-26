@@ -64,9 +64,11 @@ export module UsersView {
             element.appendString(getUserLogoInitial(user.name));
         }
 
-        const dropdown = createUserDropdown(user, 'user-info', position);
-        container.append(dropdown);
+        if (position) {
 
+            const dropdown = createUserDropdown(user, 'user-info', position);
+            container.append(dropdown);
+        }
         return container;
     }
 
