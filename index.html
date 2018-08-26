@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<div class="uk-navbar-container uk-box-shadow-small" uk-navbar>
+<nav class="uk-navbar-container uk-box-shadow-small" uk-navbar="mode: click">
     <div class="uk-navbar-left">
         <ul class="uk-navbar-nav">
             <li class="uk-text-center"><a id="recent-threads-modal-link">
@@ -87,6 +87,23 @@
                     <div class="uk-navbar-subtitle">Login</div>
                 </div>
             </a></li>
+            <li>
+                <a data-href="#" id="logged-in-link" class="uk-text-center uk-hidden">
+                    <div><span uk-icon="icon: user"></span>
+                        <div class="uk-navbar-subtitle">My User</div>
+                    </div>
+                </a>
+                <div class="uk-navbar-dropdown">
+                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li><a href="#" id="create-user-link" class="uk-hidden">
+                            <span uk-icon="icon: warning"></span> No user has been yet created. Click here to create a new one</a></li>
+                        <li><a href="#" id="my-user-link" class="uk-hidden"></a></li>
+                        <li><a href="#" id="change-password-link" class="uk-hidden">Change Password</a></li>
+                        <li class="uk-nav-divider"></li>
+                        <li><a href="#" id="logout-link"><span uk-icon="icon: sign-out"></span> Logout</a></li>
+                    </ul>
+                </div>
+            </li>
             <li class="uk-text-center"><a id="recent-thread-messages-modal-link">
                 <div>Recent
                     <div class="uk-navbar-subtitle">Messages</div>
@@ -94,7 +111,7 @@
             </a></li>
         </ul>
     </div>
-</div>
+</nav>
 
 <div class="page-content">
     <div class="uk-nav-sub uk-flex uk-flex-center">

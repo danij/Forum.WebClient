@@ -21,6 +21,12 @@ export module UserRepository {
         privileges: string[];
     }
 
+    export interface CurrentUser {
+
+        authenticated: number;
+        user: User;
+    }
+
     export const EmptyUserId: string = '';
 
     export const AnonymousUserName: string = '<anonymous>';
@@ -86,6 +92,13 @@ export module UserRepository {
 
             return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
         });
+    }
+
+    export async function getCurrentUser(): Promise<CurrentUser> {
+
+        return await RequestHandler.get({
+            path: 'users/current'
+        }) as CurrentUser;
     }
 
     export async function getUsers(request: GetUsersRequest): Promise<UserCollection> {

@@ -1,4 +1,5 @@
 import {RequestHandler} from "./requestHandler";
+import {RepositoryCommon} from "./repositoryCommon";
 
 export module ConsentRepository {
 
@@ -35,28 +36,13 @@ export module ConsentRepository {
         });
     }
 
-    function getCookieValue(name: string): string {
-
-        const nameValuePairs = document.cookie
-            .split(';')
-            .map(p => p.trim().split('='));
-
-        for (let nameValuePair of nameValuePairs) {
-
-            if (nameValuePair[0] == name) {
-
-                return nameValuePair[1];
-            }
-        }
-    }
-
     export function hasConsentedToUsingCookies(): boolean {
 
-        return getCookieValue('allow_cookies_fp') === 'yes';
+        return RepositoryCommon.getCookieValue('allow_cookies_fp') === 'yes';
     }
 
     export function hasConsentedToLoadingExternalImages(): boolean {
 
-        return getCookieValue('allow_external_images') === 'yes';
+        return RepositoryCommon.getCookieValue('allow_external_images') === 'yes';
     }
 }

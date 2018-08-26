@@ -37,6 +37,8 @@ export module MasterPage {
 
         ConsentView.init();
 
+        MasterView.checkAuthentication();
+
         setupLinks();
 
         const loadForumWidePrivilegesPromise = Privileges.ForumWide.loadForumWidePrivileges();

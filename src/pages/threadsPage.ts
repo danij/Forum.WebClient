@@ -81,6 +81,15 @@ export class ThreadsPage implements Pages.Page {
         this.display();
     }
 
+    displayForLoadedUser(user: UserRepository.User): void {
+
+        if (user) {
+
+            this.user = user;
+        }
+        this.display();
+    }
+
     displaySubscribedByUser(userName: string): void {
 
         if (userName && userName.length) {

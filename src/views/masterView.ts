@@ -12,6 +12,8 @@ import {ViewsExtra} from "./extra";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "./threadMessagesView";
 import {ScrollSpy} from "./scrollSpy";
+import {AuthRepository} from "../services/authRepository";
+import {ThreadsPage} from "../pages/threadsPage";
 
 export module MasterView {
 
@@ -233,5 +235,48 @@ export module MasterView {
 
         const recentThreadMessagesModalLink = document.getElementById('recent-thread-messages-modal-link');
         Views.onClick(recentThreadMessagesModalLink, showRecentThreadMessagesModal);
+    }
+
+    export function checkAuthentication(): void {
+
+        UserRepository.getCurrentUser().then(currentUser => {
+
+            if (null == currentUser) return;
+
+            if (currentUser.authenticated) {
+
+                DOMHelpers.hide(document.getElementById('login-link'));
+                DOMHelpers.unHide(document.getElementById('logged-in-link'));
+            }
+
+            if (currentUser.user) {
+
+                const myUserLink = document.getElementById('my-user-link');
+                DOMHelpers.unHide(myUserLink);
+                myUserLink.innerText = currentUser.user.name;
+
+                Views.onClick(myUserLink, () => {
+
+                    new ThreadsPage().displayForLoadedUser(currentUser.user);
+                });
+            }
+            else {
+
+                const createUserLink = document.getElementById('create-user-link');
+                DOMHelpers.unHide(createUserLink);
+            }
+
+            if (AuthRepository.usingCustomAuthentication()) {
+
+                DOMHelpers.unHide(document.getElementById('change-password-link'));
+            }
+
+            Views.onClick(document.getElementById('logout-link'), async () => {
+
+                await Pages.getOrShowError(AuthRepository.logout());
+
+                location.reload();
+            });
+        })
     }
 }
