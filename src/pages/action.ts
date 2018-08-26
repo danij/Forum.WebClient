@@ -5,6 +5,7 @@ import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {CategoryRepository} from "../services/categoryRepository";
 import {Pages} from "./common";
 import {PrivilegesRepository} from "../services/privilegesRepository";
+import {AuthRepository} from "../services/authRepository";
 
 export module PageActions {
 
@@ -111,6 +112,15 @@ export module PageActions {
         deleteUser(id: string): Promise<boolean>;
 
         searchUsersByName(name: string): Promise<UserRepository.User[]>;
+    }
+
+    export interface IAuthCallback {
+
+        getCurrentUser(): Promise<UserRepository.CurrentUser>;
+
+        usingCustomAuthentication(): boolean;
+
+        logout(): Promise<void>;
     }
 
     export interface IPrivilegesCallback {
@@ -392,6 +402,25 @@ export module PageActions {
         }
     }
 
+    class AuthCallback implements IAuthCallback {
+
+        getCurrentUser(): Promise<UserRepository.CurrentUser> {
+
+            return Pages.getOrShowError(UserRepository.getCurrentUser());
+        }
+
+        usingCustomAuthentication(): boolean {
+
+            return AuthRepository.usingCustomAuthentication();
+        }
+
+        async logout(): Promise<void> {
+
+            await Pages.getOrShowError(AuthRepository.logout());
+            location.reload();
+        }
+    }
+
     class PrivilegesCallback implements IPrivilegesCallback {
 
         getThreadMessageRequiredPrivileges(messageId: string): Promise<PrivilegesRepository.RequiredPrivilegesCollection> {
@@ -484,6 +513,11 @@ export module PageActions {
     export function getUserCallback(): IUserCallback {
 
         return new UserCallback();
+    }
+
+    export function getAuthCallback(): IAuthCallback {
+
+        return new AuthCallback();
     }
 
     export function getPrivilegesCallback(): IPrivilegesCallback {

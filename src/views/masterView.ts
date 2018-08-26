@@ -12,12 +12,13 @@ import {ViewsExtra} from "./extra";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "./threadMessagesView";
 import {ScrollSpy} from "./scrollSpy";
-import {AuthRepository} from "../services/authRepository";
 import {ThreadsPage} from "../pages/threadsPage";
+import {PageActions} from "../pages/action";
 
 export module MasterView {
 
     import cE = DOMHelpers.cE;
+    import IAuthCallback = PageActions.IAuthCallback;
     const FooterSeparator = ' · ';
 
     export function applyPageConfig(config: Pages.MasterPageConfig) {
@@ -237,9 +238,9 @@ export module MasterView {
         Views.onClick(recentThreadMessagesModalLink, showRecentThreadMessagesModal);
     }
 
-    export function checkAuthentication(): void {
+    export function checkAuthentication(callback: PageActions.IAuthCallback): void {
 
-        UserRepository.getCurrentUser().then(currentUser => {
+        callback.getCurrentUser().then(currentUser => {
 
             if (null == currentUser) return;
 
@@ -266,17 +267,12 @@ export module MasterView {
                 DOMHelpers.unHide(createUserLink);
             }
 
-            if (AuthRepository.usingCustomAuthentication()) {
+            if (callback.usingCustomAuthentication()) {
 
                 DOMHelpers.unHide(document.getElementById('change-password-link'));
             }
 
-            Views.onClick(document.getElementById('logout-link'), async () => {
-
-                await Pages.getOrShowError(AuthRepository.logout());
-
-                location.reload();
-            });
+            Views.onClick(document.getElementById('logout-link'), () => { callback.logout(); });
         })
     }
 }

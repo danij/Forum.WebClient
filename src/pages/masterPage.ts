@@ -37,7 +37,7 @@ export module MasterPage {
 
         ConsentView.init();
 
-        MasterView.checkAuthentication();
+        MasterView.checkAuthentication(PageActions.getAuthCallback());
 
         setupLinks();
 
