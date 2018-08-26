@@ -370,15 +370,23 @@ export module ThreadMessagesView {
                 if (-1 == message.voteStatus) {
 
                     downVotesTooltip.push('Click to reset vote.');
-                    downVotesNr += VotedMark;
                     downVoteData = ` data-resetvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+                    downVoteExtraClass = 'pointer-cursor';
                 }
                 else {
 
                     upVotesTooltip.push('Click to reset vote.');
-                    upVotesNr += VotedMark;
                     upVoteData = ` data-resetvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+                    upVoteExtraClass = 'pointer-cursor';
                 }
+            }
+            if (-1 == message.voteStatus) {
+
+                downVotesNr += VotedMark;
+            }
+            else if (1 == message.voteStatus) {
+
+                upVotesNr += VotedMark;
             }
 
             authorContainer.appendRaw(`<div class="uk-text-center uk-float-left message-down-vote ${downVoteExtraClass}">` +
