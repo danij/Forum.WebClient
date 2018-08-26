@@ -406,11 +406,9 @@ export module Views {
         Views.onClick(link, categoryLinkClicked);
     }
 
-    export function scrollContainerToId(elementId: string): void {
+    export function scrollContainerTo(element: HTMLElement): void {
 
         setTimeout(() => {
-
-            const element = document.getElementById(elementId);
 
             element.scrollIntoView();
         }, 500);
