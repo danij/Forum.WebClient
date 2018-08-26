@@ -161,6 +161,11 @@ export module MasterView {
 
         const allPages = document.getElementsByClassName('recent-threads-content');
 
+        if (allPages[allPages.length - 1].getElementsByClassName('uk-text-warning').length > 0) {
+
+            return; //no more threads
+        }
+
         const newPageNumber = allPages.length;
 
         const newPage = DOMHelpers.parseHTML('<div class="recent-threads-content"></div>');
@@ -185,6 +190,11 @@ export module MasterView {
     function loadNewRecentThreadMessagesPage(): void {
 
         const allPages = document.getElementsByClassName('recent-messages-content');
+
+        if (allPages[allPages.length - 1].getElementsByClassName('uk-text-warning').length > 0) {
+
+            return; //no more thread messages
+        }
 
         const newPageNumber = allPages.length;
 

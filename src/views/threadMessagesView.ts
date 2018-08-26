@@ -59,14 +59,23 @@ export module ThreadMessagesView {
 
         const result = dA('<div>');
 
+        let atLeastOneMessage = false;
+
         for (let message of messages) {
 
             if (null === message) continue;
+
+            atLeastOneMessage = true;
 
             const element = dA('<div class="recent-message">');
             result.append(element);
 
             element.append(createMessageShortView(message, false));
+        }
+
+        if ( ! atLeastOneMessage) {
+
+            result.appendRaw('<span class="uk-text-warning">No more messages found</span>');
         }
 
         const resultElement = result.toElement();

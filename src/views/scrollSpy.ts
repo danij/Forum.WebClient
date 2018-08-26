@@ -27,6 +27,8 @@ export module ScrollSpy {
 
             previous = current;
 
+            if (element.offsetHeight == element.scrollHeight) return; //no scrollbar displayed
+
             if (current.height == current.lastVisible) {
 
                 callback();

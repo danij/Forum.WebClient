@@ -264,9 +264,13 @@ export module ThreadsView {
 
         const result = dA('<div>');
 
+        let atLeastOneThread = false;
+
         for (let thread of threads) {
 
             if (null === thread) continue;
+
+            atLeastOneThread = true;
 
             const element = dA('<div class="recent-thread">');
             result.append(element);
@@ -302,6 +306,11 @@ export module ThreadsView {
             const link = dA(`<a href="${href}" class="recent-thread-link render-math" title="${title}" ${data}>`);
             element.append(link);
             link.appendString(thread.name);
+        }
+
+        if ( ! atLeastOneThread) {
+
+            result.appendRaw('<span class="uk-text-warning">No more threads found</span>');
         }
 
         const resultElement = result.toElement();
