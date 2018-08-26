@@ -87,7 +87,7 @@ export module ThreadMessagesView {
         });
         DOMHelpers.forEach(resultElement.getElementsByClassName('recent-message-link'), link => {
 
-            ViewsExtra.expandAndAdjust(link, link.title);
+            link.title = '';
             DOMHelpers.addClasses(link, 'render-math');
             ViewsExtra.refreshMath(link);
         });
