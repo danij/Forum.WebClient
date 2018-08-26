@@ -84,18 +84,22 @@ export module ViewsExtra {
 
         setTimeout(() => {
 
-            const elements = document.getElementsByClassName('render-math');
-            DOMHelpers.forEach(elements, element => {
+            const elements = DOMHelpers.toArray(element.getElementsByClassName('render-math'));
+            if (element.classList.contains('render-math')) {
+
+                elements.push(element);
+            }
+            for (let currentElement of elements) {
 
                 try {
 
-                    renderMathInElement(element, katexRenderOptions);
+                    renderMathInElement(currentElement, katexRenderOptions);
                 }
                 catch (ex) {
 
                     console.log(ex);
                 }
-            });
+            }
         }, 10);
     }
 
