@@ -134,6 +134,14 @@ export module UserRepository {
         }) as OnlineUserCollection).online_users || [];
     }
 
+    export async function createUserName(name: string): Promise<void> {
+
+        await RequestHandler.post({
+            path: 'users',
+            stringData: name
+        });
+    }
+
     export async function editUserName(userId: string, newName: string): Promise<void> {
 
         await RequestHandler.put({

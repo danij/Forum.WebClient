@@ -4,15 +4,11 @@ import {ThreadsPage} from "./threadsPage";
 import {UsersPage} from "./usersPage";
 import {Pages} from "./common";
 import {Views} from "../views/common";
-import {StatisticsRepository} from "../services/statisticsRepository";
-import {ThreadRepository} from "../services/threadRepository";
 import {ThreadsView} from "../views/threadsView";
-import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "../views/threadMessagesView";
 import {ThreadMessagesPage} from "./threadMessagesPage";
 import {MasterView} from "../views/masterView";
 import {ViewsExtra} from "../views/extra";
-import {UserRepository} from "../services/userRepository";
 import {ThreadMessageCommentsPage} from "./threadMessageCommentsPage";
 import {Privileges} from "../services/privileges";
 import {NewThreadPage} from "./newThreadPage";
@@ -22,6 +18,7 @@ import {DOMHelpers} from "../helpers/domHelpers";
 import {PrivilegesView} from "../views/privilegesView";
 import {ConsentView} from "../views/consentView";
 import {LoginView} from "../views/loginView";
+import {AuthenticationView} from "../views/authenticationView";
 
 export module MasterPage {
 
@@ -37,7 +34,7 @@ export module MasterPage {
 
         ConsentView.init();
 
-        MasterView.checkAuthentication(PageActions.getAuthCallback());
+        AuthenticationView.checkAuthentication(PageActions.getAuthCallback(), PageActions.getUserCallback());
 
         setupLinks();
 

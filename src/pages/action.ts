@@ -97,6 +97,8 @@ export module PageActions {
 
     export interface IUserCallback {
 
+        createUser(name: string): Promise<boolean>;
+
         editUserName(id: string, newName: string): Promise<boolean>;
 
         editUserInfo(id: string, newTitle: string): Promise<boolean>;
@@ -360,6 +362,11 @@ export module PageActions {
     }
 
     class UserCallback implements IUserCallback {
+
+        createUser(name: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(UserRepository.createUserName(name.trim()));
+        }
 
         editUserName(id: string, newName: string): Promise<boolean> {
 

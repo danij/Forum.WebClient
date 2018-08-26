@@ -258,42 +258,4 @@ export module MasterView {
         const recentThreadMessagesModalLink = document.getElementById('recent-thread-messages-modal-link');
         Views.onClick(recentThreadMessagesModalLink, showRecentThreadMessagesModal);
     }
-
-    export function checkAuthentication(callback: PageActions.IAuthCallback): void {
-
-        callback.getCurrentUser().then(currentUser => {
-
-            if (null == currentUser) return;
-
-            if (currentUser.authenticated) {
-
-                DOMHelpers.hide(document.getElementById('login-link'));
-                DOMHelpers.unHide(document.getElementById('logged-in-link'));
-            }
-
-            if (currentUser.user) {
-
-                const myUserLink = document.getElementById('my-user-link');
-                DOMHelpers.unHide(myUserLink);
-                myUserLink.innerText = currentUser.user.name;
-
-                Views.onClick(myUserLink, () => {
-
-                    new ThreadsPage().displayForLoadedUser(currentUser.user);
-                });
-            }
-            else {
-
-                const createUserLink = document.getElementById('create-user-link');
-                DOMHelpers.unHide(createUserLink);
-            }
-
-            if (callback.usingCustomAuthentication()) {
-
-                DOMHelpers.unHide(document.getElementById('change-password-link'));
-            }
-
-            Views.onClick(document.getElementById('logout-link'), () => { callback.logout(); });
-        })
-    }
 }

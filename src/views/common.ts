@@ -17,6 +17,12 @@ export module Views {
 
     declare var UIkit: any;
 
+    interface UserLengthConfig {
+
+        minName: number,
+        maxName: number
+    }
+
     interface DisplayConfig {
 
         pageNumbersBefore: number,
@@ -29,6 +35,7 @@ export module Views {
         useDashesForThreadNameInUrl: boolean;
         privacyPolicyDocName: string;
         termsOfServiceDocName: string;
+        newUserLengths: UserLengthConfig;
     }
 
     declare const displayConfig: DisplayConfig;

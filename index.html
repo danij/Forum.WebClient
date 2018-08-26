@@ -95,8 +95,8 @@
                 </a>
                 <div class="uk-navbar-dropdown">
                     <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <li><a href="#" id="create-user-link" class="uk-hidden">
-                            <span uk-icon="icon: warning"></span> No user has been yet created. Click here to create a new one</a></li>
+                        <li><a href="#" id="create-user-name-link" class="uk-hidden">
+                            <span uk-icon="icon: warning"></span> No user name has been yet created. Click here to create one.</a></li>
                         <li><a href="#" id="my-user-link" class="uk-hidden"></a></li>
                         <li><a href="#" id="change-password-link" class="uk-hidden">Change Password</a></li>
                         <li class="uk-nav-divider"></li>
@@ -455,6 +455,32 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="create-user-name-modal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Create User Name</h2>
+
+        <div>
+            <div class="uk-margin">
+                <p>You have logged in but have not chosen a user name yet. The user name is displayed along side all the content created by you on the site.</p>
+                <p>The following restrictions apply:</p>
+                <ul>
+                    <li class="replace-template">Minimum length: {userNameMinLength} characters</li>
+                    <li class="replace-template">Maximum length: {userNameMaxLength} characters</li>
+                </ul>
+            </div>
+            <form>
+                <div class="uk-margin">
+                    <input type="text" id="user-name-input" class="uk-input" placeholder="user name" />
+                </div>
+                <div class="uk-margin uk-text-center">
+                    <button id="create-user-name-button" class="uk-button uk-button-primary">Create</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

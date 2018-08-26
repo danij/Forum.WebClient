@@ -26,7 +26,11 @@ window.displayConfig = {
     renderMessagePreviewEveryMilliseconds: 2000,
     useDashesForThreadNameInUrl: true,
     privacyPolicyDocName: 'privacy.md',
-    termsOfServiceDocName: 'tos.md'
+    termsOfServiceDocName: 'tos.md',
+    newUserLengths: { //only for displaying errors, when updating please also update the backend configuration
+        minName: 3,
+        maxName: 20
+    }
 };
 
 window.masterPageConfig = {
