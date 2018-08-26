@@ -405,9 +405,9 @@ export module Pages {
 
             radioElement.addEventListener('change', (ev) => {
 
-                this.orderBy = (ev.target as HTMLInputElement).value;
-                this.refreshUrl();
-                this.refreshList({
+                page.orderBy = (ev.target as HTMLInputElement).value;
+                page.refreshUrl();
+                page.refreshList({
 
                     top: true
                 });
@@ -420,9 +420,9 @@ export module Pages {
 
             selectElement.addEventListener('change', (ev) => {
 
-                this.sortOrder = (ev.target as HTMLSelectElement).value;
-                this.refreshUrl();
-                this.refreshList({
+                page.sortOrder = (ev.target as HTMLSelectElement).value;
+                page.refreshUrl();
+                page.refreshList({
 
                     top: true
                 });
