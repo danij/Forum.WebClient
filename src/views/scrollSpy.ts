@@ -1,6 +1,6 @@
 export module ScrollSpy {
 
-    export function enableScrollSpy(element: HTMLElement, callback: () => void) {
+    export function enableScrollSpy(element: HTMLElement, callback: () => void, onClose?: () => void) {
 
         let previous = {
 
@@ -14,6 +14,7 @@ export module ScrollSpy {
             if (notVisible) {
 
                 clearInterval(interval);
+                if (onClose) onClose();
                 return;
             }
 

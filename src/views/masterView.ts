@@ -18,7 +18,6 @@ import {PageActions} from "../pages/action";
 export module MasterView {
 
     import cE = DOMHelpers.cE;
-    import IAuthCallback = PageActions.IAuthCallback;
     const FooterSeparator = ' · ';
 
     export function applyPageConfig(config: Pages.MasterPageConfig) {
@@ -141,6 +140,18 @@ export module MasterView {
         });
     }
 
+    function removeRecentPageParts(className: string): void {
+
+        let i = 0;
+        DOMHelpers.forEach(document.getElementsByClassName(className), element => {
+
+            if (0 < i++) {
+
+                element.parentElement.removeChild(element);
+            }
+        });
+    }
+
     function updateRecentThreads(pageNumber?: number): void {
 
         updateRecentPage('recent-threads-content', async (page) => {
@@ -177,6 +188,11 @@ export module MasterView {
         updateRecentThreads(newPageNumber);
     }
 
+    function closeRecentThreadsPage(): void {
+
+        removeRecentPageParts('recent-threads-content');
+    }
+
     function updateRecentThreadMessages(pageNumber?: number): void {
 
         updateRecentPage('recent-messages-content', async (page) => {
@@ -207,13 +223,18 @@ export module MasterView {
         updateRecentThreadMessages(newPageNumber);
     }
 
+    function closeRecentThreadMessagesPage(): void {
+
+        removeRecentPageParts('recent-messages-content');
+    }
+
     export function showRecentThreadsModal(): void {
 
         const recentThreadsModal = document.getElementById('recent-threads-modal');
         updateRecentThreads();
 
         const dialog = recentThreadsModal.getElementsByClassName('uk-modal-dialog')[0] as HTMLElement;
-        ScrollSpy.enableScrollSpy(dialog, loadNewRecentThreadsPage);
+        ScrollSpy.enableScrollSpy(dialog, loadNewRecentThreadsPage, closeRecentThreadsPage);
 
         Views.showModal(recentThreadsModal);
     }
@@ -224,7 +245,7 @@ export module MasterView {
         updateRecentThreadMessages();
 
         const dialog = recentThreadMessagesModal.getElementsByClassName('uk-modal-dialog')[0] as HTMLElement;
-        ScrollSpy.enableScrollSpy(dialog, loadNewRecentThreadMessagesPage);
+        ScrollSpy.enableScrollSpy(dialog, loadNewRecentThreadMessagesPage, closeRecentThreadMessagesPage);
 
         Views.showModal(recentThreadMessagesModal);
     }
