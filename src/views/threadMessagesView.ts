@@ -381,12 +381,13 @@ export module ThreadMessagesView {
                 }
             }
 
-            authorContainer.appendRaw(`<div class="uk-text-center uk-float-left message-up-vote ${upVoteExtraClass}">` +
-                `<span class="uk-label" ${upVoteData} title="${DOMHelpers.escapeStringForAttribute(upVotesTooltip.join('\n'))}">` +
-                `&plus; ${upVotesNr}</span></div>`);
-            authorContainer.appendRaw(`<div class="uk-text-center uk-float-right message-down-vote ${downVoteExtraClass}">` +
+            authorContainer.appendRaw(`<div class="uk-text-center uk-float-left message-down-vote ${downVoteExtraClass}">` +
                 `<span class="uk-label" ${downVoteData} title="${DOMHelpers.escapeStringForAttribute(downVotesTooltip.join('\n'))}">` +
                 `&minus; ${downVotesNr}</span></div>`);
+
+            authorContainer.appendRaw(`<div class="uk-text-center uk-float-right message-up-vote ${upVoteExtraClass}">` +
+                `<span class="uk-label" ${upVoteData} title="${DOMHelpers.escapeStringForAttribute(upVotesTooltip.join('\n'))}">` +
+                `&plus; ${upVotesNr}</span></div>`);
         }
 
         return authorContainer;
