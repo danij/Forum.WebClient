@@ -269,16 +269,12 @@ export module Views {
 
     function threadsWithTagLinkClicked(ev: Event) {
 
-        ev.preventDefault();
-
         const tagName = DOMHelpers.getLink(ev).getAttribute(ThreadsWithTagData);
 
         new ThreadsPage().displayForTag(tagName);
     }
 
     function threadsOfUserLinkClicked(ev: Event) {
-
-        ev.preventDefault();
 
         const userName = DOMHelpers.getLink(ev).getAttribute(UserThreadsData);
 
@@ -287,16 +283,12 @@ export module Views {
 
     function subscribedThreadsOfUserLinkClicked(ev: Event) {
 
-        ev.preventDefault();
-
         const userName = DOMHelpers.getLink(ev).getAttribute(UserSubscribedThreadsData);
 
         new ThreadsPage().displaySubscribedByUser(userName);
     }
 
     function threadMessagesOfUserLinkClicked(ev: Event) {
-
-        ev.preventDefault();
 
         const userName = DOMHelpers.getLink(ev).getAttribute(UserMessagesData);
 
@@ -305,16 +297,12 @@ export module Views {
 
     function threadMessageCommentsWrittenByUserLinkClicked(ev: Event) {
 
-        ev.preventDefault();
-
         const userName = DOMHelpers.getLink(ev).getAttribute(UserWrittenThreadMessageCommentsData);
 
         new ThreadMessageCommentsPage().displayForUser(userName);
     }
 
     function threadMessagesOfThreadLinkClicked(ev: Event) {
-
-        ev.preventDefault();
 
         const threadId = DOMHelpers.getLink(ev).getAttribute('data-threadmessagethreadid');
 
@@ -323,16 +311,12 @@ export module Views {
 
     function threadMessagesOfParentThreadLinkClicked(ev: Event) {
 
-        ev.preventDefault();
-
         const threadMessageId = DOMHelpers.getLink(ev).getAttribute('data-threadmessageid');
 
         new ThreadMessagesPage().displayForThreadMessage(threadMessageId);
     }
 
     function categoryLinkClicked(ev: Event) {
-
-        ev.preventDefault();
 
         const link = DOMHelpers.getLink(ev);
 
