@@ -459,13 +459,6 @@ html {
                 margin-bottom: 10px;
             }
 
-            .author {
-                float: right;
-                display: block;
-                margin-right: 5px;
-                margin-left: 5px;
-            }
-
             a.recent-message-link {
                 display: block;
                 text-decoration: none;
@@ -478,7 +471,6 @@ html {
 
             a.recent-message-thread-link {
                 display: block;
-                font-weight: bold;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
@@ -764,8 +756,6 @@ html {
         }
 
         .author {
-            display: block;
-            flex-grow: 1;
 
             a {
                 font-variant-numeric: oldstyle-nums;
@@ -1098,6 +1088,8 @@ html {
 
 .recent-message .author {
     font-variant-numeric: oldstyle-nums;
+    display: block;
+    flex-grow: 1
 }
 
 .thread-messages-list-header {

@@ -66,30 +66,22 @@ export module ThreadMessagesView {
             const element = dA('<div class="recent-message">');
             result.append(element);
 
-            const user = dA('<span class="author">');
-            element.append(user);
-
-            const userLink = UsersView.createAuthorSmall(message.createdBy);
-            user.append(userLink);
-
-            const threadTitle = DOMHelpers.escapeStringForAttribute(message.parentThread.name);
-
-            let href = Pages.getThreadMessagesOfThreadUrlFull(message.parentThread);
-            let data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(message.parentThread.id)}"`;
-            const threadLink = dA(`<a href="${href}" class="recent-message-thread-link render-math" title="${threadTitle}" ${data}>`);
-            element.append(threadLink);
-            threadLink.appendString(message.parentThread.name);
-
-            const messageTitle = DOMHelpers.escapeStringForAttribute(message.content);
-
-            href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id);
-            data = `data-threadmessageid="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-            const link = dA(`<a href="${href}" class="recent-message-link render-math" title="${messageTitle}" ${data}>`);
-            element.append(link);
-            link.appendRaw(ViewsExtra.expandContent(message.content));
+            element.append(createMessageShortView(message));
         }
 
         const resultElement = result.toElement();
+
+        DOMHelpers.forEach(resultElement.getElementsByClassName('recent-message-thread-link'), link => {
+
+            DOMHelpers.addClasses(link, 'render-math');
+            ViewsExtra.refreshMath(link);
+        });
+        DOMHelpers.forEach(resultElement.getElementsByClassName('recent-message-link'), link => {
+
+            ViewsExtra.expandAndAdjust(link, link.title);
+            DOMHelpers.addClasses(link, 'render-math');
+            ViewsExtra.refreshMath(link);
+        });
 
         Views.setupThreadsOfUsersLinks(resultElement);
         Views.setupSubscribedThreadsOfUsersLinks(resultElement);
@@ -818,50 +810,72 @@ export module ThreadMessagesView {
         return element;
     }
 
-    export function createLatestMessageColumnView(latestMessage: ThreadMessageRepository.LatestMessage) {
-
-        const latestMessageColumn = dA('<td class="latest-message">');
+    function createMessageShortView(
+        message: ThreadMessageRepository.ThreadMessage | ThreadMessageRepository.LatestMessage): DOMAppender {
 
         const container = dA('<div>');
-        latestMessageColumn.append(container);
 
-        container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
+        container.append(UsersView.createUserLogoSmall(message.createdBy));
 
-        const threadTitle = latestMessage.threadName || 'unknown';
+        const anyMessage = <any>message;
+
+        const threadId = anyMessage.threadId
+            ? anyMessage.threadId
+            : (anyMessage.parentThread
+                ? anyMessage.parentThread.id
+                : '');
+        const threadName = anyMessage.threadName
+            ? anyMessage.threadName
+            : (anyMessage.parentThread
+                ? anyMessage.parentThread.name
+                : '');
+
+        const threadTitle = threadName || 'unknown';
 
         const href = Pages.getThreadMessagesOfThreadUrlFull({
-            id: latestMessage.threadId,
-            name: latestMessage.threadName
+
+            id: threadId,
+            name: threadTitle
+
         } as ThreadRepository.Thread);
 
         const threadTitleElement = cE('a');
         DOMHelpers.addClasses(threadTitleElement, 'recent-message-thread-link');
         threadTitleElement.setAttribute('href', href);
         threadTitleElement.setAttribute('title', threadTitle);
-        threadTitleElement.setAttribute('data-threadmessagethreadid', latestMessage.threadId);
+        threadTitleElement.setAttribute('data-threadmessagethreadid', threadId);
         threadTitleElement.innerText = threadTitle;
         container.appendElement(threadTitleElement);
 
         const timeFlex = dA('<div class="date-time-flex">');
         container.append(timeFlex);
 
-        timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
+        timeFlex.append(UsersView.createAuthorSmall(message.createdBy));
         const recentMessageTime = dA('<div class="recent-message-time uk-text-meta">');
         timeFlex.append(recentMessageTime);
 
         const recentMessageTimeContent = cE('span');
-        recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(latestMessage.created);
+        recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(message.created);
         recentMessageTime.appendElement(recentMessageTimeContent);
 
-        const messageContent = latestMessage.content || 'empty';
+        const messageContent = message.content || 'empty';
 
         const messageLink = cE('a');
         DOMHelpers.addClasses(messageLink, 'recent-message-link');
-        messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
+        messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id));
         messageLink.setAttribute('title', messageContent);
-        messageLink.setAttribute('data-threadmessageid', latestMessage.id);
+        messageLink.setAttribute('data-threadmessageid', message.id);
         messageLink.innerText = messageContent;
         container.appendElement(messageLink);
+
+        return container;
+    }
+
+    export function createLatestMessageColumnView(latestMessage: ThreadMessageRepository.LatestMessage): DOMAppender {
+
+        const latestMessageColumn = dA('<td class="latest-message">');
+
+        latestMessageColumn.append(createMessageShortView(latestMessage));
 
         return latestMessageColumn;
     }
