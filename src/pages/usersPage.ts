@@ -32,7 +32,7 @@ export class UsersPage implements Pages.Page {
                 }, (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
 
-            this.setupSortControls(elements.sortControls);
+            Pages.setupSortControls(this, elements.sortControls);
 
             this.topPaginationControl = elements.paginationTop;
             this.bottomPaginationControl = elements.paginationBottom;
@@ -86,33 +86,6 @@ export class UsersPage implements Pages.Page {
             this.bottomPaginationControl = newBottomPaginationControl;
 
             return UsersView.createUserListContent(userCollection.users);
-        });
-    }
-
-    private setupSortControls(controls: HTMLElement): void {
-
-        const radioElements = controls.querySelectorAll('input[type=radio]');
-
-        DOMHelpers.forEach(radioElements, radioElement => {
-
-            radioElement.addEventListener('change', (ev) => {
-
-                this.orderBy = (ev.target as HTMLInputElement).value;
-                this.refreshUrl();
-                this.refreshList();
-            });
-        });
-
-        const selectElements = controls.querySelectorAll("select[name='sortOrder']");
-
-        DOMHelpers.forEach(selectElements, selectElement => {
-
-            selectElement.addEventListener('change', (ev) => {
-
-                this.sortOrder = (ev.target as HTMLSelectElement).value;
-                this.refreshUrl();
-                this.refreshList();
-            });
         });
     }
 

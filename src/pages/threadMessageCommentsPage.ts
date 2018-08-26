@@ -45,7 +45,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
                 PageActions.getThreadMessageCallback(), PageActions.getUserCallback(),
                 PageActions.getThreadCallback(), PageActions.getPrivilegesCallback());
 
-            this.setupSortControls(elements.sortControls);
+            Pages.setupSortControls(this, elements.sortControls);
 
             this.topPaginationControl = elements.paginationTop;
             this.bottomPaginationControl = elements.paginationBottom;
@@ -131,27 +131,6 @@ export class ThreadMessageCommentsPage implements Pages.Page {
         });
 
         Pages.scrollPage(scrollDirection);
-    }
-
-    private setupSortControls(controls: HTMLElement): void {
-
-        if (controls) {
-
-            const selectElements = controls.querySelectorAll("select[name='sortOrder']");
-
-            DOMHelpers.forEach(selectElements, selectElement => {
-
-                selectElement.addEventListener('change', (ev) => {
-
-                    this.sortOrder = (ev.target as HTMLSelectElement).value;
-                    this.refreshUrl();
-                    this.refreshList({
-
-                        top: true
-                    });
-                });
-            });
-        }
     }
 
     private onPageNumberChange(newPageNumber: number): void {

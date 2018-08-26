@@ -58,7 +58,7 @@ export class HomePage implements Pages.Page {
                     (pageNumber: number) => this.getLinkForPage(pageNumber),
                     PageActions.getTagCallback(), PageActions.getUserCallback(), PageActions.getPrivilegesCallback());
 
-                this.setupSortControls(threadElements.sortControls);
+                Pages.setupSortControls(this, threadElements.sortControls);
 
                 this.topPaginationControl = threadElements.paginationTop;
                 this.bottomPaginationControl = threadElements.paginationBottom;
@@ -102,43 +102,18 @@ export class HomePage implements Pages.Page {
         } as ThreadRepository.GetThreadsRequest));
     }
 
-    private setupSortControls(controls: HTMLElement): void {
-
-        const radioElements = controls.querySelectorAll('input[type=radio]');
-
-        DOMHelpers.forEach(radioElements, radioElement => {
-
-            radioElement.addEventListener('change', (ev) => {
-
-                this.orderBy = (ev.target as HTMLInputElement).value;
-                this.refreshUrl();
-                this.refreshList();
-            });
-        });
-
-        const selectElements = controls.querySelectorAll("select[name='sortOrder']");
-
-        DOMHelpers.forEach(selectElements, selectElement => {
-
-            selectElement.addEventListener('change', (ev) => {
-
-                this.sortOrder = (ev.target as HTMLSelectElement).value;
-                this.refreshUrl();
-                this.refreshList();
-            });
-        });
-    }
-
     private onPageNumberChange(newPageNumber: number): void {
+
+        const scrollDirection = Pages.getScrollDirection(newPageNumber, this.pageNumber);
 
         this.pageNumber = newPageNumber;
         this.refreshUrl();
-        this.refreshList();
+        this.refreshList(scrollDirection);
     }
 
-    private refreshList(): void {
+    private async refreshList(scrollDirection: Pages.ScrollDirection): Promise<void> {
 
-        Views.changeContent(document.getElementsByClassName('threads-table')[0] as HTMLElement, async () => {
+        await Views.changeContent(document.getElementsByClassName('threads-table')[0] as HTMLElement, async () => {
 
             const threadCollection = await this.getCategoryThreads(this.category);
 
@@ -158,6 +133,8 @@ export class HomePage implements Pages.Page {
 
             return ThreadsView.createThreadsTable(threadCollection.threads);
         });
+
+        Pages.scrollPage(scrollDirection);
     }
 
     private getLinkForPage(pageNumber: number): string {

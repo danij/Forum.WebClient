@@ -3,6 +3,7 @@ import {TagRepository} from "../services/tagRepository";
 import {UserRepository} from "../services/userRepository";
 import {CategoryRepository} from "../services/categoryRepository";
 import {ThreadRepository} from "../services/threadRepository";
+import {DOMHelpers} from "../helpers/domHelpers";
 
 export module Pages {
 
@@ -392,5 +393,40 @@ export module Pages {
             }
 
         }, 500);
+    }
+
+    export function setupSortControls(page: any, controls: HTMLElement): void {
+
+        if (( ! page) || ( ! controls)) return;
+
+        const radioElements = controls.querySelectorAll('input[type=radio]');
+
+        DOMHelpers.forEach(radioElements, radioElement => {
+
+            radioElement.addEventListener('change', (ev) => {
+
+                this.orderBy = (ev.target as HTMLInputElement).value;
+                this.refreshUrl();
+                this.refreshList({
+
+                    top: true
+                });
+            });
+        });
+
+        const selectElements = controls.querySelectorAll("select[name='sortOrder']");
+
+        DOMHelpers.forEach(selectElements, selectElement => {
+
+            selectElement.addEventListener('change', (ev) => {
+
+                this.sortOrder = (ev.target as HTMLSelectElement).value;
+                this.refreshUrl();
+                this.refreshList({
+
+                    top: true
+                });
+            });
+        });
     }
 }

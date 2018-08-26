@@ -57,7 +57,7 @@ export class ThreadsPage implements Pages.Page {
                 (pageNumber: number) => this.getLinkForPage(pageNumber),
                 PageActions.getTagCallback(), PageActions.getUserCallback(), PageActions.getPrivilegesCallback());
 
-            this.setupSortControls(elements.sortControls);
+            Pages.setupSortControls(this, elements.sortControls);
 
             this.topPaginationControl = elements.paginationTop;
             this.bottomPaginationControl = elements.paginationBottom;
@@ -188,38 +188,6 @@ export class ThreadsPage implements Pages.Page {
         });
 
         Pages.scrollPage(scrollDirection);
-    }
-
-    private setupSortControls(controls: HTMLElement): void {
-
-        const radioElements = controls.querySelectorAll('input[type=radio]');
-
-        DOMHelpers.forEach(radioElements, radioElement => {
-
-            radioElement.addEventListener('change', (ev) => {
-
-                this.orderBy = (ev.target as HTMLInputElement).value;
-                this.refreshUrl();
-                this.refreshList({
-
-                    top: true
-                });
-            });
-        });
-
-        const selectElements = controls.querySelectorAll("select[name='sortOrder']");
-
-        DOMHelpers.forEach(selectElements, selectElement => {
-
-            selectElement.addEventListener('change', (ev) => {
-
-                this.sortOrder = (ev.target as HTMLSelectElement).value;
-                this.refreshUrl();
-                this.refreshList({
-                    top: true
-                });
-            });
-        });
     }
 
     private onPageNumberChange(newPageNumber: number): void {

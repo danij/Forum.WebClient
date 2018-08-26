@@ -28,7 +28,7 @@ export class TagsPage implements Pages.Page {
                 sortOrder: this.sortOrder
             }, PageActions.getTagCallback());
 
-            this.setupSortControls(elements.sortControls);
+            Pages.setupSortControls(this, elements.sortControls);
 
             return elements.list;
         });
@@ -64,33 +64,6 @@ export class TagsPage implements Pages.Page {
             if (null == tagCollection) return null;
 
             return TagsView.createTagsTable(tagCollection.tags);
-        });
-    }
-
-    private setupSortControls(controls: HTMLElement): void {
-
-        const radioElements = controls.querySelectorAll('input[type=radio]');
-
-        DOMHelpers.forEach(radioElements, radioElement => {
-
-            radioElement.addEventListener('change', (ev) => {
-
-                this.orderBy = (ev.target as HTMLInputElement).value;
-                this.refreshUrl();
-                this.refreshList();
-            });
-        });
-
-        const selectElements = controls.querySelectorAll("select[name='sortOrder']");
-
-        DOMHelpers.forEach(selectElements, selectElement => {
-
-            selectElement.addEventListener('change', (ev) => {
-
-                this.sortOrder = (ev.target as HTMLSelectElement).value;
-                this.refreshUrl();
-                this.refreshList();
-            });
         });
     }
 
