@@ -15,6 +15,7 @@ export module RequestHandler {
         binaryData?: ArrayBuffer;
         doNotParse?: boolean;
         cacheSeconds?: number;
+        allowEmptyContent?: boolean;
     }
 
     interface ServiceConfig {
@@ -142,7 +143,7 @@ export module RequestHandler {
                         ? xmlHttp.responseText
                         : parseContent(xmlHttp.responseText);
 
-                    if (null == content) {
+                    if (( ! request.allowEmptyContent) && (null == content)) {
 
                         reject(new Error("No content received"));
                     }

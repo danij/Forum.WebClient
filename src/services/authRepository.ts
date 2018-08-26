@@ -7,7 +7,9 @@ export module AuthRepository {
 
         return RequestHandler.post({
 
-            path: '../auth/logout'
+            path: '../auth/logout',
+            allowEmptyContent: true,
+            doNotParse: true
         });
     }
 
