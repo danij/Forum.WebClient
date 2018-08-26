@@ -133,7 +133,6 @@ export module ThreadRepository {
             filterThreadNulls(thread);
         }
 
-
         return result;
     }
 
@@ -141,7 +140,8 @@ export module ThreadRepository {
 
         return filterNulls(await RequestHandler.get({
             path: 'threads',
-            query: request
+            query: request,
+            cacheSeconds: CommonEntities.getCacheConfig().threads
         }));
     }
 

@@ -174,7 +174,8 @@ export module ThreadMessageRepository {
     export async function getLatestThreadMessages(): Promise<ThreadMessageCollection> {
 
         return filterNulls(await RequestHandler.get({
-            path: 'thread_messages/latest'
+            path: 'thread_messages/latest',
+            cacheSeconds: CommonEntities.getCacheConfig().latestMessages
         }));
     }
 

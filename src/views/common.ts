@@ -24,8 +24,6 @@ export module Views {
         pageNumbersAfter: number,
         showSpinnerAfterMilliSeconds: number;
         updateStatisticsEveryMilliSeconds: number;
-        updateRecentThreadsEveryMilliSeconds: number;
-        updateRecentThreadMessagesEveryMilliSeconds: number;
         searchThreadWaitMilliseconds: number;
         renderMessagePreviewEveryMilliseconds: number;
         useDashesForThreadNameInUrl: boolean;

@@ -28,8 +28,6 @@ export module MasterPage {
     let originalTitle: string;
     let linkElements: HTMLElement[];
     let goBackInProgress: boolean = false;
-    let recentThreadsLatestValue: string = '';
-    let recentThreadMessagesLatestValue: string = '';
 
     export async function bootstrap(): Promise<void> {
 
@@ -50,6 +48,7 @@ export module MasterPage {
         window.onpopstate = () => onGoBack();
 
         setupUpdates();
+        setupRecentModals();
         setupSettings();
 
         await loadForumWidePrivilegesPromise;
@@ -186,90 +185,16 @@ export module MasterPage {
 
         updateStatistics();
         setInterval(updateStatistics, Views.DisplayConfig.updateStatisticsEveryMilliSeconds);
+    }
 
-        updateRecentThreads();
-        setInterval(updateRecentThreads, Views.DisplayConfig.updateRecentThreadsEveryMilliSeconds);
+    function setupRecentModals(): void {
 
-        updateRecentThreadMessages();
-        setInterval(updateRecentThreadMessages, Views.DisplayConfig.updateRecentThreadMessagesEveryMilliSeconds);
+        MasterView.setupRecentModal();
     }
 
     function updateStatistics(): void {
 
         MasterView.updateStatistics();
-    }
-
-    function updateRecentThreads(): void {
-
-        const request: ThreadRepository.GetThreadsRequest = {
-            page: 0,
-            orderBy: 'created',
-            sort: 'descending'
-        };
-
-        ThreadRepository.getThreads(request).then(value => {
-
-            value.threads = value.threads || [];
-            const latestValue = calculateRecentThreadsLatestValue(value.threads);
-            if (latestValue == recentThreadsLatestValue) return;
-
-            recentThreadsLatestValue = latestValue;
-
-            const panel = document.getElementsByClassName('recent-threads-content')[0] as HTMLElement;
-
-            panel.innerHTML = '';
-            panel.appendChild(ThreadsView.createRecentThreadsView(value.threads));
-
-            ViewsExtra.refreshMath(panel);
-        });
-    }
-
-    function calculateRecentThreadsLatestValue(threads: ThreadRepository.Thread[]) {
-
-        const result = [];
-        for (let thread of threads) {
-
-            result.push(thread.id);
-            result.push(thread.createdBy.id);
-            result.push(thread.voteScore);
-            result.push(thread.name);
-        }
-
-        return result.join('-');
-    }
-
-    function updateRecentThreadMessages(): void {
-
-        ThreadMessageRepository.getLatestThreadMessages().then(value => {
-
-            value.messages = value.messages || [];
-            const latestValue = calculateRecentThreadMessagesLatestValue(value.messages);
-            if (latestValue == recentThreadMessagesLatestValue) return;
-
-            recentThreadMessagesLatestValue = latestValue;
-
-            const panel = document.getElementsByClassName('recent-messages-content')[0] as HTMLElement;
-
-            panel.innerHTML = '';
-            panel.appendChild(ThreadMessagesView.createRecentThreadMessagesView(value.messages));
-
-            ViewsExtra.refreshMath(panel);
-        });
-    }
-
-    function calculateRecentThreadMessagesLatestValue(messages: ThreadMessageRepository.ThreadMessage[]) {
-
-        const result = [];
-        for (let message of messages) {
-
-            result.push(message.id);
-            result.push(message.content);
-            result.push(message.parentThread.id);
-            result.push(message.parentThread.name);
-            result.push(message.createdBy.id);
-        }
-
-        return result.join('-');
     }
 
     function setupSearch(): void {

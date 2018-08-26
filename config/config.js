@@ -8,7 +8,9 @@ window.serviceConfig = {
 //stores the number of seconds to cache various entities
 window.cacheConfig = {
 
-    tags: 3600*24
+    tags: 3600*24,
+    threads: 60,
+    latestMessages: 30
 };
 
 window.displayConfig = {
