@@ -1,5 +1,6 @@
 import {PathHelpers} from "../helpers/pathHelpers";
 import {ConsentRepository} from "./consentRepository";
+import {RepositoryCache} from "./repositoryCache";
 
 export module RequestHandler {
 
@@ -13,6 +14,7 @@ export module RequestHandler {
         stringData?: string;
         binaryData?: ArrayBuffer;
         doNotParse?: boolean;
+        cacheSeconds?: number;
     }
 
     interface ServiceConfig {
@@ -113,6 +115,17 @@ export module RequestHandler {
 
     function ajaxSimple(method: string, request: Request): Promise<any> {
 
+        const url = getUrl(request);
+
+        if (request.cacheSeconds) {
+
+            const fromCache = RepositoryCache.get(url);
+            if (fromCache) {
+
+                return Promise.resolve(fromCache);
+            }
+        }
+
         return new Promise((resolve, reject) => {
 
             const xmlHttp = new XMLHttpRequest();
@@ -138,11 +151,16 @@ export module RequestHandler {
                         reject(new Error(getStatusCode(content.status)));
                     }
 
+                    if (request.cacheSeconds) {
+
+                        RepositoryCache.update(url, content, request.cacheSeconds);
+                    }
+
                     resolve(content);
                 }
             };
 
-            xmlHttp.open(method, getUrl(request));
+            xmlHttp.open(method, url);
             xmlHttp.setRequestHeader('Content-Type', request.type ? request.type : 'application/json');
 
             if (request.extraHeaders) {

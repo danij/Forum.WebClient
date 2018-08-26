@@ -185,7 +185,7 @@ export module PageActions {
 
         getAllTags(): Promise<TagRepository.Tag[]> {
 
-            return TagRepository.getTagsCached();
+            return TagRepository.getAllTags();
         }
     }
 
@@ -213,7 +213,7 @@ export module PageActions {
 
         getAllTags(): Promise<TagRepository.Tag[]> {
 
-            return TagRepository.getTagsCached();
+            return TagRepository.getAllTags();
         }
     }
 
@@ -290,7 +290,7 @@ export module PageActions {
 
         getAllTags(): Promise<TagRepository.Tag[]> {
 
-            return TagRepository.getTagsCached();
+            return TagRepository.getAllTags();
         }
     }
 

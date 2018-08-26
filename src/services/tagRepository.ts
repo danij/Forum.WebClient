@@ -36,8 +36,6 @@ export module TagRepository {
         });
     }
 
-    let latestTags: Tag[];
-
     export function filterTag(tag: Tag): Tag {
 
         tag.latestMessage = CategoryRepository.filterLatestMessage(tag.latestMessage);
@@ -63,28 +61,23 @@ export module TagRepository {
 
         const result = filterNulls(await RequestHandler.get({
             path: 'tags',
-            query: request || {orderBy: 'name', sort: 'ascending'}
+            query: request || {orderBy: 'name', sort: 'ascending'},
+            cacheSeconds: CommonEntities.getCacheConfig().tags
         }));
-
-        latestTags = result.tags;
 
         return result;
     }
 
-    export async function getTagsCached(): Promise<Tag[]> {
+    export async function getAllTags(): Promise<Tag[]> {
 
-        if (latestTags) {
-
-            return latestTags.slice();
-        }
-        return (await getTags(null)).tags.slice();
+        return (await getTags(null)).tags;
     }
 
     export async function getTag(name: string): Promise<Tag> {
 
-        if (null == latestTags) await getTags(null);
+        const tags = await getAllTags();
 
-        return latestTags.find(t => name.toLowerCase() === t.name.toLowerCase()) || null;
+        return tags.find(t => name.toLowerCase() === t.name.toLowerCase()) || null;
     }
 
     export async function addNewTag(name: string): Promise<void> {

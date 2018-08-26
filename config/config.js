@@ -5,6 +5,12 @@ window.serviceConfig = {
     responsePrefix: "while(1);"
 };
 
+//stores the number of seconds to cache various entities
+window.cacheConfig = {
+
+    tags: 3600*24
+};
+
 window.displayConfig = {
 
     pageNumbersBefore: 3,

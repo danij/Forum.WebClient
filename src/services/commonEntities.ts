@@ -16,4 +16,11 @@ export module CommonEntities {
 
         return Math.ceil(info.totalCount / Math.max(info.pageSize, 1));
     }
+
+    declare const cacheConfig: any;
+
+    export function getCacheConfig(): any {
+
+        return cacheConfig;
+    }
 }

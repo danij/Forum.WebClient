@@ -18,7 +18,7 @@ export class NewThreadPage implements Pages.Page {
 
         Pages.changePage(async () => {
 
-            const allTags = await TagRepository.getTagsCached();
+            const allTags = await TagRepository.getAllTags();
 
             return ThreadsView.createAddNewThreadContent(allTags, (name, tagIds, message) => {
 
