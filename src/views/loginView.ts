@@ -5,6 +5,7 @@ import {ConsentRepository} from "../services/consentRepository";
 import {ConsentView} from "./consentView";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {PageActions} from "../pages/action";
+import {AuthenticationView} from "./authenticationView";
 
 export module LoginView {
 
@@ -45,6 +46,10 @@ export module LoginView {
         if (ConsentRepository.hasConsentedToUsingCookies()) {
 
             const loginModal = document.getElementById('login-modal');
+            const registerLink = DOMHelpers.removeEventListeners(document.getElementById('register-link'));
+
+            Views.onClick(registerLink, () => AuthenticationView.showRegisterModal(docCallback));
+
             Views.setupKnownDocumentationLinks(loginModal, docCallback);
             Views.showModal(loginModal);
         }

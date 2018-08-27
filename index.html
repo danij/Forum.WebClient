@@ -441,7 +441,7 @@
                         </div>
                     </form>
                     <span>
-                        <a href="#" class="uk-align-left uk-margin-remove">Create new account</a>
+                        <a href="#" id="register-link" class="uk-align-left uk-margin-remove">Create new account</a>
                         <a href="#" class="uk-align-right uk-margin-remove">Forgot the password?</a>
                     </span>
                 </div>
@@ -456,6 +456,44 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div id="register-modal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <h2 class="uk-modal-title">Register a New Account</h2>
+
+        <form>
+            <div class="uk-margin">
+                <input type="text" id="register-email" class="uk-input" placeholder="email" />
+            </div>
+            <div class="uk-margin">
+                <input type="password" id="register-password" class="uk-input" placeholder="password for the new account" />
+            </div>
+            <div class="uk-margin">
+                <input type="password" id="register-password-confirm" class="uk-input" placeholder="confirm password" />
+            </div>
+            <ul uk-tab class="uk-flex-center uk-tab uk-margin-remove-bottom">
+                <li class="uk-active" aria-expanded="true">
+                    <a href="#">Privacy Policy</a>
+                </li>
+                <li aria-expanded="false">
+                    <a href="#">Terms Of Service</a>
+                </li>
+            </ul>
+            <ul class="uk-switcher">
+                <li id="register-policy" class="tabbed-documentation uk-active"></li>
+                <li id="register-tos" class="tabbed-documentation"></li>
+            </ul>
+            <div class="uk-margin">
+                <input type="checkbox" id="register-accept-privacy-and-tos" class="uk-checkbox" />
+                <label for="register-accept-privacy-and-tos">I agree to the Privacy Policy and Terms of Service</label>
+            </div>
+            <div class="uk-margin uk-text-center uk-hidden">
+                <button id="register-button" class="uk-button uk-button-primary">Create account</button>
+            </div>
+        </form>
     </div>
 </div>
 

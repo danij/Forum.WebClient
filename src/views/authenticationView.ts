@@ -2,11 +2,14 @@ import {PageActions} from "../pages/action";
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Views} from "./common";
 import {ThreadsPage} from "../pages/threadsPage";
-import {Pages} from "../pages/common";
+import {ConsentRepository} from "../services/consentRepository";
+import {ConsentView} from "./consentView";
+import {DocumentationView} from "./documentationView";
 
 export module AuthenticationView {
 
     import IUserCallback = PageActions.IUserCallback;
+    import IDocumentationCallback = PageActions.IDocumentationCallback;
 
     export function checkAuthentication(authCallback: PageActions.IAuthCallback,
                                         userCallback: PageActions.IUserCallback): void {
@@ -84,5 +87,50 @@ export module AuthenticationView {
         });
 
         Views.showModal(modal);
+    }
+
+    export function showRegisterModal(docCallback: IDocumentationCallback): void {
+
+        if (ConsentRepository.hasConsentedToUsingCookies()) {
+
+            const registerModal = document.getElementById('register-modal');
+
+            prepareAuthentication(docCallback);
+
+            Views.showModal(registerModal);
+        }
+        else {
+
+            ConsentView.showConsentModal((value) => {
+
+                if (value) {
+
+                    setTimeout(() => showRegisterModal(docCallback), 500);
+                }
+                else {
+
+                    Views.showWarningNotification('Consent for storing cookies is required to be able to register.');
+                }
+            });
+        }
+    }
+
+    async function prepareAuthentication(docCallback: IDocumentationCallback): Promise<void> {
+
+        const registerPrivacyPolicyContainer = document.getElementById('register-policy');
+        const registerToSContainer = document.getElementById('register-tos');
+        const registerButtonContainer = document.getElementById('register-button').parentElement;
+
+        DOMHelpers.hide(registerButtonContainer);
+
+        registerPrivacyPolicyContainer.innerHTML = '';
+        registerPrivacyPolicyContainer.appendChild(
+            await DocumentationView.createDocumentationContainer(Views.DisplayConfig.privacyPolicyDocName, docCallback));
+
+        registerToSContainer.innerHTML = '';
+        registerToSContainer.appendChild(
+            await DocumentationView.createDocumentationContainer(Views.DisplayConfig.termsOfServiceDocName, docCallback));
+
+        DOMHelpers.unHide(registerButtonContainer);
     }
 }

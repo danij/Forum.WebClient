@@ -27,6 +27,7 @@
 @recent-thread-link-color: black;
 @recent-message-link-color: black;
 @already-visited-color: #551A8B;
+@inline-documentation-background-color: #a0a0a0;
 
 @logo-size: 96px;
 @latest-message-logo-scale: 0.6;
@@ -1292,4 +1293,15 @@ form.assign-privileges-form {
 #documentation-modal .uk-modal-dialog {
 
     min-width: 75%;
+}
+
+.tabbed-documentation {
+
+    border-left: solid 1px @global-border;
+    border-right: solid 1px @global-border;
+    border-bottom: solid 1px @global-border;
+
+    padding: 10px 0 10px 10px;
+    max-height: 300px;
+    overflow-y: scroll;
 }
