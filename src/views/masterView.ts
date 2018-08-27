@@ -12,8 +12,7 @@ import {ViewsExtra} from "./extra";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "./threadMessagesView";
 import {ScrollSpy} from "./scrollSpy";
-import {ThreadsPage} from "../pages/threadsPage";
-import {PageActions} from "../pages/action";
+import {DocPage} from "../pages/docPage";
 
 export module MasterView {
 
@@ -43,7 +42,8 @@ export module MasterView {
         }
         else if (link.docName) {
 
-            Views.onClick(linkElement, () => DocumentationView.showDocumentation(link.docName));
+            linkElement.href = DocPage.getPageUrl(link.docName);
+            Views.onClick(linkElement, () => DocumentationView.showDocumentationInModal(link.docName));
         }
         linkElement.innerText = link.title;
 

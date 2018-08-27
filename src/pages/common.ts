@@ -144,6 +144,7 @@ export module Pages {
     const userNameRegex = /\/user\/([^/]+)/;
     const subscribedByUserNameRegex = /\/subscribed_by_user\/([^/]+)/;
     const categoryRootRegex = /^[\/]?category\/([^/]+)\/([^/]+)/;
+    const docSourceRegex = /\/documentation\/([^/]+)/;
 
     export function getOrderBy(url: string): string {
 
@@ -234,6 +235,16 @@ export module Pages {
                 id: decodeURIComponent(match[2]),
                 name: decodeURIComponent(match[1])
             };
+        }
+        return null;
+    }
+
+    export function getDocSource(url: string): string {
+
+        const match = url.match(docSourceRegex);
+        if (match && match.length) {
+
+            return decodeURIComponent(match[1]);
         }
         return null;
     }

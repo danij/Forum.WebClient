@@ -639,7 +639,7 @@ export module Views {
 
             DOMHelpers.forEach(element.getElementsByClassName(className), element => {
 
-               onClick(element, () => DocumentationView.showDocumentation(knownClasses[className]));
+               onClick(element, () => DocumentationView.showDocumentationInModal(knownClasses[className]));
             });
         }
     }

@@ -19,6 +19,7 @@ import {PrivilegesView} from "../views/privilegesView";
 import {ConsentView} from "../views/consentView";
 import {LoginView} from "../views/loginView";
 import {AuthenticationView} from "../views/authenticationView";
+import {DocPage} from "./docPage";
 
 export module MasterPage {
 
@@ -154,7 +155,8 @@ export module MasterPage {
             ThreadsPage.loadPage,
             ThreadMessagesPage.loadPage,
             UsersPage.loadPage,
-            ThreadMessageCommentsPage.loadPage
+            ThreadMessageCommentsPage.loadPage,
+            DocPage.loadPage
         ];
 
         let location = window.location.toString().toLowerCase().replace(/\\/g, '/');
