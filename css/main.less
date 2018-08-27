@@ -5,33 +5,51 @@
 @global-emphasis-color: #222;
 @global-muted-color: #777;
 @global-background: #f0f0f0;
-
 @global-border: #d5d5d5;
 
+@fore-color: #242424;
+@dropdown-background: #FAFAFA;
+@footer-background-color: #F8F8F8;
+@logo-background-color: #E4E4E4;
+@blockquote-border-color: #DEDEDE;
+@up-vote-color: #6DB629;
+@down-vote-color: #F25347;
+@neutral-vote-color: #A0A0A0;
+@recent-thread-border-color: #E5E5E5;
+@recent-message-border-color: #E5E5E5;
+@time-ago-color: #707070;
+@message-comment-border-color: #CFCFCF;
+@message-comment-background-color: #EFEFEF;
+@message-comment-background-gradient-from: #EFEFEF;
+@message-comment-background-gradient-to: #FFFFFF;
+@up-votes-text-color: white;
+@down-votes-text-color: white;
+@recent-thread-link-color: black;
+@recent-message-link-color: black;
+@already-visited-color: #551A8B;
+
+@logo-size: 96px;
+@latest-message-logo-scale: 0.6;
+@message-extra-bottom: 2px;
+
 html {
-    //background-color: #F8F3EA;
-    color: #242424;
+    color: @fore-color;
 }
 
 .uk-navbar {
-    //background-color: #EADFC5 !important;
 }
 
 .uk-navbar-nav > li > a {
-    //color: #333333;
 }
 
 .uk-navbar-nav > li.uk-active > a {
-    //color: #111111;
     font-weight: 500;
 }
 
 .uk-table th {
-    //color: #333333;
 }
 
 .uk-badge {
-    //background-color: #3F99E6;
 }
 
 .uk-dropdown-nav .uk-badge {
@@ -46,10 +64,8 @@ html {
 .uk-dropdown.user-info {
     width: 300px;
     padding: 10px 15px 10px 15px;
-    background-color: #FAFAFA;
 
     li > span:not(.uk-badge) {
-        //color: #999;
         padding: 5px 0;
     }
 }
@@ -107,7 +123,7 @@ html {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #F8F8F8;
+    background-color: @footer-background-color;
     font-size: 0.875rem;
     text-align: center;
 }
@@ -184,17 +200,13 @@ html {
     cursor: pointer;
 }
 
-@logo-size: 96px;
-@latest-message-logo-scale: 0.6;
-
 .text-logo-mixin(@dimension, @scale) {
     box-sizing: border-box;
     width: @dimension * @scale;
     height: @dimension * @scale;
     font-size: 64px * @scale;
     border-radius: 500px;
-    background: #E4E4E4;
-    //border-color: #EADFC5;
+    background: @logo-background-color;
     vertical-align: middle;
     display: -ms-inline-flexbox;
     display: -webkit-inline-flex;
@@ -209,10 +221,6 @@ html {
     transition: .1s ease-in-out;
     -webkit-transition-property: color, background-color;
     transition-property: color, background-color;
-
-    &:hover {
-        //background-color: #EADFC5;
-    }
 }
 
 .text-logo {
@@ -276,32 +284,25 @@ html {
         width: 90%;
         margin-left: auto;
         margin-right: auto;
-        //background-color: #FFFAF2;
-        //border-color: #EADFC5;
     }
 
     ol, ul {
         margin-left: 50px;
     }
 
-    h1, h2, h3, h4, h5, h6, h7 {
+    h1, h2, h3, h4, h5, h6 {
 
         margin-top: 0;
         margin-bottom: 20px;
     }
 
     blockquote {
-        border-right: solid 5px #DEDEDE;
+        border-right: solid 5px @blockquote-border-color;
         padding-right: 25px;
         margin-right: 25px;
         font-size: initial;
     }
 }
-
-@message-extra-bottom: 2px;
-@up-vote-color: #6DB629;
-@down-vote-color: #F25347;
-@neutral-vote-color: #A0A0A0;
 
 .message-signature {
     position: absolute;
@@ -406,7 +407,7 @@ html {
             padding-bottom: 10px;
 
             &:not(:last-child) {
-                border-bottom: solid 1px #E5E5E5;
+                border-bottom: solid 1px @recent-thread-border-color;
                 margin-bottom: 10px;
             }
 
@@ -416,7 +417,7 @@ html {
                 width: 7em;
                 font-weight: lighter;
                 font-size: 0.9em;
-                color: #707070;
+                color: @time-ago-color;
             }
 
             .thread-vote {
@@ -455,7 +456,7 @@ html {
             padding-bottom: 10px;
 
             &:not(:last-child) {
-                border-bottom: solid 1px #E5E5E5;
+                border-bottom: solid 1px @recent-message-border-color;
                 margin-bottom: 10px;
             }
 
@@ -507,9 +508,9 @@ html {
 
 .message-comment-above-message {
 
-    border: solid 1px #CFCFCF;
-    background-color: #EFEFEF;
-    background: linear-gradient(90deg, #EFEFEF 0%, #FFFFFF 100%);
+    border: solid 1px @message-comment-border-color;
+    background-color: @message-comment-background-color;
+    background: linear-gradient(90deg, @message-comment-background-gradient-from 0%, @message-comment-background-gradient-to 100%);
     padding: 10px;
     margin-bottom: 10px;
 }
@@ -672,7 +673,7 @@ html {
     .user-up-votes {
         float: left;
         span {
-            color: white;
+            color: @up-votes-text-color;
             background: @up-vote-color;
         }
     }
@@ -680,7 +681,7 @@ html {
     .user-down-votes {
         float: right;
         span {
-            color: white;
+            color: @down-votes-text-color;
             background: @down-vote-color;
         }
     }
@@ -741,10 +742,6 @@ html {
         overflow-x: hidden;
         text-overflow: ellipsis;
         font-size: 0.875rem;
-        &:not(:last-child) {
-            border-bottom: solid 1px #E5E5E5;
-            margin-bottom: 10px;
-        }
 
         .author-logo {
             width: @logo-size * @latest-message-logo-scale;
@@ -773,7 +770,7 @@ html {
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            color: black;
+            color: @recent-message-link-color;
             font-size: 0.85rem;
             font-weight: lighter;
             max-height: 20px;
@@ -784,7 +781,7 @@ html {
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            color: black;
+            color: @recent-thread-link-color;
         }
     }
 }
@@ -843,7 +840,7 @@ html {
     }
 
     .already-visited {
-        color: #551A8B;
+        color: @already-visited-color;
     }
 
     .thread-tags {
@@ -884,11 +881,6 @@ html {
         text-overflow: ellipsis;
         font-size: 0.875rem;
 
-        &:not(:last-child) {
-            border-bottom: solid 1px #E5E5E5;
-            margin-bottom: 10px;
-        }
-
         .author-logo {
             width: @logo-size * @latest-message-logo-scale;
             height: @logo-size * @latest-message-logo-scale;
@@ -918,7 +910,7 @@ html {
             text-decoration: none;
             text-overflow: ellipsis;
             overflow: hidden;
-            color: black;
+            color: @recent-message-link-color;
             font-size: 0.75rem;
             max-height: 50px;
         }
@@ -928,7 +920,7 @@ html {
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            color: black;
+            color: @recent-thread-link-color;
         }
     }
 }
@@ -1039,11 +1031,6 @@ html {
         text-overflow: ellipsis;
         font-size: 0.875rem;
 
-        &:not(:last-child) {
-            border-bottom: solid 1px #E5E5E5;
-            margin-bottom: 10px;
-        }
-
         .author-logo {
 
             width: @logo-size * @latest-message-logo-scale;
@@ -1070,7 +1057,7 @@ html {
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            color: black;
+            color: @recent-message-link-color;
             font-size: 0.85rem;
             font-weight: lighter;
             max-height: 20px;
@@ -1081,7 +1068,7 @@ html {
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            color: black;
+            color: @recent-thread-link-color;
         }
     }
 }
