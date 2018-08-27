@@ -130,9 +130,15 @@ export module ViewsExtra {
         });
     }
 
-    function adjustImageInMessage(element: HTMLImageElement): void {
+    function adjustImageInMessage(imageElement: HTMLImageElement): void {
 
-        const src = element.getAttribute('data-src');
+        const src = imageElement.getAttribute('data-src');
+
+        if (isYouTubeLink(src)) {
+
+            DOMHelpers.replaceElementWith(imageElement, createYouTubeElement(imageElement, src));
+            return;
+        }
 
         if (Pages.isLocalUrl(src)) {
 
@@ -141,11 +147,11 @@ export module ViewsExtra {
 
         if (ConsentRepository.hasConsentedToLoadingExternalImages()) {
 
-            loadImage(element, src);
+            loadImage(imageElement, src);
         }
         else {
 
-            replaceImageWithLink(element, src);
+            DOMHelpers.replaceElementWith(imageElement, createImageLink(imageElement, src));
         }
     }
 
@@ -154,10 +160,10 @@ export module ViewsExtra {
         element.src = src;
     }
 
-    function replaceImageWithLink(element: HTMLImageElement, src: string): void {
+    function createImageLink(imageElement: HTMLImageElement, src: string): HTMLElement {
 
         const linkTitle = Pages.getConfig().externalImagesWarningFormat
-            .replace(/{title}/g, element.alt || src);
+            .replace(/{title}/g, imageElement.alt || src);
 
         const link = cE('a') as HTMLAnchorElement;
         link.href = src;
@@ -165,7 +171,32 @@ export module ViewsExtra {
         link.setAttribute('target', '_blank');
         DOMHelpers.addRelAttribute(link);
 
-        DOMHelpers.replaceElementWith(element, link);
+        return link;
+    }
+
+    function isYouTubeLink(src: string): boolean {
+
+        return src.startsWith('https://www.youtube.com/') || src.startsWith('https://youtu.be/');
+    }
+
+    function createYouTubeElement(imageElement: HTMLImageElement, src: string): HTMLElement {
+
+        if (ConsentRepository.hasConsentedToLoadingExternalImages()) {
+
+            const iFrame = cE('iframe');
+            iFrame.setAttribute('src', src);
+            iFrame.setAttribute('width', '100%');
+            iFrame.setAttribute('height', '300px');
+            iFrame.setAttribute('frameborder', '0');
+            iFrame.setAttribute('allow', 'autoplay; encrypted-media');
+            iFrame.setAttribute('allowfullscreen', '');
+
+            return iFrame;
+        }
+        else {
+
+            return createImageLink(imageElement, src);
+        }
     }
 
     export function expandAndAdjust(container: HTMLElement, source?: string): void {

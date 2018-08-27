@@ -200,7 +200,8 @@ export module EditViews {
                 {icon: 'minus', title: 'Add horizontal rule', callback: () => this.addHorizontalRule()},
                 null,
                 {icon: 'link', title: 'Add link', callback: () => this.addLink()},
-                {icon: 'image', title: 'Add image reference', callback: () => this.addImage()}
+                {icon: 'image', title: 'Add image reference', callback: () => this.addImage()},
+                {icon: 'youtube', title: 'Add YouTube link', callback: () => this.addYouTubeLink()}
             ];
 
             for (const action of actions) {
@@ -309,6 +310,15 @@ export module EditViews {
 
                     this.addTextAtCurrentPosition(`![${altText}](${link})`);
                 }
+            }
+        }
+
+        private addYouTubeLink(): void {
+
+            const link = getInput('Please enter the link mentioned in the embedded code');
+            if (link) {
+
+                this.addTextAtCurrentPosition(`![](${link})`);
             }
         }
 
