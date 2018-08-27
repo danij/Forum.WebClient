@@ -6,6 +6,7 @@ import {CategoryRepository} from "../services/categoryRepository";
 import {Pages} from "./common";
 import {PrivilegesRepository} from "../services/privilegesRepository";
 import {AuthRepository} from "../services/authRepository";
+import {RequestHandler} from "../services/requestHandler";
 
 export module PageActions {
 
@@ -148,6 +149,11 @@ export module PageActions {
         getForumWideAssignedPrivileges(): Promise<PrivilegesRepository.AssignedPrivilegesCollection>;
 
         getPrivilegesAssignedToUser(userId: string): Promise<PrivilegesRepository.AssignedPrivilegesCollection>;
+    }
+
+    export interface IDocumentationCallback {
+
+        getContent(source: string) : Promise<string>;
     }
 
     class CategoryCallback implements ICategoryCallback {
@@ -497,6 +503,18 @@ export module PageActions {
         }
     }
 
+    class DocumentationCallback implements IDocumentationCallback {
+
+        getContent(source: string): Promise<string> {
+
+            return RequestHandler.get({
+
+                path: `../doc/${source}.md`,
+                doNotParse: true
+            })
+        }
+    }
+
     export function getCategoryCallback(): ICategoryCallback {
 
         return new CategoryCallback();
@@ -530,5 +548,10 @@ export module PageActions {
     export function getPrivilegesCallback(): IPrivilegesCallback {
 
         return new PrivilegesCallback();
+    }
+
+    export function getDocumentationCallback(): IDocumentationCallback {
+
+        return new DocumentationCallback();
     }
 }

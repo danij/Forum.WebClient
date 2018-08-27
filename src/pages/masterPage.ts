@@ -29,7 +29,7 @@ export module MasterPage {
 
     export async function bootstrap(): Promise<void> {
 
-        MasterView.applyPageConfig(masterPageConfig);
+        MasterView.applyPageConfig(masterPageConfig, PageActions.getDocumentationCallback());
 
         originalTitle = document.title;
 
@@ -83,7 +83,7 @@ export module MasterPage {
             return link;
         });
 
-        LoginView.setupLogin();
+        LoginView.setupLogin(PageActions.getDocumentationCallback());
     }
 
     function afterGettingForumWidePrivileges() : void {

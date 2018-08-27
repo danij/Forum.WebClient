@@ -1,20 +1,16 @@
-import {RequestHandler} from "../services/requestHandler";
 import {Views} from "./common";
 import {ViewsExtra} from "./extra";
 import {DOMHelpers} from "../helpers/domHelpers";
+import {PageActions} from "../pages/action";
 
 export module DocumentationView {
 
     import cE = DOMHelpers.cE;
+    import IDocumentationCallback = PageActions.IDocumentationCallback;
 
-    export function showDocumentationInModal(fileName: string): void {
+    export function showDocumentationInModal(source: string, callback: IDocumentationCallback): void {
 
-        RequestHandler.get({
-
-            path: `../doc/${fileName}.md`,
-            doNotParse: true
-
-        }).catch(reason => {
+        callback.getContent(source).catch(reason => {
 
             Views.showDangerNotification('Could not load documentation: ' + reason);
 
@@ -30,18 +26,15 @@ export module DocumentationView {
         });
     }
 
-    export async function createDocumentationContainer(fileName: string): Promise<HTMLElement> {
+    export async function createDocumentationContainer(source: string,
+                                                       callback: IDocumentationCallback): Promise<HTMLElement> {
 
         let couldNotLoadReason : string;
         let content : string;
 
         try {
 
-            content = await RequestHandler.get({
-
-                path: `../doc/${fileName}.md`,
-                doNotParse: true
-            });
+            content = await callback.getContent(source);
         }
         catch (e) {
 

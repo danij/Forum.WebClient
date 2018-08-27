@@ -4,14 +4,17 @@ import {PathHelpers} from "../helpers/pathHelpers";
 import {ConsentRepository} from "../services/consentRepository";
 import {ConsentView} from "./consentView";
 import {DOMHelpers} from "../helpers/domHelpers";
+import {PageActions} from "../pages/action";
 
 export module LoginView {
 
-    export function setupLogin(): void {
+    import IDocumentationCallback = PageActions.IDocumentationCallback;
+
+    export function setupLogin(docCallback: IDocumentationCallback): void {
 
         const loginLink = document.getElementById('login-link');
 
-        Views.onClick(loginLink, showLoginModal);
+        Views.onClick(loginLink, () => showLoginModal(docCallback));
 
         const loginWithGoogleLink = document.getElementById('login-with-google');
         Views.onClick(loginWithGoogleLink, loginWithGoogle);
@@ -37,12 +40,12 @@ export module LoginView {
         }
     }
 
-    function showLoginModal() {
+    function showLoginModal(docCallback: IDocumentationCallback) {
 
         if (ConsentRepository.hasConsentedToUsingCookies()) {
 
             const loginModal = document.getElementById('login-modal');
-            Views.setupKnownDocumentationLinks(loginModal);
+            Views.setupKnownDocumentationLinks(loginModal, docCallback);
             Views.showModal(loginModal);
         }
         else {
@@ -51,7 +54,7 @@ export module LoginView {
 
                 if (value) {
 
-                    setTimeout(() => showLoginModal(), 500);
+                    setTimeout(() => showLoginModal(docCallback), 500);
                 }
                 else {
 

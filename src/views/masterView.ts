@@ -13,13 +13,15 @@ import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {ThreadMessagesView} from "./threadMessagesView";
 import {ScrollSpy} from "./scrollSpy";
 import {DocPage} from "../pages/docPage";
+import {PageActions} from "../pages/action";
 
 export module MasterView {
 
     import cE = DOMHelpers.cE;
+    import IDocumentationCallback = PageActions.IDocumentationCallback;
     const FooterSeparator = ' · ';
 
-    export function applyPageConfig(config: Pages.MasterPageConfig) {
+    export function applyPageConfig(config: Pages.MasterPageConfig, docCallback: IDocumentationCallback) {
 
         document.title = config.title;
 
@@ -27,11 +29,11 @@ export module MasterView {
 
         for (let footerLink of config.navLinks) {
 
-            footerLinks.appendChild(createNavLink(footerLink));
+            footerLinks.appendChild(createNavLink(footerLink, docCallback));
         }
     }
 
-    function createNavLink(link: Pages.PageLink) : HTMLLIElement {
+    function createNavLink(link: Pages.PageLink, docCallback: IDocumentationCallback) : HTMLLIElement {
 
         const linkElement = cE('a') as HTMLAnchorElement;
 
@@ -43,7 +45,7 @@ export module MasterView {
         else if (link.docName) {
 
             linkElement.href = DocPage.getPageUrl(link.docName);
-            Views.onClick(linkElement, () => DocumentationView.showDocumentationInModal(link.docName));
+            Views.onClick(linkElement, () => DocumentationView.showDocumentationInModal(link.docName, docCallback));
         }
         linkElement.innerText = link.title;
 

@@ -8,12 +8,14 @@ import {ViewsExtra} from "./extra";
 import {Pages} from "../pages/common";
 import {ThreadMessageCommentsPage} from "../pages/threadMessageCommentsPage";
 import {DocumentationView} from "./documentationView";
+import {PageActions} from "../pages/action";
 
 export module Views {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
+    import IDocumentationCallback = PageActions.IDocumentationCallback;
 
     declare var UIkit: any;
 
@@ -627,7 +629,7 @@ export module Views {
         });
     }
 
-    export function setupKnownDocumentationLinks(element: HTMLElement): void {
+    export function setupKnownDocumentationLinks(element: HTMLElement, docCallback: IDocumentationCallback): void {
 
         const knownClasses = {
 
@@ -639,7 +641,8 @@ export module Views {
 
             DOMHelpers.forEach(element.getElementsByClassName(className), element => {
 
-               onClick(element, () => DocumentationView.showDocumentationInModal(knownClasses[className]));
+               onClick(element, () => DocumentationView.showDocumentationInModal(knownClasses[className],
+                   docCallback));
             });
         }
     }
