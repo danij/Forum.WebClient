@@ -11,7 +11,7 @@ export module DocumentationView {
 
         RequestHandler.get({
 
-            path: `../doc/${fileName}`,
+            path: `../doc/${fileName}.md`,
             doNotParse: true
 
         }).catch(reason => {
@@ -39,7 +39,7 @@ export module DocumentationView {
 
             content = await RequestHandler.get({
 
-                path: `../doc/${fileName}`,
+                path: `../doc/${fileName}.md`,
                 doNotParse: true
             });
         }
