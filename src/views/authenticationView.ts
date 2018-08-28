@@ -11,6 +11,13 @@ export module AuthenticationView {
     import IUserCallback = PageActions.IUserCallback;
     import IDocumentationCallback = PageActions.IDocumentationCallback;
 
+    interface RegisterConfig {
+
+        minAge: number
+    }
+
+    declare const registerConfig: RegisterConfig;
+
     export function checkAuthentication(authCallback: PageActions.IAuthCallback,
                                         userCallback: PageActions.IUserCallback): void {
 
@@ -119,6 +126,9 @@ export module AuthenticationView {
 
         const registerPrivacyPolicyContainer = document.getElementById('register-policy');
         const registerToSContainer = document.getElementById('register-tos');
+        const registerConfirmAgeCheckbox = document.getElementById('register-confirm-min-age');
+        const registerConfirmAgeGroup = registerConfirmAgeCheckbox.parentElement;
+        const registerConfirmAgeLabel = registerConfirmAgeGroup.getElementsByTagName('label')[0] as HTMLElement;
         const registerButtonContainer = document.getElementById('register-button').parentElement;
 
         DOMHelpers.hide(registerButtonContainer);
@@ -130,6 +140,17 @@ export module AuthenticationView {
         registerToSContainer.innerHTML = '';
         registerToSContainer.appendChild(
             await DocumentationView.createDocumentationContainer(Views.DisplayConfig.termsOfServiceDocName, docCallback));
+
+        if (registerConfig.minAge > 0) {
+
+            registerConfirmAgeLabel.innerText =registerConfirmAgeLabel.innerText.replace('{age}',
+                registerConfig.minAge.toString());
+            DOMHelpers.unHide(registerConfirmAgeGroup);
+        }
+        else {
+
+            DOMHelpers.hide(registerConfirmAgeGroup);
+        }
 
         DOMHelpers.unHide(registerButtonContainer);
     }

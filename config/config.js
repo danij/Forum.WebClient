@@ -54,6 +54,11 @@ window.masterPageConfig = {
     externalImagesWarningFormat: 'External link: {title}'
 };
 
+window.registerConfig = {
+
+    minAge: 18
+};
+
 window.debugConfig = {
 
     enableAllPrivileges: false
