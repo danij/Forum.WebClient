@@ -94,7 +94,6 @@ export module PrivilegesView {
     const ForumWidePrivilegeNames = [
 
         ['add_user', 'Add User'],
-        ['login', 'Login'],
         ['get_entities_count', 'Get Entities Count'],
         ['get_version', 'Get Version'],
         ['get_all_users', 'Get All Users'],
