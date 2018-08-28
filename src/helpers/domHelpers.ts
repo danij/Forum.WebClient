@@ -131,6 +131,20 @@ export module DOMHelpers {
         return newElement;
     }
 
+    export function disable(element: HTMLElement): void {
+
+        DOMHelpers.addClasses(element, 'uk-disabled');
+        if (element.tagName.toLowerCase() === 'a') {
+
+            DOMHelpers.addClasses(element, 'uk-link-muted');
+        }
+    }
+
+    export function enable(element: HTMLElement): void {
+
+        DOMHelpers.removeClasses(element, 'uk-disabled', 'uk-link-muted');
+    }
+
     export function hide(element: HTMLElement): void {
 
         DOMHelpers.addClasses(element, 'uk-hidden');

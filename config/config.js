@@ -56,6 +56,7 @@ window.masterPageConfig = {
 
 window.registerConfig = {
 
+    enableRegistration: true,
     minAge: 18
 };
 

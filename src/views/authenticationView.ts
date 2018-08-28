@@ -13,10 +13,16 @@ export module AuthenticationView {
 
     interface RegisterConfig {
 
+        enableRegistration: boolean,
         minAge: number
     }
 
     declare const registerConfig: RegisterConfig;
+
+    export function isRegistrationEnabled(): boolean {
+
+        return registerConfig.enableRegistration;
+    }
 
     export function checkAuthentication(authCallback: PageActions.IAuthCallback,
                                         userCallback: PageActions.IUserCallback): void {
@@ -97,6 +103,12 @@ export module AuthenticationView {
     }
 
     export function showRegisterModal(docCallback: IDocumentationCallback): void {
+
+        if ( ! isRegistrationEnabled()) {
+
+            Views.showWarningNotification('Registration is not available.');
+            return;
+        }
 
         if (ConsentRepository.hasConsentedToUsingCookies()) {
 

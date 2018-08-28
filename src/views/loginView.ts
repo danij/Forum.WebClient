@@ -48,7 +48,15 @@ export module LoginView {
             const loginModal = document.getElementById('login-modal');
             const registerLink = DOMHelpers.removeEventListeners(document.getElementById('register-link'));
 
-            Views.onClick(registerLink, () => AuthenticationView.showRegisterModal(docCallback));
+            if (AuthenticationView.isRegistrationEnabled()) {
+
+                DOMHelpers.enable(registerLink);
+                Views.onClick(registerLink, () => AuthenticationView.showRegisterModal(docCallback));
+            }
+            else {
+
+                DOMHelpers.disable(registerLink);
+            }
 
             Views.setupKnownDocumentationLinks(loginModal, docCallback);
             Views.showModal(loginModal);
