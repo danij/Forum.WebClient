@@ -91,14 +91,12 @@ export module CategoriesView {
 
                 if (category.children && category.children.length) {
 
+                    const container = dA('div');
+                    nameColumn.append(container);
+
                     const childCategoryElement = dA('<span class="category-children uk-text-small">');
-                    if (category.description && category.description.length) {
-                        nameColumn.appendRaw('<span class="uk-text-meta"> · Subcategories:</span> ');
-                    }
-                    else {
-                        nameColumn.appendRaw('<span class="uk-text-meta">Subcategories:</span> ');
-                    }
-                    nameColumn.append(childCategoryElement);
+                    container.appendRaw('<span class="uk-text-meta">Subcategories:</span> ');
+                    container.append(childCategoryElement);
 
                     for (let i = 0; i < category.children.length; ++i) {
 
