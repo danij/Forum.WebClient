@@ -272,7 +272,7 @@ export module MasterPage {
 
             const threads = await PageActions.getThreadCallback().searchThreadsByName(toSearch);
 
-            const result = DOMHelpers.parseHTML('<div class="threads-table uk-margin-left"></div>');
+            const result = DOMHelpers.parseHTML('<div class="threads-table"></div>');
             result.appendChild(ThreadsView.createThreadsTable(threads));
 
             return result;
