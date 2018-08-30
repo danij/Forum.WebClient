@@ -1,6 +1,7 @@
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
 import {ConsentRepository} from "../services/consentRepository";
+import {hljs} from 'highlight.js'
 
 export module ViewsExtra {
 
@@ -9,7 +10,6 @@ export module ViewsExtra {
     let remarkable: any;
 
     declare var Remarkable: any;
-    declare var hljs: any;
     declare var renderMathInElement: (element: HTMLElement, options: any) => void;
 
     export function init() {
