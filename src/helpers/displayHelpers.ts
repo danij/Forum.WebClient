@@ -72,7 +72,7 @@ export module DisplayHelpers {
 
     export function getDateTime(epochTime: number): string {
 
-        const dateTime = getDateTimeInternal(epochTime);
+        const dateTime = getDateTimeInternal(epochTime || 0);
         if (null === dateTime) return '–';
 
         return `<span class="date-time"><span class="date">${dateTime.date}</span> ${dateTime.time}</span>`;
