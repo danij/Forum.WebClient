@@ -36,13 +36,13 @@ export class HomePage implements Pages.Page {
         });
     }
 
-    displayCategory(id: string, name: string): void {
+    async displayCategory(id: string, name: string): Promise<void> {
 
         MasterPage.goTo(Pages.getCategoryUrl(id, name), name);
 
         DOMHelpers.addClasses(document.getElementById('home-page-link'), 'uk-active');
 
-        Pages.changePage(async () => {
+        await Pages.changePage(async () => {
 
             this.category = await Pages.getOrShowError(CategoryRepository.getCategoryById(id));
             if (null == this.category) return;
@@ -68,6 +68,10 @@ export class HomePage implements Pages.Page {
 
             return CategoriesView.createCategoryDisplay(this.category, threadList, PageActions.getCategoryCallback(),
                 PageActions.getPrivilegesCallback());
+        });
+
+        Pages.scrollPage({
+            top: true
         });
     }
 
