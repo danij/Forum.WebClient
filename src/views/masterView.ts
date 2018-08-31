@@ -93,6 +93,9 @@ export module MasterView {
 
             const span = document.getElementById('entity-count');
             span.innerText = getStatisticsText(value);
+
+            const visitorsStatistics = document.getElementById('visitors-statistics');
+            visitorsStatistics.innerText = `(${DisplayHelpers.intToString(value.visitors)} total visitors)`;
         });
         UserRepository.getOnlineUsers().then(users => {
 

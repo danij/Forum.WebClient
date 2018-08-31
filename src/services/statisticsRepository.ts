@@ -9,6 +9,7 @@ export module StatisticsRepository {
         discussionMessages: number;
         discussionTags: number;
         discussionCategories: number;
+        visitors: number;
     }
 
     interface EntityCountResponse {
