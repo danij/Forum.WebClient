@@ -1,7 +1,7 @@
-import {Views} from "./common";
-import {ViewsExtra} from "./extra";
-import {DOMHelpers} from "../helpers/domHelpers";
-import {PageActions} from "../pages/action";
+import {Views} from './common';
+import {ViewsExtra} from './extra';
+import {DOMHelpers} from '../helpers/domHelpers';
+import {PageActions} from '../pages/action';
 
 export module DocumentationView {
 

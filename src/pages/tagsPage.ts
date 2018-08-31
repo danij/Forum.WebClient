@@ -1,10 +1,10 @@
 import {Pages} from './common';
-import {TagRepository} from "../services/tagRepository";
-import {TagsView} from "../views/tagsView";
-import {Views} from "../views/common";
-import {MasterPage} from "./masterPage";
-import {PageActions} from "./action";
-import {DOMHelpers} from "../helpers/domHelpers";
+import {TagRepository} from '../services/tagRepository';
+import {TagsView} from '../views/tagsView';
+import {Views} from '../views/common';
+import {MasterPage} from './masterPage';
+import {PageActions} from './action';
+import {DOMHelpers} from '../helpers/domHelpers';
 
 /**
  * Displays a list of all tags with custom sorting

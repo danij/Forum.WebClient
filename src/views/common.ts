@@ -1,14 +1,14 @@
-import {CommonEntities} from "../services/commonEntities";
-import {DOMHelpers} from "../helpers/domHelpers";
-import {ThreadsPage} from "../pages/threadsPage";
-import {DisplayHelpers} from "../helpers/displayHelpers";
-import {HomePage} from "../pages/homePage";
-import {ThreadMessagesPage} from "../pages/threadMessagesPage";
-import {ViewsExtra} from "./extra";
-import {Pages} from "../pages/common";
-import {ThreadMessageCommentsPage} from "../pages/threadMessageCommentsPage";
-import {DocumentationView} from "./documentationView";
-import {PageActions} from "../pages/action";
+import {CommonEntities} from '../services/commonEntities';
+import {DOMHelpers} from '../helpers/domHelpers';
+import {ThreadsPage} from '../pages/threadsPage';
+import {DisplayHelpers} from '../helpers/displayHelpers';
+import {HomePage} from '../pages/homePage';
+import {ThreadMessagesPage} from '../pages/threadMessagesPage';
+import {ViewsExtra} from './extra';
+import {Pages} from '../pages/common';
+import {ThreadMessageCommentsPage} from '../pages/threadMessageCommentsPage';
+import {DocumentationView} from './documentationView';
+import {PageActions} from '../pages/action';
 
 export module Views {
 

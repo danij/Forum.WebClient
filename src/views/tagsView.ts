@@ -1,13 +1,13 @@
-import {TagRepository} from "../services/tagRepository";
-import {DisplayHelpers} from "../helpers/displayHelpers";
-import {Views} from "./common";
-import {DOMHelpers} from "../helpers/domHelpers";
-import {Pages} from "../pages/common";
-import {PageActions} from "../pages/action";
-import {Privileges} from "../services/privileges";
-import {EditViews} from "./edit";
-import {PrivilegesView} from "./privilegesView";
-import {ThreadMessagesView} from "./threadMessagesView";
+import {TagRepository} from '../services/tagRepository';
+import {DisplayHelpers} from '../helpers/displayHelpers';
+import {Views} from './common';
+import {DOMHelpers} from '../helpers/domHelpers';
+import {Pages} from '../pages/common';
+import {PageActions} from '../pages/action';
+import {Privileges} from '../services/privileges';
+import {EditViews} from './edit';
+import {PrivilegesView} from './privilegesView';
+import {ThreadMessagesView} from './threadMessagesView';
 
 export module TagsView {
 

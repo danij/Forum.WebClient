@@ -1,8 +1,8 @@
 import {RequestHandler} from './requestHandler'
-import {TagRepository} from "./tagRepository";
-import {UserRepository} from "./userRepository";
-import {CommonEntities} from "./commonEntities";
-import {ThreadMessageRepository} from "./threadMessageRepository";
+import {TagRepository} from './tagRepository';
+import {UserRepository} from './userRepository';
+import {CommonEntities} from './commonEntities';
+import {ThreadMessageRepository} from './threadMessageRepository';
 
 export module CategoryRepository {
 

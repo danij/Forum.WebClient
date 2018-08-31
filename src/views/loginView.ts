@@ -1,11 +1,11 @@
-import {Pages} from "../pages/common";
-import {Views} from "./common";
-import {PathHelpers} from "../helpers/pathHelpers";
-import {ConsentRepository} from "../services/consentRepository";
-import {ConsentView} from "./consentView";
-import {DOMHelpers} from "../helpers/domHelpers";
-import {PageActions} from "../pages/action";
-import {AuthenticationView} from "./authenticationView";
+import {Pages} from '../pages/common';
+import {Views} from './common';
+import {PathHelpers} from '../helpers/pathHelpers';
+import {ConsentRepository} from '../services/consentRepository';
+import {ConsentView} from './consentView';
+import {DOMHelpers} from '../helpers/domHelpers';
+import {PageActions} from '../pages/action';
+import {AuthenticationView} from './authenticationView';
 
 export module LoginView {
 

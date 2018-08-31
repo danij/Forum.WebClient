@@ -1,12 +1,12 @@
-import {TagRepository} from "../services/tagRepository";
-import {ThreadRepository} from "../services/threadRepository";
-import {UserRepository} from "../services/userRepository";
-import {ThreadMessageRepository} from "../services/threadMessageRepository";
-import {CategoryRepository} from "../services/categoryRepository";
-import {Pages} from "./common";
-import {PrivilegesRepository} from "../services/privilegesRepository";
-import {AuthRepository} from "../services/authRepository";
-import {RequestHandler} from "../services/requestHandler";
+import {TagRepository} from '../services/tagRepository';
+import {ThreadRepository} from '../services/threadRepository';
+import {UserRepository} from '../services/userRepository';
+import {ThreadMessageRepository} from '../services/threadMessageRepository';
+import {CategoryRepository} from '../services/categoryRepository';
+import {Pages} from './common';
+import {PrivilegesRepository} from '../services/privilegesRepository';
+import {AuthRepository} from '../services/authRepository';
+import {RequestHandler} from '../services/requestHandler';
 
 export module PageActions {
 

@@ -1,10 +1,10 @@
-import {PageActions} from "../pages/action";
-import {DOMHelpers} from "../helpers/domHelpers";
-import {Views} from "./common";
-import {ThreadsPage} from "../pages/threadsPage";
-import {ConsentRepository} from "../services/consentRepository";
-import {ConsentView} from "./consentView";
-import {DocumentationView} from "./documentationView";
+import {PageActions} from '../pages/action';
+import {DOMHelpers} from '../helpers/domHelpers';
+import {Views} from './common';
+import {ThreadsPage} from '../pages/threadsPage';
+import {ConsentRepository} from '../services/consentRepository';
+import {ConsentView} from './consentView';
+import {DocumentationView} from './documentationView';
 
 export module AuthenticationView {
 

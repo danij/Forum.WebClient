@@ -1,6 +1,6 @@
-import {Views} from "./common";
-import {ConsentRepository} from "../services/consentRepository";
-import {DOMHelpers} from "../helpers/domHelpers";
+import {Views} from './common';
+import {ConsentRepository} from '../services/consentRepository';
+import {DOMHelpers} from '../helpers/domHelpers';
 
 export module ConsentView {
 

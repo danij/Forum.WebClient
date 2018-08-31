@@ -1,7 +1,7 @@
-import {Pages} from "./common";
-import {MasterPage} from "./masterPage";
-import {DocumentationView} from "../views/documentationView";
-import {PageActions} from "./action";
+import {Pages} from './common';
+import {MasterPage} from './masterPage';
+import {DocumentationView} from '../views/documentationView';
+import {PageActions} from './action';
 
 export class DocPage implements Pages.Page {
 

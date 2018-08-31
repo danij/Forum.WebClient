@@ -1,7 +1,7 @@
-import {RequestHandler} from "./requestHandler";
-import {CommonEntities} from "./commonEntities";
-import {UserRepository} from "./userRepository";
-import {ThreadRepository} from "./threadRepository";
+import {RequestHandler} from './requestHandler';
+import {CommonEntities} from './commonEntities';
+import {UserRepository} from './userRepository';
+import {ThreadRepository} from './threadRepository';
 
 export module ThreadMessageRepository {
 

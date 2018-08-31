@@ -1,15 +1,15 @@
-import {UserRepository} from "../services/userRepository";
-import {DisplayHelpers} from "../helpers/displayHelpers";
-import {Views} from "./common";
-import {DOMHelpers} from "../helpers/domHelpers";
-import {Pages} from "../pages/common";
-import {PageActions} from "../pages/action";
-import {Privileges} from "../services/privileges";
-import {EditViews} from "./edit";
-import {UsersPage} from "../pages/usersPage";
-import {ThreadsPage} from "../pages/threadsPage";
-import {ViewsExtra} from "./extra";
-import {PrivilegesView} from "./privilegesView";
+import {UserRepository} from '../services/userRepository';
+import {DisplayHelpers} from '../helpers/displayHelpers';
+import {Views} from './common';
+import {DOMHelpers} from '../helpers/domHelpers';
+import {Pages} from '../pages/common';
+import {PageActions} from '../pages/action';
+import {Privileges} from '../services/privileges';
+import {EditViews} from './edit';
+import {UsersPage} from '../pages/usersPage';
+import {ThreadsPage} from '../pages/threadsPage';
+import {ViewsExtra} from './extra';
+import {PrivilegesView} from './privilegesView';
 
 export module UsersView {
 

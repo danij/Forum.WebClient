@@ -1,9 +1,9 @@
 import {Pages} from './common';
-import {UserRepository} from "../services/userRepository";
-import {UsersView} from "../views/usersView";
-import {Views} from "../views/common";
-import {MasterPage} from "./masterPage";
-import {DOMHelpers} from "../helpers/domHelpers";
+import {UserRepository} from '../services/userRepository';
+import {UsersView} from '../views/usersView';
+import {Views} from '../views/common';
+import {MasterPage} from './masterPage';
+import {DOMHelpers} from '../helpers/domHelpers';
 
 /**
  * Displays a list of users with pagination and custom sorting

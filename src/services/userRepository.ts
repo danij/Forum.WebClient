@@ -1,5 +1,5 @@
-import {RequestHandler} from "./requestHandler";
-import {CommonEntities} from "./commonEntities";
+import {RequestHandler} from './requestHandler';
+import {CommonEntities} from './commonEntities';
 
 export module UserRepository {
 

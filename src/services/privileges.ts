@@ -1,11 +1,11 @@
-import {CategoryRepository} from "./categoryRepository";
-import {CommonEntities} from "./commonEntities";
-import {TagRepository} from "./tagRepository";
-import {ThreadRepository} from "./threadRepository";
-import {ThreadMessageRepository} from "./threadMessageRepository";
-import {UserRepository} from "./userRepository";
-import {PrivilegesRepository} from "./privilegesRepository";
-import {Debug} from "./debug";
+import {CategoryRepository} from './categoryRepository';
+import {CommonEntities} from './commonEntities';
+import {TagRepository} from './tagRepository';
+import {ThreadRepository} from './threadRepository';
+import {ThreadMessageRepository} from './threadMessageRepository';
+import {UserRepository} from './userRepository';
+import {PrivilegesRepository} from './privilegesRepository';
+import {Debug} from './debug';
 
 export module Privileges {
 

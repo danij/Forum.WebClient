@@ -1,5 +1,5 @@
-import {RequestHandler} from "./requestHandler";
-import {RepositoryCommon} from "./repositoryCommon";
+import {RequestHandler} from './requestHandler';
+import {RepositoryCommon} from './repositoryCommon';
 
 export module ConsentRepository {
 

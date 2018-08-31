@@ -1,13 +1,12 @@
 import {Pages} from './common';
-import {CategoryRepository} from "../services/categoryRepository";
-import {CategoriesView} from "../views/categoriesView";
-import {MasterPage} from "./masterPage";
-import {ThreadsView} from "../views/threadsView";
-import {ThreadRepository} from "../services/threadRepository";
-import {Views} from "../views/common";
-import {Privileges} from '../services/privileges';
-import {PageActions} from "./action";
-import {DOMHelpers} from "../helpers/domHelpers";
+import {CategoryRepository} from '../services/categoryRepository';
+import {CategoriesView} from '../views/categoriesView';
+import {MasterPage} from './masterPage';
+import {ThreadsView} from '../views/threadsView';
+import {ThreadRepository} from '../services/threadRepository';
+import {Views} from '../views/common';
+import {PageActions} from './action';
+import {DOMHelpers} from '../helpers/domHelpers';
 
 /**
  * The home page displays the root categories

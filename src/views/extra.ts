@@ -1,6 +1,6 @@
-import {DOMHelpers} from "../helpers/domHelpers";
-import {Pages} from "../pages/common";
-import {ConsentRepository} from "../services/consentRepository";
+import {DOMHelpers} from '../helpers/domHelpers';
+import {Pages} from '../pages/common';
+import {ConsentRepository} from '../services/consentRepository';
 import * as hljs from 'highlight.js/lib/index.js';
 import 'highlight.js/styles/default.css';
 

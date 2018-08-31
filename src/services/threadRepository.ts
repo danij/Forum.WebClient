@@ -1,9 +1,9 @@
-import {CategoryRepository} from "./categoryRepository";
-import {UserRepository} from "./userRepository";
-import {TagRepository} from "./tagRepository";
-import {CommonEntities} from "./commonEntities";
-import {RequestHandler} from "./requestHandler";
-import {ThreadMessageRepository} from "./threadMessageRepository";
+import {CategoryRepository} from './categoryRepository';
+import {UserRepository} from './userRepository';
+import {TagRepository} from './tagRepository';
+import {CommonEntities} from './commonEntities';
+import {RequestHandler} from './requestHandler';
+import {ThreadMessageRepository} from './threadMessageRepository';
 
 export module ThreadRepository {
 

@@ -1,12 +1,12 @@
 import {Pages} from './common';
-import {ThreadRepository} from "../services/threadRepository";
-import {ThreadsView} from "../views/threadsView";
-import {Views} from "../views/common";
-import {MasterPage} from "./masterPage";
-import {TagRepository} from "../services/tagRepository";
-import {UserRepository} from "../services/userRepository";
-import {PageActions} from "./action";
-import {DOMHelpers} from "../helpers/domHelpers";
+import {ThreadRepository} from '../services/threadRepository';
+import {ThreadsView} from '../views/threadsView';
+import {Views} from '../views/common';
+import {MasterPage} from './masterPage';
+import {TagRepository} from '../services/tagRepository';
+import {UserRepository} from '../services/userRepository';
+import {PageActions} from './action';
+import {DOMHelpers} from '../helpers/domHelpers';
 
 /**
  * Displays a list of threads with pagination and custom sorting

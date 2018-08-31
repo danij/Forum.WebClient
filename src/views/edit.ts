@@ -1,9 +1,9 @@
-import {DOMHelpers} from "../helpers/domHelpers";
-import {Pages} from "../pages/common";
-import {ViewsExtra} from "./extra";
-import {Views} from "./common";
-import {ThreadMessageRepository} from "../services/threadMessageRepository";
-import {DisplayHelpers} from "../helpers/displayHelpers";
+import {DOMHelpers} from '../helpers/domHelpers';
+import {Pages} from '../pages/common';
+import {ViewsExtra} from './extra';
+import {Views} from './common';
+import {ThreadMessageRepository} from '../services/threadMessageRepository';
+import {DisplayHelpers} from '../helpers/displayHelpers';
 
 export module EditViews {
 

@@ -1,9 +1,9 @@
 import {Pages} from './common';
-import {ThreadsView} from "../views/threadsView";
-import {MasterPage} from "./masterPage";
-import {TagRepository} from "../services/tagRepository";
-import {PageActions} from "./action";
-import {DOMHelpers} from "../helpers/domHelpers";
+import {ThreadsView} from '../views/threadsView';
+import {MasterPage} from './masterPage';
+import {TagRepository} from '../services/tagRepository';
+import {PageActions} from './action';
+import {DOMHelpers} from '../helpers/domHelpers';
 
 /**
  * Displays page for creating a new thread

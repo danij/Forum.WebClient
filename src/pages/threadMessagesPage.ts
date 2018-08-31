@@ -1,14 +1,13 @@
 import {Pages} from './common';
-import {ThreadRepository} from "../services/threadRepository";
-import {Views} from "../views/common";
-import {MasterPage} from "./masterPage";
-import {UserRepository} from "../services/userRepository";
-import {ThreadMessageRepository} from "../services/threadMessageRepository";
-import {ThreadMessagesView} from "../views/threadMessagesView";
-import {Privileges} from "../services/privileges";
-import {PageActions} from "./action";
-import {DOMHelpers} from "../helpers/domHelpers";
-import {EditViews} from "../views/edit";
+import {ThreadRepository} from '../services/threadRepository';
+import {Views} from '../views/common';
+import {MasterPage} from './masterPage';
+import {UserRepository} from '../services/userRepository';
+import {ThreadMessageRepository} from '../services/threadMessageRepository';
+import {ThreadMessagesView} from '../views/threadMessagesView';
+import {PageActions} from './action';
+import {DOMHelpers} from '../helpers/domHelpers';
+import {EditViews} from '../views/edit';
 
 /**
  * Displays a list of thread messages with pagination and custom sorting

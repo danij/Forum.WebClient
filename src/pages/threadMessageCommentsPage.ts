@@ -1,12 +1,11 @@
 import {Pages} from './common';
-import {Views} from "../views/common";
-import {MasterPage} from "./masterPage";
-import {UserRepository} from "../services/userRepository";
-import {Privileges} from "../services/privileges";
-import {PageActions} from "./action";
-import {DOMHelpers} from "../helpers/domHelpers";
-import {ThreadMessagesView} from "../views/threadMessagesView";
-import {ThreadMessageRepository} from "../services/threadMessageRepository";
+import {Views} from '../views/common';
+import {MasterPage} from './masterPage';
+import {UserRepository} from '../services/userRepository';
+import {PageActions} from './action';
+import {DOMHelpers} from '../helpers/domHelpers';
+import {ThreadMessagesView} from '../views/threadMessagesView';
+import {ThreadMessageRepository} from '../services/threadMessageRepository';
 
 /**
  * Displays a list of thread message comments with pagination and custom sorting

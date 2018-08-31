@@ -1,15 +1,15 @@
-import {CategoryRepository} from "../services/categoryRepository";
-import {TagsView} from "./tagsView";
-import {DisplayHelpers} from "../helpers/displayHelpers";
-import {DOMHelpers} from "../helpers/domHelpers";
-import {Views} from "./common";
-import {Pages} from "../pages/common";
-import {PageActions} from "../pages/action";
-import {Privileges} from "../services/privileges";
-import {EditViews} from "./edit";
-import {TagRepository} from "../services/tagRepository";
-import {PrivilegesView} from "./privilegesView";
-import {ThreadMessagesView} from "./threadMessagesView";
+import {CategoryRepository} from '../services/categoryRepository';
+import {TagsView} from './tagsView';
+import {DisplayHelpers} from '../helpers/displayHelpers';
+import {DOMHelpers} from '../helpers/domHelpers';
+import {Views} from './common';
+import {Pages} from '../pages/common';
+import {PageActions} from '../pages/action';
+import {Privileges} from '../services/privileges';
+import {EditViews} from './edit';
+import {TagRepository} from '../services/tagRepository';
+import {PrivilegesView} from './privilegesView';
+import {ThreadMessagesView} from './threadMessagesView';
 
 export module CategoriesView {
 

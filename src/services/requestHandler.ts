@@ -1,6 +1,6 @@
-import {PathHelpers} from "../helpers/pathHelpers";
-import {ConsentRepository} from "./consentRepository";
-import {RepositoryCache} from "./repositoryCache";
+import {PathHelpers} from '../helpers/pathHelpers';
+import {ConsentRepository} from './consentRepository';
+import {RepositoryCache} from './repositoryCache';
 
 export module RequestHandler {
 

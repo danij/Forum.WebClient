@@ -1,9 +1,9 @@
-import {Views} from "../views/common";
-import {TagRepository} from "../services/tagRepository";
-import {UserRepository} from "../services/userRepository";
-import {CategoryRepository} from "../services/categoryRepository";
-import {ThreadRepository} from "../services/threadRepository";
-import {DOMHelpers} from "../helpers/domHelpers";
+import {Views} from '../views/common';
+import {TagRepository} from '../services/tagRepository';
+import {UserRepository} from '../services/userRepository';
+import {CategoryRepository} from '../services/categoryRepository';
+import {ThreadRepository} from '../services/threadRepository';
+import {DOMHelpers} from '../helpers/domHelpers';
 
 export module Pages {
 

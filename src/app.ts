@@ -1,5 +1,5 @@
-import {RequestHandler} from "./services/requestHandler";
-import {MasterPage} from "./pages/masterPage";
+import {RequestHandler} from './services/requestHandler';
+import {MasterPage} from './pages/masterPage';
 
 window.addEventListener('load', () => {
 
