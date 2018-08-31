@@ -93,6 +93,7 @@ export module DisplayHelpers {
 
     export function getShortDate(epochTime: number): string {
 
+        epochTime = epochTime || 0;
         if (epochTime < 1) return '–';
 
         const date = dateFromEpochTime(epochTime);
