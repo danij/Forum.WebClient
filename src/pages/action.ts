@@ -298,7 +298,7 @@ export module PageActions {
 
         getSubscribedUsers(id: string): Promise<UserRepository.User[]> {
 
-            return UserRepository.getUsersSubscribedToThread(id);
+            return Pages.getOrShowErrorAndDefault(UserRepository.getUsersSubscribedToThread(id), () => []);
         }
 
         addThreadMessage(id: string, content: string): Promise<string> {
