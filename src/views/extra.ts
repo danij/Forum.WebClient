@@ -1,7 +1,8 @@
 import {DOMHelpers} from "../helpers/domHelpers";
 import {Pages} from "../pages/common";
 import {ConsentRepository} from "../services/consentRepository";
-import {hljs} from 'highlight.js'
+import * as hljs from 'highlight.js/lib/index.js';
+import 'highlight.js/styles/default.css';
 
 export module ViewsExtra {
 

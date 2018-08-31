@@ -16,14 +16,6 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin([
             {
-                from: path.resolve(__dirname, 'node_modules/highlight.js/lib/highlight.pack.js'),
-                to: path.resolve(__dirname, 'dist/highlight.pack.js')
-            },
-            {
-                from: path.resolve(__dirname, 'node_modules/highlight.js/styles/default.css'),
-                to: path.resolve(__dirname, 'dist/highlight_js.css')
-            },
-            {
                 from: path.resolve(__dirname, 'node_modules/katex/dist/katex.min.css'),
                 to: path.resolve(__dirname, 'dist/katex.min.css')
             },
