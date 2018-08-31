@@ -509,6 +509,14 @@ export module Views {
 
     export function setContent(container: HTMLElement, newPageContent: HTMLElement, refreshMath: boolean) {
 
+        if ('page-content-container' === container.id) {
+
+            container.parentElement.children[0].scrollIntoView();
+        }
+        else {
+
+            container.scrollIntoView();
+        }
         container.innerHTML = '';
 
         const elementWithAnimationDisplaySelector = getElementMarkedForAnimatedDisplay(newPageContent);
