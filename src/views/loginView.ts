@@ -16,6 +16,9 @@ export module LoginView {
 
         Views.onClick(loginLink, () => showLoginModal(authCallback, docCallback));
 
+        const loginCustomLink = document.getElementById('login-custom-button') as HTMLButtonElement;
+        Views.onClickWithSpinner(loginCustomLink, () => loginCustom(authCallback));
+
         const loginWithGoogleLink = document.getElementById('login-with-google');
         Views.onClick(loginWithGoogleLink, loginWithGoogle);
 
@@ -94,7 +97,7 @@ export module LoginView {
         return checkBox.checked;
     }
 
-    function loginWithGoogle():void  {
+    function loginWithGoogle(): void {
 
         if ( ! checkAgreePrivacyToS()) return;
 
@@ -109,5 +112,34 @@ export module LoginView {
         }
 
         self.location.href = Pages.getUrl('auth/provider/google/' + PathHelpers.queryParameters(extra, true));
+    }
+
+    async function loginCustom(authCallback: PageActions.IAuthCallback): Promise<void> {
+
+        if ( ! checkAgreePrivacyToS()) return;
+
+        const emailInput = document.getElementById('login-custom-email') as HTMLInputElement;
+        const email = emailInput.value;
+        const passwordInput = document.getElementById('login-custom-password') as HTMLInputElement;
+        const password = passwordInput.value;
+
+        if ( ! AuthenticationView.validateEmail(email)) {
+
+            Views.showWarningNotification('Invalid email address!');
+            return;
+        }
+        if (password.length < 1) {
+
+            Views.showWarningNotification('Please enter a password!');
+            return;
+        }
+
+        if (await authCallback.loginCustom(email, password, true, true, showInOnlineUsers())) {
+
+            emailInput.value = '';
+            passwordInput.value = '';
+
+            location.reload();
+        }
     }
 }

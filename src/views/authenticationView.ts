@@ -246,7 +246,7 @@ export module AuthenticationView {
         }
     }
 
-    function validateEmail(email: string): boolean {
+    export function validateEmail(email: string): boolean {
 
         const match = email.match(/^[a-zA-Z0-9.\-_]+@[a-zA-Z0-9.\-_]+\.[a-zA-Z]{2,}$/i);
         return match && (match.length > 0);

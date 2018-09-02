@@ -127,6 +127,9 @@ export module PageActions {
 
         registerCustomAuth(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
                            minAge: number): Promise<boolean>;
+
+        loginCustom(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
+                    showInOnlineUsers: boolean): Promise<boolean>;
     }
 
     export interface IPrivilegesCallback {
@@ -441,6 +444,13 @@ export module PageActions {
 
             return Pages.getOrShowErrorAndDefault(
                 AuthRepository.registerCustomAuth(email, password, acceptPrivacy, acceptTos, minAge), () => false);
+        }
+
+        loginCustom(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
+                    showInOnlineUsers: boolean): Promise<boolean> {
+
+            return Pages.getOrShowErrorAndDefault(
+                AuthRepository.loginCustomAuth(email, password, acceptPrivacy, acceptTos, showInOnlineUsers), () => false);
         }
     }
 

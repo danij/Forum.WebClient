@@ -35,4 +35,22 @@ export module AuthRepository {
         });
         return true;
     }
+
+    export async function loginCustomAuth(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
+                                          showInOnlineUsers: boolean): Promise<boolean> {
+
+        //throws exception if there is an issue
+        await RequestHandler.post({
+
+            path: '../auth/custom/login',
+            objectData: {
+                email: email,
+                password: password,
+                acceptPrivacy: acceptPrivacy,
+                acceptTos: acceptTos,
+                showInOnlineUsers: showInOnlineUsers
+            }
+        });
+        return true;
+    }
 }
