@@ -49,17 +49,18 @@ export module UsersView {
     export function createUserLogoSmall(user: UserRepository.User, position: string = 'bottom-right'): DOMAppender {
 
         const container = dA('<div>');
+        const showPointer = user.id ? 'pointer-cursor' : '';
 
         if (user.hasLogo) {
 
-            const element = dA(`<div class="author-logo pointer-cursor">`);
+            const element = dA(`<div class="author-logo ${showPointer}">`);
             container.append(element);
             const img = dA(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`);
             element.append(img);
         }
         else {
 
-            const element = dA(`<div class="author-text-logo pointer-cursor" style="color: ${getUserLogoColor(user.id)}">`);
+            const element = dA(`<div class="author-text-logo ${showPointer}" style="color: ${getUserLogoColor(user.id)}">`);
             container.append(element);
             element.appendString(getUserLogoInitial(user.name));
         }

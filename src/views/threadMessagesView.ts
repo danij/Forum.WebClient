@@ -834,7 +834,7 @@ export module ThreadMessagesView {
 
         const container = dA('<div>');
 
-        if (createAuthorDropdown) {
+        if (createAuthorDropdown && message.createdBy && message.createdBy.id) {
 
             container.append(UsersView.createUserLogoSmall(message.createdBy));
         }
