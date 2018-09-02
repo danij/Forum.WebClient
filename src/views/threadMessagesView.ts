@@ -894,11 +894,18 @@ export module ThreadMessagesView {
 
         const messageContent = message.content || 'empty';
 
-        const messageLink = cE('a');
-        DOMHelpers.addClasses(messageLink, 'recent-message-link');
-        messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id));
-        messageLink.setAttribute('title', messageContent);
-        messageLink.setAttribute('data-threadmessageid', message.id);
+        let messageLink: HTMLElement;
+        if (message.id) {
+
+            messageLink = cE('a');
+            DOMHelpers.addClasses(messageLink, 'recent-message-link');
+            messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id));
+            messageLink.setAttribute('title', messageContent);
+            messageLink.setAttribute('data-threadmessageid', message.id);
+        }
+        else {
+            messageLink = cE('span');
+        }
         messageLink.innerText = messageContent;
         container.appendElement(messageLink);
 
