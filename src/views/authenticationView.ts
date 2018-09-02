@@ -61,7 +61,10 @@ export module AuthenticationView {
 
             if (authCallback.usingCustomAuthentication()) {
 
-                DOMHelpers.unHide(document.getElementById('change-password-link'));
+                const changePasswordLink = DOMHelpers.removeEventListeners(document.getElementById('change-password-link'));
+
+                DOMHelpers.unHide(changePasswordLink);
+                Views.onClick(changePasswordLink, () => showChangePasswordModal(authCallback));
             }
 
             Views.onClick(document.getElementById('logout-link'), () => {
@@ -105,7 +108,7 @@ export module AuthenticationView {
     export function showRegisterModal(authCallback: PageActions.IAuthCallback,
                                       docCallback: PageActions.IDocumentationCallback): void {
 
-        if (!isRegistrationEnabled()) {
+        if (! isRegistrationEnabled()) {
 
             Views.showWarningNotification('Registration is not available.');
             return;
@@ -255,5 +258,58 @@ export module AuthenticationView {
     function validatePassword(password: string): boolean {
 
         return password.length >= registerConfig.minPasswordLength;
+    }
+
+    function showChangePasswordModal(callback: PageActions.IAuthCallback) {
+
+        const modal = document.getElementById('change-password-modal');
+        const changePasswordButton = DOMHelpers.removeEventListeners(
+            document.getElementById('change-password-button') as HTMLButtonElement);
+
+        Views.onClickWithSpinner(changePasswordButton, async () => {
+
+            const emailInput = document.getElementById('change-password-email') as HTMLInputElement;
+            const email = emailInput.value;
+            const oldPasswordInput = document.getElementById('change-password-old-password') as HTMLInputElement;
+            const oldPassword = oldPasswordInput.value;
+            const newPasswordInput = document.getElementById('change-password-new-password') as HTMLInputElement;
+            const newPassword = newPasswordInput.value;
+            const confirmPasswordInput = document.getElementById('change-password-password-confirm') as HTMLInputElement;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (! validateEmail(email)) {
+
+                Views.showWarningNotification('Invalid email address!');
+                return;
+            }
+            if (oldPassword.length < 1) {
+
+                Views.showWarningNotification('Please specify the old password');
+                return;
+            }
+            if (! validatePassword(newPassword)) {
+
+                Views.showWarningNotification('Please use a more complex password!');
+                return;
+            }
+            if (newPassword != confirmPassword) {
+
+                Views.showWarningNotification('Passwords do not match!');
+                return;
+            }
+
+            if (await callback.changeCustomPassword(email, oldPassword, newPassword)) {
+
+                emailInput.value = '';
+                oldPasswordInput.value = '';
+                newPasswordInput.value = '';
+                confirmPasswordInput.value = '';
+
+                Views.showSuccessNotification('Password changed.');
+                Views.hideOpenModals();
+            }
+        });
+
+        Views.showModal(modal);
     }
 }

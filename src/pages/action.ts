@@ -130,6 +130,8 @@ export module PageActions {
 
         loginCustom(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
                     showInOnlineUsers: boolean): Promise<boolean>;
+
+        changeCustomPassword(email: string, oldPassword: string, newPassword: string): Promise<boolean>;
     }
 
     export interface IPrivilegesCallback {
@@ -451,6 +453,12 @@ export module PageActions {
 
             return Pages.getOrShowErrorAndDefault(
                 AuthRepository.loginCustomAuth(email, password, acceptPrivacy, acceptTos, showInOnlineUsers), () => false);
+        }
+
+        changeCustomPassword(email: string, oldPassword: string, newPassword: string): Promise<boolean> {
+
+            return Pages.getOrShowErrorAndDefault(
+                AuthRepository.changeCustomPassword(email, oldPassword, newPassword), () => false);
         }
     }
 

@@ -53,4 +53,19 @@ export module AuthRepository {
         });
         return true;
     }
+
+    export async function changeCustomPassword(email: string, oldPassword: string, newPassword: string): Promise<boolean> {
+
+        //throws exception if there is an issue
+        await RequestHandler.post({
+
+            path: '../auth/custom/change_password',
+            objectData: {
+                email: email,
+                oldPassword: oldPassword,
+                newPassword: newPassword
+            }
+        });
+        return true;
+    }
 }
