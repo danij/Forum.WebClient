@@ -889,7 +889,10 @@ export module ThreadMessagesView {
         timeFlex.append(recentMessageTime);
 
         const recentMessageTimeContent = cE('span');
-        recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(message.created);
+        if (message.created) {
+
+            recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(message.created);
+        }
         recentMessageTime.appendElement(recentMessageTimeContent);
 
         const messageContent = message.content || 'empty';
