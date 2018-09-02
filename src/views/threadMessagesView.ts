@@ -865,11 +865,19 @@ export module ThreadMessagesView {
 
         } as ThreadRepository.Thread);
 
-        const threadTitleElement = cE('a');
-        DOMHelpers.addClasses(threadTitleElement, 'recent-message-thread-link');
-        threadTitleElement.setAttribute('href', href);
-        threadTitleElement.setAttribute('title', threadTitle);
-        threadTitleElement.setAttribute('data-threadmessagethreadid', threadId);
+        let threadTitleElement: HTMLElement;
+        if (threadId) {
+
+            threadTitleElement = cE('a');
+            DOMHelpers.addClasses(threadTitleElement, 'recent-message-thread-link');
+            threadTitleElement.setAttribute('href', href);
+            threadTitleElement.setAttribute('title', threadTitle);
+            threadTitleElement.setAttribute('data-threadmessagethreadid', threadId);
+        }
+        else {
+
+            threadTitleElement = cE('span');
+        }
         threadTitleElement.innerText = threadTitle;
         container.appendElement(threadTitleElement);
 
