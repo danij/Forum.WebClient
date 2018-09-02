@@ -509,9 +509,11 @@ export module Views {
 
     export function setContent(container: HTMLElement, newPageContent: HTMLElement, refreshMath: boolean) {
 
-        if ('page-content-container' === container.id) {
+        const scrollContainer = DOMHelpers.goUpUntil(container, e => 'page-content-container' === e.id);
 
-            container.parentElement.children[0].scrollIntoView();
+        if (scrollContainer && ('page-content-container' === scrollContainer.id)) {
+
+            scrollContainer.parentElement.children[0].scrollIntoView();
         }
         else {
 
