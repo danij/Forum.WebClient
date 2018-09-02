@@ -68,4 +68,19 @@ export module AuthRepository {
         });
         return true;
     }
+
+    export async function resetCustomPassword(email: string, acceptPrivacy: boolean, acceptTos: boolean): Promise<boolean> {
+
+        //throws exception if there is an issue
+        await RequestHandler.post({
+
+            path: '../auth/custom/reset_password',
+            objectData: {
+                email: email,
+                acceptPrivacy: acceptPrivacy,
+                acceptTos: acceptTos
+            }
+        });
+        return true;
+    }
 }

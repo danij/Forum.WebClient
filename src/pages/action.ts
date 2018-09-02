@@ -132,6 +132,8 @@ export module PageActions {
                     showInOnlineUsers: boolean): Promise<boolean>;
 
         changeCustomPassword(email: string, oldPassword: string, newPassword: string): Promise<boolean>;
+
+        resetCustomPassword(email: string, acceptPrivacy: boolean, acceptTos: boolean): Promise<boolean>;
     }
 
     export interface IPrivilegesCallback {
@@ -459,6 +461,12 @@ export module PageActions {
 
             return Pages.getOrShowErrorAndDefault(
                 AuthRepository.changeCustomPassword(email, oldPassword, newPassword), () => false);
+        }
+
+        resetCustomPassword(email: string, acceptPrivacy: boolean, acceptTos: boolean): Promise<boolean> {
+
+            return Pages.getOrShowErrorAndDefault(AuthRepository.resetCustomPassword(email, acceptPrivacy, acceptTos),
+                () => false);
         }
     }
 

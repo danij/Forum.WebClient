@@ -19,6 +19,9 @@ export module LoginView {
         const loginCustomLink = document.getElementById('login-custom-button') as HTMLButtonElement;
         Views.onClickWithSpinner(loginCustomLink, () => loginCustom(authCallback));
 
+        const forgottenPasswordLink = document.getElementById('forgotten-password') as HTMLAnchorElement;
+        Views.onClick(forgottenPasswordLink, () => forgottenPassword(authCallback));
+
         const loginWithGoogleLink = document.getElementById('login-with-google');
         Views.onClick(loginWithGoogleLink, loginWithGoogle);
 
@@ -91,7 +94,7 @@ export module LoginView {
 
         if ( ! checkBox.checked) {
 
-            Views.showWarningNotification('Cannot log in without accepting the privacy policy and terms of service');
+            Views.showWarningNotification('Cannot log in or reset the password without accepting the privacy policy and terms of service');
         }
 
         return checkBox.checked;
@@ -140,6 +143,25 @@ export module LoginView {
             passwordInput.value = '';
 
             location.reload();
+        }
+    }
+
+    async function forgottenPassword(authCallback: PageActions.IAuthCallback): Promise<void> {
+
+        if ( ! checkAgreePrivacyToS()) return;
+
+        const emailInput = document.getElementById('login-custom-email') as HTMLInputElement;
+        const email = emailInput.value;
+
+        if ( ! AuthenticationView.validateEmail(email)) {
+
+            Views.showWarningNotification('Invalid email address!');
+            return;
+        }
+
+        if (await authCallback.resetCustomPassword(email, true, true)) {
+
+            Views.showSuccessNotification('Please check your email for details on how to reset the password.');
         }
     }
 }
