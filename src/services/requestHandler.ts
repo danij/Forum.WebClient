@@ -11,6 +11,7 @@ export module RequestHandler {
         extraHeaders?: {};
         query?: any;
         type?: string;
+        objectData?: any;
         stringData?: string;
         binaryData?: ArrayBuffer;
         doNotParse?: boolean;
@@ -149,7 +150,8 @@ export module RequestHandler {
                     }
                     else if (content.status) {
 
-                        reject(new Error(getStatusCode(content.status)));
+                        const statusText = content.statusText || getStatusCode(content.status);
+                        reject(new Error(statusText));
                     }
 
                     if (request.cacheSeconds) {
@@ -172,7 +174,11 @@ export module RequestHandler {
                 }
             }
 
-            if (request.stringData) {
+            if (request.objectData) {
+
+                xmlHttp.send(JSON.stringify(request.objectData));
+            }
+            else if (request.stringData) {
 
                 xmlHttp.send(request.stringData);
             }

@@ -17,4 +17,22 @@ export module AuthRepository {
 
         return RepositoryCommon.getCookieValue('auth_provider') === 'custom';
     }
+
+    export async function registerCustomAuth(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
+                                             minAge: number): Promise<boolean> {
+
+        //throws exception if there is an issue
+        await RequestHandler.post({
+
+            path: '../auth/custom/register',
+            objectData: {
+                email: email,
+                password: password,
+                acceptPrivacy: acceptPrivacy,
+                acceptTos: acceptTos,
+                minAge: minAge
+            }
+        });
+        return true;
+    }
 }

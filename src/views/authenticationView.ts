@@ -8,13 +8,11 @@ import {DocumentationView} from './documentationView';
 
 export module AuthenticationView {
 
-    import IUserCallback = PageActions.IUserCallback;
-    import IDocumentationCallback = PageActions.IDocumentationCallback;
-
     interface RegisterConfig {
 
         enableRegistration: boolean,
-        minAge: number
+        minAge: number,
+        minPasswordLength: number
     }
 
     declare const registerConfig: RegisterConfig;
@@ -66,11 +64,13 @@ export module AuthenticationView {
                 DOMHelpers.unHide(document.getElementById('change-password-link'));
             }
 
-            Views.onClick(document.getElementById('logout-link'), () => { authCallback.logout(); });
+            Views.onClick(document.getElementById('logout-link'), () => {
+                authCallback.logout();
+            });
         })
     }
 
-    function showCreateUserModal(userCallback: IUserCallback) {
+    function showCreateUserModal(userCallback: PageActions.IUserCallback) {
 
         const modal = document.getElementById('create-user-name-modal');
         const createButton = DOMHelpers.removeEventListeners(document.getElementById('create-user-name-button'));
@@ -102,9 +102,10 @@ export module AuthenticationView {
         Views.showModal(modal);
     }
 
-    export function showRegisterModal(docCallback: IDocumentationCallback): void {
+    export function showRegisterModal(authCallback: PageActions.IAuthCallback,
+                                      docCallback: PageActions.IDocumentationCallback): void {
 
-        if ( ! isRegistrationEnabled()) {
+        if (!isRegistrationEnabled()) {
 
             Views.showWarningNotification('Registration is not available.');
             return;
@@ -114,7 +115,7 @@ export module AuthenticationView {
 
             const registerModal = document.getElementById('register-modal');
 
-            prepareAuthentication(docCallback);
+            prepareRegistration(authCallback, docCallback);
 
             Views.showModal(registerModal);
         }
@@ -124,7 +125,7 @@ export module AuthenticationView {
 
                 if (value) {
 
-                    setTimeout(() => showRegisterModal(docCallback), 500);
+                    setTimeout(() => showRegisterModal(authCallback, docCallback), 500);
                 }
                 else {
 
@@ -134,14 +135,16 @@ export module AuthenticationView {
         }
     }
 
-    async function prepareAuthentication(docCallback: IDocumentationCallback): Promise<void> {
+    async function prepareRegistration(authCallback: PageActions.IAuthCallback,
+                                       docCallback: PageActions.IDocumentationCallback): Promise<void> {
 
         const registerPrivacyPolicyContainer = document.getElementById('register-policy');
         const registerToSContainer = document.getElementById('register-tos');
         const registerConfirmAgeCheckbox = document.getElementById('register-confirm-min-age');
         const registerConfirmAgeGroup = registerConfirmAgeCheckbox.parentElement;
         const registerConfirmAgeLabel = registerConfirmAgeGroup.getElementsByTagName('label')[0] as HTMLElement;
-        const registerButtonContainer = document.getElementById('register-button').parentElement;
+        const registerButton = document.getElementById('register-button') as HTMLButtonElement;
+        const registerButtonContainer = registerButton.parentElement;
 
         DOMHelpers.hide(registerButtonContainer);
 
@@ -155,7 +158,7 @@ export module AuthenticationView {
 
         if (registerConfig.minAge > 0) {
 
-            registerConfirmAgeLabel.innerText =registerConfirmAgeLabel.innerText.replace('{age}',
+            registerConfirmAgeLabel.innerText = registerConfirmAgeLabel.innerText.replace('{age}',
                 registerConfig.minAge.toString());
             DOMHelpers.unHide(registerConfirmAgeGroup);
         }
@@ -165,5 +168,92 @@ export module AuthenticationView {
         }
 
         DOMHelpers.unHide(registerButtonContainer);
+
+        Views.onClickWithSpinner(DOMHelpers.removeEventListeners(registerButton), () => register(authCallback));
+    }
+
+    async function register(callback: PageActions.IAuthCallback): Promise<void> {
+
+        const emailInput = document.getElementById('register-email') as HTMLInputElement;
+        const email = emailInput.value;
+        const passwordInput = document.getElementById('register-password') as HTMLInputElement;
+        const password = passwordInput.value;
+        const confirmPasswordInput = document.getElementById('register-password-confirm') as HTMLInputElement;
+        const confirmPassword = confirmPasswordInput.value;
+        const acceptPrivacyTosCheckbox = document.getElementById('register-accept-privacy-and-tos') as HTMLInputElement;
+        const registerConfirmAgeCheckbox = document.getElementById('register-confirm-min-age') as HTMLInputElement;
+
+        let acceptPrivacy: boolean = false;
+        let acceptTos: boolean = false;
+        let minAge: number = 0;
+
+        {
+            if (! validateEmail(email)) {
+
+                Views.showWarningNotification('Invalid email address!');
+                return;
+            }
+        }
+        {
+            if (! validatePassword(password)) {
+
+                Views.showWarningNotification('Please use a more complex password!');
+                return;
+            }
+            if (password != confirmPassword) {
+
+                Views.showWarningNotification('Passwords do not match!');
+                return;
+            }
+        }
+        {
+            if (acceptPrivacyTosCheckbox.checked) {
+
+                acceptPrivacy = true;
+                acceptTos = true;
+            }
+            else {
+
+                Views.showWarningNotification('Cannot register if the Privacy Policy and Terms of Service are not accepted');
+                return;
+            }
+        }
+        {
+            if (registerConfig.minAge > 0) {
+
+                if (registerConfirmAgeCheckbox.checked) {
+
+                    minAge = registerConfig.minAge;
+                }
+                else {
+
+                    Views.showWarningNotification('You do not have the minimum age required to register on this site.');
+                    return;
+                }
+            }
+        }
+
+        if (await callback.registerCustomAuth(email, password, acceptPrivacy, acceptTos, minAge)) {
+
+            emailInput.value = '';
+            passwordInput.value = '';
+            confirmPasswordInput.value = '';
+            acceptPrivacyTosCheckbox.checked = false;
+            registerConfirmAgeCheckbox.checked = false;
+
+            Views.showSuccessNotification('Please check your email to complete the registration.');
+            Views.hideOpenModals();
+        }
+    }
+
+    function validateEmail(email: string): boolean {
+
+        const match = email.match(/^[a-zA-Z0-9.\-_]+@[a-zA-Z0-9.\-_]+\.[a-zA-Z]{2,}$/i);
+        return match && (match.length > 0);
+    }
+
+    function validatePassword(password: string): boolean {
+
+        return password.length >= registerConfig.minPasswordLength;
     }
 }

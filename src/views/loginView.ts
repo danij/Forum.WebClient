@@ -9,13 +9,12 @@ import {AuthenticationView} from './authenticationView';
 
 export module LoginView {
 
-    import IDocumentationCallback = PageActions.IDocumentationCallback;
-
-    export function setupLogin(docCallback: IDocumentationCallback): void {
+    export function setupLogin(authCallback: PageActions.IAuthCallback,
+                               docCallback: PageActions.IDocumentationCallback): void {
 
         const loginLink = document.getElementById('login-link');
 
-        Views.onClick(loginLink, () => showLoginModal(docCallback));
+        Views.onClick(loginLink, () => showLoginModal(authCallback, docCallback));
 
         const loginWithGoogleLink = document.getElementById('login-with-google');
         Views.onClick(loginWithGoogleLink, loginWithGoogle);
@@ -41,7 +40,7 @@ export module LoginView {
         }
     }
 
-    function showLoginModal(docCallback: IDocumentationCallback) {
+    function showLoginModal(authCallback: PageActions.IAuthCallback, docCallback: PageActions.IDocumentationCallback) {
 
         if (ConsentRepository.hasConsentedToUsingCookies()) {
 
@@ -51,7 +50,7 @@ export module LoginView {
             if (AuthenticationView.isRegistrationEnabled()) {
 
                 DOMHelpers.enable(registerLink);
-                Views.onClick(registerLink, () => AuthenticationView.showRegisterModal(docCallback));
+                Views.onClick(registerLink, () => AuthenticationView.showRegisterModal(authCallback, docCallback));
             }
             else {
 
@@ -67,7 +66,7 @@ export module LoginView {
 
                 if (value) {
 
-                    setTimeout(() => showLoginModal(docCallback), 500);
+                    setTimeout(() => showLoginModal(authCallback, docCallback), 500);
                 }
                 else {
 

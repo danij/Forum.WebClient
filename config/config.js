@@ -57,7 +57,9 @@ window.masterPageConfig = {
 window.registerConfig = {
 
     enableRegistration: true,
-    minAge: 18
+    //only for displaying errors, when updating please also update the auth backend configuration
+    minAge: 18,
+    minPasswordLength: 8
 };
 
 window.debugConfig = {

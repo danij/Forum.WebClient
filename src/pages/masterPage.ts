@@ -83,7 +83,7 @@ export module MasterPage {
             return link;
         });
 
-        LoginView.setupLogin(PageActions.getDocumentationCallback());
+        LoginView.setupLogin(PageActions.getAuthCallback(), PageActions.getDocumentationCallback());
     }
 
     function afterGettingForumWidePrivileges() : void {
