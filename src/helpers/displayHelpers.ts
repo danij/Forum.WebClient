@@ -144,7 +144,7 @@ export module DisplayHelpers {
             return '1 second ago';
         }
         else if (difference < 60) {
-            return `{difference} seconds ago`;
+            return `${difference} seconds ago`;
         }
         else if (difference < 3600) {
 
