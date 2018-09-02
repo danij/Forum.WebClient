@@ -10,6 +10,13 @@ import {RequestHandler} from '../services/requestHandler';
 
 export module PageActions {
 
+    interface ActionConfig {
+
+        multiTagInputSeparator: string;
+    }
+
+    declare const actionConfig: ActionConfig;
+
     export interface ICategoryCallback {
 
         createRootCategory(name: string): Promise<boolean>;
@@ -219,9 +226,16 @@ export module PageActions {
 
     class TagCallback implements ITagCallback {
 
-        createTag(name: string): Promise<boolean> {
+        async createTag(name: string): Promise<boolean> {
 
-            return Pages.trueOrShowErrorAndFalse(TagRepository.addNewTag(name));
+            const tags = name.split(actionConfig.multiTagInputSeparator)
+                .map(tagName => tagName.trim())
+                .filter(tagName => tagName.length);
+
+            const promises = tags.map(tagName => Pages.trueOrShowErrorAndFalse(TagRepository.addNewTag(tagName)));
+            const results = await Promise.all(promises);
+
+            return results.reduceRight((accumulator, currentValue) => accumulator && currentValue);
         }
 
         deleteTag(id: string): Promise<boolean> {

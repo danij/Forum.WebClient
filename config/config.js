@@ -33,6 +33,11 @@ window.displayConfig = {
     }
 };
 
+window.actionConfig = {
+
+    multiTagInputSeparator: ';'
+};
+
 window.masterPageConfig = {
 
     baseUri: "http://dani.forum:8080/",
