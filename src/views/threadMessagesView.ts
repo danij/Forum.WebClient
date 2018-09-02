@@ -403,7 +403,7 @@ export module ThreadMessagesView {
 
     function createThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
 
-        const content = dA('<div class="message-content render-math">');
+        const content = dA('<div class="message-content uk-float-left render-math">');
         content.appendRaw(ViewsExtra.expandContent(message.content));
         return content;
     }
