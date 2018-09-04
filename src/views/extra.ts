@@ -208,7 +208,7 @@ export module ViewsExtra {
 
             setTimeout(() => {
 
-                const iFrameAvailableWidth = iFrame.parentElement.clientWidth;
+                const iFrameAvailableWidth = iFrame.parentElement.clientWidth - 10;
 
                 iFrame.setAttribute('width', `${iFrameAvailableWidth}px`);
                 iFrame.setAttribute('height', `${iFrameAvailableWidth / aspectRatio}px`);
