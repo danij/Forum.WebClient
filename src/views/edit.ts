@@ -111,6 +111,7 @@ export module EditViews {
     export class EditControl {
 
         private textArea: HTMLTextAreaElement;
+        private previewContainer: HTMLDivElement;
         private resultContainer: HTMLDivElement;
 
         constructor(container: HTMLElement, initialText: string = '') {
@@ -119,11 +120,11 @@ export module EditViews {
             DOMHelpers.addClasses(this.textArea, 'uk-textarea');
             this.textArea.value = initialText;
 
-            const previewContainer = cE('div');
-            DOMHelpers.addClasses(previewContainer, 'edit-preview', 'message-content', 'render-math');
-            previewContainer.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Message Preview</span>'));
+            this.previewContainer = cE('div') as HTMLDivElement;
+            DOMHelpers.addClasses(this.previewContainer, 'edit-preview', 'message-content', 'render-math');
+            this.previewContainer.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Message Preview</span>'));
 
-            previewContainer.appendChild(this.resultContainer = cE('div') as HTMLDivElement);
+            this.previewContainer.appendChild(this.resultContainer = cE('div') as HTMLDivElement);
 
             const grid = cE('div');
             container.appendChild(grid);
@@ -136,7 +137,7 @@ export module EditViews {
             textAreaContainer.appendChild(this.textArea);
 
             grid.appendChild(textAreaContainer);
-            grid.appendChild(previewContainer);
+            grid.appendChild(this.previewContainer);
 
             this.setupEvents();
         }
@@ -172,7 +173,7 @@ export module EditViews {
             this.adjustGeneratedContent(this.resultContainer);
 
             ViewsExtra.adjustMessageContent(this.resultContainer.parentNode as HTMLElement);
-            ViewsExtra.refreshMath(this.resultContainer);
+            ViewsExtra.refreshMath(this.previewContainer);
         }
 
         private adjustGeneratedContent(element: HTMLElement): void {
