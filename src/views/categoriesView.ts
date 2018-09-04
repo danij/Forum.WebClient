@@ -274,6 +274,16 @@ export module CategoriesView {
         descriptionElement.innerText = category.description || '';
         DOMHelpers.addClasses(descriptionElement, 'uk-text-meta');
 
+        const threadCount = cE('span');
+        element.appendChild(threadCount);
+        DOMHelpers.addClasses(threadCount, 'uk-margin-left');
+        threadCount.innerText = `${DisplayHelpers.intToString(category.threadTotalCount)} threads`;
+
+        const messageCount = cE('span');
+        element.appendChild(messageCount);
+        DOMHelpers.addClasses(messageCount, 'uk-margin-left');
+        messageCount.innerText = `${DisplayHelpers.intToString(category.messageTotalCount)} messages`;
+
         if (Privileges.Category.canEditCategoryDescription(category)) {
 
             const link = EditViews.createEditLink('Edit category description');
