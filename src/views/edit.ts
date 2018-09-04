@@ -8,6 +8,7 @@ import {DisplayHelpers} from '../helpers/displayHelpers';
 export module EditViews {
 
     import cE = DOMHelpers.cE;
+    import refreshMath = ViewsExtra.refreshMath;
 
     export function getInput(title: string, value: string = ''): string {
 
@@ -201,6 +202,7 @@ export module EditViews {
                 {icon: 'minus', title: 'Add horizontal rule', callback: () => this.addHorizontalRule()},
                 null,
                 {icon: 'file-edit', title: 'Add code', callback: () => this.addCode()},
+                {math: '$\\Sigma$', title: 'Add math', callback: () => this.addMath()},
                 null,
                 {icon: 'link', title: 'Add link', callback: () => this.addLink()},
                 {icon: 'image', title: 'Add image reference', callback: () => this.addImage()},
@@ -217,7 +219,16 @@ export module EditViews {
                     const link = cE('a');
                     listElement.appendChild(link);
 
-                    link.setAttribute('uk-icon', `icon: ${action.icon}`);
+                    if (action.icon && action.icon.length) {
+
+                        link.setAttribute('uk-icon', `icon: ${action.icon}`);
+                    }
+                    else if (action.math && action.math.length) {
+
+                        link.innerText = action.math;
+                        DOMHelpers.addClasses(link, 'render-math');
+                        refreshMath(link);
+                    }
                     link.setAttribute('title', action.title);
                     link.setAttribute('uk-tooltip', '');
 
@@ -281,6 +292,12 @@ export module EditViews {
                 '```\n' +
                 'Sample Code\n' +
                 '```\n');
+        }
+
+        private addMath(): void {
+
+            this.addTextAtCurrentPosition('\n' +
+                '$$f(x) = \\sqrt{\\frac{x}{2}}$$\n');
         }
 
         private addHorizontalRule(): void {
