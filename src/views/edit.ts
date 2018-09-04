@@ -200,6 +200,8 @@ export module EditViews {
                 {icon: 'table', title: 'Add table', callback: () => this.addTable()},
                 {icon: 'minus', title: 'Add horizontal rule', callback: () => this.addHorizontalRule()},
                 null,
+                {icon: 'file-edit', title: 'Add code', callback: () => this.addCode()},
+                null,
                 {icon: 'link', title: 'Add link', callback: () => this.addLink()},
                 {icon: 'image', title: 'Add image reference', callback: () => this.addImage()},
                 {icon: 'youtube', title: 'Add YouTube link', callback: () => this.addYouTubeLink()}
@@ -271,6 +273,14 @@ export module EditViews {
                 '|:-|:-:|-:|\n' +
                 '|1|2|3|\n' +
                 '|aa|bb|cc|\n\n');
+        }
+
+        private addCode(): void {
+
+            this.addTextAtCurrentPosition('\n' +
+                '```\n' +
+                'Sample Code\n' +
+                '```\n');
         }
 
         private addHorizontalRule(): void {
