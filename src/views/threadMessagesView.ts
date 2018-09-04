@@ -436,7 +436,7 @@ export module ThreadMessagesView {
             actions.appendRaw(`<a uk-icon="icon: warning" class="comment-thread-message-link" title="Flag & comment" data-message-id="${messageId}" uk-tooltip></a>`);
         }
         if (quoteCallback) {
-            actions.appendRaw(`<a uk-icon="icon: commenting" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}" uk-tooltip></a>`);
+            actions.appendRaw(`<a uk-icon="icon: quote-right" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}" uk-tooltip></a>`);
         }
 
         return actions;
