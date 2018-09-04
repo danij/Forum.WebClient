@@ -201,9 +201,13 @@ export module ThreadMessagesView {
 
             createThreadMessageHeader(messageContainer, message, collection, i, showParentThreadName);
             messageContainer.append(createThreadMessageDetails(message, showParentThreadName));
-            messageContainer.append(createThreadMessageAuthor(message, thread));
-            messageContainer.append(createThreadMessageActionLinks(message, quoteCallback));
-            messageContainer.append(createThreadMessageContent(message));
+
+            const flexContainer = dA('<div class="uk-flex">');
+            messageContainer.append(flexContainer);
+
+            flexContainer.append(createThreadMessageAuthor(message, thread));
+            flexContainer.append(createThreadMessageContent(message));
+            flexContainer.append(createThreadMessageActionLinks(message, quoteCallback));
 
             if (i < (messages.length - 1)) {
 
@@ -403,7 +407,7 @@ export module ThreadMessagesView {
 
     function createThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
 
-        const content = dA('<div class="message-content uk-float-left render-math">');
+        const content = dA('<div class="message-content render-math uk-flex-1">');
         content.appendRaw(ViewsExtra.expandContent(message.content));
         return content;
     }

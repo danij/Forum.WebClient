@@ -184,7 +184,15 @@ export module ViewsExtra {
 
         if (ConsentRepository.hasConsentedToLoadingExternalImages()) {
 
-            const extra = JSON.parse(imageElement.alt);
+            let extra;
+            try {
+
+                extra = JSON.parse(imageElement.alt);
+            }
+            catch {
+
+                extra = {};
+            }
 
             const aspectRatio = extra.width && extra.height
                 ? extra.width / extra.height
