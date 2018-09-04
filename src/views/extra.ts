@@ -177,24 +177,41 @@ export module ViewsExtra {
 
     function isYouTubeLink(src: string): boolean {
 
-        return src.startsWith('https://www.youtube.com/') || src.startsWith('https://youtu.be/');
+        return src.startsWith('https://www.youtube.com/');
     }
 
     function createYouTubeElement(imageElement: HTMLImageElement, src: string): HTMLElement {
 
         if (ConsentRepository.hasConsentedToLoadingExternalImages()) {
 
+            const extra = JSON.parse(imageElement.alt);
+
+            const aspectRatio = extra.width && extra.height
+                ? extra.width / extra.height
+                : 16/9;
+
             const iFrame = cE('iframe');
+            DOMHelpers.addClasses(iFrame, 'embedded-video');
+
             iFrame.setAttribute('src', src);
-            iFrame.setAttribute('width', '100%');
-            iFrame.setAttribute('height', '300px');
             iFrame.setAttribute('frameborder', '0');
             iFrame.setAttribute('allow', 'autoplay; encrypted-media');
-            iFrame.setAttribute('allowfullscreen', '');
+            //iFrame.setAttribute('allowfullscreen', '');
+
+            setTimeout(() => {
+
+                const iFrameAvailableWidth = iFrame.parentElement.clientWidth;
+
+                iFrame.setAttribute('width', `${iFrameAvailableWidth}px`);
+                iFrame.setAttribute('height', `${iFrameAvailableWidth / aspectRatio}px`);
+
+            }, 1000);
 
             return iFrame;
         }
         else {
+
+            imageElement.alt = imageElement.src;
 
             return createImageLink(imageElement, src);
         }

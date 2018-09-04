@@ -341,12 +341,24 @@ export module EditViews {
             }
         }
 
+        private getFirstMatchOrDefault(input: string, regex: RegExp): string {
+
+            const match = input.match(regex);
+            return match && match.length > 1
+                ? match[1]
+                : '';
+        }
+
         private addYouTubeLink(): void {
 
-            const link = getInput('Please enter the link mentioned in the embedded code');
+            const link = getInput('Please enter the embed code');
             if (link) {
 
-                this.addTextAtCurrentPosition(`![](${link})`);
+                const src = this.getFirstMatchOrDefault(link, /src="([^"]+)"/i).trim();
+                const width = parseInt(this.getFirstMatchOrDefault(link, /width="([^"]+)"/i)) || 0;
+                const height = parseInt(this.getFirstMatchOrDefault(link, /height="([^"]+)"/i)) || 0;
+
+                this.addTextAtCurrentPosition(`![{"width":${width},"height":${height}}](${src})`);
             }
         }
 
