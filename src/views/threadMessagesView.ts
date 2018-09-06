@@ -14,6 +14,7 @@ import {ThreadMessagesPage} from '../pages/threadMessagesPage';
 import {ThreadsView} from './threadsView';
 import {CommonEntities} from '../services/commonEntities';
 import {PrivilegesView} from './privilegesView';
+import {TagsView} from "./tagsView";
 
 export module ThreadMessagesView {
 
@@ -222,6 +223,7 @@ export module ThreadMessagesView {
         Views.setupSubscribedThreadsOfUsersLinks(element);
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
+        Views.setupThreadsWithTagsLinks(element);
 
         setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback,
             quoteCallback);
@@ -243,6 +245,12 @@ export module ThreadMessagesView {
 
             const container = dA('<div class="message-parent-thread render-math uk-card-badge">');
             container.append(link);
+
+            for (let tag of (message.parentThread.tags || [])) {
+
+                container.append(TagsView.createTagElement(tag));
+            }
+
             messageContainer.append(container);
         }
         else {
@@ -824,6 +832,7 @@ export module ThreadMessagesView {
         Views.setupSubscribedThreadsOfUsersLinks(element);
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
+        Views.setupThreadsWithTagsLinks(element);
 
         setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback);
 
