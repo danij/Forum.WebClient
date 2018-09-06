@@ -307,16 +307,22 @@ html {
     }
 
     blockquote {
-        border-right: solid 5px @blockquote-border-color;
-        padding-right: 25px;
-        margin-right: 25px;
+        border-style: solid;
+        border-color: @blockquote-border-color;
+        border-width: 0 5px 5px 5px;
+        padding-right: 15px;
+        padding-left: 15px;
+        padding-bottom: 15px;
+        margin-right: 15px;
+        margin-left: 15px;
         font-size: initial;
 
         .quote-title {
 
             text-align: right;
             background-color: @blockquote-border-color;
-            margin-right: -25px;
+            margin-right: -15px;
+            margin-left: -15px;
             font-style: normal;
         }
     }
