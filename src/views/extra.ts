@@ -1,6 +1,7 @@
 import {DOMHelpers} from '../helpers/domHelpers';
 import {Pages} from '../pages/common';
 import {ConsentRepository} from '../services/consentRepository';
+import {DisplayHelpers} from "../helpers/displayHelpers";
 import * as hljs from 'highlight.js/lib/index.js';
 import 'highlight.js/styles/default.css';
 
@@ -118,6 +119,9 @@ export module ViewsExtra {
             }
         });
 
+        const blockQuotes = container.getElementsByTagName('blockquote');
+        DOMHelpers.forEach(blockQuotes, adjustBlockquote);
+
         const links = container.getElementsByTagName('a');
         DOMHelpers.forEach(links, link => {
 
@@ -222,6 +226,29 @@ export module ViewsExtra {
             imageElement.alt = imageElement.src;
 
             return createImageLink(imageElement, src);
+        }
+    }
+
+    function adjustBlockquote(quote: HTMLElement): void {
+
+        if (quote.children.length > 0) {
+
+            const firstParagraph = quote.children[0] as HTMLElement;
+            if ('P' == firstParagraph.tagName.toUpperCase()) {
+
+                const match = firstParagraph.innerText.match(/^quote\|(\d+)\|(.+)$/i);
+                if (match && match.length > 0) {
+
+                    const createdAt = parseInt(match[1]);
+                    const userName = match[2];
+
+                    const replacement = cE('p');
+                    DOMHelpers.addClasses(replacement, 'quote-title');
+                    replacement.innerHTML = `${DOMHelpers.escapeStringForContent(userName)} @ ${DisplayHelpers.getDateTime(createdAt)}`;
+
+                    DOMHelpers.replaceElementWith(firstParagraph, replacement);
+                }
+            }
         }
     }
 
