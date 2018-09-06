@@ -358,7 +358,14 @@ export module EditViews {
                 const width = parseInt(this.getFirstMatchOrDefault(link, /width="([^"]+)"/i)) || 0;
                 const height = parseInt(this.getFirstMatchOrDefault(link, /height="([^"]+)"/i)) || 0;
 
-                this.addTextAtCurrentPosition(`![{"width":${width},"height":${height}}](${src})`);
+                if (src && src.length) {
+
+                    this.addTextAtCurrentPosition(`![{"width":${width},"height":${height}}](${src})`);
+                }
+                else {
+
+                    Views.showWarningNotification('Invalid embed code.');
+                }
             }
         }
 
