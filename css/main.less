@@ -12,9 +12,12 @@
 @footer-background-color: #F8F8F8;
 @logo-background-color: #E4E4E4;
 @blockquote-border-color: #DEDEDE;
-@up-vote-color: #6DB629;
-@down-vote-color: #F25347;
-@neutral-vote-color: #A0A0A0;
+@up-vote-foreground-color: white;
+@up-vote-background-color: #6DB629;
+@down-vote-foreground-color: white;
+@down-vote-background-color: #F25347;
+@neutral-vote-foreground-color: white;
+@neutral-vote-background-color: #A0A0A0;
 @recent-thread-border-color: #E5E5E5;
 @recent-message-border-color: #E5E5E5;
 @time-ago-color: #707070;
@@ -22,8 +25,6 @@
 @message-comment-background-color: #EFEFEF;
 @message-comment-background-gradient-from: #EFEFEF;
 @message-comment-background-gradient-to: #FFFFFF;
-@up-votes-text-color: white;
-@down-votes-text-color: white;
 @recent-thread-link-color: black;
 @recent-message-link-color: black;
 @already-visited-color: #551A8B;
@@ -320,33 +321,19 @@ html {
     }
 }
 
-.message-signature {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    margin: 0 auto;
-}
-
 .message-up-vote {
 
-    position: absolute;
-    bottom: @message-extra-bottom;
-    right: 0;
-
     span {
-        color: white;
-        background: @up-vote-color;
+        color: @up-vote-foreground-color;
+        background: @up-vote-background-color;
     }
 }
 
 .message-down-vote {
 
-    position: absolute;
-    bottom: @message-extra-bottom;
-
     span {
-        color: white;
-        background: @down-vote-color;
+        color: @down-vote-foreground-color;
+        background: @down-vote-background-color;
     }
 }
 
@@ -406,16 +393,16 @@ html {
             text-align: center;
 
             &.up-vote {
-                color: white;
-                background-color: @up-vote-color;
+                color: @up-vote-foreground-color;
+                background-color: @up-vote-background-color;
             }
             &.neutral-vote {
-                color: white;
-                background-color: @neutral-vote-color;
+                color: @neutral-vote-foreground-color;
+                background-color: @neutral-vote-background-color;
             }
             &.down-vote {
-                color: white;
-                background-color: @down-vote-color;
+                color: @down-vote-foreground-color;
+                background-color: @down-vote-background-color;
             }
         }
 
@@ -689,16 +676,16 @@ html {
     .user-up-votes {
         float: left;
         span {
-            color: @up-votes-text-color;
-            background: @up-vote-color;
+            color: @up-vote-foreground-color;
+            background: @up-vote-background-color;
         }
     }
 
     .user-down-votes {
         float: right;
         span {
-            color: @down-votes-text-color;
-            background: @down-vote-color;
+            color: @down-vote-foreground-color;
+            background: @down-vote-background-color;
         }
     }
 }
@@ -997,18 +984,18 @@ html {
 }
 
 .score-up {
-    color: white;
-    background: @up-vote-color;
+    color: @up-vote-foreground-color;
+    background: @up-vote-background-color;
 }
 
 .score-neutral {
-    color: white;
-    background: @neutral-vote-color;
+    color: @neutral-vote-foreground-color;
+    background: @neutral-vote-background-color;
 }
 
 .score-down {
-    color: white;
-    background: @down-vote-color;
+    color: @down-vote-foreground-color;
+    background: @down-vote-background-color;
 }
 
 .tags-table {

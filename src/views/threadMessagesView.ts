@@ -210,6 +210,8 @@ export module ThreadMessagesView {
             flexContainer.append(createThreadMessageContent(message));
             flexContainer.append(createThreadMessageActionLinks(message, quoteCallback));
 
+            messageContainer.append(createThreadMessageFooter(message));
+
             if (i < (messages.length - 1)) {
 
                 result.appendRaw('<hr class="uk-divider-icon" />');
@@ -295,18 +297,6 @@ export module ThreadMessagesView {
         return messageDetailsContainer;
     }
 
-    function getUsersWhoVotedTooltip(votes: ThreadMessageRepository.ThreadMessageVote[]) : string {
-
-        if ( ! votes.length) return '–';
-
-        votes.sort((first, second) => {
-
-            return second.at - first.at;
-        });
-
-        return votes.map((v) => `${v.userName} (${DisplayHelpers.getShortDate(v.at)})`).join(' · ');
-    }
-
     const VotedMark: string = ' ✓';
 
     function createThreadMessageAuthor(message: ThreadMessageRepository.ThreadMessage,
@@ -336,81 +326,88 @@ export module ThreadMessagesView {
         {
             authorContainer.append(UsersView.createUserDropdown(author, 'user-info', 'bottom-left'));
         }
+        return authorContainer;
+    }
+
+    function createThreadMessageFooter(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
+
+        const author = message.createdBy;
+
+        const container = dA('<div class="uk-flex">');
+
+        let upVotesNr = (message.nrOfUpVotes || (message.nrOfUpVotes == 0))
+            ? DisplayHelpers.intToString(message.nrOfUpVotes)
+            : '?';
+        let downVotesNr = (message.nrOfDownVotes || (message.nrOfDownVotes == 0))
+            ? DisplayHelpers.intToString(message.nrOfDownVotes) : '?';
+
+        const upVotesTooltip = [];
+        const downVotesTooltip = [];
+
+        let upVoteData = '';
+        let downVoteData = '';
+        let upVoteExtraClass = '';
+        let downVoteExtraClass = '';
+
+        if ((undefined === message.voteStatus) || (0 == message.voteStatus)) {
+
+            if (Privileges.ThreadMessage.canUpVoteThreadMessage(message)) {
+
+                upVotesTooltip.push('Click to up vote message.');
+                upVoteData = ` data-upvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+                upVoteExtraClass = 'pointer-cursor';
+            }
+            if (Privileges.ThreadMessage.canDownVoteThreadMessage(message)) {
+
+                downVotesTooltip.push('Click to down vote message.');
+                downVoteData = ` data-downvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+                downVoteExtraClass = 'pointer-cursor';
+            }
+        }
+        else if (Privileges.ThreadMessage.canResetVoteOfThreadMessage(message)) {
+
+            if (-1 == message.voteStatus) {
+
+                downVotesTooltip.push('Click to reset vote.');
+                downVoteData = ` data-resetvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+                downVoteExtraClass = 'pointer-cursor';
+            }
+            else {
+
+                upVotesTooltip.push('Click to reset vote.');
+                upVoteData = ` data-resetvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
+                upVoteExtraClass = 'pointer-cursor';
+            }
+        }
+        if (-1 == message.voteStatus) {
+
+            downVotesNr += VotedMark;
+        }
+        else if (1 == message.voteStatus) {
+
+            upVotesNr += VotedMark;
+        }
+
+        container.appendRaw(`<div class="uk-text-center message-down-vote ${downVoteExtraClass}">` +
+            `<span class="uk-label" ${downVoteData} title="${DOMHelpers.escapeStringForAttribute(downVotesTooltip.join('\n'))}">` +
+            `&minus; ${downVotesNr}</span></div>`);
+
         {
             author.signature = author.signature || '';
 
-            const signatureContainer = dA('<div class="uk-text-center uk-float-left message-signature">');
-            authorContainer.append(signatureContainer);
+            const signatureContainer = dA('<div class="uk-text-center uk-flex-1 message-signature">');
+            container.append(signatureContainer);
 
             const signature = dA('<span title="User signature" uk-tooltip>');
             signatureContainer.append(signature);
             signature.appendString(author.signature);
         }
-        {
 
-            let upVotesNr = (message.nrOfUpVotes || (message.nrOfUpVotes == 0))
-                ? DisplayHelpers.intToString(message.nrOfUpVotes)
-                : '?';
-            let downVotesNr = (message.nrOfDownVotes || (message.nrOfDownVotes == 0))
-                ? DisplayHelpers.intToString(message.nrOfDownVotes) : '?';
+        container.appendRaw(`<div class="uk-text-center message-up-vote ${upVoteExtraClass}">` +
+            `<span class="uk-label" ${upVoteData} title="${DOMHelpers.escapeStringForAttribute(upVotesTooltip.join('\n'))}">` +
+            `&plus; ${upVotesNr}</span></div>`);
 
-            const upVotesTooltip = [];
-            const downVotesTooltip = [];
-
-            let upVoteData = '';
-            let downVoteData = '';
-            let upVoteExtraClass = '';
-            let downVoteExtraClass = '';
-
-            if ((undefined === message.voteStatus) || (0 == message.voteStatus)) {
-
-                if (Privileges.ThreadMessage.canUpVoteThreadMessage(message)) {
-
-                    upVotesTooltip.push('Click to up vote message.');
-                    upVoteData = ` data-upvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-                    upVoteExtraClass = 'pointer-cursor';
-                }
-                if (Privileges.ThreadMessage.canDownVoteThreadMessage(message)) {
-
-                    downVotesTooltip.push('Click to down vote message.');
-                    downVoteData = ` data-downvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-                    downVoteExtraClass = 'pointer-cursor';
-                }
-            }
-            else if (Privileges.ThreadMessage.canResetVoteOfThreadMessage(message)) {
-
-                if (-1 == message.voteStatus) {
-
-                    downVotesTooltip.push('Click to reset vote.');
-                    downVoteData = ` data-resetvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-                    downVoteExtraClass = 'pointer-cursor';
-                }
-                else {
-
-                    upVotesTooltip.push('Click to reset vote.');
-                    upVoteData = ` data-resetvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
-                    upVoteExtraClass = 'pointer-cursor';
-                }
-            }
-            if (-1 == message.voteStatus) {
-
-                downVotesNr += VotedMark;
-            }
-            else if (1 == message.voteStatus) {
-
-                upVotesNr += VotedMark;
-            }
-
-            authorContainer.appendRaw(`<div class="uk-text-center uk-float-left message-down-vote ${downVoteExtraClass}">` +
-                `<span class="uk-label" ${downVoteData} title="${DOMHelpers.escapeStringForAttribute(downVotesTooltip.join('\n'))}">` +
-                `&minus; ${downVotesNr}</span></div>`);
-
-            authorContainer.appendRaw(`<div class="uk-text-center uk-float-right message-up-vote ${upVoteExtraClass}">` +
-                `<span class="uk-label" ${upVoteData} title="${DOMHelpers.escapeStringForAttribute(upVotesTooltip.join('\n'))}">` +
-                `&plus; ${upVotesNr}</span></div>`);
-        }
-
-        return authorContainer;
+        return container;
     }
 
     function createThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
