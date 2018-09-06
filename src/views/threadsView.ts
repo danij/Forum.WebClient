@@ -640,7 +640,7 @@ export module ThreadsView {
         result.appendChild(form);
 
         let input: HTMLInputElement;
-        let tagsSelect: HTMLSelectElement;
+        let tagsContainer: HTMLDivElement;
         let editControl: EditViews.EditControl;
 
         {
@@ -658,10 +658,8 @@ export module ThreadsView {
             form.appendChild(div);
 
             div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Tags</label>'));
-            tagsSelect = DOMHelpers.parseHTML('<select class="uk-select" multiple></select>') as HTMLSelectElement;
-            div.appendChild(tagsSelect);
-
-            TagsView.populateTagsInSelect(tagsSelect, allTags);
+            tagsContainer = TagsView.createTagSelectionView(allTags);
+            div.appendChild(tagsContainer);
         }
         {
             const div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
@@ -680,13 +678,7 @@ export module ThreadsView {
         Views.onClick(addButton, async () => {
 
             const name = input.value;
-            const tagIds: string[] = [];
-
-            const selected = tagsSelect.selectedOptions;
-            for (let i = 0; i < selected.length; ++i) {
-
-                tagIds.push(selected[i].getAttribute('value'));
-            }
+            const tagIds: string[] = TagsView.getSelectedTagIds(tagsContainer);
 
             const message = editControl.getText();
 

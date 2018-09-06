@@ -308,14 +308,57 @@ export module TagsView {
             option.innerText = tag.name;
 
             if (selectedTags.find((value) => {
-                    return value.id == tag.id;
-                })) {
+                return value.id == tag.id;
+            })) {
 
                 option.setAttribute('selected', '');
             }
 
             selectElement.appendChild(option);
         }
+    }
+
+    export function createTagSelectionView(tags: TagRepository.Tag[], selectedTags?: TagRepository.Tag[]): HTMLDivElement {
+
+        selectedTags = selectedTags || [];
+
+        const result = cE('div') as HTMLDivElement;
+        DOMHelpers.addClasses(result, 'tag-selection-container');
+
+        for (let tag of tags) {
+
+            const checkBox = cE('input') as HTMLInputElement;
+            checkBox.type = 'checkbox';
+            checkBox.setAttribute('value', tag.id);
+
+            const label = cE('label') as HTMLLabelElement;
+            result.appendChild(label);
+            label.appendChild(checkBox);
+            label.appendChild(document.createTextNode(tag.name));
+
+            checkBox.checked = !! selectedTags.find((value) => {
+
+                return value.id == tag.id;
+            });
+        }
+
+        return result;
+    }
+
+    export function getSelectedTagIds(container: HTMLElement): string[] {
+
+        const result: string[] = [];
+
+        DOMHelpers.forEach(container.getElementsByTagName('input'), element => {
+
+            const checkbox = element as HTMLInputElement;
+            if (checkbox.checked) {
+
+                result.push(checkbox.value);
+            }
+        });
+
+        return result;
     }
 
     export function showSelectTagsDialog(currentTags: TagRepository.Tag[], allTags: TagRepository.Tag[],
@@ -328,7 +371,7 @@ export module TagsView {
 
         const saveButton = DOMHelpers.removeEventListeners(
             modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
-        const selectElement = modal.getElementsByTagName('select')[0] as HTMLSelectElement;
+        const selectFormElement = modal.getElementsByTagName('form')[0] as HTMLFormElement;
 
         const previousTagIds = new Set();
         for (let tag of currentTags) {
@@ -338,12 +381,9 @@ export module TagsView {
 
         Views.onClick(saveButton, () => {
 
-            const selected = selectElement.selectedOptions;
             const added = [], removed = [];
 
-            for (let i = 0; i < selected.length; ++i) {
-
-                const id = selected[i].getAttribute('value');
+            for (const id of getSelectedTagIds(selectFormElement)) {
 
                 if (previousTagIds.has(id)) {
 
@@ -361,7 +401,8 @@ export module TagsView {
             onSave(added, removed);
         });
 
-        populateTagsInSelect(selectElement, allTags, currentTags);
+        selectFormElement.innerHTML = '';
+        selectFormElement.appendChild(createTagSelectionView(allTags, currentTags));
     }
 
     export function showSelectSingleTagDialog(allTags: TagRepository.Tag[], onSave: (selected: string) => void): void {

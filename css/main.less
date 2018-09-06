@@ -615,6 +615,11 @@ html {
     .uk-navbar-nav > li > a {
         padding: 0 5px;
     }
+
+    .tag-selection-container {
+
+        column-count: 5 !important;
+    }
 }
 
 @media (max-width: 1700px) {
@@ -1099,9 +1104,9 @@ html {
     margin-right: 5px;
 }
 
-#select-tags-modal select {
+#select-tags-modal .uk-modal-dialog {
 
-    min-height: 200px;
+    min-width: 90%;
 }
 
 #select-category-parent-modal {
@@ -1307,4 +1312,13 @@ form.assign-privileges-form {
     padding: 10px 0 10px 10px;
     max-height: 300px;
     overflow-y: scroll;
+}
+
+.tag-selection-container {
+
+    column-count: 7;
+
+    label {
+        display: block;
+    }
 }
