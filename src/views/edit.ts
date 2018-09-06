@@ -206,7 +206,7 @@ export module EditViews {
                 null,
                 {icon: 'link', title: 'Add link', callback: () => this.addLink()},
                 {icon: 'image', title: 'Add image reference', callback: () => this.addImage()},
-                {icon: 'youtube', title: 'Add YouTube link', callback: () => this.addYouTubeLink()}
+                {icon: 'youtube', title: 'Embed YouTube', callback: () => this.addYouTubeLink()}
             ];
 
             for (const action of actions) {
