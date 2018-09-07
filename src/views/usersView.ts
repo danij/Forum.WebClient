@@ -306,7 +306,15 @@ export module UsersView {
     export function createUserTitleElement(user: UserRepository.User): DOMAppender {
 
         const result = dA('<div class="usertitle uk-text-small">');
-        result.appendString(user.title);
+
+        if (user.title && user.title.length) {
+
+            result.appendString(user.title);
+        }
+        else {
+
+            result.appendRaw('&nbsp;');
+        }
 
         return result;
     }
@@ -391,12 +399,7 @@ export module UsersView {
         left.append(name);
         name.appendString(user.name);
 
-        if (user.title && user.title.length) {
-
-            const title = dA('<div class="usertitle uk-text-small">');
-            left.append(title);
-            title.appendString(user.title);
-        }
+        left.append(createUserTitleElement(user));
 
         const threadsLink = '<a ' + getThreadsOfUserLinkContent(user) + '>threads</a>';
         const threadMessagesLink = '<a ' + getMessagesOfUserLinkContent(user) + '>messages</a>';
