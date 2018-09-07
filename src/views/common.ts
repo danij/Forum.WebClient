@@ -38,6 +38,8 @@ export module Views {
         privacyPolicyDocName: string;
         termsOfServiceDocName: string;
         userNameLengths: LengthConfig;
+        threadNameLengths: LengthConfig;
+        messageContentLengths: LengthConfig;
     }
 
     declare const displayConfig: DisplayConfig;

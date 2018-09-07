@@ -412,6 +412,20 @@ export module ThreadsView {
                     const name = EditViews.getInput('Edit thread name', thread.name);
                     if (name && name.length && (name != thread.name)) {
 
+                        const min = Views.DisplayConfig.threadNameLengths.min;
+                        const max = Views.DisplayConfig.threadNameLengths.max;
+
+                        if (name.length < min) {
+
+                            Views.showWarningNotification(`Thread name must be at least ${min} characters long.`);
+                            return;
+                        }
+                        if (name.length > max) {
+
+                            Views.showWarningNotification(`Thread name must be less than ${max} characters long.`);
+                            return;
+                        }
+
                         EditViews.doIfOk(callback.editThreadName(thread.id, name), () => {
 
                             threadTitle.innerText = thread.name = name;

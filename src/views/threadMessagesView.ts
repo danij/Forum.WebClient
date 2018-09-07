@@ -462,6 +462,20 @@ export module ThreadMessagesView {
 
             showEditThreadMessageDialog(message.content, async (text: string, changeReason: string) => {
 
+                const min = Views.DisplayConfig.messageContentLengths.min;
+                const max = Views.DisplayConfig.messageContentLengths.max;
+
+                if (text.length < min) {
+
+                    Views.showWarningNotification(`Message must be at least ${min} characters long.`);
+                    return;
+                }
+                if (text.length > max) {
+
+                    Views.showWarningNotification(`Message must be less than ${max} characters long.`);
+                    return;
+                }
+
                 if (await callback.editThreadMessageContent(messageId, text, changeReason)) {
 
                     new ThreadMessagesPage().displayForThreadMessage(messageId);
@@ -677,6 +691,20 @@ export module ThreadMessagesView {
 
                 const text = editControl.getText();
                 if (text.trim().length < 1) return;
+
+                const min = Views.DisplayConfig.messageContentLengths.min;
+                const max = Views.DisplayConfig.messageContentLengths.max;
+
+                if (text.length < min) {
+
+                    Views.showWarningNotification(`Message must be at least ${min} characters long.`);
+                    return;
+                }
+                if (text.length > max) {
+
+                    Views.showWarningNotification(`Message must be less than ${max} characters long.`);
+                    return;
+                }
 
                 const newMessageId = await callback.addThreadMessage(thread.id, text);
                 if (newMessageId) {

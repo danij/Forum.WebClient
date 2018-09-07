@@ -8,7 +8,7 @@ window.serviceConfig = {
 //stores the number of seconds to cache various entities
 window.cacheConfig = {
 
-    tags: 3600*24,
+    tags: 3600 * 24,
     threads: 60,
     latestMessages: 30
 };
@@ -27,9 +27,18 @@ window.displayConfig = {
     useDashesForThreadNameInUrl: true,
     privacyPolicyDocName: 'privacy',
     termsOfServiceDocName: 'terms_of_service',
-    userNameLengths: { //only for displaying errors, when updating please also update the backend configuration
+    //only for displaying errors, when updating please also update the backend configuration
+    userNameLengths: {
         min: 3,
         max: 20
+    },
+    threadNameLengths: {
+        min: 3,
+        max: 128
+    },
+    messageContentLengths: {
+        min: 5,
+        max: 65535
     }
 };
 
@@ -69,5 +78,5 @@ window.registerConfig = {
 
 window.debugConfig = {
 
-    enableAllPrivileges: true
+    enableAllPrivileges: false
 };
