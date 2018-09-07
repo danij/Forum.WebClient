@@ -19,7 +19,7 @@ export module CategoriesView {
 
     export function createCategoryLink(category: CategoryRepository.Category,
                                        addSpace: boolean = false,
-                                       classes: string = 'uk-button uk-button-text uk-text-bold'): DOMAppender {
+                                       classes: string = 'uk-button uk-button-text category-link'): DOMAppender {
 
         const result = dA(`<a class="${classes}" href="` + Pages.getCategoryFullUrl(category) +
             '" data-categoryid="' + DOMHelpers.escapeStringForAttribute(category.id) + '" data-categoryname="' +
@@ -72,7 +72,7 @@ export module CategoriesView {
                         'data-category-display-order': category.displayOrder.toString()
                     };
                     const dataAttribute = DOMHelpers.concatAttributes(attributes);
-                    const link = dA(`<a class="editDisplayOrderLink" ${dataAttribute}>`);
+                    const link = dA(`<a class="edit-display-order-link" ${dataAttribute}>`);
                     nameColumn.append(link);
                     link.append(dA('<span class="uk-icon" uk-icon="icon: move" uk-tooltip title="Edit category display order">'))
                 }
@@ -441,7 +441,7 @@ export module CategoriesView {
             }
         };
 
-        const elements = container.getElementsByClassName('editDisplayOrderLink');
+        const elements = container.getElementsByClassName('edit-display-order-link');
         DOMHelpers.forEach(elements, element => {
 
             Views.onClick(element, (ev) => eventHandler(ev));
