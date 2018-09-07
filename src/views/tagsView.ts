@@ -325,6 +325,15 @@ export module TagsView {
         const result = cE('div') as HTMLDivElement;
         DOMHelpers.addClasses(result, 'tag-selection-container');
 
+        const searchForm = cE('form');
+        result.appendChild(searchForm);
+        DOMHelpers.addClasses(searchForm, 'uk-search', 'uk-search-default');
+
+        searchForm.appendChild(DOMHelpers.parseHTML('<span class="uk-search-icon-flip" uk-search-icon></span>'));
+        const searchInput =
+            DOMHelpers.parseHTML('<input class="uk-search-input" type="search" placeholder="Filter..." />') as HTMLInputElement;
+        searchForm.appendChild(searchInput);
+
         for (let tag of tags) {
 
             const checkBox = cE('input') as HTMLInputElement;
@@ -335,12 +344,37 @@ export module TagsView {
             result.appendChild(label);
             label.appendChild(checkBox);
             label.appendChild(document.createTextNode(tag.name));
+            label.setAttribute('data-value', tag.name.toLowerCase());
 
             checkBox.checked = !! selectedTags.find((value) => {
 
                 return value.id == tag.id;
             });
         }
+
+        searchInput.onclick = ev => ev.preventDefault();
+        searchInput.onkeypress = ev => {
+
+            if ('Enter' === ev.key) ev.preventDefault();
+        };
+        searchInput.oninput = () => {
+
+            const toSearch = searchInput.value;
+            const searchFor = toSearch.toLocaleLowerCase().trim();
+
+            DOMHelpers.forEach(result.getElementsByTagName('label'), label => {
+
+                DOMHelpers.unHide(label);
+
+                if (searchFor.length) {
+
+                    if (label.getAttribute('data-value').indexOf(searchFor) < 0) {
+
+                        DOMHelpers.hide(label);
+                    }
+                }
+            });
+        };
 
         return result;
     }
