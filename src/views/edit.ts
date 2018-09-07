@@ -125,7 +125,6 @@ export module EditViews {
             this.previewContainer.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Message Preview</span>'));
 
             this.resultContainer = cE('div') as HTMLDivElement;
-            DOMHelpers.addClasses(this.resultContainer, 'preview-container');
             this.previewContainer.appendChild(this.resultContainer);
 
             const grid = cE('div');
