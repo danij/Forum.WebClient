@@ -27,9 +27,9 @@ window.displayConfig = {
     useDashesForThreadNameInUrl: true,
     privacyPolicyDocName: 'privacy',
     termsOfServiceDocName: 'terms_of_service',
-    newUserLengths: { //only for displaying errors, when updating please also update the backend configuration
-        minName: 3,
-        maxName: 20
+    userNameLengths: { //only for displaying errors, when updating please also update the backend configuration
+        min: 3,
+        max: 20
     }
 };
 
@@ -69,5 +69,5 @@ window.registerConfig = {
 
 window.debugConfig = {
 
-    enableAllPrivileges: false
+    enableAllPrivileges: true
 };

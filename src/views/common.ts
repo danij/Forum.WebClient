@@ -19,10 +19,10 @@ export module Views {
 
     declare var UIkit: any;
 
-    interface UserLengthConfig {
+    interface LengthConfig {
 
-        minName: number,
-        maxName: number
+        min: number,
+        max: number
     }
 
     interface DisplayConfig {
@@ -37,7 +37,7 @@ export module Views {
         useDashesForThreadNameInUrl: boolean;
         privacyPolicyDocName: string;
         termsOfServiceDocName: string;
-        newUserLengths: UserLengthConfig;
+        userNameLengths: LengthConfig;
     }
 
     declare const displayConfig: DisplayConfig;

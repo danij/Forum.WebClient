@@ -80,8 +80,8 @@ export module AuthenticationView {
 
         const toReplace = {
 
-            userNameMinLength: Views.DisplayConfig.newUserLengths.minName,
-            userNameMaxLength: Views.DisplayConfig.newUserLengths.maxName,
+            userNameMinLength: Views.DisplayConfig.userNameLengths.min,
+            userNameMaxLength: Views.DisplayConfig.userNameLengths.max,
         };
 
         DOMHelpers.forEach(modal.getElementsByClassName('replace-template'), element => {

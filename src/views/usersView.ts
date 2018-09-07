@@ -493,6 +493,20 @@ export module UsersView {
             const name = EditViews.getInput('Edit user name', user.name);
             if (name && name.length && (name != user.name)) {
 
+                const min = Views.DisplayConfig.userNameLengths.min;
+                const max = Views.DisplayConfig.userNameLengths.max;
+
+                if (name.length < min) {
+
+                    Views.showWarningNotification(`User name must be at least ${min} characters long.`);
+                    return;
+                }
+                if (name.length > max) {
+
+                    Views.showWarningNotification(`User name must be less than ${max} characters long.`);
+                    return;
+                }
+
                 if (await callback.editUserName(user.id, name)) {
 
                     new ThreadsPage().displayForUser(name);
