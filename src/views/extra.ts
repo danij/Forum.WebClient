@@ -244,6 +244,8 @@ export module ViewsExtra {
 
                     const replacement = cE('p');
                     DOMHelpers.addClasses(replacement, 'quote-title');
+                    DOMHelpers.addClasses(firstParagraph.parentElement, 'no-border-top');
+
                     replacement.innerHTML = `${DOMHelpers.escapeStringForContent(userName)} @ ${DisplayHelpers.getDateTime(createdAt)}`;
 
                     DOMHelpers.replaceElementWith(firstParagraph, replacement);
