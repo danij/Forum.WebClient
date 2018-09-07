@@ -212,10 +212,7 @@ export module ThreadMessagesView {
 
             messageContainer.append(createThreadMessageFooter(message));
 
-            if (i < (messages.length - 1)) {
-
-                result.appendRaw('<hr class="uk-divider-icon" />');
-            }
+            result.appendRaw('<hr class="uk-divider-icon" />');
         }
 
         const element = result.toElement();
