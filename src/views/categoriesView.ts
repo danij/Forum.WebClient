@@ -30,7 +30,7 @@ export module CategoriesView {
         return result;
     }
 
-    export function createCategoriesTable(categories: CategoryRepository.Category[],
+    export function createCategoriesTable(categories: CategoryRepository.Category[], showingRootCategories: boolean,
                                           callback: PageActions.ICategoryCallback): HTMLElement {
 
         const tableContainer = dA('<div class="categories-table">');
@@ -59,90 +59,7 @@ export module CategoriesView {
 
             if (null == category) continue;
 
-            const row = dA('<tr>');
-            tbody.append(row);
-            {
-                const nameColumn = dA('<td class="uk-table-expand">');
-                row.append(nameColumn);
-
-                if (Privileges.Category.canEditCategoryDisplayOrder(category)) {
-
-                    const attributes = {
-                        'data-category-id': category.id,
-                        'data-category-display-order': category.displayOrder.toString()
-                    };
-                    const dataAttribute = DOMHelpers.concatAttributes(attributes);
-                    const link = dA(`<a class="edit-display-order-link" ${dataAttribute}>`);
-                    nameColumn.append(link);
-                    link.append(dA('<span class="uk-icon" uk-icon="icon: move" uk-tooltip title="Edit category display order">'))
-                }
-                else {
-
-                    nameColumn.append(dA('<span class="uk-icon" uk-icon="icon: folder">'));
-                }
-
-                const nameLink = createCategoryLink(category, true);
-                nameColumn.append(nameLink);
-                nameColumn.appendRaw('<br/>');
-
-                const description = dA('<span class="category-description">');
-                nameColumn.append(description);
-                description.appendString(category.description);
-
-                if (category.children && category.children.length) {
-
-                    const container = dA('div');
-                    nameColumn.append(container);
-
-                    const childCategoryElement = dA('<span class="category-children uk-text-small">');
-                    container.appendRaw('<span class="uk-text-meta">Subcategories:</span> ');
-                    container.append(childCategoryElement);
-
-                    for (let i = 0; i < category.children.length; ++i) {
-
-                        const childCategory = category.children[i];
-
-                        const element = createCategoryLink(childCategory, false, '');
-                        childCategoryElement.append(element);
-
-                        if (i < (category.children.length - 1)) {
-                            childCategoryElement.appendRaw(' · ');
-                        }
-                    }
-                }
-            }
-            {
-                const tagColumn = dA('<td class="uk-text-center uk-table-shrink">');
-                row.append(tagColumn);
-
-                for (const tag of category.tags) {
-
-                    if (null == tag) continue;
-
-                    tagColumn.append(TagsView.createTagElement(tag));
-                    tagColumn.appendRaw('\n');
-                }
-            }
-            {
-                const statisticsColumn = ('<td class="category-statistics uk-table-shrink">\n' +
-                    '    <table>\n' +
-                    '        <tr>\n' +
-                    '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +
-                    '            <td class="spaced-number uk-text-left uk-text-meta">threads</td>\n' +
-                    '        </tr>\n' +
-                    '        <tr>\n' +
-                    '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
-                    '            <td class="spaced-number uk-text-left uk-text-meta">messages</td>\n' +
-                    '        </tr>\n' +
-                    '    </table>\n' +
-                    '</td>')
-                    .replace('{nrOfThreads}', DisplayHelpers.intToString(category.threadTotalCount))
-                    .replace('{nrOfMessages}', DisplayHelpers.intToString(category.messageTotalCount));
-                row.appendRaw(statisticsColumn);
-            }
-            {
-                row.append(ThreadMessagesView.createLatestMessageColumnView(category.latestMessage));
-            }
+            createCategoryTableRow(tbody, category, showingRootCategories);
         }
 
         const result = tableContainer.toElement();
@@ -158,6 +75,111 @@ export module CategoriesView {
         setupEditCategoryDisplayCategories(result, callback);
 
         return result;
+    }
+
+    function createCategoryTableRow(container: DOMAppender, category: CategoryRepository.Category,
+                                    showingRootCategories: boolean, level: number = 0) {
+
+        const justName = showingRootCategories && (( ! category.tags) || (0 == category.tags.length));
+
+        const row = dA('tr');
+        container.append(row);
+
+        {
+            const levelClass = level > 0 ? `category-level-${level}` : '';
+            const nameColumn = justName
+                ? dA('<td class="uk-table-expand category-just-name" colspan="4">')
+                : dA(`<td class="uk-table-expand ${levelClass}">`);
+            row.append(nameColumn);
+
+            if (Privileges.Category.canEditCategoryDisplayOrder(category)) {
+
+                const attributes = {
+                    'data-category-id': category.id,
+                    'data-category-display-order': category.displayOrder.toString()
+                };
+                const dataAttribute = DOMHelpers.concatAttributes(attributes);
+                const link = dA(`<a class="edit-display-order-link" ${dataAttribute}>`);
+                nameColumn.append(link);
+                link.append(dA('<span class="uk-icon" uk-icon="icon: move" uk-tooltip title="Edit category display order">'))
+            }
+            else {
+
+                nameColumn.append(dA('<span class="uk-icon" uk-icon="icon: folder">'));
+            }
+
+            const nameLink = createCategoryLink(category, true);
+            nameColumn.append(nameLink);
+            nameColumn.appendRaw('<br/>');
+
+            const description = dA('<span class="category-description">');
+            nameColumn.append(description);
+            description.appendString(category.description);
+
+            if (( ! showingRootCategories) && category.children && category.children.length) {
+
+                const container = dA('div');
+                nameColumn.append(container);
+
+                const childCategoryElement = dA('<span class="category-children uk-text-small">');
+                container.appendRaw('<span class="uk-text-meta">Subcategories:</span> ');
+                container.append(childCategoryElement);
+
+                for (let i = 0; i < category.children.length; ++i) {
+
+                    const childCategory = category.children[i];
+
+                    const element = createCategoryLink(childCategory, false, '');
+                    childCategoryElement.append(element);
+
+                    if (i < (category.children.length - 1)) {
+                        childCategoryElement.appendRaw(' · ');
+                    }
+                }
+            }
+        }
+        if ( ! justName) {
+            const tagColumn = dA('<td class="uk-text-center uk-table-shrink">');
+            row.append(tagColumn);
+
+            for (const tag of category.tags) {
+
+                if (null == tag) continue;
+
+                tagColumn.append(TagsView.createTagElement(tag));
+                tagColumn.appendRaw('\n');
+            }
+        }
+        if ( ! justName) {
+
+            const statisticsColumn = ('<td class="category-statistics uk-table-shrink">\n' +
+                '    <table>\n' +
+                '        <tr>\n' +
+                '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +
+                '            <td class="spaced-number uk-text-left uk-text-meta">threads</td>\n' +
+                '        </tr>\n' +
+                '        <tr>\n' +
+                '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
+                '            <td class="spaced-number uk-text-left uk-text-meta">messages</td>\n' +
+                '        </tr>\n' +
+                '    </table>\n' +
+                '</td>')
+                .replace('{nrOfThreads}', DisplayHelpers.intToString(category.threadTotalCount))
+                .replace('{nrOfMessages}', DisplayHelpers.intToString(category.messageTotalCount));
+            row.appendRaw(statisticsColumn);
+        }
+        if ( ! justName) {
+
+            row.append(ThreadMessagesView.createLatestMessageColumnView(category.latestMessage));
+        }
+
+        if (showingRootCategories && category.children && category.children.length) {
+
+            for (let childCategory of category.children) {
+
+                createCategoryTableRow(container, childCategory, false, level + 1);
+            }
+        }
     }
 
     export function createCategoryHeader(category: CategoryRepository.Category,
@@ -349,7 +371,7 @@ export module CategoriesView {
                                                 callback: PageActions.ICategoryCallback): HTMLElement {
 
         const result = cE('div');
-        result.appendChild(createCategoriesTable(categories, callback));
+        result.appendChild(createCategoriesTable(categories, true, callback));
 
         if (Privileges.ForumWide.canAddNewRootCategory()) {
 
@@ -372,7 +394,7 @@ export module CategoriesView {
 
         if (category.children && category.children.length) {
 
-            result.appendChild(createCategoriesTable(category.children, callback));
+            result.appendChild(createCategoriesTable(category.children, false, callback));
             separatorNeeded = true;
         }
 

@@ -29,6 +29,8 @@
 @recent-message-link-color: black;
 @already-visited-color: #551A8B;
 @inline-documentation-background-color: #a0a0a0;
+@category-just-name-background-gradient-from: #EFEFEF;
+@category-just-name-background-gradient-to: #FFFFFF;
 
 @logo-size: 96px;
 @latest-message-logo-scale: 0.6;
@@ -742,9 +744,15 @@ html {
         width: @latest-message-in-table-width;
     }
 
-    //.category-children {
-    //    float: right;
-    //}
+    .category-just-name {
+
+        background: linear-gradient(90deg, @category-just-name-background-gradient-from 0%, @category-just-name-background-gradient-to 100%);
+    }
+
+    .category-level-1 {
+
+        padding-left: 50px !important;
+    }
 
     .category-link {
 
