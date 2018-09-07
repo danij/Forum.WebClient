@@ -318,7 +318,8 @@ export module TagsView {
         }
     }
 
-    export function createTagSelectionView(tags: TagRepository.Tag[], selectedTags?: TagRepository.Tag[]): HTMLDivElement {
+    export function createTagSelectionView(tagCallback: PageActions.ITagCallback, tags: TagRepository.Tag[],
+                                           selectedTags?: TagRepository.Tag[]): HTMLDivElement {
 
         selectedTags = selectedTags || [];
 
@@ -334,22 +335,72 @@ export module TagsView {
             DOMHelpers.parseHTML('<input class="uk-search-input" type="search" placeholder="Filter..." />') as HTMLInputElement;
         searchForm.appendChild(searchInput);
 
-        for (let tag of tags) {
+        function createEntry(tagId: string, tagName: string): HTMLLabelElement {
 
             const checkBox = cE('input') as HTMLInputElement;
             checkBox.type = 'checkbox';
-            checkBox.setAttribute('value', tag.id);
+            checkBox.setAttribute('value', tagId);
 
             const label = cE('label') as HTMLLabelElement;
-            result.appendChild(label);
             label.appendChild(checkBox);
-            label.appendChild(document.createTextNode(tag.name));
-            label.setAttribute('data-value', tag.name.toLowerCase());
+            label.appendChild(document.createTextNode(tagName));
+            label.setAttribute('data-value', tagName.toLowerCase());
 
             checkBox.checked = !! selectedTags.find((value) => {
 
-                return value.id == tag.id;
+                return value.id == tagId;
             });
+
+            return label;
+        }
+
+        for (let tag of tags) {
+
+            result.appendChild(createEntry(tag.id, tag.name));
+        }
+
+        if (Privileges.ForumWide.canAddNewTag()) {
+
+            const tagNameInput =
+                DOMHelpers.parseHTML('<input class="uk-input" type="input" placeholder="Add new tag..." />') as HTMLInputElement;
+
+            result.appendChild(tagNameInput);
+
+            tagNameInput.onkeypress = async ev => {
+
+                if ('Enter' === ev.key) {
+
+                    ev.preventDefault();
+
+                    const tagName = tagNameInput.value.trim();
+                    if (tagName.length < 1) return;
+
+                    const tagId = await tagCallback.createTagAndGetId(tagName);
+                    if (tagId && tagId.length) {
+
+                        const entry = createEntry(tagId, tagName);
+                        (entry.getElementsByTagName('input')[0] as HTMLInputElement).checked = true;
+
+                        const searchBy = tagName.toLowerCase();
+
+                        let nextEntry: HTMLElement = null;
+                        DOMHelpers.forEach(result.getElementsByTagName('label'), label => {
+
+                            if ((null === nextEntry) && label.getAttribute('data-value') > searchBy) {
+
+                                nextEntry = label as HTMLLabelElement;
+                            }
+                        });
+
+                        if (null === nextEntry) {
+
+                            nextEntry = tagNameInput;
+                        }
+                        nextEntry.parentElement.insertBefore(entry, nextEntry);
+                        tagNameInput.value = '';
+                    }
+                }
+            }
         }
 
         searchInput.onclick = ev => ev.preventDefault();
@@ -395,7 +446,8 @@ export module TagsView {
         return result;
     }
 
-    export function showSelectTagsDialog(currentTags: TagRepository.Tag[], allTags: TagRepository.Tag[],
+    export function showSelectTagsDialog(tagCallback: PageActions.ITagCallback,
+                                         currentTags: TagRepository.Tag[], allTags: TagRepository.Tag[],
                                          onSave: (added: string[], removed: string[]) => void): void {
 
         TagRepository.sortByName(allTags);
@@ -436,7 +488,7 @@ export module TagsView {
         });
 
         selectFormElement.innerHTML = '';
-        selectFormElement.appendChild(createTagSelectionView(allTags, currentTags));
+        selectFormElement.appendChild(createTagSelectionView(tagCallback, allTags, currentTags));
     }
 
     export function showSelectSingleTagDialog(allTags: TagRepository.Tag[], onSave: (selected: string) => void): void {

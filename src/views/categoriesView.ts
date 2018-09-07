@@ -162,6 +162,7 @@ export module CategoriesView {
 
     export function createCategoryHeader(category: CategoryRepository.Category,
                                          callback: PageActions.ICategoryCallback,
+                                         tagCallback: PageActions.ITagCallback,
                                          privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         const result = cE('div');
@@ -321,7 +322,7 @@ export module CategoriesView {
             Views.onClick(link, async () => {
 
                 const allTags = await callback.getAllTags();
-                TagsView.showSelectTagsDialog(category.tags, allTags,
+                TagsView.showSelectTagsDialog(tagCallback, category.tags, allTags,
                     (added: string[], removed: string[]) => {
 
                         EditViews.reloadPageIfOk(callback.editCategoryTags(category.id, added, removed));
@@ -361,10 +362,11 @@ export module CategoriesView {
     export function createCategoryDisplay(category: CategoryRepository.Category,
                                           threadList: HTMLElement,
                                           callback: PageActions.ICategoryCallback,
+                                          tagCallback: PageActions.ITagCallback,
                                           privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         const result = cE('div');
-        result.appendChild(createCategoryHeader(category, callback, privilegesCallback));
+        result.appendChild(createCategoryHeader(category, callback, tagCallback, privilegesCallback));
 
         let separatorNeeded = false;
 

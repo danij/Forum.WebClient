@@ -109,6 +109,7 @@ export module ThreadMessagesView {
                                                     thread: ThreadRepository.Thread,
                                                     threadCallback: PageActions.IThreadCallback,
                                                     threadMessageCallback: PageActions.IThreadMessageCallback,
+                                                    tagCallback: PageActions.ITagCallback,
                                                     userCallback: PageActions.IUserCallback,
                                                     privilegesCallback: PageActions.IPrivilegesCallback,
                                                     quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): ThreadMessagesPageContent {
@@ -121,7 +122,8 @@ export module ThreadMessagesView {
 
         if (info.thread) {
 
-            resultList.appendChild(ThreadsView.createThreadPageHeader(info.thread, threadCallback, privilegesCallback));
+            resultList.appendChild(ThreadsView.createThreadPageHeader(info.thread, threadCallback, tagCallback,
+                privilegesCallback));
         }
         else if (info.user) {
 

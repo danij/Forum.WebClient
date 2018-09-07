@@ -325,6 +325,7 @@ export module ThreadsView {
 
     export function createThreadPageHeader(thread: ThreadRepository.Thread,
                                            callback: PageActions.IThreadCallback,
+                                           tagCallback: PageActions.ITagCallback,
                                            privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
 
         const element = cE('div');
@@ -503,7 +504,7 @@ export module ThreadsView {
                 Views.onClick(link, async () => {
 
                     const allTags = await callback.getAllTags();
-                    TagsView.showSelectTagsDialog(thread.tags, allTags,
+                    TagsView.showSelectTagsDialog(tagCallback, thread.tags, allTags,
                         (added: string[], removed: string[]) => {
 
                             EditViews.reloadPageIfOk(callback.editThreadTags(thread.id, added, removed));
@@ -643,7 +644,7 @@ export module ThreadsView {
         content.appendChild(UsersView.createUserListContent(users));
     }
 
-    export function createAddNewThreadContent(allTags: TagRepository.Tag[],
+    export function createAddNewThreadContent(allTags: TagRepository.Tag[], tagCallback: PageActions.ITagCallback,
                                               callback: (name: string, tagIds: string[], message: string) => Promise<string>): HTMLElement {
 
         const result = cE('div');
@@ -672,7 +673,7 @@ export module ThreadsView {
             form.appendChild(div);
 
             div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Tags</label>'));
-            tagsContainer = TagsView.createTagSelectionView(allTags);
+            tagsContainer = TagsView.createTagSelectionView(tagCallback, allTags);
             div.appendChild(tagsContainer);
         }
         {

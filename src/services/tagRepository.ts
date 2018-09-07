@@ -80,12 +80,13 @@ export module TagRepository {
         return tags.find(t => name.toLowerCase() === t.name.toLowerCase()) || null;
     }
 
-    export async function addNewTag(name: string): Promise<void> {
+    export async function addNewTag(name: string): Promise<string> {
 
-        await RequestHandler.post({
+        const result = await RequestHandler.post({
             path: 'tags/',
             stringData: name
         });
+        return result.id;
     }
 
     export async function deleteTag(tagId: string): Promise<void> {

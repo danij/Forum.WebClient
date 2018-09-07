@@ -42,6 +42,8 @@ export module PageActions {
 
         createTag(name: string): Promise<boolean>;
 
+        createTagAndGetId(name: string): Promise<string>;
+
         deleteTag(id: string): Promise<boolean>;
 
         editTagName(id: string, newName: string): Promise<boolean>;
@@ -236,6 +238,11 @@ export module PageActions {
             const results = await Promise.all(promises);
 
             return results.reduceRight((accumulator, currentValue) => accumulator && currentValue);
+        }
+
+        async createTagAndGetId(name: string): Promise<string> {
+
+            return Pages.getOrShowErrorAndDefault(TagRepository.addNewTag(name.trim()), () => '');
         }
 
         deleteTag(id: string): Promise<boolean> {

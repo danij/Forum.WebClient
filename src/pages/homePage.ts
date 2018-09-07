@@ -66,6 +66,7 @@ export class HomePage implements Pages.Page {
             }
 
             return CategoriesView.createCategoryDisplay(this.category, threadList, PageActions.getCategoryCallback(),
+                PageActions.getTagCallback(),
                 PageActions.getPrivilegesCallback());
         });
 

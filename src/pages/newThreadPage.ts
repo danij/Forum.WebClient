@@ -21,7 +21,7 @@ export class NewThreadPage implements Pages.Page {
 
             const allTags = await TagRepository.getAllTags();
 
-            return ThreadsView.createAddNewThreadContent(allTags, (name, tagIds, message) => {
+            return ThreadsView.createAddNewThreadContent(allTags, PageActions.getTagCallback(), (name, tagIds, message) => {
 
                 if (name && name.trim().length && message && message.trim().length) {
 
