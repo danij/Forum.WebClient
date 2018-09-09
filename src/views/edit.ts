@@ -383,8 +383,32 @@ export module EditViews {
 
         private addTextAtCurrentPosition(value: string): void {
 
-            this.textArea.value = this.textArea.value.substr(0, this.textArea.selectionStart) +
-                value + this.textArea.value.substring(this.textArea.selectionStart);
+            const textArea = this.textArea;
+            const before = textArea.value.substr(0, textArea.selectionStart);
+            const after = textArea.value.substring(textArea.selectionStart);
+
+            if (0 == textArea.selectionStart) {
+
+                //newlines in value are not needed
+                let removeChars = 0;
+
+                for (let i = 0; i < value.length; i++) {
+
+                    if (('\r' == value[i]) || ('\n' == value[i])) {
+
+                        removeChars = i + 1;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                if (removeChars > 0) {
+
+                    value = value.substring(removeChars);
+                }
+            }
+
+            textArea.value = before + value + after;
         }
     }
 }
