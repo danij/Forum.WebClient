@@ -360,7 +360,7 @@ export module EditViews {
 
                 if (src && src.length) {
 
-                    this.addTextAtCurrentPosition(`![{"width":${width},"height":${height}}](${src})`);
+                    this.addTextAtCurrentPosition(`\n\n![{"width":${width},"height":${height}}](${src})`);
                 }
                 else {
 

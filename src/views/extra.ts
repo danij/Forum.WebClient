@@ -141,7 +141,7 @@ export module ViewsExtra {
 
         if (isYouTubeLink(src)) {
 
-            DOMHelpers.replaceElementWith(imageElement, createYouTubeElement(imageElement, src));
+            createYouTubeElement(imageElement, src);
             return;
         }
 
@@ -184,7 +184,7 @@ export module ViewsExtra {
         return src.startsWith('https://www.youtube.com/');
     }
 
-    function createYouTubeElement(imageElement: HTMLImageElement, src: string): HTMLElement {
+    function createYouTubeElement(imageElement: HTMLImageElement, src: string): void {
 
         if (ConsentRepository.hasConsentedToLoadingExternalImages()) {
 
@@ -202,7 +202,13 @@ export module ViewsExtra {
                 ? extra.width / extra.height
                 : 16/9;
 
+            const newParent = cE('div');
+            newParent.style.position = 'relative';
+            newParent.style.height = '0';
+            newParent.style.paddingTop = `${1.0/aspectRatio * 100}%`;
+
             const iFrame = cE('iframe');
+            newParent.appendChild(iFrame);
             DOMHelpers.addClasses(iFrame, 'embedded-video');
 
             iFrame.setAttribute('src', src);
@@ -210,23 +216,23 @@ export module ViewsExtra {
             iFrame.setAttribute('allow', 'autoplay; encrypted-media');
             //iFrame.setAttribute('allowfullscreen', '');
 
-            setTimeout(() => {
-
-                const iFrameAvailableWidth = iFrame.parentElement.clientWidth - 10;
-
-                iFrame.setAttribute('width', `${iFrameAvailableWidth}px`);
-                iFrame.setAttribute('height', `${iFrameAvailableWidth / aspectRatio}px`);
-
-            }, 1000);
-
-            return iFrame;
+            DOMHelpers.replaceElementWith(imageElement.parentElement, newParent);
         }
         else {
 
-            imageElement.alt = imageElement.src;
+            const normalUrl = convertToNormalUrl(src);
+            imageElement.alt = normalUrl;
 
-            return createImageLink(imageElement, src);
+            DOMHelpers.replaceElementWith(imageElement, createImageLink(imageElement, normalUrl));
         }
+    }
+
+    function convertToNormalUrl(embeddedUrl: string): string {
+
+        const split = embeddedUrl.split('/');
+        const id = split[split.length - 1];
+
+        return `https://www.youtube.com/watch?v=${id}`;
     }
 
     function adjustBlockquote(quote: HTMLElement): void {
