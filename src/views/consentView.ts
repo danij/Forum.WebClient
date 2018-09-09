@@ -49,18 +49,17 @@ export module ConsentView {
         cookiesFpConsentCheckbox.checked = ConsentRepository.hasConsentedToUsingCookies();
         rememberCurrentChecked(cookiesFpConsentCheckbox);
 
-        const externalImagesConsentCheckbox = (document.getElementById('consent-external-images') as HTMLInputElement);
-        externalImagesConsentCheckbox.checked = ConsentRepository.hasConsentedToLoadingExternalImages();
-        rememberCurrentChecked(externalImagesConsentCheckbox);
+        const externalContentConsentCheckbox = (document.getElementById('consent-external-content') as HTMLInputElement);
+        externalContentConsentCheckbox.checked = ConsentRepository.hasConsentedToLoadingExternalContent();
+        rememberCurrentChecked(externalContentConsentCheckbox);
 
         const saveConsentButton = document.getElementById('save-consent') as HTMLButtonElement;
 
         Views.onClickWithSpinner(saveConsentButton, async () => {
 
-            await Promise.all([
-                saveFpCookiesConsent(cookiesFpConsentCheckbox),
-                saveExternalImagesConsent(externalImagesConsentCheckbox)
-            ]);
+            await saveFpCookiesConsent(cookiesFpConsentCheckbox);
+            //need cookie consent to be able to store other types of consent
+            await saveExternalImagesConsent(externalContentConsentCheckbox);
 
             Views.hideOpenModals();
         });
@@ -111,11 +110,11 @@ export module ConsentView {
 
         if (externalImagesConsentCheckbox.checked) {
 
-            await ConsentRepository.consentToLoadingExternalImages();
+            await ConsentRepository.consentToLoadingExternalContent();
         }
         else {
 
-            await ConsentRepository.removeConsentToLoadingExternalImages();
+            await ConsentRepository.removeConsentToLoadingExternalContent();
         }
         location.reload();
     }

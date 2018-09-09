@@ -150,7 +150,7 @@ export module ViewsExtra {
             return;
         }
 
-        if (ConsentRepository.hasConsentedToLoadingExternalImages()) {
+        if (ConsentRepository.hasConsentedToLoadingExternalContent()) {
 
             loadImage(imageElement, src);
         }
@@ -186,7 +186,7 @@ export module ViewsExtra {
 
     function createYouTubeElement(imageElement: HTMLImageElement, src: string): void {
 
-        if (ConsentRepository.hasConsentedToLoadingExternalImages()) {
+        if (ConsentRepository.hasConsentedToLoadingExternalContent()) {
 
             let extra;
             try {

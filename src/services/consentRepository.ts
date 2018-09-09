@@ -20,19 +20,19 @@ export module ConsentRepository {
         });
     }
 
-    export async function consentToLoadingExternalImages(): Promise<void> {
+    export async function consentToLoadingExternalContent(): Promise<void> {
 
         await RequestHandler.post({
 
-            path : '../auth/consent/consent_external_images'
+            path : '../auth/consent/consent_external_content'
         });
     }
 
-    export async function removeConsentToLoadingExternalImages(): Promise<void> {
+    export async function removeConsentToLoadingExternalContent(): Promise<void> {
 
         await RequestHandler.requestDelete({
 
-            path : '../auth/consent/consent_external_images'
+            path : '../auth/consent/consent_external_content'
         });
     }
 
@@ -41,8 +41,8 @@ export module ConsentRepository {
         return RepositoryCommon.getCookieValue('allow_cookies_fp') === 'yes';
     }
 
-    export function hasConsentedToLoadingExternalImages(): boolean {
+    export function hasConsentedToLoadingExternalContent(): boolean {
 
-        return RepositoryCommon.getCookieValue('allow_external_images') === 'yes';
+        return RepositoryCommon.getCookieValue('allow_external_content') === 'yes';
     }
 }
