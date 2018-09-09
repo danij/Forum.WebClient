@@ -286,7 +286,7 @@ export module MasterPage {
 
             const messages = await PageActions.getThreadMessageCallback().searchThreadMessagesByName(toSearch);
 
-            return ThreadMessagesView.createThreadMessageList(messages,
+            return await ThreadMessagesView.createThreadMessageList(messages,
                 PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(),
                 PageActions.getPrivilegesCallback());
         });

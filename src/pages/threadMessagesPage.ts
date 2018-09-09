@@ -61,7 +61,7 @@ export class ThreadMessagesPage implements Pages.Page {
                     : await this.getThreadMessagesOfUser();
             if (null == messageCollection) return;
 
-            const elements = ThreadMessagesView.createThreadMessagesPageContent(messageCollection, {
+            const elements = await ThreadMessagesView.createThreadMessagesPageContent(messageCollection, {
                 orderBy: 'created',
                 sortOrder: this.sortOrder,
                 thread: this.thread,
@@ -184,7 +184,7 @@ export class ThreadMessagesPage implements Pages.Page {
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
             this.bottomPaginationControl = newBottomPaginationControl;
 
-            return ThreadMessagesView.createThreadMessageList(messageCollection,
+            return await ThreadMessagesView.createThreadMessageList(messageCollection,
                 PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(),
                 PageActions.getPrivilegesCallback(), this.thread, (message) => this.quoteCallback(message));
         });

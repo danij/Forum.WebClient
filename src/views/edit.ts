@@ -3,6 +3,7 @@ import {Pages} from '../pages/common';
 import {ViewsExtra} from './extra';
 import {Views} from './common';
 import {ThreadMessageRepository} from '../services/threadMessageRepository';
+import {UserCache} from "../services/userCache";
 
 export module EditViews {
 
@@ -143,15 +144,20 @@ export module EditViews {
             this.setupEvents();
         }
 
-        getText(): string {
+        getTextInternal(): string {
 
             return this.textArea.value;
+        }
+
+        async getText(): Promise<string> {
+
+            return await this.replaceUserNameReferences(this.getTextInternal());
         }
 
         insertQuote(message: ThreadMessageRepository.ThreadMessage): void {
 
             const quotedContent = message.content.split(/\n/).map((line) => `> ${line}`).join('\n');
-            this.textArea.value += `\n\n> quote|${message.created}|${message.createdBy.name}\n>\n${quotedContent}`;
+            this.textArea.value += `\n\n> quote|${message.created}|@${message.createdBy.id}@\n>\n${quotedContent}`;
         }
 
         private setupEvents(): void {
@@ -159,7 +165,7 @@ export module EditViews {
             let previousText = '';
             setInterval(() => {
 
-                const currentText = this.getText();
+                const currentText = this.getTextInternal();
                 if (currentText != previousText) {
 
                     previousText = currentText;
@@ -168,7 +174,10 @@ export module EditViews {
             }, Views.DisplayConfig.renderMessagePreviewEveryMilliseconds);
         }
 
-        private updateContent(text: string): void {
+        private async updateContent(text: string): Promise<void> {
+
+            text = await this.replaceUserNameReferences(text);
+            await ViewsExtra.searchUsersById([text]);
 
             this.resultContainer.innerHTML = ViewsExtra.expandContent(text);
             this.adjustGeneratedContent(this.resultContainer);
@@ -409,6 +418,51 @@ export module EditViews {
             }
 
             textArea.value = before + value + after;
+        }
+
+        private userNameReferenceRegexValue = '@@([^@\\t\\r\\n]+)@@';
+
+        private matchMultipleUserNames(input: string, callback: (string) => void): void {
+
+            const regex = new RegExp(this.userNameReferenceRegexValue, 'g');
+            let match;
+
+            while (null !== (match = regex.exec(input))) {
+
+                callback(match[1]);
+            }
+        }
+
+        private replaceMultipleUserNames(input: string, callback: (string) => string): string {
+
+            return input.replace(new RegExp(this.userNameReferenceRegexValue, 'g'),
+                (substring: string, ...args: any[]) => {
+
+                    return callback(substring.substr(2, substring.length - 4));
+                });
+        }
+
+        private async replaceUserNameReferences(content: string): Promise<string> {
+
+            const userNameReferences = [];
+            this.matchMultipleUserNames(content, name => {
+
+                userNameReferences.push(name);
+            });
+
+            if (userNameReferences.length) {
+
+                await UserCache.searchNames(userNameReferences);
+            }
+
+            content = this.replaceMultipleUserNames(content, name => {
+
+                const id = UserCache.getIdByName(name);
+
+                return id ? `@${id}@` : `@@${name}@@`;
+            });
+
+            return content;
         }
     }
 }

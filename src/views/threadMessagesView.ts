@@ -102,17 +102,17 @@ export module ThreadMessagesView {
         return resultElement;
     }
 
-    export function createThreadMessagesPageContent(collection: ThreadMessageRepository.ThreadMessageCollection,
-                                                    info: ThreadMessagePageDisplayInfo,
-                                                    onPageNumberChange: Views.PageNumberChangeCallback,
-                                                    getLinkForPage: Views.GetLinkForPageCallback,
-                                                    thread: ThreadRepository.Thread,
-                                                    threadCallback: PageActions.IThreadCallback,
-                                                    threadMessageCallback: PageActions.IThreadMessageCallback,
-                                                    tagCallback: PageActions.ITagCallback,
-                                                    userCallback: PageActions.IUserCallback,
-                                                    privilegesCallback: PageActions.IPrivilegesCallback,
-                                                    quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): ThreadMessagesPageContent {
+    export async function createThreadMessagesPageContent(collection: ThreadMessageRepository.ThreadMessageCollection,
+                                                          info: ThreadMessagePageDisplayInfo,
+                                                          onPageNumberChange: Views.PageNumberChangeCallback,
+                                                          getLinkForPage: Views.GetLinkForPageCallback,
+                                                          thread: ThreadRepository.Thread,
+                                                          threadCallback: PageActions.IThreadCallback,
+                                                          threadMessageCallback: PageActions.IThreadMessageCallback,
+                                                          tagCallback: PageActions.ITagCallback,
+                                                          userCallback: PageActions.IUserCallback,
+                                                          privilegesCallback: PageActions.IPrivilegesCallback,
+                                                          quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): Promise<ThreadMessagesPageContent> {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCollection();
 
@@ -138,7 +138,7 @@ export module ThreadMessagesView {
 
         const listContainer = cE('div');
         DOMHelpers.addClasses(listContainer, 'thread-message-list');
-        listContainer.appendChild(createThreadMessageList(collection, threadMessageCallback, threadCallback,
+        listContainer.appendChild(await createThreadMessageList(collection, threadMessageCallback, threadCallback,
             privilegesCallback, thread, quoteCallback));
         resultList.appendChild(listContainer);
 
@@ -172,12 +172,12 @@ export module ThreadMessagesView {
             '</div>');
     }
 
-    export function createThreadMessageList(collection: ThreadMessageRepository.ThreadMessageCollection,
-                                            callback: PageActions.IThreadMessageCallback,
-                                            threadCallback: PageActions.IThreadCallback,
-                                            privilegesCallback: PageActions.IPrivilegesCallback,
-                                            thread?: ThreadRepository.Thread,
-                                            quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): HTMLElement {
+    export async function createThreadMessageList(collection: ThreadMessageRepository.ThreadMessageCollection,
+                                                  callback: PageActions.IThreadMessageCallback,
+                                                  threadCallback: PageActions.IThreadCallback,
+                                                  privilegesCallback: PageActions.IPrivilegesCallback,
+                                                  thread?: ThreadRepository.Thread,
+                                                  quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): Promise<HTMLElement> {
 
         const messages = collection.messages || [];
 
@@ -190,6 +190,11 @@ export module ThreadMessagesView {
         }
 
         const messagesById = {};
+
+        const allMessages = messages
+            .filter(m => m)
+            .map(m => m.content);
+        await ViewsExtra.searchUsersById(allMessages);
 
         for (let i = 0; i < messages.length; ++i) {
 
@@ -220,7 +225,6 @@ export module ThreadMessagesView {
         const element = result.toElement();
 
         ViewsExtra.adjustMessageContent(element);
-        Views.setupThreadsOfUsersLinks(element);
         Views.setupSubscribedThreadsOfUsersLinks(element);
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
@@ -595,6 +599,11 @@ export module ThreadMessagesView {
 
         const comments = await callback.getCommentsOfThreadMessage(message.id) || [];
 
+        const allComments = comments
+            .filter(m => m)
+            .map(m => m.content);
+        await ViewsExtra.searchUsersById(allComments);
+
         for (let i = 0; i < comments.length; ++i) {
 
             const comment = comments[i];
@@ -691,7 +700,7 @@ export module ThreadMessagesView {
 
             Views.onClick(button, async () => {
 
-                const text = editControl.getText();
+                const text = await editControl.getText();
                 if (text.trim().length < 1) return;
 
                 const min = Views.DisplayConfig.messageContentLengths.min;
@@ -744,9 +753,9 @@ export module ThreadMessagesView {
 
         const editControl = new EditViews.EditControl(container, initialText);
 
-        Views.onClick(saveButton, () => {
+        Views.onClick(saveButton, async () => {
 
-            const currentText = editControl.getText();
+            const currentText = await editControl.getText();
 
             if (currentText.length && (currentText != initialText)) {
 
@@ -755,14 +764,14 @@ export module ThreadMessagesView {
         });
     }
 
-    export function createCommentsPageContent(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
-                                              info: CommentsPageDisplayInfo,
-                                              onPageNumberChange: Views.PageNumberChangeCallback,
-                                              getLinkForPage: Views.GetLinkForPageCallback,
-                                              threadMessageCallback: PageActions.IThreadMessageCallback,
-                                              userCallback: PageActions.IUserCallback,
-                                              threadCallback: PageActions.IThreadCallback,
-                                              privilegesCallback: PageActions.IPrivilegesCallback): ThreadMessageCommentsPageContent {
+    export async function createCommentsPageContent(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
+                                                    info: CommentsPageDisplayInfo,
+                                                    onPageNumberChange: Views.PageNumberChangeCallback,
+                                                    getLinkForPage: Views.GetLinkForPageCallback,
+                                                    threadMessageCallback: PageActions.IThreadMessageCallback,
+                                                    userCallback: PageActions.IUserCallback,
+                                                    threadCallback: PageActions.IThreadCallback,
+                                                    privilegesCallback: PageActions.IPrivilegesCallback): Promise<ThreadMessageCommentsPageContent> {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCommentCollection();
 
@@ -787,7 +796,7 @@ export module ThreadMessagesView {
 
         const listContainer = cE('div');
         DOMHelpers.addClasses(listContainer, 'thread-message-comments-list');
-        listContainer.appendChild(createCommentsList(collection, threadMessageCallback,
+        listContainer.appendChild(await createCommentsList(collection, threadMessageCallback,
             threadCallback, privilegesCallback, info.user));
         resultList.appendChild(listContainer);
 
@@ -799,11 +808,11 @@ export module ThreadMessagesView {
         return result;
     }
 
-    export function createCommentsList(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
-                                       callback: PageActions.IThreadMessageCallback,
-                                       threadCallback: PageActions.IThreadCallback,
-                                       privilegesCallback: PageActions.IPrivilegesCallback,
-                                       user?: UserRepository.User): HTMLElement {
+    export async function createCommentsList(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
+                                             callback: PageActions.IThreadMessageCallback,
+                                             threadCallback: PageActions.IThreadCallback,
+                                             privilegesCallback: PageActions.IPrivilegesCallback,
+                                             user?: UserRepository.User): Promise<HTMLElement> {
 
         const comments = collection.messageComments || [];
 
@@ -816,6 +825,11 @@ export module ThreadMessagesView {
         }
 
         const messagesById = {};
+
+        const allComments = comments
+            .filter(m => m)
+            .map(m => m.content);
+        await ViewsExtra.searchUsersById(allComments);
 
         for (let i = 0; i < comments.length; ++i) {
 

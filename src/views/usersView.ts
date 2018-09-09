@@ -599,4 +599,9 @@ export module UsersView {
 
         return resultElement;
     }
+
+    export function createUserReferenceInMessage(user: UserRepository.User): string {
+
+        return `<a ${getThreadsOfUserLinkContent(user)}>${DOMHelpers.escapeStringForContent(user.name)}</a>`;
+    }
 }

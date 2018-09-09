@@ -2,6 +2,9 @@ import {DOMHelpers} from '../helpers/domHelpers';
 import {Pages} from '../pages/common';
 import {ConsentRepository} from '../services/consentRepository';
 import {DisplayHelpers} from "../helpers/displayHelpers";
+import {UserCache} from "../services/userCache";
+import {UsersView} from "./usersView";
+import {Views} from "./common";
 import * as emojiRegexProvider from 'emoji-regex';
 import * as hljs from 'highlight.js/lib/index.js';
 import 'highlight.js/styles/default.css';
@@ -65,7 +68,7 @@ export module ViewsExtra {
     export function expandContent(content: string): string {
 
         try {
-            return wrapEmojis(remarkable.render(content));
+            return wrapEmojis(replaceUserIdReferences(remarkable.render(content)));
         }
         catch (ex) {
 
@@ -144,6 +147,8 @@ export module ViewsExtra {
 
             adjustImageInMessage(img as HTMLImageElement);
         });
+
+        Views.setupThreadsOfUsersLinks(container);
     }
 
     function adjustImageInMessage(imageElement: HTMLImageElement): void {
@@ -179,7 +184,7 @@ export module ViewsExtra {
     function createImageLink(imageElement: HTMLImageElement, src: string): HTMLElement {
 
         const linkTitle = Pages.getConfig().externalImagesWarningFormat
-            .replace(/{title}/g, imageElement.alt || src);
+            .replace(/{title}/, imageElement.alt || src);
 
         const link = cE('a') as HTMLAnchorElement;
         link.href = src;
@@ -253,7 +258,7 @@ export module ViewsExtra {
             const firstParagraph = quote.children[0] as HTMLElement;
             if ('P' == firstParagraph.tagName.toUpperCase()) {
 
-                const match = firstParagraph.innerText.match(/^quote\|(\d+)\|(.+)$/i);
+                const match = firstParagraph.innerHTML.match(/^quote\|(\d+)\|(.+)$/i);
                 if (match && match.length > 0) {
 
                     const createdAt = parseInt(match[1]);
@@ -263,7 +268,7 @@ export module ViewsExtra {
                     DOMHelpers.addClasses(replacement, 'quote-title');
                     DOMHelpers.addClasses(firstParagraph.parentElement, 'no-border-top');
 
-                    replacement.innerHTML = `${DOMHelpers.escapeStringForContent(userName)} @ ${DisplayHelpers.getDateTime(createdAt)}`;
+                    replacement.innerHTML = `${userName} @ ${DisplayHelpers.getDateTime(createdAt)}`;
 
                     DOMHelpers.replaceElementWith(firstParagraph, replacement);
                 }
@@ -275,5 +280,42 @@ export module ViewsExtra {
 
         container.innerHTML = expandContent(source || container.innerText);
         adjustMessageContent(container);
+    }
+
+    const userIdReferenceRegexValue = "\\@([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\\@";
+
+    function matchMultipleUserIds(input: string, callback: (string) => void): void {
+
+        const regex = new RegExp(userIdReferenceRegexValue, 'gi');
+        let match;
+
+        while (null !== (match = regex.exec(input))) {
+
+            callback(match[1]);
+        }
+    }
+
+    export async function searchUsersById(inputs: string[]): Promise<void> {
+
+        const ids = [];
+
+        for (const input of inputs) {
+
+            matchMultipleUserIds(input, id => {
+
+                ids.push(id.toLowerCase());
+            });
+        }
+        await UserCache.searchUsersById(ids);
+    }
+
+    function replaceUserIdReferences(content: string): string {
+
+        const regex = new RegExp(userIdReferenceRegexValue, 'gi');
+        return content.replace(regex, (substring: string, ...args: any[]) => {
+
+            const user = UserCache.getUserById(substring.substr(1, substring.length - 2));
+            return user ? UsersView.createUserReferenceInMessage(user) : substring ;
+        });
     }
 }

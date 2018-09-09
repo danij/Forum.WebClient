@@ -35,7 +35,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
             const commentsCollection = await this.getCommentsCollection();
             if (null == commentsCollection) return;
 
-            const elements = ThreadMessagesView.createCommentsPageContent(commentsCollection, {
+            const elements = await ThreadMessagesView.createCommentsPageContent(commentsCollection, {
                     orderBy: null,
                     sortOrder: this.sortOrder,
                     user: this.user
@@ -124,7 +124,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
             this.bottomPaginationControl = newBottomPaginationControl;
 
-            return ThreadMessagesView.createCommentsList(commentsCollection,
+            return await ThreadMessagesView.createCommentsList(commentsCollection,
                 PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(),
                 PageActions.getPrivilegesCallback(), this.user);
         });

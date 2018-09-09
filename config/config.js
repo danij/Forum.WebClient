@@ -10,7 +10,8 @@ window.cacheConfig = {
 
     tags: 3600 * 24,
     threads: 60,
-    latestMessages: 30
+    latestMessages: 30,
+    userRetrieveBatchSize: 25 //cannot exceed the configured user page size
 };
 
 window.displayConfig = {

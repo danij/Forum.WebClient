@@ -695,7 +695,7 @@ export module ThreadsView {
             const name = input.value;
             const tagIds: string[] = TagsView.getSelectedTagIds(tagsContainer);
 
-            const message = editControl.getText();
+            const message = await editControl.getTextInternal();
 
             const newThreadId = await callback(name, tagIds, message);
             if (newThreadId && newThreadId.length) {

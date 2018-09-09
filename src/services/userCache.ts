@@ -3,11 +3,12 @@ import {ThreadRepository} from "./threadRepository";
 import {TagRepository} from "./tagRepository";
 import {CategoryRepository} from "./categoryRepository";
 import {ThreadMessageRepository} from "./threadMessageRepository";
+import {CommonEntities} from "./commonEntities";
 
 export module UserCache {
 
     const usersById: any = {};
-    const usersByName: any = {};
+    const idsByName: any = {};
 
     export function process(user: UserRepository.User): void {
 
@@ -15,7 +16,7 @@ export module UserCache {
         if ( ! user.id) return;
 
         usersById[user.id.toLowerCase()] = user;
-        usersByName[user.name.toLowerCase()] = user;
+        idsByName[user.name.toLowerCase()] = user.id;
     }
 
     export function processUsers(users: UserRepository.User[]): void {
@@ -142,5 +143,76 @@ export module UserCache {
         if ( ! collection) return;
 
         processComments(collection.messageComments);
+    }
+
+    export function searchNames(names: string[]): Promise<void> {
+
+         return searchUniqueNames(Array.from(new Set(
+             names
+                 .map(n => n.toLowerCase())
+                 .filter(n => ! (n in idsByName)))));
+    }
+
+    async function searchUniqueNames(names: string[]): Promise<void> {
+
+        if (names.length < 1) return;
+
+        const batches = getBatches(names, CommonEntities.getCacheConfig().userRetrieveBatchSize);
+
+        for (const batch of batches) {
+
+            const ids = await UserRepository.getMultipleByName(batch);
+
+            for (let i = 0; i < batch.length; ++i) {
+
+                idsByName[batch[i]] = ids[i];
+            }
+        }
+    }
+
+    export function searchUsersById(ids: string[]): Promise<void> {
+
+        return searchUniqueUsersById(Array.from(new Set(
+            ids
+                .map(n => n.toLowerCase())
+                .filter(n => ! (n in usersById)))));
+    }
+
+    async function searchUniqueUsersById(ids: string[]): Promise<void> {
+
+        if (ids.length < 1) return;
+
+        const batches = getBatches(ids, CommonEntities.getCacheConfig().userRetrieveBatchSize);
+
+        for (const batch of batches) {
+
+            const users = await UserRepository.getMultipleById(batch);
+            for (let i = 0; i < batch.length; ++i) {
+
+                usersById[batch[i]] = users[i];
+            }
+        }
+    }
+
+    function getBatches<T>(input: T[], size: number): T[][] {
+
+        const result: T[][] = [];
+
+        for (let i = 0; i < input.length; i += size) {
+
+            result.push(input.slice(i, i + size));
+        }
+
+        return result;
+    }
+
+    export function getIdByName(name: string): string {
+
+        return idsByName[name.toLowerCase()];
+    }
+
+    export function getUserById(id: string): UserRepository.User {
+
+        return usersById[id.toLowerCase()];
     }
 }

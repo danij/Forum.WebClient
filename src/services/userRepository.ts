@@ -154,6 +154,20 @@ export module UserRepository {
         return result;
     }
 
+    export async function getMultipleById(ids: string[]): Promise<string[]> {
+
+        return (await RequestHandler.get({
+            path: 'users/multiple/ids/' + encodeURIComponent(ids.join(','))
+        })).users;
+    }
+
+    export async function getMultipleByName(names: string[]): Promise<string[]> {
+
+        return (await RequestHandler.get({
+            path: 'users/multiple/names/' + encodeURIComponent(names.join(','))
+        })).user_ids;
+    }
+
     export async function createUserName(name: string): Promise<void> {
 
         await RequestHandler.post({

@@ -17,9 +17,17 @@ export module CommonEntities {
         return Math.ceil(info.totalCount / Math.max(info.pageSize, 1));
     }
 
-    declare const cacheConfig: any;
+    export interface CacheConfig {
 
-    export function getCacheConfig(): any {
+        tags: number;
+        threads: number;
+        latestMessages: number;
+        userRetrieveBatchSize: number;
+    }
+
+    declare const cacheConfig: CacheConfig;
+
+    export function getCacheConfig(): CacheConfig {
 
         return cacheConfig;
     }
