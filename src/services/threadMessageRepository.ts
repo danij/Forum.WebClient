@@ -2,6 +2,7 @@ import {RequestHandler} from './requestHandler';
 import {CommonEntities} from './commonEntities';
 import {UserRepository} from './userRepository';
 import {ThreadRepository} from './threadRepository';
+import {UserCache} from "./userCache";
 
 export module ThreadMessageRepository {
 
@@ -173,16 +174,21 @@ export module ThreadMessageRepository {
 
     export async function getLatestThreadMessages(pageNumber: number): Promise<ThreadMessageCollection> {
 
-        return filterNulls(await RequestHandler.get({
+        const result = filterNulls(await RequestHandler.get({
             path: 'thread_messages/latest',
             query: {
                 page: pageNumber
             },
             cacheSeconds: CommonEntities.getCacheConfig().latestMessages
         }));
+
+        UserCache.processMessageCollection(result);
+
+        return result;
     }
 
-    export async function getThreadMessagesOfUser(user: UserRepository.User, request: GetThreadMessagesRequest): Promise<ThreadMessageCollection> {
+    export async function getThreadMessagesOfUser(user: UserRepository.User,
+                                                  request: GetThreadMessagesRequest): Promise<ThreadMessageCollection> {
 
         const result = filterNulls(await RequestHandler.get({
             path: 'thread_messages/user/' + encodeURIComponent(user.id),
@@ -197,6 +203,9 @@ export module ThreadMessageRepository {
                 message.createdBy = user;
             }
         }
+
+        UserCache.processMessageCollection(result);
+
         return result;
     }
 
@@ -209,33 +218,49 @@ export module ThreadMessageRepository {
 
     export async function getThreadMessageComments(messageId: string): Promise<ThreadMessageCommentCollection> {
 
-        return filterCommentNulls(await RequestHandler.get({
+        const result = filterCommentNulls(await RequestHandler.get({
             path: 'thread_messages/comments/' + encodeURIComponent(messageId)
         }));
+
+        UserCache.processCommentCollection(result);
+
+        return result;
     }
 
     export async function getAllThreadMessageComments(request: GetThreadMessageCommentsRequest): Promise<ThreadMessageCommentCollection> {
 
-        return filterCommentNulls(await RequestHandler.get({
+        const result = filterCommentNulls(await RequestHandler.get({
             path: 'thread_messages/allcomments',
             query: request
         }));
+
+        UserCache.processCommentCollection(result);
+
+        return result;
     }
 
     export async function getThreadMessageCommentsWrittenByUser(user: UserRepository.User,
                                                                 request: GetThreadMessageCommentsRequest): Promise<ThreadMessageCommentCollection> {
 
-        return filterCommentNulls(await RequestHandler.get({
+        const result = filterCommentNulls(await RequestHandler.get({
             path: 'thread_messages/comments/user/' + encodeURIComponent(user.id),
             query: request
         }), user);
+
+        UserCache.processCommentCollection(result);
+
+        return result;
     }
 
     export async function getThreadMessagesById(ids: string[]): Promise<ThreadMessageCollection> {
 
-        return createThreadMessageCollection((await RequestHandler.get({
+        const result = createThreadMessageCollection((await RequestHandler.get({
             path: 'thread_messages/multiple/' + encodeURIComponent(ids.join(','))
         })).thread_messages);
+
+        UserCache.processMessageCollection(result);
+
+        return result;
     }
 
     export async function searchThreadMessagesByName(name: string): Promise<ThreadMessageCollection> {

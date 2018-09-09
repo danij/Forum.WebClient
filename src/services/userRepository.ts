@@ -1,5 +1,6 @@
 import {RequestHandler} from './requestHandler';
 import {CommonEntities} from './commonEntities';
+import {UserCache} from "./userCache";
 
 export module UserRepository {
 
@@ -96,24 +97,36 @@ export module UserRepository {
 
     export async function getCurrentUser(): Promise<CurrentUser> {
 
-        return await RequestHandler.get({
+        const result = await RequestHandler.get({
             path: 'users/current'
         }) as CurrentUser;
+
+        UserCache.process(result.user);
+
+        return result;
     }
 
     export async function getUsers(request: GetUsersRequest): Promise<UserCollection> {
 
-        return await RequestHandler.get({
+        const result = await RequestHandler.get({
             path: 'users',
             query: request
         }) as UserCollection;
+
+        UserCache.processCollection(result);
+
+        return result;
     }
 
     export async function getUserByName(name: string): Promise<User> {
 
-        return (await RequestHandler.get({
+        const result = (await RequestHandler.get({
             path: 'users/name/' + encodeURIComponent(name)
         }) as SingleUser).user;
+
+        UserCache.process(result);
+
+        return result;
     }
 
     export async function getUsersSubscribedToThread(threadId: string): Promise<User[]> {
@@ -124,14 +137,21 @@ export module UserRepository {
 
         collection.users = collection.users || [];
         UserRepository.sortByName(collection.users);
+
+        UserCache.processCollection(collection);
+
         return collection.users;
     }
 
     export async function getOnlineUsers(): Promise<User[]> {
 
-        return (await RequestHandler.get({
+        const result = (await RequestHandler.get({
             path: 'users/online',
         }) as OnlineUserCollection).online_users || [];
+
+        UserCache.processUsers(result);
+
+        return result;
     }
 
     export async function createUserName(name: string): Promise<void> {

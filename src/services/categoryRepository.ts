@@ -3,6 +3,7 @@ import {TagRepository} from './tagRepository';
 import {UserRepository} from './userRepository';
 import {CommonEntities} from './commonEntities';
 import {ThreadMessageRepository} from './threadMessageRepository';
+import {UserCache} from "./userCache";
 
 export module CategoryRepository {
 
@@ -97,6 +98,8 @@ export module CategoryRepository {
         })).categories;
 
         sortCategories(result);
+        UserCache.processCategories(result);
+
         return result;
     }
 
@@ -107,6 +110,8 @@ export module CategoryRepository {
         })).categories;
 
         sortCategories(result);
+        UserCache.processCategories(result);
+
         return result;
     }
 
@@ -133,6 +138,8 @@ export module CategoryRepository {
             }
         }
 
+        UserCache.processCategories(rootCategories);
+
         return rootCategories;
     }
 
@@ -143,6 +150,7 @@ export module CategoryRepository {
         }) as SingleCategory).category);
 
         sortCategories(result.children);
+        UserCache.processCategory(result);
 
         return result;
     }

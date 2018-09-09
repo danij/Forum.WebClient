@@ -4,6 +4,7 @@ import {TagRepository} from './tagRepository';
 import {CommonEntities} from './commonEntities';
 import {RequestHandler} from './requestHandler';
 import {ThreadMessageRepository} from './threadMessageRepository';
+import {UserCache} from "./userCache";
 
 export module ThreadRepository {
 
@@ -138,19 +139,27 @@ export module ThreadRepository {
 
     export async function getThreads(request: GetThreadsRequest): Promise<ThreadCollection> {
 
-        return filterNulls(await RequestHandler.get({
+        const result = filterNulls(await RequestHandler.get({
             path: 'threads',
             query: request,
             cacheSeconds: CommonEntities.getCacheConfig().threads
         }));
+
+        UserCache.processThreadCollection(result);
+
+        return result;
     }
 
     export async function getThreadsWithTag(tag: TagRepository.Tag, request: GetThreadsRequest): Promise<ThreadCollection> {
 
-        return filterNulls(await RequestHandler.get({
+        const result = filterNulls(await RequestHandler.get({
             path: 'threads/tag/' + encodeURIComponent(tag.id),
             query: request
         }));
+
+        UserCache.processThreadCollection(result);
+
+        return result;
     }
 
     export async function getThreadsOfUser(user: UserRepository.User, request: GetThreadsRequest): Promise<ThreadCollection> {
@@ -168,6 +177,8 @@ export module ThreadRepository {
                 thread.createdBy = thread.createdBy || user;
             }
         }
+
+        UserCache.processThreadCollection(result);
 
         return result;
     }
@@ -189,16 +200,22 @@ export module ThreadRepository {
             }
         }
 
+        UserCache.processThreadCollection(result);
+
         return result;
     }
 
     export async function getThreadsOfCategory(category: CategoryRepository.Category,
                                                request: GetThreadsRequest): Promise<ThreadCollection> {
 
-        return appendPinnedThreadCollection(filterPinnedThreadNulls(await RequestHandler.get({
+        const result = appendPinnedThreadCollection(filterPinnedThreadNulls(await RequestHandler.get({
             path: 'threads/category/' + encodeURIComponent(category.id),
             query: request
         })));
+
+        UserCache.processThreadCollection(result);
+
+        return result;
     }
 
     export async function getThreadById(id: string, request: GetThreadsRequest): Promise<ThreadWithMessagesResponse> {
@@ -212,14 +229,21 @@ export module ThreadRepository {
 
             filterThreadWithMessagesNulls(response.thread);
         }
+
+        UserCache.processThreadWithMessages(response.thread);
+
         return response;
     }
 
     export async function getThreadsById(ids: string[]): Promise<ThreadCollection> {
 
-        return filterNulls(await RequestHandler.get({
+        const result = filterNulls(await RequestHandler.get({
             path: 'threads/multiple/' + encodeURIComponent(ids.join(','))
         }));
+
+        UserCache.processThreadCollection(result);
+
+        return result;
     }
 
     export async function searchThreadsByInitial(name: string): Promise<Thread[]> {
@@ -264,6 +288,8 @@ export module ThreadRepository {
                 threads = threads.concat(collections[1].threads.slice(0, remaining));
             }
 
+            UserCache.processThreads(threads);
+
             return threads;
         }
         return Promise.resolve([]);
@@ -277,7 +303,11 @@ export module ThreadRepository {
 
         if (idsResult && idsResult.thread_ids && idsResult.thread_ids.length) {
 
-            return (await getThreadsById(idsResult.thread_ids)).threads;
+            const result = (await getThreadsById(idsResult.thread_ids)).threads;
+
+            UserCache.processThreads(result);
+
+            return result;
         }
         else {
             return [];

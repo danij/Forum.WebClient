@@ -2,6 +2,7 @@ import {RequestHandler} from './requestHandler';
 import {CategoryRepository} from './categoryRepository';
 import {CommonEntities} from './commonEntities';
 import {ThreadMessageRepository} from './threadMessageRepository';
+import {UserCache} from "./userCache";
 
 export module TagRepository {
 
@@ -64,6 +65,8 @@ export module TagRepository {
             query: request || {orderBy: 'name', sort: 'ascending'},
             cacheSeconds: CommonEntities.getCacheConfig().tags
         }));
+
+        UserCache.processTags(result.tags);
 
         return result;
     }
