@@ -399,7 +399,7 @@ export module ThreadMessagesView {
 
             const signature = dA('<span title="User signature" uk-tooltip>');
             signatureContainer.append(signature);
-            signature.appendString(author.signature);
+            signature.appendRaw(ViewsExtra.wrapEmojis(DOMHelpers.escapeStringForContent(author.signature)));
         }
 
         container.appendRaw(`<div class="uk-text-center message-up-vote ${upVoteExtraClass}">` +

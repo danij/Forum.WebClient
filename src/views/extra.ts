@@ -2,6 +2,7 @@ import {DOMHelpers} from '../helpers/domHelpers';
 import {Pages} from '../pages/common';
 import {ConsentRepository} from '../services/consentRepository';
 import {DisplayHelpers} from "../helpers/displayHelpers";
+import * as emojiRegexProvider from 'emoji-regex';
 import * as hljs from 'highlight.js/lib/index.js';
 import 'highlight.js/styles/default.css';
 
@@ -64,13 +65,23 @@ export module ViewsExtra {
     export function expandContent(content: string): string {
 
         try {
-            return remarkable.render(content);
+            return wrapEmojis(remarkable.render(content));
         }
         catch (ex) {
 
             console.log(ex);
             return '<span class="uk-label uk-label-danger">Error while rendering</span>';
         }
+    }
+
+    const emojiFind = emojiRegexProvider();
+
+    export function wrapEmojis(content: string): string {
+
+        return content.replace(emojiFind, function (substring: string, ...args: any[]) {
+
+            return `<span class="e">${substring}</span>`;
+        });
     }
 
     const katexRenderOptions = {
