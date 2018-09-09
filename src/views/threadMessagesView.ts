@@ -306,7 +306,7 @@ export module ThreadMessagesView {
                                        thread: ThreadRepository.Thread): DOMAppender {
 
         const author = message.createdBy;
-        const authorContainer = dA('<div class="message-author uk-float-left">');
+        const authorContainer = dA('<div class="message-author">');
         {
             const userContainer = dA('<div class="pointer-cursor">');
             authorContainer.append(userContainer);
@@ -838,7 +838,7 @@ export module ThreadMessagesView {
 
             const message = comment.message;
 
-            if (!message) continue;
+            if (! message) continue;
 
             messagesById[message.id] = message;
 
@@ -854,9 +854,15 @@ export module ThreadMessagesView {
 
             createThreadMessageHeader(messageContainer, message, collection, i, true);
             messageContainer.append(createThreadMessageDetails(message, true));
-            messageContainer.append(createThreadMessageAuthor(message, null));
-            messageContainer.append(createThreadMessageActionLinks(message, null));
-            messageContainer.append(createThreadMessageContent(message));
+
+            {
+                const flex = dA('<div class="uk-flex">');
+                messageContainer.append(flex);
+
+                flex.append(createThreadMessageAuthor(message, null));
+                flex.append(createThreadMessageContent(message));
+                flex.append(createThreadMessageActionLinks(message, null));
+            }
 
             if (i < (comments.length - 1)) {
 
