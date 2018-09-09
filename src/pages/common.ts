@@ -140,7 +140,7 @@ export module Pages {
     const pageNumberRegex = /\/page\/([0-9]+)/;
     const tagNameRegex = /\/tag\/([^/]+)/;
     const threadIdRegex = /\/thread\/([^/]+)\/([^/]+)/;
-    const threadMessageIdRegex = /\/message\/([^/]+)/;
+    const threadMessageIdRegex = /^thread_message\/([^/]+)/;
     const userNameRegex = /\/user\/([^/]+)/;
     const subscribedByUserNameRegex = /\/subscribed_by_user\/([^/]+)/;
     const categoryRootRegex = /^[\/]?category\/([^/]+)\/([^/]+)/;
@@ -353,7 +353,7 @@ export module Pages {
 
     export function getThreadMessagesOfMessageParentThreadUrl(id: string): string {
 
-        return `thread_messages/message/${encodeURIComponent(id)}`;
+        return `thread_message/${encodeURIComponent(id)}`;
     }
 
     export function getCategoryFullUrl(category: CategoryRepository.Category): string {

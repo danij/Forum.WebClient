@@ -124,7 +124,8 @@ export class ThreadMessagesPage implements Pages.Page {
 
     static loadPage(url: string): boolean {
 
-        if ((url.indexOf('thread_messages/') != 0)
+        if ((url.indexOf('thread_message/') != 0)
+            && (url.indexOf('thread_messages/') != 0)
             && (url.indexOf('thread/') != 0)) return false;
 
         const page = new ThreadMessagesPage();
