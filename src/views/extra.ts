@@ -153,7 +153,7 @@ export module ViewsExtra {
 
     function adjustImageInMessage(imageElement: HTMLImageElement): void {
 
-        const src = imageElement.getAttribute('data-src');
+        const src = imageElement.getAttribute('data-src') || imageElement.src || '';
 
         if (isYouTubeLink(src)) {
 
