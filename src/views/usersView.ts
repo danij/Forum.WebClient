@@ -73,20 +73,37 @@ export module UsersView {
         return container;
     }
 
-    export function createUserLogoForList(user: UserRepository.User): DOMAppender {
+    export function createUserLogoForList(user: UserRepository.User, linkToUserThreads: boolean = false): DOMAppender {
 
         if (user.hasLogo) {
 
             const element = dA(`<div class="logo">`);
+            let imageContainer = element;
+
+            if (linkToUserThreads) {
+
+                const link = dA(`<a ${getThreadsOfUserLinkContent(user)}>`);
+                element.append(link);
+                imageContainer = link;
+            }
+
             const img = dA(`<img src="${DOMHelpers.escapeStringForAttribute(Pages.getUserLogoSrc(user))}" />`);
-            element.append(img);
+            imageContainer.append(img);
 
             return element;
         }
         else {
 
             const element = dA(`<div class="text-logo" style="color: ${getUserLogoColor(user.id)}">`);
-            element.appendString(getUserLogoInitial(user.name));
+            let nameContainer = element;
+
+            if (linkToUserThreads) {
+
+                const link = dA(`<a class="user-name-link" ${getThreadsOfUserLinkContent(user)}>`);
+                element.append(link);
+                nameContainer = link;
+            }
+            nameContainer.appendString(getUserLogoInitial(user.name));
             return element;
         }
     }
@@ -329,7 +346,7 @@ export module UsersView {
         const wrapper = dA('<div class="user-in-list">');
         card.append(wrapper);
 
-        wrapper.append(createUserLogoForList(user));
+        wrapper.append(createUserLogoForList(user, true));
         wrapper.append(createUserNameElement(user));
 
         wrapper.append(createUserTitleElement(user));
