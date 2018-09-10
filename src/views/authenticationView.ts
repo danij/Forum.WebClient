@@ -5,6 +5,7 @@ import {ThreadsPage} from '../pages/threadsPage';
 import {ConsentRepository} from '../services/consentRepository';
 import {ConsentView} from './consentView';
 import {DocumentationView} from './documentationView';
+import {Privileges} from "../services/privileges";
 
 export module AuthenticationView {
 
@@ -40,6 +41,8 @@ export module AuthenticationView {
             }
 
             if (currentUser.user) {
+
+                Privileges.User.updateCurrentUserId(currentUser.user.id);
 
                 const myUserLink = document.getElementById('my-user-link');
                 DOMHelpers.unHide(myUserLink);
