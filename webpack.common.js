@@ -7,7 +7,8 @@ module.exports = {
     entry: {
         app: './src/app.ts',
         others: './src/others.ts',
-        styles: './src/styles.ts',
+        defaultTheme: './css/defaultTheme.less',
+        darkTheme: './css/darkTheme.less'
     },
     output: {
         filename: '[name].bundle.js',
