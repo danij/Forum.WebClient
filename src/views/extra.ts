@@ -7,7 +7,6 @@ import {UsersView} from "./usersView";
 import {Views} from "./common";
 import * as emojiRegexProvider from 'emoji-regex';
 import * as hljs from 'highlight.js/lib/index.js';
-import 'highlight.js/styles/default.css';
 
 export module ViewsExtra {
 
