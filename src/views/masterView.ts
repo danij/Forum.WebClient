@@ -263,4 +263,14 @@ export module MasterView {
         const recentThreadMessagesModalLink = document.getElementById('recent-thread-messages-modal-link');
         Views.onClick(recentThreadMessagesModalLink, showRecentThreadMessagesModal);
     }
+
+    export function setupThemeSelector(): void {
+
+        const selectElement = document.getElementById('theme-select') as HTMLSelectElement;
+        selectElement.onchange = (ev) => {
+
+            const linkElement = document.getElementById('theme-link') as HTMLLinkElement;
+            linkElement.href = `/${DOMHelpers.escapeStringForAttribute(selectElement.value)}Theme.css`;
+        };
+    }
 }

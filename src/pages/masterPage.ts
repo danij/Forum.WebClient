@@ -54,6 +54,8 @@ export module MasterPage {
         await loadForumWidePrivilegesPromise;
         afterGettingForumWidePrivileges();
         loadCurrentPage();
+
+        MasterView.setupThemeSelector();
     }
 
     function setupLinks() : void {

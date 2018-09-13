@@ -9,7 +9,7 @@
     <script type="text/javascript" src="/app.bundle.js"></script>
 
     <link rel="stylesheet" href="/katex.min.css">
-    <link rel="stylesheet" href="/defaultTheme.css">
+    <link rel="stylesheet" href="/defaultTheme.css" id="theme-link">
 </head>
 <body>
 
@@ -563,6 +563,12 @@
     <span>
         <span id="entity-count"></span> · <a id="users-online"></a> <span id="visitors-statistics"></span>
     </span>
+    <div class="uk-float-left">
+        <select id="theme-select" class="uk-select">
+            <option value="default" selected>Default Theme</option>
+            <option value="dark">Dark Theme</option>
+        </select>
+    </div>
 </div>
 </body>
 </html>
