@@ -14,6 +14,7 @@ import {ThreadMessagesView} from './threadMessagesView';
 import {ScrollSpy} from './scrollSpy';
 import {DocPage} from '../pages/docPage';
 import {PageActions} from '../pages/action';
+import {ThemeRepository} from "../services/themeRepository";
 
 export module MasterView {
 
@@ -264,13 +265,41 @@ export module MasterView {
         Views.onClick(recentThreadMessagesModalLink, showRecentThreadMessagesModal);
     }
 
+    export function loadFavoriteTheme(): void {
+
+        const theme = ThemeRepository.getFavoriteTheme();
+        let themeIsValid = false;
+
+        const selectElement = document.getElementById('theme-select') as HTMLSelectElement;
+
+        DOMHelpers.forEach(selectElement.options, (option: HTMLOptionElement ) => {
+
+            themeIsValid = themeIsValid || (theme.toLowerCase() === option.value.toLowerCase());
+        });
+
+        if (themeIsValid) {
+
+            selectElement.value = theme;
+            changeTheme(theme);
+        }
+    }
+
+    export function changeTheme(theme: string): void {
+
+        const linkElement = document.getElementById('theme-link') as HTMLLinkElement;
+
+        linkElement.href = `/${DOMHelpers.escapeStringForAttribute(theme)}Theme.css`;
+    }
+
     export function setupThemeSelector(): void {
 
         const selectElement = document.getElementById('theme-select') as HTMLSelectElement;
         selectElement.onchange = (ev) => {
 
-            const linkElement = document.getElementById('theme-link') as HTMLLinkElement;
-            linkElement.href = `/${DOMHelpers.escapeStringForAttribute(selectElement.value)}Theme.css`;
+            const selectedTheme = selectElement.value;
+
+            changeTheme(selectedTheme);
+            ThemeRepository.saveFavoriteTheme(selectedTheme);
         };
     }
 }

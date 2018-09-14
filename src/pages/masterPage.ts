@@ -29,6 +29,8 @@ export module MasterPage {
 
     export async function bootstrap(): Promise<void> {
 
+        MasterView.loadFavoriteTheme();
+
         MasterView.applyPageConfig(masterPageConfig, PageActions.getDocumentationCallback());
 
         originalTitle = document.title;
