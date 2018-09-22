@@ -308,13 +308,23 @@ export module ViewsExtra {
         await UserCache.searchUsersById(ids);
     }
 
-    function replaceUserIdReferences(content: string): string {
+    function replaceUserIdReferencesInternal(content: string, createView: (User) => string): string {
 
         const regex = new RegExp(userIdReferenceRegexValue, 'gi');
         return content.replace(regex, (substring: string, ...args: any[]) => {
 
             const user = UserCache.getUserById(substring.substr(1, substring.length - 2));
-            return user ? UsersView.createUserReferenceInMessage(user) : substring ;
+            return user ? createView(user) : substring;
         });
+    }
+
+    function replaceUserIdReferences(content: string): string {
+
+        return replaceUserIdReferencesInternal(content, user => UsersView.createUserReferenceInMessage(user));
+    }
+
+    export function replaceUserIdReferencesWithName(content: string): string {
+
+        return replaceUserIdReferencesInternal(content, user => `@@${user.name}@@`);
     }
 }

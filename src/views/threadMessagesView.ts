@@ -197,7 +197,7 @@ export module ThreadMessagesView {
             else {
                 messageLink = cE('span');
             }
-            messageLink.innerText = messageContent;
+            messageLink.innerText = ViewsExtra.replaceUserIdReferencesWithName(messageContent);
             container.appendElement(messageLink);
         }
 
@@ -1094,7 +1094,7 @@ export module ThreadMessagesView {
         else {
             messageLink = cE('span');
         }
-        messageLink.innerText = messageContent;
+        messageLink.innerText = ViewsExtra.replaceUserIdReferencesWithName(messageContent);
         container.appendElement(messageLink);
 
         return container;
