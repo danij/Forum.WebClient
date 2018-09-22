@@ -299,7 +299,7 @@ export module ThreadMessageRepository {
     export async function editThreadMessageApproved(messageId: string, newApproved: boolean): Promise<void> {
 
         await RequestHandler.put({
-            path: 'thread_messages/approved/' + encodeURIComponent(messageId) + '/' + (newApproved ? 'true' : 'false')
+            path: 'thread_messages/approval/' + encodeURIComponent(messageId) + '/' + (newApproved ? 'true' : 'false')
         });
     }
 

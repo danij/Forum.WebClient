@@ -103,6 +103,10 @@ export module PageActions {
         downVote(id: string): Promise<boolean>;
 
         resetVote(id: string): Promise<boolean>;
+
+        approve(id: string): Promise<boolean>;
+
+        unapprove(id: string): Promise<boolean>;
     }
 
     export interface IUserCallback {
@@ -395,6 +399,16 @@ export module PageActions {
         resetVote(id: string): Promise<boolean> {
 
             return Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.resetVote(id));
+        }
+
+        approve(id: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.editThreadMessageApproved(id, true));
+        }
+
+        unapprove(id: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(ThreadMessageRepository.editThreadMessageApproved(id, false));
         }
     }
 

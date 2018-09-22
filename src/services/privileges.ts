@@ -130,6 +130,10 @@ export module Privileges {
             return hasPrivilege(message, 'change_content');
         }
 
+        export function canChangeThreadMessageApproval(message: ThreadMessageRepository.ThreadMessage): boolean {
+            return hasPrivilege(message, 'change_approval');
+        }
+
         export function canMoveThreadMessage(message: ThreadMessageRepository.ThreadMessage): boolean {
             return hasPrivilege(message, 'move');
         }

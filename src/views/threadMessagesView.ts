@@ -554,6 +554,12 @@ export module ThreadMessagesView {
         const actions = dA('<div class="message-actions">');
         const messageId = DOMHelpers.escapeStringForAttribute(message.id);
 
+        if (Privileges.ThreadMessage.canChangeThreadMessageApproval(message)) {
+
+            actions.appendRaw(`<a uk-icon="icon: check" class="approve-thread-message-link" title="Approve Content" data-message-id="${messageId}" uk-tooltip></a>`);
+            actions.appendRaw(`<a uk-icon="icon: ban" class="unapprove-thread-message-link" title="Unapprove Content" data-message-id="${messageId}" uk-tooltip></a>`);
+        }
+
         if (Privileges.ThreadMessage.canEditThreadMessageContent(message)) {
 
             actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}" uk-tooltip></a>`);
@@ -588,6 +594,42 @@ export module ThreadMessagesView {
                                             threadCallback: PageActions.IThreadCallback,
                                             privilegesCallback: PageActions.IPrivilegesCallback,
                                             quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void) {
+
+        function getMessageContent(ev: Event): HTMLElement {
+
+            return DOMHelpers.goUpUntil(ev.target as HTMLElement, e => e.classList.contains('uk-flex'))
+                .getElementsByClassName('message-content')[0] as HTMLElement;
+        }
+
+        DOMHelpers.addEventListeners(element, 'approve-thread-message-link', 'click', async (ev) => {
+
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const message = messagesById[messageId];
+
+            if (message.approved) return;
+
+            if (await callback.approve(messageId)) {
+
+                message.approved = true;
+
+                DOMHelpers.removeClasses(getMessageContent(ev), 'unapproved');
+            }
+        });
+
+        DOMHelpers.addEventListeners(element, 'unapprove-thread-message-link', 'click', async (ev) => {
+
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const message = messagesById[messageId];
+
+            if ( ! message.approved) return;
+
+            if (await callback.unapprove(messageId)) {
+
+                message.approved = false;
+
+                DOMHelpers.addClasses(getMessageContent(ev), 'unapproved');
+            }
+        });
 
         DOMHelpers.addEventListeners(element, 'edit-thread-message-content-link', 'click', async (ev) => {
 
