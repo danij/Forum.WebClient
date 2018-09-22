@@ -127,7 +127,6 @@ export module PrivilegesView {
         ['view_forum_wide_assigned_privileges', 'View Forum Wide Assigned Privileges'],
         ['view_user_assigned_privileges', 'View User Assigned Privileges'],
         ['adjust_forum_wide_privilege', 'Adjust Privileges'],
-        ['get_user_vote_history', 'View User Vote History'],
         ['no_throttling', 'No Throttling Exception'],
     ];
 
