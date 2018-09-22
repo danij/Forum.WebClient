@@ -6,6 +6,7 @@ import {ConsentRepository} from '../services/consentRepository';
 import {ConsentView} from './consentView';
 import {DocumentationView} from './documentationView';
 import {Privileges} from "../services/privileges";
+import {MasterView} from "./masterView";
 
 export module AuthenticationView {
 
@@ -34,6 +35,9 @@ export module AuthenticationView {
 
                 DOMHelpers.hide(document.getElementById('login-link'));
                 DOMHelpers.unHide(document.getElementById('logged-in-link'));
+
+                Views.onClick(document.getElementById('vote-history-link'),
+                    () => MasterView.showVoteHistoryModal());
             }
             else {
 

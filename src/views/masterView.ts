@@ -265,6 +265,21 @@ export module MasterView {
         Views.onClick(recentThreadMessagesModalLink, showRecentThreadMessagesModal);
     }
 
+    export function showVoteHistoryModal(): void {
+
+        const modal = document.getElementById('vote-history-modal');
+
+        updateRecentPage('received-votes-content', async (page) => {
+
+            const receivedVoteHistory = await UserRepository.getReceivedVotesHistory();
+
+            return ThreadMessagesView.createReceivedVotesView(receivedVoteHistory);
+
+        }, 0);
+
+        Views.showModal(modal);
+    }
+
     export function loadFavoriteTheme(): void {
 
         const theme = ThemeRepository.getFavoriteTheme();

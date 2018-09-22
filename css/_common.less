@@ -363,6 +363,27 @@ html {
     overflow: auto;
 }
 
+.thread-vote {
+    padding: 0;
+    margin-right: 10px;
+    min-width: 30px;
+    display: inline-block;
+    text-align: center;
+
+    &.up-vote {
+        color: @up-vote-foreground-color;
+        background-color: @up-vote-background-color;
+    }
+    &.neutral-vote {
+        color: @neutral-vote-foreground-color;
+        background-color: @neutral-vote-background-color;
+    }
+    &.down-vote {
+        color: @down-vote-foreground-color;
+        background-color: @down-vote-background-color;
+    }
+}
+
 #recent-threads-modal .uk-modal-dialog {
     min-width: 50%;
     height: 90%;
@@ -371,27 +392,6 @@ html {
 
         position: relative;
         width: 100%;
-
-        .thread-vote {
-            padding: 0;
-            margin-right: 10px;
-            min-width: 30px;
-            display: inline-block;
-            text-align: center;
-
-            &.up-vote {
-                color: @up-vote-foreground-color;
-                background-color: @up-vote-background-color;
-            }
-            &.neutral-vote {
-                color: @neutral-vote-foreground-color;
-                background-color: @neutral-vote-background-color;
-            }
-            &.down-vote {
-                color: @down-vote-foreground-color;
-                background-color: @down-vote-background-color;
-            }
-        }
 
         .recent-thread {
             padding-bottom: 10px;
@@ -465,6 +465,57 @@ html {
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
+            }
+        }
+    }
+}
+
+#vote-history-modal .uk-modal-dialog {
+    min-width: 50%;
+    height: 90%;
+
+    .received-votes-content {
+
+        position: relative;
+        width: 100%;
+
+        .voted-message {
+            padding-bottom: 10px;
+
+            &:not(:last-child) {
+                border-bottom: solid 1px @recent-message-border-color;
+                margin-bottom: 10px;
+            }
+
+            &.new-vote {
+                font-weight: bold;
+            }
+
+            a.voted-message-link {
+                display: block;
+                text-decoration: none;
+                white-space: normal;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                color: inherit;
+                max-height: 70px;
+            }
+
+            a.voted-message-thread-link {
+                display: block;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                flex-grow: 1;
+            }
+
+            .time-ago {
+                display: block;
+                float: left;
+                width: 7em;
+                font-weight: lighter;
+                font-size: 0.9em;
+                color: @time-ago-color;
             }
         }
     }
@@ -628,6 +679,10 @@ html {
     }
 
     #recent-thread-messages-modal .uk-modal-dialog {
+        min-width: 75%;
+    }
+
+    #vote-history-modal .uk-modal-dialog {
         min-width: 75%;
     }
 

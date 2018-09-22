@@ -102,6 +102,133 @@ export module ThreadMessagesView {
         return resultElement;
     }
 
+    export function createReceivedVotesView(voteHistory: UserRepository.VoteHistory): HTMLElement {
+
+        const result = dA('<div>');
+
+        let atLeastOneMessage = false;
+
+        for (let vote of voteHistory.receivedVotes) {
+
+            if ((null === vote) || (null === vote.message)) continue;
+
+            atLeastOneMessage = true;
+
+            const newVoteClass = (vote.at >= voteHistory.lastRetrievedAt) ? 'new-vote' : '';
+
+            const element = dA(`<div class="voted-message ${newVoteClass}">`);
+            result.append(element);
+
+            const container = dA('<div>');
+            element.append(container);
+
+            const message = vote.message;
+
+            const threadName = message.parentThread.name;
+            const threadId = message.parentThread.id;
+
+            const threadTitle = threadName || 'unknown';
+
+            const href = Pages.getThreadMessagesOfThreadUrlFull({
+
+                id: threadId,
+                name: threadTitle
+
+            } as ThreadRepository.Thread);
+
+            const timeFlex = dA('<div class="date-time-flex">');
+            container.append(timeFlex);
+
+            const time = dA('<span class="time-ago">');
+            timeFlex.append(time);
+            time.appendString(DisplayHelpers.getAgoTimeShort(vote.at));
+
+            const score = DisplayHelpers.intToString(Math.abs(vote.score));
+
+            if (0 === vote.score) {
+
+                timeFlex.appendRaw(`<span class="thread-vote neutral-vote" aria-expanded="false">0</span>`);
+            }
+            else if (vote.score < 0) {
+
+                timeFlex.appendRaw(`<span class="thread-vote down-vote" aria-expanded="false">−${score}</span>`);
+            }
+            else {
+                timeFlex.appendRaw(`<span class="thread-vote up-vote" aria-expanded="false">+${score}</span>`);
+            }
+
+            let threadTitleElement: HTMLElement;
+            if (threadId) {
+
+                threadTitleElement = cE('a');
+                DOMHelpers.addClasses(threadTitleElement, 'voted-message-thread-link');
+                threadTitleElement.setAttribute('href', href);
+                threadTitleElement.setAttribute('title', threadTitle);
+                threadTitleElement.setAttribute('data-threadmessagethreadid', threadId);
+            }
+            else {
+
+                threadTitleElement = cE('span');
+            }
+            threadTitleElement.innerText = threadTitle;
+            timeFlex.appendElement(threadTitleElement);
+
+            const votedMessageTime = dA('<div class="voted-message-time uk-text-meta">');
+            timeFlex.append(votedMessageTime);
+
+            const votedMessageTimeContent = cE('span');
+            if (message.created) {
+
+                votedMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(message.created);
+            }
+            votedMessageTime.appendElement(votedMessageTimeContent);
+
+            const messageContent = message.content || 'empty';
+
+            let messageLink: HTMLElement;
+            if (message.id) {
+
+                messageLink = cE('a');
+                DOMHelpers.addClasses(messageLink, 'voted-message-link');
+                messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id));
+                messageLink.setAttribute('title', messageContent);
+                messageLink.setAttribute('data-threadmessageid', message.id);
+            }
+            else {
+                messageLink = cE('span');
+            }
+            messageLink.innerText = messageContent;
+            container.appendElement(messageLink);
+        }
+
+        if ( ! atLeastOneMessage) {
+
+            result.appendRaw('<span class="uk-text-warning">No more messages found</span>');
+        }
+
+        const resultElement = result.toElement();
+
+        DOMHelpers.forEach(resultElement.getElementsByClassName('voted-message-thread-link'), link => {
+
+            DOMHelpers.addClasses(link, 'render-math');
+            ViewsExtra.refreshMath(link);
+        });
+        DOMHelpers.forEach(resultElement.getElementsByClassName('voted-message-link'), link => {
+
+            link.title = '';
+            DOMHelpers.addClasses(link, 'render-math');
+            ViewsExtra.refreshMath(link);
+        });
+
+        Views.setupThreadsOfUsersLinks(resultElement);
+        Views.setupSubscribedThreadsOfUsersLinks(resultElement);
+        Views.setupThreadMessagesOfUsersLinks(resultElement);
+        Views.setupThreadMessagesOfThreadsLinks(resultElement);
+        Views.setupThreadMessagesOfMessageParentThreadLinks(resultElement);
+
+        return resultElement;
+    }
+
     export async function createThreadMessagesPageContent(collection: ThreadMessageRepository.ThreadMessageCollection,
                                                           info: ThreadMessagePageDisplayInfo,
                                                           onPageNumberChange: Views.PageNumberChangeCallback,

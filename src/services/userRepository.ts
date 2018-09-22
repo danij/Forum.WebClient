@@ -1,6 +1,7 @@
 import {RequestHandler} from './requestHandler';
 import {CommonEntities} from './commonEntities';
 import {UserCache} from "./userCache";
+import {ThreadMessageRepository} from "./threadMessageRepository";
 
 export module UserRepository {
 
@@ -26,6 +27,19 @@ export module UserRepository {
 
         authenticated: number;
         user: User;
+    }
+
+    export interface Vote {
+
+        at: number;
+        score: number;
+        message: ThreadMessageRepository.ThreadMessage;
+    }
+
+    export interface VoteHistory {
+
+        lastRetrievedAt: number;
+        receivedVotes: Vote[];
     }
 
     export const EmptyUserId: string = '';
@@ -275,5 +289,12 @@ export module UserRepository {
             return users;
         }
         return Promise.resolve([]);
+    }
+
+    export async function getReceivedVotesHistory(): Promise<VoteHistory> {
+
+        return await RequestHandler.get({
+            path: 'users/votehistory'
+        }) as VoteHistory;
     }
 }
