@@ -42,6 +42,11 @@ export module UserRepository {
         receivedVotes: Vote[];
     }
 
+    export interface QuoteHistory {
+
+        messages: ThreadMessageRepository.ThreadMessage[];
+    }
+
     export const EmptyUserId: string = '';
 
     export const AnonymousUserName: string = '<anonymous>';
@@ -296,5 +301,12 @@ export module UserRepository {
         return await RequestHandler.get({
             path: 'users/votehistory'
         }) as VoteHistory;
+    }
+
+    export async function getQuotedHistory(): Promise<QuoteHistory> {
+
+        return await RequestHandler.get({
+            path: 'users/quotedhistory'
+        }) as QuoteHistory;
     }
 }

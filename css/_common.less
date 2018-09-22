@@ -433,11 +433,13 @@ html {
     }
 }
 
-#recent-thread-messages-modal .uk-modal-dialog {
+#recent-thread-messages-modal .uk-modal-dialog,
+#quote-history-modal .uk-modal-dialog {
+
     min-width: 50%;
     height: 90%;
 
-    .recent-messages-content {
+    .recent-messages-content, .quoted-messages-content {
 
         position: relative;
         width: 100%;
@@ -683,6 +685,10 @@ html {
     }
 
     #vote-history-modal .uk-modal-dialog {
+        min-width: 75%;
+    }
+
+    #quote-history-modal .uk-modal-dialog {
         min-width: 75%;
     }
 

@@ -38,6 +38,8 @@ export module AuthenticationView {
 
                 Views.onClick(document.getElementById('vote-history-link'),
                     () => MasterView.showVoteHistoryModal());
+                Views.onClick(document.getElementById('quote-history-link'),
+                    () => MasterView.showQuoteHistoryModal());
             }
             else {
 

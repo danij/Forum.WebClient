@@ -280,6 +280,21 @@ export module MasterView {
         Views.showModal(modal);
     }
 
+    export function showQuoteHistoryModal(): void {
+
+        const modal = document.getElementById('quote-history-modal');
+
+        updateRecentPage('quoted-messages-content', async (page) => {
+
+            const receivedQuotesHistory = await UserRepository.getQuotedHistory();
+
+            return ThreadMessagesView.createRecentThreadMessagesView(receivedQuotesHistory.messages);
+
+        }, 0);
+
+        Views.showModal(modal);
+    }
+
     export function loadFavoriteTheme(): void {
 
         const theme = ThemeRepository.getFavoriteTheme();

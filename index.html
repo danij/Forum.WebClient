@@ -99,7 +99,7 @@
                         <li><a href="#" id="change-password-link" class="uk-hidden">Change Password</a></li>
                         <li class="uk-nav-divider"></li>
                         <li><a href="#" id="vote-history-link">Received Votes</a></li>
-                        <li><a href="#" id="quotes-link">Quoted By</a></li>
+                        <li><a href="#" id="quote-history-link">Quoted By</a></li>
                         <li class="uk-nav-divider"></li>
                         <li><a href="#" id="logout-link"><span uk-icon="icon: sign-out"></span> Logout</a></li>
                     </ul>
@@ -157,6 +157,18 @@
         </div>
         <div class="uk-modal-body">
             <div class="received-votes-content"></div>
+        </div>
+    </div>
+</div>
+
+<div id="quote-history-modal" uk-modal>
+    <div class="uk-modal-dialog uk-margin-auto-vertical">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Received Quotes</h2>
+        </div>
+        <div class="uk-modal-body">
+            <div class="quoted-messages-content"></div>
         </div>
     </div>
 </div>
