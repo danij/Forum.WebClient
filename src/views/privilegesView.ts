@@ -27,6 +27,7 @@ export module PrivilegesView {
     const ThreadMessagePrivilegeNames = [
 
         ['view', 'View'],
+        ['view_unapproved', 'View Unapproved'],
         ['view_required_privileges', 'View Required Privileges'],
         ['view_assigned_privileges', 'View Assigned Privileges'],
         ['view_creator_user', 'View Creator User'],
@@ -39,6 +40,7 @@ export module PrivilegesView {
         ['get_message_comments', 'View Message Comments'],
         ['set_comment_to_solved', 'Set Comment to Solved'],
         ['change_content', 'Change Content'],
+        ['change_approval', 'Change Approval'],
         ['delete', 'Delete'],
         ['move', 'Move'],
         ['adjust_privilege', 'Adjust Privileges'],
@@ -53,6 +55,7 @@ export module PrivilegesView {
         ['subscribe', 'Subscribe'],
         ['unsubscribe', 'Unsubscribe'],
         ['add_message', 'Add Message'],
+        ['auto_approve_message', 'Auto Approve Message'],
         ['change_name', 'Change Name'],
         ['change_pin_display_order', 'Change Pin Display Order'],
         ['add_tag', 'Add Tag'],

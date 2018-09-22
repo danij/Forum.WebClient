@@ -44,6 +44,7 @@ export module CategoryRepository {
 
             latestMessage = {
                 id: '',
+                approved: true,
                 created: 0,
                 createdBy: null,
                 content: '',

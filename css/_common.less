@@ -251,6 +251,17 @@ html {
 .message-content {
     text-align: justify;
     word-wrap: break-word;
+    position: relative;
+
+    &.unapproved:before {
+        content: '!';
+        font-size: 5em;
+        position: absolute;
+        opacity: 0.5;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
 
     .uk-table {
         width: 75%;
@@ -1406,4 +1417,9 @@ form.assign-privileges-form {
 
     height: inherit;
     margin-top: -2px;
+}
+
+.unapproved {
+
+   opacity: 0.5;
 }

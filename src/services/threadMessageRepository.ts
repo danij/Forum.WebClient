@@ -10,6 +10,7 @@ export module ThreadMessageRepository {
         id: string;
         created: number;
         createdBy: UserRepository.User;
+        approved: boolean;
         content: string;
         threadId: string;
         threadName: string;
@@ -35,6 +36,7 @@ export module ThreadMessageRepository {
         id: string;
         created: number;
         createdBy: UserRepository.User;
+        approved: boolean;
         commentsCount: number;
         solvedCommentsCount: number;
         content: string;
@@ -291,6 +293,13 @@ export module ThreadMessageRepository {
         await RequestHandler.put({
             path: 'thread_messages/content/' + encodeURIComponent(messageId) + '/' + encodeURIComponent(changeReason),
             stringData: newContent
+        });
+    }
+
+    export async function editThreadMessageApproved(messageId: string, newApproved: boolean): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'thread_messages/approved/' + encodeURIComponent(messageId) + '/' + (newApproved ? 'true' : 'false')
         });
     }
 

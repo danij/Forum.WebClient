@@ -77,7 +77,7 @@ export module ThreadRepository {
 
         filterThreadNulls(thread);
 
-        thread.messages = thread.messages || [];
+        thread.messages = thread.messages ? thread.messages.filter(msg => msg) : [];
 
         for (const message of thread.messages) {
 

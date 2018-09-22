@@ -236,6 +236,10 @@ export module ThreadsView {
 
                     const messageLink = cE('a');
                     DOMHelpers.addClasses(messageLink, 'recent-message-link');
+                    if ( ! latestMessage.approved) {
+
+                        DOMHelpers.addClasses(messageLink, 'unapproved');
+                    }
                     messageLink.setAttribute('title', messageContent);
                     messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
                     messageLink.setAttribute('data-threadmessageid', latestMessage.id);

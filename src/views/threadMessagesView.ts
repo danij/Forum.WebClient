@@ -542,7 +542,8 @@ export module ThreadMessagesView {
 
     function createThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
 
-        const content = dA('<div class="message-content render-math uk-flex-1">');
+        const unapprovedClass = message.approved ? '' : 'unapproved';
+        const content = dA(`<div class="message-content ${unapprovedClass} render-math uk-flex-1">`);
         content.appendRaw(ViewsExtra.expandContent(message.content));
         return content;
     }
@@ -1087,6 +1088,10 @@ export module ThreadMessagesView {
 
             messageLink = cE('a');
             DOMHelpers.addClasses(messageLink, 'recent-message-link');
+            if ( ! message.approved) {
+
+                DOMHelpers.addClasses(messageLink, 'unapproved');
+            }
             messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(message.id));
             messageLink.setAttribute('title', messageContent);
             messageLink.setAttribute('data-threadmessageid', message.id);
