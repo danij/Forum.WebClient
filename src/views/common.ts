@@ -32,6 +32,7 @@ export module Views {
         pageNumbersAfter: number,
         showSpinnerAfterMilliSeconds: number;
         updateStatisticsEveryMilliSeconds: number;
+        checkAuthenticationEveryMilliSeconds: number;
         searchThreadWaitMilliseconds: number;
         renderMessagePreviewEveryMilliseconds: number;
         useDashesForThreadNameInUrl: boolean;
@@ -602,6 +603,11 @@ export module Views {
             ev.preventDefault();
             callback(ev);
         });
+    }
+
+    export function onClickRemoveListeners(element: HTMLElement, callback: (ev) => void): void {
+
+        onClick(DOMHelpers.removeEventListeners(element), callback);
     }
 
     export function onClickWithSpinner<T>(element: HTMLButtonElement, callback: (ev) => Promise<T>): void {

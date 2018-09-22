@@ -36,12 +36,16 @@ export module AuthenticationView {
                 DOMHelpers.hide(document.getElementById('login-link'));
                 DOMHelpers.unHide(document.getElementById('logged-in-link'));
 
-                Views.onClick(document.getElementById('vote-history-link'),
+                Views.onClickRemoveListeners(document.getElementById('vote-history-link'),
                     () => MasterView.showVoteHistoryModal());
-                Views.onClick(document.getElementById('quote-history-link'),
+
+                Views.onClickRemoveListeners(document.getElementById('quote-history-link'),
                     () => MasterView.showQuoteHistoryModal());
             }
             else {
+
+                DOMHelpers.unHide(document.getElementById('login-link'));
+                DOMHelpers.hide(document.getElementById('logged-in-link'));
 
                 return;
             }
@@ -54,7 +58,7 @@ export module AuthenticationView {
                 DOMHelpers.unHide(myUserLink);
                 myUserLink.innerText = currentUser.user.name;
 
-                Views.onClick(myUserLink, () => {
+                Views.onClickRemoveListeners(myUserLink, () => {
 
                     new ThreadsPage().displayForLoadedUser(currentUser.user);
                 });
@@ -63,7 +67,7 @@ export module AuthenticationView {
 
                 const createUserLink = document.getElementById('create-user-name-link');
                 DOMHelpers.unHide(createUserLink);
-                Views.onClick(createUserLink, showCreateUserModal);
+                Views.onClickRemoveListeners(createUserLink, showCreateUserModal);
 
                 showCreateUserModal(userCallback);
             }
@@ -73,10 +77,10 @@ export module AuthenticationView {
                 const changePasswordLink = DOMHelpers.removeEventListeners(document.getElementById('change-password-link'));
 
                 DOMHelpers.unHide(changePasswordLink);
-                Views.onClick(changePasswordLink, () => showChangePasswordModal(authCallback));
+                Views.onClickRemoveListeners(changePasswordLink, () => showChangePasswordModal(authCallback));
             }
 
-            Views.onClick(document.getElementById('logout-link'), () => {
+            Views.onClickRemoveListeners(document.getElementById('logout-link'), () => {
                 authCallback.logout();
             });
         })

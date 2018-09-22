@@ -190,6 +190,9 @@ export module MasterPage {
 
         updateStatistics();
         setInterval(updateStatistics, Views.DisplayConfig.updateStatisticsEveryMilliSeconds);
+        setInterval(
+            () => AuthenticationView.checkAuthentication(PageActions.getAuthCallback(), PageActions.getUserCallback()),
+            Views.DisplayConfig.checkAuthenticationEveryMilliSeconds);
     }
 
     function setupRecentModals(): void {

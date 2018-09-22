@@ -23,6 +23,7 @@ window.displayConfig = {
     updateStatisticsEveryMilliSeconds: 60000,
     updateRecentThreadsEveryMilliSeconds: 60000,
     updateRecentThreadMessagesEveryMilliSeconds: 30000,
+    checkAuthenticationEveryMilliSeconds: 120000,
     searchThreadWaitMilliseconds: 100,
     renderMessagePreviewEveryMilliseconds: 2000,
     useDashesForThreadNameInUrl: true,
