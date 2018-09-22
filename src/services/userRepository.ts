@@ -305,8 +305,12 @@ export module UserRepository {
 
     export async function getQuotedHistory(): Promise<QuoteHistory> {
 
-        return await RequestHandler.get({
+        const result = await RequestHandler.get({
             path: 'users/quotedhistory'
         }) as QuoteHistory;
+
+        UserCache.processMessages(result.messages);
+
+        return result;
     }
 }
