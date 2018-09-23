@@ -543,7 +543,7 @@ export module ThreadMessagesView {
     function createThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
 
         const unapprovedClass = message.approved ? '' : 'unapproved';
-        const unapprovedTitle = message.approved ? '' : ' title="Not yet approved"';
+        const unapprovedTitle = message.approved ? '' : ' title="Not yet approved. Message is only visible to the author and privileged users."';
         const content = dA(`<div class="message-content ${unapprovedClass} render-math uk-flex-1" ${unapprovedTitle}>`);
         content.appendRaw(ViewsExtra.expandContent(message.content));
         return content;
