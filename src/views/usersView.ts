@@ -477,8 +477,8 @@ export module UsersView {
             }
             if (Privileges.User.canEditUserLogo(user)) {
 
-                editContent.push('<a class="clear-user-logo-link">Remove logo</a>');
-                editContent.push('<a class="edit-user-logo-link">Upload new logo</a>');
+                editContent.push('<a class="clear-user-logo-link">Remove profile image</a>');
+                editContent.push('<a class="edit-user-logo-link">Upload new profile image</a>');
             }
             if (Privileges.User.canDeleteUser(user)) {
 
