@@ -101,7 +101,7 @@ export class ThreadMessagesPage implements Pages.Page {
         }
     }
 
-    displayForThread(threadId: string, page: number): void {
+    displayForThread(threadId: string, page?: number): void {
 
         this.threadId = threadId;
         if (page > 0) {
