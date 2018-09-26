@@ -77,7 +77,7 @@ export module AuthenticationView {
 
                 const createUserLink = document.getElementById('create-user-name-link');
                 DOMHelpers.unHide(createUserLink);
-                Views.onClickRemoveListeners(createUserLink, showCreateUserModal);
+                Views.onClickRemoveListeners(createUserLink, () => showCreateUserModal(userCallback));
 
                 showCreateUserModal(userCallback);
             }
