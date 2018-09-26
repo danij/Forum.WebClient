@@ -317,8 +317,11 @@ export module Views {
     function threadMessagesOfThreadLinkClicked(ev: Event) {
 
         const threadId = DOMHelpers.getLink(ev).getAttribute('data-threadmessagethreadid');
+        const threadPageString = DOMHelpers.getLink(ev).getAttribute('data-threadmessagethreadpage');
 
-        new ThreadMessagesPage().displayForThread(threadId);
+        const threadPage = parseInt(threadPageString) || 0;
+
+        new ThreadMessagesPage().displayForThread(threadId, threadPage);
     }
 
     function threadMessagesOfParentThreadLinkClicked(ev: Event) {

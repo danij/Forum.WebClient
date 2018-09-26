@@ -39,8 +39,27 @@ export module ThreadsView {
 
         const classes = showAsButton ? 'uk-button uk-button-text ' : '';
 
-        const result = dA(`<a class="${classes}thread-name render-math ${visitedClass}" href="${href}" ${data}>`);
-        result.appendString((addSpace ? ' ' : '') + thread.name);
+        const link = dA(`<a class="${classes}thread-name render-math ${visitedClass}" href="${href}" ${data}>`);
+        link.appendString((addSpace ? ' ' : '') + thread.name);
+
+        let result: DOMAppender;
+
+        if (thread.latestVisitedPage > 0) {
+
+            result = dA('span');
+            result.append(link);
+
+            const pageHref = Pages.getThreadMessagesOfThreadUrlFull(thread, thread.latestVisitedPage + 1);
+            const data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}" 
+                          data-threadmessagethreadpage="${parseInt(thread.latestVisitedPage.toString())}"`;
+
+            const goToPage = dA(`<a href="${pageHref}" ${data} class="uk-icon-link thread-latest-visited-page-link" uk-icon="icon: chevron-right; ratio: 1.25" title="Go to latest visited page" uk-title>`);
+            result.append(goToPage);
+        }
+        else {
+
+            result = link;
+        }
 
         return result;
     }

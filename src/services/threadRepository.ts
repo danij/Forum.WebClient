@@ -28,6 +28,7 @@ export module ThreadRepository {
         pinned: boolean;
         pinDisplayOrder: number;
         subscribedToThread: boolean;
+        latestVisitedPage?: number;
         privileges: string[];
     }
 

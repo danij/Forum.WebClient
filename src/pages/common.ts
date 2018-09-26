@@ -331,19 +331,25 @@ export module Pages {
         return `thread_messages/user/${encodeURIComponent(name)}`;
     }
 
-    export function getThreadMessagesOfThreadUrlFull(thread: ThreadRepository.Thread): string {
+    export function getThreadMessagesOfThreadUrlFull(thread: ThreadRepository.Thread, page?: number): string {
 
-        return getUrl(getThreadMessagesOfThreadUrl(thread.id, thread.name));
+        return getUrl(getThreadMessagesOfThreadUrl(thread.id, thread.name, page));
     }
 
-    export function getThreadMessagesOfThreadUrl(id: string, name: string): string {
+    export function getThreadMessagesOfThreadUrl(id: string, name: string, page?: number): string {
 
         if (Views.DisplayConfig.useDashesForThreadNameInUrl) {
 
             name = name.replace(/\s/g, '-');
         }
 
-        return `thread/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
+        let result = `thread/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
+
+        if (page > 0) {
+
+            result = `${result}/page/${page}`;
+        }
+        return result;
     }
 
     export function getThreadMessagesOfMessageParentThreadUrlFull(messageId: string): string {
