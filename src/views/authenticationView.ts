@@ -7,6 +7,7 @@ import {ConsentView} from './consentView';
 import {DocumentationView} from './documentationView';
 import {Privileges} from "../services/privileges";
 import {MasterView} from "./masterView";
+import {DisplayHelpers} from "../helpers/displayHelpers";
 
 export module AuthenticationView {
 
@@ -36,11 +37,20 @@ export module AuthenticationView {
                 DOMHelpers.hide(document.getElementById('login-link'));
                 DOMHelpers.unHide(document.getElementById('logged-in-link'));
 
-                Views.onClickRemoveListeners(document.getElementById('vote-history-link'),
-                    () => MasterView.showVoteHistoryModal());
+                Views.onClickRemoveListeners(document.getElementById('vote-history-link'), () => {
 
-                Views.onClickRemoveListeners(document.getElementById('quote-history-link'),
-                    () => MasterView.showQuoteHistoryModal());
+                    MasterView.showVoteHistoryModal();
+                    updateVoteHistoryNr(0);
+                });
+
+                Views.onClickRemoveListeners(document.getElementById('quote-history-link'), () => {
+
+                    MasterView.showQuoteHistoryModal();
+                    updateQuoteHistoryNr(0);
+                });
+
+                updateVoteHistoryNr(currentUser.newReceivedVotesNr);
+                updateQuoteHistoryNr(currentUser.newReceivedQuotesNr);
             }
             else {
 
@@ -84,6 +94,16 @@ export module AuthenticationView {
                 authCallback.logout();
             });
         })
+    }
+
+    export function updateVoteHistoryNr(value: number): void {
+
+        document.getElementById('vote-history-nr').innerText = DisplayHelpers.intToString(value);
+    }
+
+    export function updateQuoteHistoryNr(value: number): void {
+
+        document.getElementById('quote-history-nr').innerText = DisplayHelpers.intToString(value);
     }
 
     function showCreateUserModal(userCallback: PageActions.IUserCallback) {

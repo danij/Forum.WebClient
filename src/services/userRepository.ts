@@ -27,6 +27,8 @@ export module UserRepository {
 
         authenticated: number;
         user: User;
+        newReceivedVotesNr: number;
+        newReceivedQuotesNr: number;
     }
 
     export interface Vote {
