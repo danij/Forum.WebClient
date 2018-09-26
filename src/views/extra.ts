@@ -132,6 +132,9 @@ export module ViewsExtra {
             }
         });
 
+        const codeBlocks = container.getElementsByTagName('pre');
+        DOMHelpers.forEach(codeBlocks, adjustCodeBlock);
+
         const blockQuotes = container.getElementsByTagName('blockquote');
         DOMHelpers.forEach(blockQuotes, adjustBlockquote);
 
@@ -250,7 +253,14 @@ export module ViewsExtra {
         return `https://www.youtube.com/watch?v=${id}`;
     }
 
+    function adjustCodeBlock(codeBlock: HTMLPreElement): void {
+
+        DOMHelpers.addClasses(codeBlock, 'uk-resize-vertical');
+    }
+
     function adjustBlockquote(quote: HTMLElement): void {
+
+        DOMHelpers.addClasses(quote, 'uk-resize-vertical');
 
         if (quote.children.length > 0) {
 
