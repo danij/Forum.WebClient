@@ -551,7 +551,10 @@ export module ThreadMessagesView {
             const details = dA('<span class="uk-text-warning">');
             content.append(details);
 
-            details.appendString(`Last edited by ${message.lastUpdated.userName}: ${reason}`);
+            if (message.lastUpdated.userName) {
+
+                details.appendString(`Last edited by ${message.lastUpdated.userName}: ${reason}`);
+            }
         }
 
         return content;
