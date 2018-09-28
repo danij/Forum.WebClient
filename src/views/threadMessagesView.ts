@@ -1107,6 +1107,11 @@ export module ThreadMessagesView {
 
             threadTitleElement = cE('a');
             DOMHelpers.addClasses(threadTitleElement, 'recent-message-thread-link');
+            if (anyMessage.parentThread && (! anyMessage.parentThread.approved)) {
+
+                DOMHelpers.addClasses(threadTitleElement, 'unapproved');
+            }
+
             threadTitleElement.setAttribute('href', href);
             threadTitleElement.setAttribute('title', threadTitle);
             threadTitleElement.setAttribute('data-threadmessagethreadid', threadId);
