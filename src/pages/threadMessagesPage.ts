@@ -50,7 +50,11 @@ export class ThreadMessagesPage implements Pages.Page {
             else if (this.threadId && this.threadId.length) {
 
                 this.thread = await this.getCurrentThread();
-                if (null == this.thread) return;
+                if (null == this.thread) {
+
+                    Views.showDangerNotification('Thread not found');
+                    return;
+                }
             }
 
             this.refreshUrl();
