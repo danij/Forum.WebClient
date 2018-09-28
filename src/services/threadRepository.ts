@@ -13,6 +13,7 @@ export module ThreadRepository {
         id: string;
         name: string;
         created: number;
+        approved: boolean;
         latestVisibleChangeAt: number;
         visitorsSinceLastChange: number;
         subscribedUsersCount: number;
@@ -366,6 +367,13 @@ export module ThreadRepository {
         await RequestHandler.put({
             path: 'threads/pindisplayorder/' + encodeURIComponent(threadId),
             stringData: newDisplayOrder.toString()
+        });
+    }
+
+    export async function editThreadApproved(threadId: string, newApproved: boolean): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'threads/approval/' + encodeURIComponent(threadId) + '/' + (newApproved ? 'true' : 'false')
         });
     }
 

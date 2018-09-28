@@ -37,7 +37,11 @@ export module ThreadsView {
 
         const visitedClass = thread.visitedSinceLastChange ? 'already-visited' : '';
 
-        const classes = showAsButton ? 'uk-button uk-button-text ' : '';
+        let classes = showAsButton ? 'uk-button uk-button-text ' : '';
+        if ( ! thread.approved) {
+
+            classes = classes + 'unapproved ';
+        }
 
         const link = dA(`<a class="${classes}thread-name render-math ${visitedClass}" href="${href}" ${data}>`);
         link.appendString((addSpace ? ' ' : '') + thread.name);
@@ -326,7 +330,14 @@ export module ThreadsView {
 
             const href = Pages.getThreadMessagesOfThreadUrlFull(thread);
             const data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}"`;
-            const link = dA(`<a href="${href}" class="recent-thread-link render-math" title="${title}" ${data}>`);
+
+            let classes = 'recent-thread-link render-math';
+            if ( ! thread.approved) {
+
+                classes = classes + ' unapproved';
+            }
+
+            const link = dA(`<a href="${href}" class="${classes}" title="${title}" ${data}>`);
             element.append(link);
             link.appendString(thread.name);
         }
@@ -360,10 +371,6 @@ export module ThreadsView {
 
         const threadTitle = cE('span');
         {
-            /* append to card:
-            <a uk-icon="icon: settings" href="editThreadPrivileges" title="Edit thread access" uk-tooltip
-               uk-toggle="target: #privileges-modal"></a>
-            */
             const actions = cE('div');
             card.appendChild(actions);
             DOMHelpers.addClasses(actions, 'thread-actions');
@@ -409,6 +416,39 @@ export module ThreadsView {
                 });
 
                 if ( ! thread.subscribedToThread) DOMHelpers.hide(unSubscribeFromThread);
+            }
+
+            if (Privileges.Thread.canEditThreadApproval(thread)) {
+
+                const approveThreadLink = EditViews.createEditLink('Approve Thread', 'check');
+                actions.appendChild(approveThreadLink);
+
+                const unApproveThreadLink = EditViews.createEditLink('Unapprove Thread', 'ban');
+                actions.appendChild(unApproveThreadLink);
+
+                Views.onClick(approveThreadLink, async () => {
+
+                    if (thread.approved) return;
+
+                    if (await callback.approve(thread.id)) {
+
+                        thread.approved = true;
+
+                        DOMHelpers.removeClasses(threadTitle, 'unapproved');
+                    }
+                });
+
+                Views.onClick(unApproveThreadLink, async () => {
+
+                    if ( ! thread.approved) return;
+
+                    if (await callback.unapprove(thread.id)) {
+
+                        thread.approved = false;
+
+                        DOMHelpers.addClasses(threadTitle, 'unapproved');
+                    }
+                });
             }
 
             if (Privileges.Thread.canEditThreadPinDisplayOrder(thread)) {
@@ -502,10 +542,15 @@ export module ThreadsView {
         {
             const title = cE('div');
             card.appendChild(title);
+
             DOMHelpers.addClasses(title, 'uk-align-left', 'thread-title');
 
             title.appendChild(threadTitle);
             DOMHelpers.addClasses(threadTitle, 'uk-logo', 'render-math');
+            if ( ! thread.approved) {
+
+                DOMHelpers.addClasses(threadTitle, 'unapproved');
+            }
 
             threadTitle.innerText = thread.name;
             title.appendChild(document.createTextNode(' '));

@@ -91,6 +91,10 @@ export module Privileges {
             return hasPrivilege(thread, 'change_pin_display_order');
         }
 
+        export function canEditThreadApproval(thread: ThreadRepository.Thread): boolean {
+            return hasPrivilege(thread, 'change_approval');
+        }
+
         export function canEditThreadTags(thread: ThreadRepository.Thread): boolean {
             return hasPrivilege(thread, 'add_tag') || hasPrivilege(thread, 'remove_tag');
         }
@@ -130,7 +134,7 @@ export module Privileges {
             return hasPrivilege(message, 'change_content');
         }
 
-        export function canChangeThreadMessageApproval(message: ThreadMessageRepository.ThreadMessage): boolean {
+        export function canEditThreadMessageApproval(message: ThreadMessageRepository.ThreadMessage): boolean {
             return hasPrivilege(message, 'change_approval');
         }
 

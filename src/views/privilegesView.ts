@@ -49,6 +49,7 @@ export module PrivilegesView {
     const ThreadPrivilegeNames = [
 
         ['view', 'View'],
+        ['view_unapproved', 'View Unapproved'],
         ['view_required_privileges', 'View Required Privileges'],
         ['view_assigned_privileges', 'View Assigned Privileges'],
         ['get_subscribed_users', 'View Users Subscribed to Thread'],
@@ -58,6 +59,7 @@ export module PrivilegesView {
         ['auto_approve_message', 'Auto Approve Message'],
         ['change_name', 'Change Name'],
         ['change_pin_display_order', 'Change Pin Display Order'],
+        ['change_approval', 'Change Approval'],
         ['add_tag', 'Add Tag'],
         ['remove_tag', 'Remove Tag'],
         ['delete', 'Delete'],
@@ -113,6 +115,7 @@ export module PrivilegesView {
         ['add_discussion_category', 'Add Category'],
         ['add_discussion_tag', 'Add Tag'],
         ['add_discussion_thread', 'Add Thread'],
+        ['auto_approve_discussion_thread', 'Auto Approve Thread'],
         ['change_own_user_name', 'Change Own User Name'],
         ['change_any_user_name', 'Change Any User Name'],
         ['change_own_user_info', 'Change Own User Info'],

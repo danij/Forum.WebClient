@@ -563,7 +563,7 @@ export module ThreadMessagesView {
         const actions = dA('<div class="message-actions">');
         const messageId = DOMHelpers.escapeStringForAttribute(message.id);
 
-        if (Privileges.ThreadMessage.canChangeThreadMessageApproval(message)) {
+        if (Privileges.ThreadMessage.canEditThreadMessageApproval(message)) {
 
             actions.appendRaw(`<a uk-icon="icon: check" class="approve-thread-message-link" title="Approve Content" data-message-id="${messageId}" uk-tooltip></a>`);
             actions.appendRaw(`<a uk-icon="icon: ban" class="unapprove-thread-message-link" title="Unapprove Content" data-message-id="${messageId}" uk-tooltip></a>`);

@@ -80,6 +80,10 @@ export module PageActions {
         addThreadMessage(id: string, content: string): Promise<string>;
 
         getAllTags(): Promise<TagRepository.Tag[]>;
+
+        approve(id: string): Promise<boolean>;
+
+        unapprove(id: string): Promise<boolean>;
     }
 
     export interface IThreadMessageCallback {
@@ -344,6 +348,16 @@ export module PageActions {
         getAllTags(): Promise<TagRepository.Tag[]> {
 
             return TagRepository.getAllTags();
+        }
+
+        approve(id: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(ThreadRepository.editThreadApproved(id, true));
+        }
+
+        unapprove(id: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(ThreadRepository.editThreadApproved(id, false));
         }
     }
 

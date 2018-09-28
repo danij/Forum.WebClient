@@ -101,6 +101,11 @@ html {
 .thread-title {
     margin-right: 190px;
 
+    .uk-logo.unapproved {
+
+        text-decoration: line-through;
+    }
+
     .author {
         font-variant-numeric: oldstyle-nums;
     }
@@ -439,6 +444,11 @@ html {
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 max-height: 30px;
+
+                &.unapproved {
+
+                    text-decoration: line-through;
+                }
             }
         }
     }
@@ -916,6 +926,11 @@ html {
         font-size: 1.25rem;
         line-height: 1.25;
         text-align: left;
+
+        &.unapproved {
+
+            text-decoration: line-through;
+        }
     }
 
     .already-visited {
