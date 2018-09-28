@@ -370,6 +370,7 @@ export module ThreadsView {
         DOMHelpers.addClasses(card, 'uk-card', 'uk-card-body');
 
         const threadTitle = cE('span');
+        const approvalNotification = cE('span');
         {
             const actions = cE('div');
             card.appendChild(actions);
@@ -434,7 +435,7 @@ export module ThreadsView {
 
                         thread.approved = true;
 
-                        DOMHelpers.removeClasses(threadTitle, 'unapproved');
+                        DOMHelpers.hide(approvalNotification);
                     }
                 });
 
@@ -446,7 +447,7 @@ export module ThreadsView {
 
                         thread.approved = false;
 
-                        DOMHelpers.addClasses(threadTitle, 'unapproved');
+                        DOMHelpers.unHide(approvalNotification);
                     }
                 });
             }
@@ -545,11 +546,15 @@ export module ThreadsView {
 
             DOMHelpers.addClasses(title, 'uk-align-left', 'thread-title');
 
+            title.appendChild(approvalNotification);
+            DOMHelpers.addClasses(approvalNotification, 'uk-text-danger');
+            approvalNotification.innerText = '(Not yet approved) ';
+
             title.appendChild(threadTitle);
             DOMHelpers.addClasses(threadTitle, 'uk-logo', 'render-math');
-            if ( ! thread.approved) {
+            if (thread.approved) {
 
-                DOMHelpers.addClasses(threadTitle, 'unapproved');
+                DOMHelpers.addClasses(approvalNotification, 'uk-hidden');
             }
 
             threadTitle.innerText = thread.name;
