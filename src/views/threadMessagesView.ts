@@ -403,13 +403,7 @@ export module ThreadMessagesView {
 
         if (message.lastUpdated && message.lastUpdated.at) {
 
-            let reason = (message.lastUpdated.reason || '').trim();
-            if (reason.length < 1) {
-                reason = '<no reason>';
-            }
-            const title = message.lastUpdated.userName + ': ' + reason;
-
-            messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning" title="${DOMHelpers.escapeStringForAttribute(title)}">Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
+            messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning">Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
         }
         if (message.ip && message.ip.length) {
 
@@ -546,6 +540,20 @@ export module ThreadMessagesView {
         const unapprovedTitle = message.approved ? '' : ' title="Not yet approved. Message is only visible to the author and privileged users."';
         const content = dA(`<div class="message-content ${unapprovedClass} render-math uk-flex-1" ${unapprovedTitle}>`);
         content.appendRaw(ViewsExtra.expandContent(message.content));
+
+        if (message.lastUpdated && message.lastUpdated.at) {
+
+            let reason = (message.lastUpdated.reason || '').trim();
+            if (reason.length < 1) {
+                reason = '<no reason>';
+            }
+
+            const details = dA('<span class="uk-text-warning">');
+            content.append(details);
+
+            details.appendString(`Last edited by ${message.lastUpdated.userName}: ${reason}`);
+        }
+
         return content;
     }
 
