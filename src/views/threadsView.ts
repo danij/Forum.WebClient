@@ -559,8 +559,6 @@ export module ThreadsView {
 
             threadTitle.innerText = thread.name;
             title.appendChild(document.createTextNode(' '));
-
-            title.appendChild(UsersView.createAuthorSmall(thread.createdBy).toElement());
         }
         {
             card.appendChild(DOMHelpers.parseHTML('<div class="uk-clearfix"></div>'));
