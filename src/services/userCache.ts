@@ -4,6 +4,7 @@ import {TagRepository} from "./tagRepository";
 import {CategoryRepository} from "./categoryRepository";
 import {ThreadMessageRepository} from "./threadMessageRepository";
 import {CommonEntities} from "./commonEntities";
+import {PrivateMessageRepository} from "./privateMessageRepository";
 
 export module UserCache {
 
@@ -143,6 +144,28 @@ export module UserCache {
         if ( ! collection) return;
 
         processComments(collection.messageComments);
+    }
+
+    export function processPrivateMessage(message: PrivateMessageRepository.PrivateMessage): void {
+
+        if ( ! message) return;
+
+        process(message.source);
+        process(message.destination);
+    }
+
+    export function processPrivateMessages(messages: PrivateMessageRepository.PrivateMessage[]): void {
+
+        if ( ! messages) return;
+
+        messages.forEach(message => processPrivateMessage(message));
+    }
+
+    export function processPrivateMessageCollection(collection: PrivateMessageRepository.PrivateMessageCollection): void {
+
+        if ( ! collection) return;
+
+        processPrivateMessages(collection.messages);
     }
 
     export function searchNames(names: string[]): Promise<void> {

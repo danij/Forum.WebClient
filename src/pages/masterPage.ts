@@ -37,7 +37,8 @@ export module MasterPage {
 
         ConsentView.init();
 
-        AuthenticationView.checkAuthentication(PageActions.getAuthCallback(), PageActions.getUserCallback());
+        AuthenticationView.checkAuthentication(PageActions.getAuthCallback(), PageActions.getUserCallback(),
+            PageActions.getPrivateMessageCallback());
 
         setupLinks();
 
@@ -191,7 +192,8 @@ export module MasterPage {
         updateStatistics();
         setInterval(updateStatistics, Views.DisplayConfig.updateStatisticsEveryMilliSeconds);
         setInterval(
-            () => AuthenticationView.checkAuthentication(PageActions.getAuthCallback(), PageActions.getUserCallback()),
+            () => AuthenticationView.checkAuthentication(PageActions.getAuthCallback(),
+                PageActions.getUserCallback(), PageActions.getPrivateMessageCallback()),
             Views.DisplayConfig.checkAuthenticationEveryMilliSeconds);
     }
 

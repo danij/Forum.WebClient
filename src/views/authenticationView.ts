@@ -8,6 +8,7 @@ import {DocumentationView} from './documentationView';
 import {Privileges} from "../services/privileges";
 import {MasterView} from "./masterView";
 import {DisplayHelpers} from "../helpers/displayHelpers";
+import {PrivateMessagesView} from "./privateMessagesView";
 
 export module AuthenticationView {
 
@@ -26,7 +27,8 @@ export module AuthenticationView {
     }
 
     export function checkAuthentication(authCallback: PageActions.IAuthCallback,
-                                        userCallback: PageActions.IUserCallback): void {
+                                        userCallback: PageActions.IUserCallback,
+                                        privateMessagesCallback: PageActions.IPrivateMessageCallback): void {
 
         authCallback.getCurrentUser().then(currentUser => {
 
@@ -49,8 +51,15 @@ export module AuthenticationView {
                     updateQuoteHistoryNr(0);
                 });
 
+                Views.onClickRemoveListeners(document.getElementById('private-messages-link'), () => {
+
+                    PrivateMessagesView.displayPrivateMessages(privateMessagesCallback, userCallback);
+                    updateReceivedPrivateMessagesNr(0);
+                });
+
                 updateVoteHistoryNr(currentUser.newReceivedVotesNr);
                 updateQuoteHistoryNr(currentUser.newReceivedQuotesNr);
+                updateReceivedPrivateMessagesNr(currentUser.newReceivedPrivateMessagesNr);
             }
             else {
 
@@ -104,6 +113,11 @@ export module AuthenticationView {
     export function updateQuoteHistoryNr(value: number): void {
 
         document.getElementById('quote-history-nr').innerText = DisplayHelpers.intToString(value);
+    }
+
+    export function updateReceivedPrivateMessagesNr(value: number): void {
+
+        document.getElementById('private-messages-nr').innerText = DisplayHelpers.intToString(value);
     }
 
     function showCreateUserModal(userCallback: PageActions.IUserCallback) {

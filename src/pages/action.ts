@@ -7,8 +7,11 @@ import {Pages} from './common';
 import {PrivilegesRepository} from '../services/privilegesRepository';
 import {AuthRepository} from '../services/authRepository';
 import {RequestHandler} from '../services/requestHandler';
+import {PrivateMessageRepository} from "../services/privateMessageRepository";
 
 export module PageActions {
+
+    import PrivateMessageCollection = PrivateMessageRepository.PrivateMessageCollection;
 
     interface ActionConfig {
 
@@ -111,6 +114,17 @@ export module PageActions {
         approve(id: string): Promise<boolean>;
 
         unapprove(id: string): Promise<boolean>;
+    }
+
+    export interface IPrivateMessageCallback {
+
+        getReceivedPrivateMessages(page: number): Promise<PrivateMessageCollection>;
+
+        getSentPrivateMessages(page: number): Promise<PrivateMessageCollection>;
+
+        sendPrivateMessage(destinationId: string, content: string): Promise<boolean>;
+
+        deletePrivateMessage(messageId: string): Promise<boolean>;
     }
 
     export interface IUserCallback {
@@ -426,6 +440,33 @@ export module PageActions {
         }
     }
 
+    class PrivateMessageCallback implements IPrivateMessageCallback {
+
+        getReceivedPrivateMessages(page: number): Promise<PrivateMessageCollection> {
+
+            return PrivateMessageRepository.getReceivedPrivateMessages({
+                page: page
+            });
+        }
+
+        getSentPrivateMessages(page: number): Promise<PrivateMessageCollection> {
+
+            return PrivateMessageRepository.getSentPrivateMessages({
+                page: page
+            });
+        }
+
+        sendPrivateMessage(destinationId: string, content: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(PrivateMessageRepository.sendPrivateMessage(destinationId, content));
+        }
+
+        deletePrivateMessage(messageId: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(PrivateMessageRepository.deletePrivateMessage(messageId));
+        }
+    }
+
     class UserCallback implements IUserCallback {
 
         createUser(name: string): Promise<boolean> {
@@ -618,6 +659,11 @@ export module PageActions {
     export function getThreadMessageCallback(): IThreadMessageCallback {
 
         return new ThreadMessageCallback();
+    }
+
+    export function getPrivateMessageCallback(): IPrivateMessageCallback {
+
+        return new PrivateMessageCallback();
     }
 
     export function getUserCallback(): IUserCallback {

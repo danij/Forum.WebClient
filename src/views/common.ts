@@ -41,6 +41,7 @@ export module Views {
         userNameLengths: LengthConfig;
         threadNameLengths: LengthConfig;
         messageContentLengths: LengthConfig;
+        privateMessageContentLengths: LengthConfig;
     }
 
     declare const displayConfig: DisplayConfig;
@@ -126,7 +127,7 @@ export module Views {
 
     export function createPaginationControl(info: CommonEntities.PaginationInfo, totalString: string,
                                             onPageNumberChange: PageNumberChangeCallback,
-                                            getLinkForPage: GetLinkForPageCallback) {
+                                            getLinkForPage: GetLinkForPageCallback): HTMLElement {
 
         const result = cE('div');
 
@@ -666,5 +667,16 @@ export module Views {
                    docCallback));
             });
         }
+    }
+
+    export function clearActiveHeaderLinks() {
+
+        DOMHelpers.forEach(document.getElementsByClassName('uk-navbar-nav'), nav => {
+
+            DOMHelpers.forEach(nav.getElementsByTagName('li'), link => {
+
+                DOMHelpers.removeClasses(link, 'uk-active');
+            })
+        })
     }
 }

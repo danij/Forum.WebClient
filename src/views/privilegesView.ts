@@ -116,6 +116,8 @@ export module PrivilegesView {
         ['add_discussion_tag', 'Add Tag'],
         ['add_discussion_thread', 'Add Thread'],
         ['auto_approve_discussion_thread', 'Auto Approve Thread'],
+        ['send_private_message', 'Send Private Message'],
+        ['view_private_message_ip_address', 'View Private Message IP Address'],
         ['change_own_user_name', 'Change Own User Name'],
         ['change_any_user_name', 'Change Any User Name'],
         ['change_own_user_info', 'Change Own User Info'],

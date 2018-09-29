@@ -41,6 +41,10 @@ window.displayConfig = {
     messageContentLengths: {
         min: 5,
         max: 65535
+    },
+    privateMessageContentLengths: {
+        min: 5,
+        max: 65535
     }
 };
 

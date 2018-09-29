@@ -257,6 +257,10 @@ export module Privileges {
             return hasPrivilege(forumWidePrivilegesOfCurrentUser, 'add_discussion_thread');
         }
 
+        export function canSendPrivateMessages(): boolean {
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, 'send_private_message');
+        }
+
         export async function loadForumWidePrivileges(): Promise<void> {
 
             forumWidePrivilegesOfCurrentUser = await PrivilegesRepository.getForumWidePrivilegesOfCurrentUser();
