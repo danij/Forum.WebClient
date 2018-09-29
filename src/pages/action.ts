@@ -458,7 +458,7 @@ export module PageActions {
 
         sendPrivateMessage(destinationId: string, content: string): Promise<boolean> {
 
-            return Pages.trueOrShowErrorAndFalse(PrivateMessageRepository.sendPrivateMessage(destinationId, content));
+            return Pages.trueOrShowErrorAndFalse(PrivateMessageRepository.sendPrivateMessage(destinationId, content.trim()));
         }
 
         deletePrivateMessage(messageId: string): Promise<boolean> {

@@ -176,7 +176,7 @@ export module EditViews {
 
         private async updateContent(text: string): Promise<void> {
 
-            text = await this.replaceUserNameReferences(text);
+            text = (await this.replaceUserNameReferences(text)).trim();
             await ViewsExtra.searchUsersById([text]);
 
             this.resultContainer.innerHTML = ViewsExtra.expandContent(text);

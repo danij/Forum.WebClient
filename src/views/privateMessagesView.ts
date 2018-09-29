@@ -260,9 +260,8 @@ export module PrivateMessagesView {
                     return;
                 }
 
-                const text = await editControl.getText();
-                const textTrim = text.trim();
-                if (textTrim.length < 1) {
+                const text = (await editControl.getText()).trim();
+                if (text.length < 1) {
 
                     Views.showWarningNotification('Message not specified.');
                     return;
@@ -279,11 +278,6 @@ export module PrivateMessagesView {
                 if (text.length > max) {
 
                     Views.showWarningNotification(`Message must be less than ${max} characters long.`);
-                    return;
-                }
-                if (text.trim().length < text.length) {
-
-                    Views.showWarningNotification(`Message cannot contain leading or trailing spaces.`);
                     return;
                 }
 

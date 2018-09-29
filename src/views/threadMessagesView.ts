@@ -882,7 +882,7 @@ export module ThreadMessagesView {
 
             Views.onClick(button, async () => {
 
-                const text = await editControl.getText();
+                const text = (await editControl.getText()).trim();
                 if (text.trim().length < 1) return;
 
                 const min = Views.DisplayConfig.messageContentLengths.min;
@@ -937,7 +937,7 @@ export module ThreadMessagesView {
 
         Views.onClick(saveButton, async () => {
 
-            const currentText = await editControl.getText();
+            const currentText = (await editControl.getText()).trim();
 
             if (currentText.length && (currentText != initialText)) {
 
