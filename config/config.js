@@ -79,7 +79,8 @@ window.registerConfig = {
     enableRegistration: true,
     //only for displaying errors, when updating please also update the auth backend configuration
     minAge: 18,
-    minPasswordLength: 8
+    minPasswordLength: 8,
+    reCAPTCHASiteKey: ''
 };
 
 window.debugConfig = {

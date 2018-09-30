@@ -2,11 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; connect-src 'self'; font-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; frame-src https://www.youtube.com/; base-uri 'self'; form-action 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://www.google.com/ https://www.gstatic.com/; connect-src 'self'; font-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; frame-src https://www.youtube.com/ https://www.google.com/; base-uri 'self'; form-action 'self'">
 
     <script type="text/javascript" src="/config/config.js"></script>
     <script type="text/javascript" src="/others.bundle.js"></script>
     <script type="text/javascript" src="/app.bundle.js"></script>
+
+    <script src="https://www.google.com/recaptcha/api.js" defer></script>
 
     <link rel="stylesheet" href="/katex.min.css">
     <link rel="stylesheet" href="/defaultTheme.css" id="theme-link">
@@ -415,6 +417,21 @@
                     </tr>
                     </tbody>
                 </table>
+                <hr class="uk-divider-icon">
+                <p>This website needs to store the following third-party
+                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">HTTP cookies</a>
+                    in your browser in order to function property.</p>
+                <table class="uk-table uk-table-small uk-table-striped">
+                    <thead>
+                    <tr><th>Domain</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>.google.com</td>
+                        <td>Using Google reCAPTCHA to check that account registration/forgot password operations are not performed by a robot.</td>
+                    </tr>
+                    </tbody>
+                </table>
             </li>
             <li>
                 <p>Messages on the forum can include images or videos stored on external sites.</p>
@@ -466,6 +483,8 @@
                         </div>
                         <div class="uk-margin">
                             <input type="password" id="login-custom-password" class="uk-input" placeholder="password" />
+                        </div>
+                        <div class="uk-margin uk-hidden" id="login-check-not-a-robot">
                         </div>
                         <div class="uk-margin uk-text-center">
                             <button id="login-custom-button" class="uk-button uk-button-primary">Log in</button>
@@ -526,6 +545,8 @@
                 <input type="checkbox" id="register-confirm-min-age" class="uk-checkbox" />
                 <label for="register-confirm-min-age">I am at least {age} years old</label>
             </div>
+            <div class="uk-margin uk-hidden" id="register-check-not-a-robot">
+            </div>
             <div class="uk-margin uk-text-center uk-hidden">
                 <button id="register-button" class="uk-button uk-button-primary">Create account</button>
             </div>
@@ -578,6 +599,8 @@
             </div>
             <div class="uk-margin">
                 <input type="password" id="change-password-password-confirm" class="uk-input" placeholder="confirm password" />
+            </div>
+            <div class="uk-margin uk-hidden" id="change-password-check-not-a-robot">
             </div>
             <div class="uk-margin uk-text-center">
                 <button id="change-password-button" class="uk-button uk-button-primary">Change Password</button>

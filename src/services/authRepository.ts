@@ -19,7 +19,7 @@ export module AuthRepository {
     }
 
     export async function registerCustomAuth(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
-                                             minAge: number): Promise<boolean> {
+                                             minAge: number, notARobotResponse: string): Promise<boolean> {
 
         //throws exception if there is an issue
         await RequestHandler.post({
@@ -30,14 +30,15 @@ export module AuthRepository {
                 password: password,
                 acceptPrivacy: acceptPrivacy,
                 acceptTos: acceptTos,
-                minAge: minAge
+                minAge: minAge,
+                notARobotResponse: notARobotResponse
             }
         });
         return true;
     }
 
     export async function loginCustomAuth(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
-                                          showInOnlineUsers: boolean): Promise<boolean> {
+                                          showInOnlineUsers: boolean, notARobotResponse: string): Promise<boolean> {
 
         //throws exception if there is an issue
         await RequestHandler.post({
@@ -48,13 +49,15 @@ export module AuthRepository {
                 password: password,
                 acceptPrivacy: acceptPrivacy,
                 acceptTos: acceptTos,
-                showInOnlineUsers: showInOnlineUsers
+                showInOnlineUsers: showInOnlineUsers,
+                notARobotResponse: notARobotResponse
             }
         });
         return true;
     }
 
-    export async function changeCustomPassword(email: string, oldPassword: string, newPassword: string): Promise<boolean> {
+    export async function changeCustomPassword(email: string, oldPassword: string, newPassword: string,
+                                               notARobotResponse: string): Promise<boolean> {
 
         //throws exception if there is an issue
         await RequestHandler.post({
@@ -63,13 +66,15 @@ export module AuthRepository {
             objectData: {
                 email: email,
                 oldPassword: oldPassword,
-                newPassword: newPassword
+                newPassword: newPassword,
+                notARobotResponse: notARobotResponse
             }
         });
         return true;
     }
 
-    export async function resetCustomPassword(email: string, acceptPrivacy: boolean, acceptTos: boolean): Promise<boolean> {
+    export async function resetCustomPassword(email: string, acceptPrivacy: boolean, acceptTos: boolean,
+                                              notARobotResponse: string): Promise<boolean> {
 
         //throws exception if there is an issue
         await RequestHandler.post({
@@ -78,7 +83,8 @@ export module AuthRepository {
             objectData: {
                 email: email,
                 acceptPrivacy: acceptPrivacy,
-                acceptTos: acceptTos
+                acceptTos: acceptTos,
+                notARobotResponse: notARobotResponse
             }
         });
         return true;

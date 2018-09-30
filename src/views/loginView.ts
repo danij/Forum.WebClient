@@ -64,6 +64,14 @@ export module LoginView {
             }
 
             Views.setupKnownDocumentationLinks(loginModal, docCallback);
+
+            const loginCheckNotARobotContainer = document.getElementById('login-check-not-a-robot');
+
+            if (AuthenticationView.renderCheckNotARobot(loginCheckNotARobotContainer)) {
+
+                DOMHelpers.unHide(loginCheckNotARobotContainer);
+            }
+
             Views.showModal(loginModal);
         }
         else {
@@ -137,7 +145,16 @@ export module LoginView {
             return;
         }
 
-        if (await authCallback.loginCustom(email, password, true, true, showInOnlineUsers())) {
+        const loginCheckNotARobotContainer = document.getElementById('login-check-not-a-robot');
+        const notARobotResponse = AuthenticationView.getNotARobotResponse(loginCheckNotARobotContainer);
+
+        if (AuthenticationView.shouldCheckNotARobot() && (! notARobotResponse)) {
+
+            Views.showWarningNotification('Please complete the not a robot test.');
+            return;
+        }
+
+        if (await authCallback.loginCustom(email, password, true, true, showInOnlineUsers(), notARobotResponse)) {
 
             emailInput.value = '';
             passwordInput.value = '';
@@ -159,7 +176,16 @@ export module LoginView {
             return;
         }
 
-        if (await authCallback.resetCustomPassword(email, true, true)) {
+        const loginCheckNotARobotContainer = document.getElementById('login-check-not-a-robot');
+        const notARobotResponse = AuthenticationView.getNotARobotResponse(loginCheckNotARobotContainer);
+
+        if (AuthenticationView.shouldCheckNotARobot() && (! notARobotResponse)) {
+
+            Views.showWarningNotification('Please complete the not a robot test.');
+            return;
+        }
+
+        if (await authCallback.resetCustomPassword(email, true, true, notARobotResponse)) {
 
             Views.showSuccessNotification('Please check your email for details on how to reset the password.');
         }

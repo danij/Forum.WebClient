@@ -9,6 +9,7 @@ import {Privileges} from "../services/privileges";
 import {MasterView} from "./masterView";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {PrivateMessagesView} from "./privateMessagesView";
+import {ThemeRepository} from "../services/themeRepository";
 
 export module AuthenticationView {
 
@@ -16,10 +17,13 @@ export module AuthenticationView {
 
         enableRegistration: boolean,
         minAge: number,
-        minPasswordLength: number
+        minPasswordLength: number,
+        reCAPTCHASiteKey: string
     }
 
     declare const registerConfig: RegisterConfig;
+
+    declare const grecaptcha: any;
 
     export function isRegistrationEnabled(): boolean {
 
@@ -193,6 +197,7 @@ export module AuthenticationView {
         const registerConfirmAgeCheckbox = document.getElementById('register-confirm-min-age');
         const registerConfirmAgeGroup = registerConfirmAgeCheckbox.parentElement;
         const registerConfirmAgeLabel = registerConfirmAgeGroup.getElementsByTagName('label')[0] as HTMLElement;
+        const registerCheckNotARobotContainer = document.getElementById('register-check-not-a-robot');
         const registerButton = document.getElementById('register-button') as HTMLButtonElement;
         const registerButtonContainer = registerButton.parentElement;
 
@@ -217,6 +222,11 @@ export module AuthenticationView {
             DOMHelpers.hide(registerConfirmAgeGroup);
         }
 
+        if (renderCheckNotARobot(registerCheckNotARobotContainer)) {
+
+            DOMHelpers.unHide(registerCheckNotARobotContainer);
+        }
+
         DOMHelpers.unHide(registerButtonContainer);
 
         Views.onClickWithSpinner(DOMHelpers.removeEventListeners(registerButton), () => register(authCallback));
@@ -232,6 +242,7 @@ export module AuthenticationView {
         const confirmPassword = confirmPasswordInput.value;
         const acceptPrivacyTosCheckbox = document.getElementById('register-accept-privacy-and-tos') as HTMLInputElement;
         const registerConfirmAgeCheckbox = document.getElementById('register-confirm-min-age') as HTMLInputElement;
+        const registerCheckNotARobotContainer = document.getElementById('register-check-not-a-robot');
 
         let acceptPrivacy: boolean = false;
         let acceptTos: boolean = false;
@@ -283,7 +294,15 @@ export module AuthenticationView {
             }
         }
 
-        if (await callback.registerCustomAuth(email, password, acceptPrivacy, acceptTos, minAge)) {
+        const notARobotResponse = getNotARobotResponse(registerCheckNotARobotContainer);
+
+        if (shouldCheckNotARobot() && (! notARobotResponse)) {
+
+            Views.showWarningNotification('Please complete the not a robot test.');
+            return;
+        }
+
+        if (await callback.registerCustomAuth(email, password, acceptPrivacy, acceptTos, minAge, notARobotResponse)) {
 
             emailInput.value = '';
             passwordInput.value = '';
@@ -312,6 +331,13 @@ export module AuthenticationView {
         const modal = document.getElementById('change-password-modal');
         const changePasswordButton = DOMHelpers.removeEventListeners(
             document.getElementById('change-password-button') as HTMLButtonElement);
+
+        const changePasswordCheckNotARobotContainer = document.getElementById('change-password-check-not-a-robot');
+
+        if (renderCheckNotARobot(changePasswordCheckNotARobotContainer)) {
+
+            DOMHelpers.unHide(changePasswordCheckNotARobotContainer);
+        }
 
         Views.onClickWithSpinner(changePasswordButton, async () => {
 
@@ -345,7 +371,16 @@ export module AuthenticationView {
                 return;
             }
 
-            if (await callback.changeCustomPassword(email, oldPassword, newPassword)) {
+            const changePasswordCheckNotARobotContainer = document.getElementById('change-password-check-not-a-robot');
+            const notARobotResponse = getNotARobotResponse(changePasswordCheckNotARobotContainer);
+
+            if (shouldCheckNotARobot() && (! notARobotResponse)) {
+
+                Views.showWarningNotification('Please complete the not a robot test.');
+                return;
+            }
+
+            if (await callback.changeCustomPassword(email, oldPassword, newPassword, notARobotResponse)) {
 
                 emailInput.value = '';
                 oldPasswordInput.value = '';
@@ -358,5 +393,53 @@ export module AuthenticationView {
         });
 
         Views.showModal(modal);
+    }
+
+    const reCaptchaAttribute = 'data-widget-id';
+
+    export function shouldCheckNotARobot(): boolean {
+
+        return !! registerConfig.reCAPTCHASiteKey;
+    }
+
+    export function renderCheckNotARobot(container: HTMLElement): boolean {
+
+        if ( ! registerConfig.reCAPTCHASiteKey) return false;
+
+        const existingId = container.getAttribute(reCaptchaAttribute);
+        if (existingId) {
+
+            grecaptcha.reset(existingId);
+        } else {
+
+            let options = {
+
+                sitekey: registerConfig.reCAPTCHASiteKey,
+            };
+
+            const currentTheme = ThemeRepository.getFavoriteTheme();
+            if ('dark' == currentTheme) {
+
+                options['theme'] = 'dark'
+            }
+
+            const widgetId = grecaptcha.render(container, options);
+            container.setAttribute(reCaptchaAttribute, widgetId);
+        }
+
+        return true;
+    }
+
+    export function getNotARobotResponse(container: HTMLElement): string {
+
+        const existingId = container.getAttribute(reCaptchaAttribute);
+        if (existingId) {
+
+            return grecaptcha.getResponse(existingId) || '';
+
+        } else {
+
+            return '';
+        }
     }
 }

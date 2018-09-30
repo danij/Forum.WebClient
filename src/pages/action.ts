@@ -157,14 +157,16 @@ export module PageActions {
         logout(): Promise<void>;
 
         registerCustomAuth(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
-                           minAge: number): Promise<boolean>;
+                           minAge: number, notARobotResponse: string): Promise<boolean>;
 
         loginCustom(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
-                    showInOnlineUsers: boolean): Promise<boolean>;
+                    showInOnlineUsers: boolean, notARobotResponse: string): Promise<boolean>;
 
-        changeCustomPassword(email: string, oldPassword: string, newPassword: string): Promise<boolean>;
+        changeCustomPassword(email: string, oldPassword: string, newPassword: string,
+                             notARobotResponse: string): Promise<boolean>;
 
-        resetCustomPassword(email: string, acceptPrivacy: boolean, acceptTos: boolean): Promise<boolean>;
+        resetCustomPassword(email: string, acceptPrivacy: boolean, acceptTos: boolean,
+                            notARobotResponse: string): Promise<boolean>;
     }
 
     export interface IPrivilegesCallback {
@@ -534,29 +536,33 @@ export module PageActions {
         }
 
         registerCustomAuth(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
-                                 minAge: number): Promise<boolean> {
+                                 minAge: number, notARobotResponse: string): Promise<boolean> {
 
             return Pages.getOrShowErrorAndDefault(
-                AuthRepository.registerCustomAuth(email, password, acceptPrivacy, acceptTos, minAge), () => false);
+                AuthRepository.registerCustomAuth(email, password, acceptPrivacy, acceptTos, minAge, notARobotResponse),
+                () => false);
         }
 
         loginCustom(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
-                    showInOnlineUsers: boolean): Promise<boolean> {
+                    showInOnlineUsers: boolean, notARobotResponse: string): Promise<boolean> {
 
             return Pages.getOrShowErrorAndDefault(
-                AuthRepository.loginCustomAuth(email, password, acceptPrivacy, acceptTos, showInOnlineUsers), () => false);
-        }
-
-        changeCustomPassword(email: string, oldPassword: string, newPassword: string): Promise<boolean> {
-
-            return Pages.getOrShowErrorAndDefault(
-                AuthRepository.changeCustomPassword(email, oldPassword, newPassword), () => false);
-        }
-
-        resetCustomPassword(email: string, acceptPrivacy: boolean, acceptTos: boolean): Promise<boolean> {
-
-            return Pages.getOrShowErrorAndDefault(AuthRepository.resetCustomPassword(email, acceptPrivacy, acceptTos),
+                AuthRepository.loginCustomAuth(email, password, acceptPrivacy, acceptTos, showInOnlineUsers, notARobotResponse),
                 () => false);
+        }
+
+        changeCustomPassword(email: string, oldPassword: string, newPassword: string,
+                             notARobotResponse: string): Promise<boolean> {
+
+            return Pages.getOrShowErrorAndDefault(
+                AuthRepository.changeCustomPassword(email, oldPassword, newPassword, notARobotResponse), () => false);
+        }
+
+        resetCustomPassword(email: string, acceptPrivacy: boolean, acceptTos: boolean,
+                            notARobotResponse: string): Promise<boolean> {
+
+            return Pages.getOrShowErrorAndDefault(
+                AuthRepository.resetCustomPassword(email, acceptPrivacy, acceptTos, notARobotResponse),() => false);
         }
     }
 
