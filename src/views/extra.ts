@@ -265,17 +265,20 @@ export module ViewsExtra {
             const firstParagraph = quote.children[0] as HTMLElement;
             if ('P' == firstParagraph.tagName.toUpperCase()) {
 
-                const match = firstParagraph.innerHTML.match(/^quote\|(\d+)\|(.+)$/i);
+                const match = firstParagraph.innerHTML.match(/^quote\|([a-zA-Z0-9\-]+)\|(\d+)\|(.+)$/i);
                 if (match && match.length > 0) {
 
-                    const createdAt = parseInt(match[1]);
-                    const userName = match[2];
+                    const messageId = match[1];
+                    const createdAt = parseInt(match[2]);
+                    const userName = match[3];
 
                     const replacement = cE('p');
                     DOMHelpers.addClasses(replacement, 'quote-title');
                     DOMHelpers.addClasses(firstParagraph.parentElement, 'no-border-top');
 
-                    replacement.innerHTML = `${userName} @ ${DisplayHelpers.getDateTime(createdAt)}`;
+                    const href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(messageId);
+                    const messageLink = `<a class="quoted-message-link" href="${href}" uk-icon="reply" data-threadmessageid="${DOMHelpers.escapeStringForAttribute(messageId)}"></a>`;
+                    replacement.innerHTML = `${messageLink} ${userName} @ ${DisplayHelpers.getDateTime(createdAt)}`;
 
                     DOMHelpers.replaceElementWith(firstParagraph, replacement);
                 }
