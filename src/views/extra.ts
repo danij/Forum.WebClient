@@ -277,7 +277,7 @@ export module ViewsExtra {
                     DOMHelpers.addClasses(firstParagraph.parentElement, 'no-border-top');
 
                     const href = Pages.getThreadMessagesOfMessageParentThreadUrlFull(messageId);
-                    const messageLink = `<a class="quoted-message-link" href="${href}" uk-icon="reply" data-threadmessageid="${DOMHelpers.escapeStringForAttribute(messageId)}"></a>`;
+                    const messageLink = `<a class="quoted-message-link" href="${href}" uk-icon="reply" data-threadmessageid="${DOMHelpers.escapeStringForAttribute(messageId)}" title="Go to message"></a>`;
                     replacement.innerHTML = `${messageLink} ${userName} @ ${DisplayHelpers.getDateTime(createdAt)}`;
 
                     DOMHelpers.replaceElementWith(firstParagraph, replacement);
