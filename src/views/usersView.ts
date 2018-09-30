@@ -320,7 +320,7 @@ export module UsersView {
         return result;
     }
 
-    export function createUserTitleElement(user: UserRepository.User): DOMAppender {
+    export function createUserTitleElement(user: UserRepository.User, keepEmptyTitle: boolean = true): DOMAppender {
 
         const result = dA('<div class="usertitle uk-text-small">');
 
@@ -328,7 +328,7 @@ export module UsersView {
 
             result.appendString(user.title);
         }
-        else {
+        else if (keepEmptyTitle) {
 
             result.appendRaw('&nbsp;');
         }

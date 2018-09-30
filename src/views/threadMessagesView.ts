@@ -445,7 +445,7 @@ export module ThreadMessagesView {
 
             userContainer.append(usernameElement);
 
-            userContainer.append(UsersView.createUserTitleElement(author));
+            userContainer.append(UsersView.createUserTitleElement(author, false));
         }
         {
             authorContainer.append(UsersView.createUserDropdown(author, 'user-info', 'bottom-left'));
