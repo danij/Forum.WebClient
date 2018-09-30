@@ -7,7 +7,7 @@ export module ConsentRepository {
 
         await RequestHandler.post({
 
-            path : '../auth/consent/consent_fp_cookies'
+            path : '../auth/consent/consent_required_cookies'
         });
         RequestHandler.onConsentedToUsingCookies();
     }
@@ -16,7 +16,7 @@ export module ConsentRepository {
 
         await RequestHandler.requestDelete({
 
-            path : '../auth/consent/consent_fp_cookies'
+            path : '../auth/consent/consent_required_cookies'
         });
     }
 
@@ -36,9 +36,9 @@ export module ConsentRepository {
         });
     }
 
-    export function hasConsentedToUsingCookies(): boolean {
+    export function hasConsentedToUsingRequiredCookies(): boolean {
 
-        return RepositoryCommon.getCookieValue('allow_cookies_fp') === 'yes';
+        return RepositoryCommon.getCookieValue('allow_cookies_required') === 'yes';
     }
 
     export function hasConsentedToLoadingExternalContent(): boolean {

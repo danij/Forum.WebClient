@@ -165,7 +165,7 @@ export module AuthenticationView {
             return;
         }
 
-        if (ConsentRepository.hasConsentedToUsingCookies()) {
+        if (ConsentRepository.hasConsentedToUsingRequiredCookies()) {
 
             const registerModal = document.getElementById('register-modal');
 

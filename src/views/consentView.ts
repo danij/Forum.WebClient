@@ -45,9 +45,9 @@ export module ConsentView {
             DOMHelpers.addRelAttribute(link);
         });
 
-        const cookiesFpConsentCheckbox = (document.getElementById('consent-fp-cookies') as HTMLInputElement);
-        cookiesFpConsentCheckbox.checked = ConsentRepository.hasConsentedToUsingCookies();
-        rememberCurrentChecked(cookiesFpConsentCheckbox);
+        const cookiesRequiredConsentCheckbox = (document.getElementById('consent-required-cookies') as HTMLInputElement);
+        cookiesRequiredConsentCheckbox.checked = ConsentRepository.hasConsentedToUsingRequiredCookies();
+        rememberCurrentChecked(cookiesRequiredConsentCheckbox);
 
         const externalContentConsentCheckbox = (document.getElementById('consent-external-content') as HTMLInputElement);
         externalContentConsentCheckbox.checked = ConsentRepository.hasConsentedToLoadingExternalContent();
@@ -57,7 +57,7 @@ export module ConsentView {
 
         Views.onClickWithSpinner(saveConsentButton, async () => {
 
-            await saveFpCookiesConsent(cookiesFpConsentCheckbox);
+            await saveRequiredCookiesConsent(cookiesRequiredConsentCheckbox);
             //need cookie consent to be able to store other types of consent
             await saveExternalImagesConsent(externalContentConsentCheckbox);
 
@@ -65,29 +65,29 @@ export module ConsentView {
         });
     }
 
-    async function saveFpCookiesConsent(cookiesFpConsentCheckbox: HTMLInputElement): Promise<void> {
+    async function saveRequiredCookiesConsent(cookiesRequiredConsentCheckbox: HTMLInputElement): Promise<void> {
 
-        if (getPreviousChecked(cookiesFpConsentCheckbox) == cookiesFpConsentCheckbox.checked) {
+        if (getPreviousChecked(cookiesRequiredConsentCheckbox) == cookiesRequiredConsentCheckbox.checked) {
 
             //no change
             if (onCookieConsentChangeCallback) {
 
-                onCookieConsentChangeCallback(cookiesFpConsentCheckbox.checked);
+                onCookieConsentChangeCallback(cookiesRequiredConsentCheckbox.checked);
                 onCookieConsentChangeCallback = null;
             }
             return;
         }
 
-        rememberCurrentChecked(cookiesFpConsentCheckbox);
+        rememberCurrentChecked(cookiesRequiredConsentCheckbox);
 
-        if (cookiesFpConsentCheckbox.checked) {
+        if (cookiesRequiredConsentCheckbox.checked) {
 
             await ConsentRepository.consentToUsingCookies();
             Views.hideOpenModals();
 
             if (onCookieConsentChangeCallback) {
 
-                onCookieConsentChangeCallback(cookiesFpConsentCheckbox.checked);
+                onCookieConsentChangeCallback(cookiesRequiredConsentCheckbox.checked);
                 onCookieConsentChangeCallback = null;
             }
         }

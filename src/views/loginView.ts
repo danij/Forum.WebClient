@@ -48,7 +48,7 @@ export module LoginView {
 
     function showLoginModal(authCallback: PageActions.IAuthCallback, docCallback: PageActions.IDocumentationCallback) {
 
-        if (ConsentRepository.hasConsentedToUsingCookies()) {
+        if (ConsentRepository.hasConsentedToUsingRequiredCookies()) {
 
             const loginModal = document.getElementById('login-modal');
             const registerLink = DOMHelpers.removeEventListeners(document.getElementById('register-link'));
