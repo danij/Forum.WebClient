@@ -255,12 +255,12 @@ export module ViewsExtra {
 
     function adjustCodeBlock(codeBlock: HTMLPreElement): void {
 
-        DOMHelpers.addClasses(codeBlock, 'uk-resize-vertical');
+        Views.enableAutoResize(codeBlock);
     }
 
     function adjustBlockquote(quote: HTMLElement): void {
 
-        DOMHelpers.addClasses(quote, 'uk-resize-vertical');
+        Views.enableAutoResize(quote);
 
         if (quote.children.length > 0) {
 

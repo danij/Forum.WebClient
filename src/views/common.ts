@@ -679,4 +679,27 @@ export module Views {
             })
         })
     }
+
+    let lastAutoResize: number = 0;
+
+    export function enableAutoResize(element: HTMLElement): void {
+
+        element.addEventListener('dblclick', ev => {
+
+            const now = new Date().getTime();
+            if ((now - lastAutoResize) > 1000) {
+
+                const searchFor = ['pre', 'blockquote'];
+
+                const target = DOMHelpers.goUpUntil(ev.target as HTMLElement,
+                    (e => searchFor.indexOf(e.tagName.toLowerCase()) >= 0));
+
+                if (target) {
+
+                    target.classList.toggle('no-max-height');
+                }
+            }
+            lastAutoResize = now;
+        });
+    }
 }
