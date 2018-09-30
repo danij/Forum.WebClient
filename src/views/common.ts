@@ -684,15 +684,15 @@ export module Views {
 
     export function enableAutoResize(element: HTMLElement): void {
 
+        const targetClass = 'auto-resize-target';
+        DOMHelpers.addClasses(element, targetClass);
+
         element.addEventListener('dblclick', ev => {
 
             const now = new Date().getTime();
             if ((now - lastAutoResize) > 1000) {
 
-                const searchFor = ['pre', 'blockquote'];
-
-                const target = DOMHelpers.goUpUntil(ev.target as HTMLElement,
-                    (e => searchFor.indexOf(e.tagName.toLowerCase()) >= 0));
+                const target = DOMHelpers.goUpUntil(ev.target as HTMLElement, e => e.classList.contains(targetClass));
 
                 if (target) {
 

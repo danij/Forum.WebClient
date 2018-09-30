@@ -260,8 +260,6 @@ export module ViewsExtra {
 
     function adjustBlockquote(quote: HTMLElement): void {
 
-        Views.enableAutoResize(quote);
-
         if (quote.children.length > 0) {
 
             const firstParagraph = quote.children[0] as HTMLElement;
@@ -283,6 +281,21 @@ export module ViewsExtra {
                 }
             }
         }
+
+        const toMove: HTMLElement[] = [];
+        DOMHelpers.forEach(quote.children, e => {
+
+            if ( ! e.classList.contains('quote-title')) {
+
+                toMove.push(e);
+            }
+        });
+
+        const scrollContainer = cE('div');
+        toMove.forEach(e => scrollContainer.appendChild(e));
+
+        quote.appendChild(scrollContainer);
+        Views.enableAutoResize(scrollContainer);
     }
 
     export function expandAndAdjust(container: HTMLElement, source?: string): void {
