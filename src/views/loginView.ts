@@ -65,13 +65,6 @@ export module LoginView {
 
             Views.setupKnownDocumentationLinks(loginModal, docCallback);
 
-            const loginCheckNotARobotContainer = document.getElementById('login-check-not-a-robot');
-
-            if (AuthenticationView.renderCheckNotARobot(loginCheckNotARobotContainer)) {
-
-                DOMHelpers.unHide(loginCheckNotARobotContainer);
-            }
-
             Views.showModal(loginModal);
         }
         else {
@@ -145,16 +138,7 @@ export module LoginView {
             return;
         }
 
-        const loginCheckNotARobotContainer = document.getElementById('login-check-not-a-robot');
-        const notARobotResponse = AuthenticationView.getNotARobotResponse(loginCheckNotARobotContainer);
-
-        if (AuthenticationView.shouldCheckNotARobot() && (! notARobotResponse)) {
-
-            Views.showWarningNotification('Please complete the not a robot test.');
-            return;
-        }
-
-        if (await authCallback.loginCustom(email, password, true, true, showInOnlineUsers(), notARobotResponse)) {
+        if (await authCallback.loginCustom(email, password, true, true, showInOnlineUsers())) {
 
             emailInput.value = '';
             passwordInput.value = '';

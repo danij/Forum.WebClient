@@ -160,7 +160,7 @@ export module PageActions {
                            minAge: number, notARobotResponse: string): Promise<boolean>;
 
         loginCustom(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
-                    showInOnlineUsers: boolean, notARobotResponse: string): Promise<boolean>;
+                    showInOnlineUsers: boolean): Promise<boolean>;
 
         changeCustomPassword(email: string, oldPassword: string, newPassword: string,
                              notARobotResponse: string): Promise<boolean>;
@@ -544,10 +544,10 @@ export module PageActions {
         }
 
         loginCustom(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
-                    showInOnlineUsers: boolean, notARobotResponse: string): Promise<boolean> {
+                    showInOnlineUsers: boolean): Promise<boolean> {
 
             return Pages.getOrShowErrorAndDefault(
-                AuthRepository.loginCustomAuth(email, password, acceptPrivacy, acceptTos, showInOnlineUsers, notARobotResponse),
+                AuthRepository.loginCustomAuth(email, password, acceptPrivacy, acceptTos, showInOnlineUsers),
                 () => false);
         }
 

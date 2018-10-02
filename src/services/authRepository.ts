@@ -38,7 +38,7 @@ export module AuthRepository {
     }
 
     export async function loginCustomAuth(email: string, password: string, acceptPrivacy: boolean, acceptTos: boolean,
-                                          showInOnlineUsers: boolean, notARobotResponse: string): Promise<boolean> {
+                                          showInOnlineUsers: boolean): Promise<boolean> {
 
         //throws exception if there is an issue
         await RequestHandler.post({
@@ -49,8 +49,7 @@ export module AuthRepository {
                 password: password,
                 acceptPrivacy: acceptPrivacy,
                 acceptTos: acceptTos,
-                showInOnlineUsers: showInOnlineUsers,
-                notARobotResponse: notARobotResponse
+                showInOnlineUsers: showInOnlineUsers
             }
         });
         return true;
