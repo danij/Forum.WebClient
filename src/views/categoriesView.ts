@@ -71,6 +71,7 @@ export module CategoriesView {
         Views.setupThreadMessagesOfThreadsLinks(result);
         Views.setupThreadMessagesOfMessageParentThreadLinks(result);
         Views.setupCategoryLinks(result);
+        Views.setupAttachmentsAddedByUserLinks(result);
 
         setupEditCategoryDisplayCategories(result, callback);
 

@@ -44,11 +44,21 @@
                             <div class="uk-navbar-subtitle">Threads</div>
                         </div>
                     </a></li>
-                    <li id="comments-page-link" class="uk-hidden"><a data-href="thread_message_comments" class="uk-text-center">
-                        <div><span uk-icon="icon: warning"></span>
-                            <div class="uk-navbar-subtitle">Comments</div>
+                    <li id="others-page-dropdown" class="uk-hidden">
+                        <a data-href="#" class="uk-text-center">
+                            <div><span uk-icon="icon: more"></span>
+                                <div class="uk-navbar-subtitle">Others</div>
+                            </div>
+                        </a>
+                        <div class="uk-navbar-dropdown uk-text-left">
+                            <ul class="uk-nav uk-navbar-dropdown-nav">
+                                <li id="attachments-page-link" class="uk-hidden"><a data-href="attachments">
+                                    <span uk-icon="icon: download"></span> Attachments</a></li>
+                                <li id="comments-page-link" class="uk-hidden"><a data-href="thread_message_comments">
+                                    <span uk-icon="icon: warning"></span> Commented Messages</a></li>
+                            </ul>
                         </div>
-                    </a></li>
+                    </li>
                 </ul>
             </div>
         </div>

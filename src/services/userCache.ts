@@ -5,6 +5,7 @@ import {CategoryRepository} from "./categoryRepository";
 import {ThreadMessageRepository} from "./threadMessageRepository";
 import {CommonEntities} from "./commonEntities";
 import {PrivateMessageRepository} from "./privateMessageRepository";
+import {AttachmentsRepository} from "./attachmentsRepository";
 
 export module UserCache {
 
@@ -166,6 +167,27 @@ export module UserCache {
         if ( ! collection) return;
 
         processPrivateMessages(collection.messages);
+    }
+
+    export function processAttachment(attachment: AttachmentsRepository.Attachment): void {
+
+        if ( ! attachment) return;
+
+        process(attachment.createdBy);
+    }
+
+    export function processAttachments(attachments: AttachmentsRepository.Attachment[]): void {
+
+        if ( ! attachments) return;
+
+        attachments.forEach(attachment => processAttachment(attachment));
+    }
+
+    export function processAttachmentCollection(collection: AttachmentsRepository.AttachmentCollection): void {
+
+        if ( ! collection) return;
+
+        processAttachments(collection.attachments);
     }
 
     export function searchNames(names: string[]): Promise<void> {

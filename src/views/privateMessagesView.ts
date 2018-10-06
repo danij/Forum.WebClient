@@ -125,6 +125,7 @@ export module PrivateMessagesView {
         ViewsExtra.adjustMessageContent(element);
         Views.setupSubscribedThreadsOfUsersLinks(element);
         Views.setupThreadMessagesOfUsersLinks(element);
+        Views.setupAttachmentsAddedByUserLinks(element);
 
         setupPrivateMessageActionEvents(element, privateMessagesCallback);
 

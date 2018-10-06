@@ -139,6 +139,12 @@ export module UsersView {
             DOMHelpers.escapeStringForAttribute(user.name) + '"';
     }
 
+    export function getAttachmentsAddedByUserLinkContent(user: UserRepository.User): string {
+
+        return 'href="' + Pages.getAttachmentsAddedByUserUrlFull(user) + '" ' + Views.UserAddedAttachmentsData + '="' +
+            DOMHelpers.escapeStringForAttribute(user.name) + '"';
+    }
+
     export function getMessagesOfUserLinkContent(user: UserRepository.User): string {
 
         return 'href="' + Pages.getThreadMessagesOfUserUrlFull(user) + '" ' + Views.UserMessagesData + '="' +
@@ -153,18 +159,21 @@ export module UsersView {
         let threadsOfUserLink = '';
         let threadMessagesOfUserLink = '';
         let subscribedThreadsOfUserLink = '';
+        let attachmentsAddedByUserLink = '';
 
         if (UserRepository.isValidUser(user)) {
 
             threadsOfUserLink = `<a class="align-left" ${getThreadsOfUserLinkContent(user)}>Threads</a>`;
             threadMessagesOfUserLink = `<a class="align-left" ${getMessagesOfUserLinkContent(user)}>Messages</a>`;
             subscribedThreadsOfUserLink = `<a class="align-left" ${getSubscribedThreadsOfUserLinkContent(user)}>Subscribed Threads</a>`;
+            attachmentsAddedByUserLink = `<a class="align-left" ${getAttachmentsAddedByUserLinkContent(user)}>Attachments</a>`;
         }
         else {
 
             threadsOfUserLink = 'Threads';
             threadMessagesOfUserLink = 'Messages';
             subscribedThreadsOfUserLink = 'Subscribed Threads';
+            attachmentsAddedByUserLink = 'Attachments';
         }
 
         content.appendRaw(('<li>\n' +
@@ -184,6 +193,15 @@ export module UsersView {
             '    <span class="uk-badge align-right">{nrOfSubscribedThreads}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfSubscribedThreads}', DisplayHelpers.intToString(user.subscribedThreadCount)));
+
+        if (Privileges.ForumWide.canViewAllAttachments()) {
+
+            content.appendRaw(('<li>\n' +
+                '    ' + attachmentsAddedByUserLink +'\n' +
+                '    <span class="uk-badge align-right">{nrOfAttachments}</span>\n' +
+                '    <div class="uk-clearfix"></div>\n' +
+                '</li>').replace('{nrOfAttachments}', DisplayHelpers.intToStringNull(user.attachmentCount)));
+        }
 
         content.appendRaw('<li class="uk-nav-header">Activity</li>');
         content.appendRaw(('<li>\n' +
@@ -308,6 +326,7 @@ export module UsersView {
         Views.setupThreadsOfUsersLinks(result);
         Views.setupSubscribedThreadsOfUsersLinks(result);
         Views.setupThreadMessagesOfUsersLinks(result);
+        Views.setupAttachmentsAddedByUserLinks(result);
 
         return result;
     }
@@ -369,6 +388,15 @@ export module UsersView {
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfSubscribedThreads}', DisplayHelpers.intToString(user.subscribedThreadCount)));
 
+        if (Privileges.ForumWide.canViewAllAttachments()) {
+
+            wrapper.appendRaw(('<div>\n' +
+                '    <div class="uk-float-left"><a ' + getAttachmentsAddedByUserLinkContent(user) + '>Attachments</a></div>\n' +
+                '    <div class="uk-float-right">{nrOfAttachments}</div>\n' +
+                '    <div class="uk-clearfix"></div>\n' +
+                '</div>').replace('{nrOfAttachments}', DisplayHelpers.intToStringNull(user.attachmentCount)));
+        }
+
         wrapper.appendRaw(('<div>\n' +
             '    <div class="uk-float-left">Joined</div>\n' +
             '    <div class="uk-float-right min-date">\n' +
@@ -426,17 +454,23 @@ export module UsersView {
         const messageCommentsLink = Privileges.User.canViewUserComments(user)
             ? ' · <a ' + getMessageCommentsWrittenByUserLinkContent(user) + '>show written comments</a>'
              :'';
+        const attachmentsLink = Privileges.User.canViewUserAttachments(user)
+            ? ' · <a ' + getAttachmentsAddedByUserLinkContent(user) + '>show added attachments</a>'
+             :'';
         const assignedPrivilegesLink = ' · <a class="show-assigned-privileges-of-user">show assigned privileges</a>';
 
         result.appendRaw(('<div>\n' +
             `    <p>{threadCount} ${threadsLink}` +
             ` · {messageCount} ${threadMessagesLink}` +
-            `${subscribedThreadsLink}${messageCommentsLink}${assignedPrivilegesLink}` +
+            `${subscribedThreadsLink}${messageCommentsLink}${attachmentsLink}${assignedPrivilegesLink}` +
             ` <span class="uk-label score-up">+ {upVotes}</span>` +
             ` <span class="uk-label score-down">− {downVotes}</span></p>\n` +
             '    <p>Joined <span class="uk-text-meta">{joined}</span>' +
             ' · Last seen <span class="uk-text-meta">{lastSeen}</span>\n' +
-            ' · Signature: <span class="uk-text-meta">{signature}</span></p>\n' +
+            ' · Signature <span class="uk-text-meta">{signature}</span>\n' +
+            ' · Attachment Count <span class="uk-text-meta">{attachmentCount}</span>\n' +
+            ' · Attachment Total Size <span class="uk-text-meta">{attachmentTotalSize}</span>\n' +
+            ' · Attachment Quota <span class="uk-text-meta">{attachmentQuota} bytes</span></p>\n' +
             '</div>')
             .replace('{threadCount}', DisplayHelpers.intToString(user.threadCount))
             .replace('{subscribedThreadCount}', DisplayHelpers.intToString(user.subscribedThreadCount))
@@ -447,6 +481,15 @@ export module UsersView {
             .replace('{downVotes}', DisplayHelpers.intToString(user.receivedDownVotes))
             .replace('{signature}', (user.signature && user.signature.length)
                 ? DOMHelpers.escapeStringForContent(user.signature)
+                : '–')
+            .replace('{attachmentCount}', (user.attachmentCount)
+                ? DisplayHelpers.intToString(user.attachmentCount)
+                : '–')
+            .replace('{attachmentTotalSize}', (user.attachmentTotalSize)
+                ? DisplayHelpers.intToString(user.attachmentTotalSize)
+                : '–')
+            .replace('{attachmentQuota}', (user.attachmentQuota)
+                ? DisplayHelpers.intToString(user.attachmentQuota)
                 : '–')
         );
         if (user.info && user.info.length) {
@@ -475,6 +518,10 @@ export module UsersView {
 
                 editContent.push('<a class="edit-user-signature-link">Edit signature</a>');
             }
+            if (Privileges.User.canEditUserAttachmentQuota(user)) {
+
+                editContent.push('<a class="edit-user-attachment-quota-link">Edit attachment quota</a>');
+            }
             if (Privileges.User.canEditUserLogo(user)) {
 
                 editContent.push('<a class="clear-user-logo-link">Remove profile image</a>');
@@ -500,6 +547,7 @@ export module UsersView {
         Views.setupSubscribedThreadsOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfUsersLinks(resultElement);
         Views.setupThreadMessagesCommentsWrittenByUserLinks(resultElement);
+        Views.setupAttachmentsAddedByUserLinks(resultElement);
 
         const toRender = resultElement.getElementsByClassName('render-style');
         DOMHelpers.forEach(toRender, ViewsExtra.expandAndAdjust);
@@ -555,6 +603,17 @@ export module UsersView {
             if ((null !== signature) && (signature != user.signature)) {
 
                 EditViews.reloadPageIfOk(callback.editUserSignature(user.id, signature));
+            }
+        });
+        Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-attachment-quota-link')[0], (ev) =>{
+
+            ev.preventDefault();
+            const newQuota = EditViews.getInput('Edit user attachment quota',
+                user.attachmentQuota ? user.attachmentQuota.toString() : '');
+
+            if ((null !== newQuota) && (newQuota.trim().length) && (parseInt(newQuota) != user.attachmentQuota)) {
+
+                EditViews.reloadPageIfOk(callback.editUserAttachmentQuota(user.id, parseInt(newQuota)));
             }
         });
         Views.addClickIfElementExists(resultElement.getElementsByClassName('clear-user-logo-link')[0], (ev) =>{

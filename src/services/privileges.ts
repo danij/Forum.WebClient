@@ -6,6 +6,7 @@ import {ThreadMessageRepository} from './threadMessageRepository';
 import {UserRepository} from './userRepository';
 import {PrivilegesRepository} from './privilegesRepository';
 import {Debug} from './debug';
+import {AttachmentsRepository} from "./attachmentsRepository";
 
 export module Privileges {
 
@@ -175,6 +176,19 @@ export module Privileges {
         }
     }
 
+    export namespace Attachment {
+
+        export function canEditAttachmentName(attachment: AttachmentsRepository.Attachment): boolean {
+
+            return ForumWide.canEditAnyAttachmentName() || User.isCurrentUser(attachment.createdBy);
+        }
+
+        export function canDeleteAttachment(attachment: AttachmentsRepository.Attachment): boolean {
+
+            return ForumWide.canDeleteAttachment() || User.isCurrentUser(attachment.createdBy);
+        }
+    }
+
     export namespace User {
 
         let currentUserId = '00000000-0000-0000-0000-000000000000';
@@ -182,6 +196,11 @@ export module Privileges {
         export function updateCurrentUserId(id: string): void {
 
             currentUserId = id;
+        }
+
+        export function isCurrentUser(user: UserRepository.User) {
+
+            return user && (user.id == currentUserId);
         }
 
         function checkForumWideUserPrivilege(user: UserRepository.User, whenCurrentUser: string, whenDifferentUser: string) {
@@ -211,12 +230,20 @@ export module Privileges {
             return checkForumWideUserPrivilege(user, 'change_own_user_logo', 'change_any_user_logo');
         }
 
+        export function canEditUserAttachmentQuota(user: UserRepository.User): boolean {
+            return hasPrivilege(ForumWide.currentUserPrivileges(), 'change_user_attachment_quota');
+        }
+
         export function canDeleteUser(user: UserRepository.User): boolean {
             return checkForumWideUserPrivilege(user, 'delete_own_user_logo', 'delete_any_user_logo');
         }
 
         export function canViewUserComments(user: UserRepository.User): boolean {
             return hasPrivilege(ForumWide.currentUserPrivileges(), 'get_message_comments_of_user');
+        }
+
+        export function canViewUserAttachments(user: UserRepository.User): boolean {
+            return isCurrentUser(user) || hasPrivilege(ForumWide.currentUserPrivileges(), 'get_attachments_of_user');
         }
 
         export function canViewPrivilegesAssignedToUser(user: UserRepository.User): boolean {
@@ -259,6 +286,26 @@ export module Privileges {
 
         export function canSendPrivateMessages(): boolean {
             return hasPrivilege(forumWidePrivilegesOfCurrentUser, 'send_private_message');
+        }
+
+        export function canViewAllAttachments(): boolean {
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, 'get_all_attachments');
+        }
+
+        export function canCreateAttachment(): boolean {
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, 'create_attachment');
+        }
+
+        export function canEditAnyAttachmentName(): boolean {
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, 'change_any_attachment_name');
+        }
+
+        export function canEditAnyAttachmentApproval(): boolean {
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, 'change_any_attachment_approval');
+        }
+
+        export function canDeleteAttachment(): boolean {
+            return hasPrivilege(forumWidePrivilegesOfCurrentUser, 'delete_attachment');
         }
 
         export async function loadForumWidePrivileges(): Promise<void> {

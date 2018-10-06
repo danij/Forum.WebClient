@@ -20,6 +20,7 @@ import {ConsentView} from '../views/consentView';
 import {LoginView} from '../views/loginView';
 import {AuthenticationView} from '../views/authenticationView';
 import {DocPage} from './docPage';
+import {AttachmentsPage} from "./attachmentsPage";
 
 export module MasterPage {
 
@@ -69,6 +70,7 @@ export module MasterPage {
             {linkId: 'tags-page-link', factory: () => new TagsPage()},
             {linkId: 'threads-page-link', factory: () => new ThreadsPage()},
             {linkId: 'users-page-link', factory: () => new UsersPage()},
+            {linkId: 'attachments-page-link', factory: () => new AttachmentsPage()},
             {linkId: 'comments-page-link', factory: () => new ThreadMessageCommentsPage()},
             {linkId: 'new-thread-page-link', factory: () => new NewThreadPage()},
         ];
@@ -93,9 +95,16 @@ export module MasterPage {
 
     function afterGettingForumWidePrivileges() : void {
 
+        if (Privileges.ForumWide.canViewAllAttachments()) {
+
+            DOMHelpers.unHide(document.getElementById('attachments-page-link'));
+            DOMHelpers.unHide(document.getElementById('others-page-dropdown'));
+        }
+
         if (Privileges.ForumWide.canViewAllComments()) {
 
             DOMHelpers.unHide(document.getElementById('comments-page-link'));
+            DOMHelpers.unHide(document.getElementById('others-page-dropdown'));
         }
 
         if (Privileges.ForumWide.canViewForumWideRequiredPrivileges() || Privileges.ForumWide.canViewForumWideAssignedPrivileges()) {
@@ -161,6 +170,7 @@ export module MasterPage {
             ThreadMessagesPage.loadPage,
             UsersPage.loadPage,
             ThreadMessageCommentsPage.loadPage,
+            AttachmentsPage.loadPage,
             DocPage.loadPage
         ];
 

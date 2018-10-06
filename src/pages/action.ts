@@ -127,6 +127,10 @@ export module PageActions {
         deletePrivateMessage(messageId: string): Promise<boolean>;
     }
 
+    export interface IAttachmentCallback {
+
+    }
+
     export interface IUserCallback {
 
         createUser(name: string): Promise<boolean>;
@@ -138,6 +142,8 @@ export module PageActions {
         editUserTitle(id: string, newTitle: string): Promise<boolean>;
 
         editUserSignature(id: string, newSignature: string): Promise<boolean>;
+
+        editUserAttachmentQuota(id: string, newQuota: number): Promise<boolean>;
 
         deleteUserLogo(id: string): Promise<boolean>;
 
@@ -469,6 +475,10 @@ export module PageActions {
         }
     }
 
+    class AttachmentCallback implements IAttachmentCallback {
+
+    }
+
     class UserCallback implements IUserCallback {
 
         createUser(name: string): Promise<boolean> {
@@ -494,6 +504,11 @@ export module PageActions {
         editUserSignature(id: string, newSignature: string): Promise<boolean> {
 
             return Pages.trueOrShowErrorAndFalse(UserRepository.editUserSignature(id, newSignature.trim()));
+        }
+
+        editUserAttachmentQuota(id: string, newQuota: number): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(UserRepository.editUserAttachmentQuota(id, newQuota));
         }
 
         deleteUserLogo(id: string): Promise<boolean> {
@@ -670,6 +685,11 @@ export module PageActions {
     export function getPrivateMessageCallback(): IPrivateMessageCallback {
 
         return new PrivateMessageCallback();
+    }
+
+    export function getAttachmentCallback(): IAttachmentCallback {
+
+        return new AttachmentCallback();
     }
 
     export function getUserCallback(): IUserCallback {

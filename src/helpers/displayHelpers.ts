@@ -19,6 +19,12 @@ export module DisplayHelpers {
         return result.trim();
     }
 
+    export function intToStringNull(value?: number) : string {
+
+        if (null == value) return '–';
+        return intToString(value);
+    }
+
     export function largeMinus(value: string): string {
 
         return value.replace('-', '−'); //U+2212 : MINUS SIGN

@@ -20,6 +20,9 @@ export module UserRepository {
         subscribedThreadCount: number;
         receivedUpVotes: number;
         receivedDownVotes: number;
+        attachmentCount: number;
+        attachmentTotalSize: number;
+        attachmentQuota: number;
         privileges: string[];
     }
 
@@ -227,6 +230,13 @@ export module UserRepository {
         await RequestHandler.put({
             path: 'users/signature/' + encodeURIComponent(userId),
             stringData: newSignature
+        });
+    }
+
+    export async function editUserAttachmentQuota(userId: string, newQuota: number): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'users/attachment_quota/' + encodeURIComponent(userId) + '/' + encodeURIComponent(newQuota.toString())
         });
     }
 

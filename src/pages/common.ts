@@ -306,6 +306,11 @@ export module Pages {
         return getUrl(getThreadMessageCommentsWrittenByUserUrl(user.name));
     }
 
+    export function getAttachmentsAddedByUserUrlFull(user: UserRepository.User): string {
+
+        return getUrl(getAttachmentsAddedByUserUrl(user.name));
+    }
+
     export function getThreadsOfUserUrl(name: string): string {
 
         return `threads/user/${encodeURIComponent(name)}`;
@@ -319,6 +324,11 @@ export module Pages {
     export function getThreadMessageCommentsWrittenByUserUrl(name: string): string {
 
         return `thread_message_comments/user/${encodeURIComponent(name)}`;
+    }
+
+    export function getAttachmentsAddedByUserUrl(name: string): string {
+
+        return `view_attachments/user/${encodeURIComponent(name)}`;
     }
 
     export function getThreadMessagesOfUserUrlFull(user: UserRepository.User): string {
@@ -370,6 +380,11 @@ export module Pages {
     export function getCategoryUrl(id: string, name: string): string {
 
         return `category/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
+    }
+
+    export function getAttachmentDownloadUrl(id: string): string {
+
+        return `${masterPageConfig.baseUri}/attachment/${encodeURIComponent(id)}`;
     }
 
     export function getUserLogoSrc(user: UserRepository.User): string {

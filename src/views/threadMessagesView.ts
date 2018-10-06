@@ -98,6 +98,7 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfThreadsLinks(resultElement);
         Views.setupThreadMessagesOfMessageParentThreadLinks(resultElement);
+        Views.setupAttachmentsAddedByUserLinks(resultElement);
 
         return resultElement;
     }
@@ -225,6 +226,7 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(resultElement);
         Views.setupThreadMessagesOfThreadsLinks(resultElement);
         Views.setupThreadMessagesOfMessageParentThreadLinks(resultElement);
+        Views.setupAttachmentsAddedByUserLinks(resultElement);
 
         return resultElement;
     }
@@ -356,6 +358,7 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
         Views.setupThreadsWithTagsLinks(element);
+        Views.setupAttachmentsAddedByUserLinks(element);
 
         setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback,
             quoteCallback);
@@ -1060,6 +1063,7 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfUsersLinks(element);
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
         Views.setupThreadsWithTagsLinks(element);
+        Views.setupAttachmentsAddedByUserLinks(element);
 
         setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback);
 

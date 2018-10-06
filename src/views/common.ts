@@ -9,6 +9,7 @@ import {Pages} from '../pages/common';
 import {ThreadMessageCommentsPage} from '../pages/threadMessageCommentsPage';
 import {DocumentationView} from './documentationView';
 import {PageActions} from '../pages/action';
+import {AttachmentsPage} from "../pages/attachmentsPage";
 
 export module Views {
 
@@ -279,6 +280,7 @@ export module Views {
     export const UserSubscribedThreadsData = 'data-subscribedthreadusername';
     export const UserMessagesData = 'data-threadmessageusername';
     export const UserWrittenThreadMessageCommentsData = 'data-threadmessagecommentswrittenbyusername';
+    export const UserAddedAttachmentsData = 'data-attachmentsaddedbyusername';
 
     function threadsWithTagLinkClicked(ev: Event) {
 
@@ -313,6 +315,13 @@ export module Views {
         const userName = DOMHelpers.getLink(ev).getAttribute(UserWrittenThreadMessageCommentsData);
 
         new ThreadMessageCommentsPage().displayForUser(userName);
+    }
+
+    function attachmentsAddedByUserLinkClicked(ev: Event) {
+
+        const userName = DOMHelpers.getLink(ev).getAttribute(UserAddedAttachmentsData);
+
+        new AttachmentsPage().displayForUser(userName);
     }
 
     function threadMessagesOfThreadLinkClicked(ev: Event) {
@@ -378,6 +387,13 @@ export module Views {
         const links = element.querySelectorAll(`[${UserWrittenThreadMessageCommentsData}]`);
 
         DOMHelpers.forEach(links, link => { Views.onClick(link, threadMessageCommentsWrittenByUserLinkClicked); });
+    }
+
+    export function setupAttachmentsAddedByUserLinks(element: HTMLElement): void {
+
+        const links = element.querySelectorAll(`[${UserAddedAttachmentsData}]`);
+
+        DOMHelpers.forEach(links, link => { Views.onClick(link, attachmentsAddedByUserLinkClicked); });
     }
 
     export function setupThreadMessagesOfThreadsLinks(element: HTMLElement): void {
@@ -604,7 +620,6 @@ export module Views {
 
         element.addEventListener('click', ev => {
 
-            ev.preventDefault();
             callback(ev);
         });
     }

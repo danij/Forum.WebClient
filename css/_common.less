@@ -235,7 +235,7 @@ html {
     padding-left: 40px;
     text-align: right;
 
-    a:not(:first-child) {
+    a:not(:first-child):not(:nth-child(2)) {
         margin-top: 15px;
     }
 
@@ -793,7 +793,7 @@ html {
     }
 }
 
-.categories-list-header, .threads-list-header {
+.categories-list-header, .threads-list-header, .attachments-table-header {
     padding: 10px 0 10px 0;
 
     .order-by {
@@ -1496,4 +1496,75 @@ form.assign-privileges-form {
 .no-max-height {
 
     max-height: none !important;
+}
+
+.attachments-table {
+
+    th:first-child, td:first-child {
+        padding-left: 0;
+    }
+
+    th:last-child, td:last-child {
+        padding-right: 0;
+    }
+
+    .uk-button {
+        text-transform: none;
+    }
+
+    .attachment-created-header {
+        min-width: 80px;
+    }
+
+    .attachment-name {
+        font-size: 1.25rem;
+        line-height: 1.25;
+        text-align: left;
+
+        &.unapproved {
+
+            text-decoration: line-through;
+        }
+    }
+
+    .attachment-created {
+
+        width: 100px;
+    }
+
+    .attachment-size {
+
+        width: 128px;
+    }
+
+    .attachment-statistics {
+        font-size: 0.875rem;
+        min-width: 150px;
+
+        table {
+            margin: -10px auto;
+
+            tr, td {
+                padding: 0;
+                margin: 0;
+            }
+            td:first-child {
+                padding-right: 10px;
+            }
+        }
+    }
+
+    .attachment-actions {
+        width: 60px;
+        padding-left: 40px;
+        text-align: right;
+
+        a:not(:first-child):not(:nth-child(2)) {
+            margin-top: 15px;
+        }
+
+        a {
+            margin-left: 10px !important;
+        }
+    }
 }
