@@ -616,10 +616,18 @@ export module Views {
         }
     }
 
+    function closeDropdowns(): void {
+
+        document.body.click();
+    }
+
     export function onClick(element: HTMLElement, callback: (ev) => void): void {
 
         element.addEventListener('click', ev => {
 
+            closeDropdowns();
+
+            ev.preventDefault();
             callback(ev);
         });
     }
