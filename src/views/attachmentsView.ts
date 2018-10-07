@@ -160,6 +160,11 @@ export module AttachmentsView {
                 row.append(createdByColumn);
 
                 createdByColumn.append(UsersView.createAuthorSmall(attachment.createdBy));
+
+                if (attachment.ip && attachment.ip.length) {
+
+                    createdByColumn.appendRaw(`<div></div><samp>${DOMHelpers.escapeStringForContent(attachment.ip)}</samp></div>`);
+                }
             }
             {
                 const statisticsColumn = ('<td class="attachment-statistics uk-table-shrink">\n' +
