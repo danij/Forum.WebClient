@@ -15,6 +15,7 @@ import {TagsView} from './tagsView';
 import {ThreadsView} from './threadsView';
 import {Privileges} from '../services/privileges';
 import {Debug} from '../services/debug';
+import {UserCache} from "../services/userCache";
 
 export module PrivilegesView {
 
@@ -909,7 +910,7 @@ export module PrivilegesView {
             let user: UserRepository.User;
 
             try {
-                user = await UserRepository.getUserByName(userName);
+                user = await UserCache.getUserByName(userName);
             }
             catch {
                 //skip

@@ -260,4 +260,22 @@ export module UserCache {
 
         return usersById[id.toLowerCase()];
     }
+
+    export async function getUserByName(name: string): Promise<UserRepository.User> {
+
+        const id = getIdByName(name);
+        if (id) {
+
+            return getUserById(id);
+        }
+
+        const user = await UserRepository.getUserByName(name);
+        if (user) {
+
+            idsByName[name.toLowerCase()] = user.id;
+            usersById[user.id.toLowerCase()] = user;
+        }
+
+        return user;
+    }
 }

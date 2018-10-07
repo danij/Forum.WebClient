@@ -38,11 +38,11 @@ export class ThreadsPage implements Pages.Page {
             }
             else if (this.userName && this.userName.length) {
 
-                this.user = await this.getUser(this.userName);
+                this.user = await Pages.getUser(this.userName);
             }
             else if (this.subscribedByUserName && this.subscribedByUserName.length) {
 
-                this.subscribedByUser = await this.getUser(this.subscribedByUserName);
+                this.subscribedByUser = await Pages.getUser(this.subscribedByUserName);
             }
 
             const threadCollection = await this.getThreadCollection();
@@ -166,11 +166,6 @@ export class ThreadsPage implements Pages.Page {
     private getCurrentTag(): Promise<TagRepository.Tag> {
 
         return Pages.getOrShowError(TagRepository.getTag(this.tagName));
-    }
-
-    private getUser(userName: string): Promise<UserRepository.User> {
-
-        return Pages.getOrShowError(UserRepository.getUserByName(userName));
     }
 
     private async refreshList(scrollDirection: Pages.ScrollDirection): Promise<void> {

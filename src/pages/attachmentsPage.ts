@@ -30,7 +30,7 @@ export class AttachmentsPage implements Pages.Page {
 
             if (this.userName && this.userName.length) {
 
-                this.user = await this.getUser(this.userName);
+                this.user = await Pages.getUser(this.userName);
             }
 
             const attachmentsCollection = await this.getAttachmentsCollection();
@@ -100,11 +100,6 @@ export class AttachmentsPage implements Pages.Page {
             orderBy: this.orderBy,
             sort: this.sortOrder
         } as AttachmentsRepository.GetAttachmentsRequest));
-    }
-
-    private getUser(userName: string): Promise<UserRepository.User> {
-
-        return Pages.getOrShowError(UserRepository.getUserByName(userName));
     }
 
     private async refreshList(scrollDirection: Pages.ScrollDirection): Promise<void> {

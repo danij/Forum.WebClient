@@ -45,7 +45,7 @@ export class ThreadMessagesPage implements Pages.Page {
 
             if (this.userName && this.userName.length) {
 
-                this.user = await this.getCurrentUser();
+                this.user = await Pages.getUser(this.userName);
             }
             else if (this.threadId && this.threadId.length) {
 
@@ -153,11 +153,6 @@ export class ThreadMessagesPage implements Pages.Page {
             page: this.pageNumber,
             sort: this.sortOrder
         } as ThreadRepository.GetThreadsRequest))).thread;
-    }
-
-    private getCurrentUser(): Promise<UserRepository.User> {
-
-        return Pages.getOrShowError(UserRepository.getUserByName(this.userName));
     }
 
     private async getThreadMessagesOfUser(): Promise<ThreadMessageRepository.ThreadMessageCollection> {

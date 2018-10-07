@@ -4,6 +4,7 @@ import {UserRepository} from '../services/userRepository';
 import {CategoryRepository} from '../services/categoryRepository';
 import {ThreadRepository} from '../services/threadRepository';
 import {DOMHelpers} from '../helpers/domHelpers';
+import {UserCache} from "../services/userCache";
 
 export module Pages {
 
@@ -127,6 +128,16 @@ export module Pages {
             showError(ex.message);
             return false;
         }
+    }
+
+    export async function getUser(userName: string): Promise<UserRepository.User> {
+
+        const result = await Pages.getOrShowError(UserCache.getUserByName(userName));
+        if ( ! result) {
+
+            showError('Could not find a user with the name ' + userName);
+        }
+        return result;
     }
 
     export interface IdNamePair {

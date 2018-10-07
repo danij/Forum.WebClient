@@ -29,7 +29,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
             if (this.userName && this.userName.length) {
 
-                this.user = await this.getUser(this.userName);
+                this.user = await Pages.getUser(this.userName);
             }
 
             const commentsCollection = await this.getCommentsCollection();
@@ -97,11 +97,6 @@ export class ThreadMessageCommentsPage implements Pages.Page {
             page: this.pageNumber,
             sort: this.sortOrder
         } as ThreadMessageRepository.GetThreadMessageCommentsRequest));
-    }
-
-    private getUser(userName: string): Promise<UserRepository.User> {
-
-        return Pages.getOrShowError(UserRepository.getUserByName(userName));
     }
 
     private async refreshList(scrollDirection: Pages.ScrollDirection): Promise<void> {
