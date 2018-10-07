@@ -42,7 +42,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
                 }, (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber),
                 PageActions.getThreadMessageCallback(), PageActions.getUserCallback(),
-                PageActions.getThreadCallback(), PageActions.getPrivilegesCallback());
+                PageActions.getThreadCallback(), PageActions.getAttachmentCallback(), PageActions.getPrivilegesCallback());
 
             Pages.setupSortControls(this, elements.sortControls);
 
@@ -121,7 +121,7 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
             return await ThreadMessagesView.createCommentsList(commentsCollection,
                 PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(),
-                PageActions.getPrivilegesCallback(), this.user);
+                PageActions.getAttachmentCallback(), PageActions.getPrivilegesCallback(), this.user);
         });
 
         Pages.scrollPage(scrollDirection);

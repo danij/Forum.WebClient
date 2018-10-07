@@ -307,7 +307,7 @@ export module MasterPage {
 
             return await ThreadMessagesView.createThreadMessageList(messages,
                 PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(),
-                PageActions.getPrivilegesCallback());
+                PageActions.getAttachmentCallback(), PageActions.getPrivilegesCallback());
         });
         ViewsExtra.refreshMath(resultsContainer);
     }

@@ -98,4 +98,11 @@ export module AttachmentsRepository {
             path: 'attachments/' + encodeURIComponent(attachmentId)
         });
     }
+
+    export async function removeAttachmentFromMessage(attachmentId: string, messageId: string): Promise<void> {
+
+        await RequestHandler.requestDelete({
+            path: 'attachments/message/' + encodeURIComponent(attachmentId) + '/' + encodeURIComponent(messageId)
+        });
+    }
 }

@@ -8,6 +8,7 @@ import {DisplayHelpers} from "../helpers/displayHelpers";
 import {Pages} from "../pages/common";
 import {Privileges} from "../services/privileges";
 import {EditViews} from "./edit";
+import {ThreadMessageRepository} from "../services/threadMessageRepository";
 
 export module AttachmentsView {
 
@@ -93,8 +94,8 @@ export module AttachmentsView {
             '</div>');
     }
 
-    export async function createAttachmentsTable(collection: AttachmentsRepository.AttachmentCollection,
-                                                 callback: PageActions.IAttachmentCallback): Promise<HTMLElement> {
+    export function createAttachmentsTable(collection: AttachmentsRepository.AttachmentCollection,
+                                                 callback: PageActions.IAttachmentCallback): HTMLElement {
 
         const attachments = collection.attachments || [];
 
@@ -163,7 +164,7 @@ export module AttachmentsView {
 
                 if (attachment.ip && attachment.ip.length) {
 
-                    createdByColumn.appendRaw(`<div></div><samp>${DOMHelpers.escapeStringForContent(attachment.ip)}</samp></div>`);
+                    createdByColumn.appendRaw(`<div><samp>${DOMHelpers.escapeStringForContent(attachment.ip)}</samp></div>`);
                 }
             }
             {
@@ -215,11 +216,11 @@ export module AttachmentsView {
         return result;
     }
 
-    function createAttachmentLink(attachment: AttachmentsRepository.Attachment): DOMAppender {
+    function createAttachmentLink(attachment: AttachmentsRepository.Attachment, asButtonLink: boolean = true): DOMAppender {
 
         const href = Pages.getAttachmentDownloadUrl(attachment.id);
 
-        let classes = 'uk-button uk-button-text ';
+        let classes = asButtonLink ? 'uk-button uk-button-text ' : '';
         if ( ! attachment.approved) {
 
             classes = classes + 'unapproved ';
@@ -231,13 +232,25 @@ export module AttachmentsView {
         return result;
     }
 
-    function setupAttachmentActionEvents(element: HTMLElement, attachmentsById,
-                                         callback: PageActions.IAttachmentCallback) {
+    export function setupAttachmentActionEvents(element: HTMLElement, attachmentsById,
+                                                callback: PageActions.IAttachmentCallback): void {
+
+        function getAttachmentElement(ev: Event): HTMLElement {
+
+            const row = DOMHelpers.goUpUntilTag(ev.target as HTMLElement, 'tr');
+            if (row) {
+
+                return row;
+            }
+
+            return DOMHelpers.goUpUntilTag(ev.target as HTMLElement, 'li');
+        }
 
         function getAttachmentNameElement(ev: Event): HTMLElement {
 
-            return DOMHelpers.goUpUntilTag(ev.target as HTMLElement, 'tr')
-                .getElementsByClassName('attachment-name')[0] as HTMLElement;
+            const attachmentElement = getAttachmentElement(ev);
+
+            return attachmentElement.getElementsByClassName('attachment-name')[0] as HTMLElement;
         }
 
         DOMHelpers.addEventListeners(element, 'approve-attachment-link', 'click', async (ev) => {
@@ -295,6 +308,7 @@ export module AttachmentsView {
 
                 if (await callback.editAttachmentName(attachmentId, newName)) {
 
+                    attachment.name = newName;
                     getAttachmentNameElement(ev).innerText = newName;
                 }
             }
@@ -306,8 +320,98 @@ export module AttachmentsView {
 
             if (EditViews.confirm('Are you sure you want to delete the selected attachment?')) {
 
-                EditViews.reloadPageIfOk(callback.deleteAttachment(attachmentId));
+                if (await callback.deleteAttachment(attachmentId)) {
+
+                    getAttachmentElement(ev).remove();
+                }
             }
         });
+
+        DOMHelpers.addEventListeners(element, 'remove-attachment-from-message-link', 'click', async (ev) => {
+
+            const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+
+            if (EditViews.confirm('Are you sure you want to remove the selected attachment from the message?')) {
+
+                if (await callback.removeAttachmentFromMessage(attachmentId, messageId)) {
+
+                    getAttachmentElement(ev).remove();
+                }
+            }
+        });
+    }
+
+    export function createAttachmentsOfMessageList(attachments: AttachmentsRepository.Attachment[],
+                                                   message: ThreadMessageRepository.ThreadMessage): DOMAppender {
+
+        attachments.sort((first, second) => {
+
+            return first.name.toLocaleLowerCase().localeCompare(second.name.toLocaleLowerCase());
+        });
+
+        const result = dA('<ul class="attachments">');
+
+        for (let attachment of attachments) {
+
+            const item = dA('<li class="attachment">');
+            result.append(item);
+
+            const flexContainer = dA('<div class="uk-flex">');
+            item.append(flexContainer);
+
+            const mainContainer = dA('<div class="uk-flex-1">');
+            flexContainer.append(mainContainer);
+            {
+                const nameContainer = dA('span');
+                mainContainer.append(nameContainer);
+
+                const attachmentLink = createAttachmentLink(attachment, false);
+                nameContainer.append(attachmentLink);
+            }
+            {
+                const detailsContainer = dA('div');
+                mainContainer.append(detailsContainer);
+
+                detailsContainer.appendRaw(('{Size} <span class="uk-text-meta">bytes</span>')
+                    .replace('{Size}', DisplayHelpers.intToString(attachment.size)));
+
+                detailsContainer.appendRaw(' · <span class="uk-text-meta">{Added}</span>'
+                    .replace('{Added}', DisplayHelpers.getDateTime(attachment.created)));
+
+                if (attachment.createdBy.id != message.createdBy.id) {
+
+                    detailsContainer.appendString(' · ');
+                    detailsContainer.append(UsersView.createAuthorSmall(attachment.createdBy));
+                }
+            }
+            {
+                const actionsContainer = dA('<div class="attachment-actions">');
+                flexContainer.append(actionsContainer);
+
+                if (Privileges.Attachment.canEditAttachmentApproval(attachment)) {
+
+                    actionsContainer.appendRaw(`<a uk-icon="icon: check" class="approve-attachment-link" title="Approve attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                    actionsContainer.appendRaw(`<a uk-icon="icon: ban" class="unapprove-attachment-link" title="Unapprove attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                }
+
+                if (Privileges.Attachment.canEditAttachmentName(attachment)) {
+
+                    actionsContainer.appendRaw(`<a uk-icon="icon: file-edit" class="edit-attachment-name-link" title="Edit attachment name" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                }
+
+                if (Privileges.Attachment.canRemoveAttachmentFromMessage(attachment, message)) {
+
+                    actionsContainer.appendRaw(`<a uk-icon="icon: close" class="remove-attachment-from-message-link" title="Remove attachment from message" data-attachment-id="${attachment.id}" data-message-id="${message.id}" uk-tooltip></a>`);
+                }
+
+                if (Privileges.Attachment.canDeleteAttachment(attachment)) {
+
+                    actionsContainer.appendRaw(`<a uk-icon="icon: trash" class="delete-attachment-link" title="Delete attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                }
+            }
+        }
+
+        return result;
     }
 }

@@ -3,6 +3,7 @@ import {CommonEntities} from './commonEntities';
 import {UserRepository} from './userRepository';
 import {ThreadRepository} from './threadRepository';
 import {UserCache} from "./userCache";
+import {AttachmentsRepository} from "./attachmentsRepository";
 
 export module ThreadMessageRepository {
 
@@ -41,6 +42,7 @@ export module ThreadMessageRepository {
         lastUpdated: ThreadMessageLastUpdated;
         privileges: string[];
         voteStatus: number;
+        attachments: AttachmentsRepository.Attachment[];
     }
 
     export interface ThreadMessageCollection extends CommonEntities.PaginationInfo {

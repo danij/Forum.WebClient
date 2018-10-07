@@ -15,6 +15,7 @@ import {ThreadsView} from './threadsView';
 import {CommonEntities} from '../services/commonEntities';
 import {PrivilegesView} from './privilegesView';
 import {TagsView} from "./tagsView";
+import {AttachmentsView} from "./attachmentsView";
 
 export module ThreadMessagesView {
 
@@ -240,6 +241,7 @@ export module ThreadMessagesView {
                                                           threadMessageCallback: PageActions.IThreadMessageCallback,
                                                           tagCallback: PageActions.ITagCallback,
                                                           userCallback: PageActions.IUserCallback,
+                                                          attachmentsCallback: PageActions.IAttachmentCallback,
                                                           privilegesCallback: PageActions.IPrivilegesCallback,
                                                           quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): Promise<ThreadMessagesPageContent> {
 
@@ -268,7 +270,7 @@ export module ThreadMessagesView {
         const listContainer = cE('div');
         DOMHelpers.addClasses(listContainer, 'thread-message-list');
         listContainer.appendChild(await createThreadMessageList(collection, threadMessageCallback, threadCallback,
-            privilegesCallback, thread, quoteCallback));
+            attachmentsCallback, privilegesCallback, thread, quoteCallback));
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
@@ -304,6 +306,7 @@ export module ThreadMessagesView {
     export async function createThreadMessageList(collection: ThreadMessageRepository.ThreadMessageCollection,
                                                   callback: PageActions.IThreadMessageCallback,
                                                   threadCallback: PageActions.IThreadCallback,
+                                                  attachmentsCallback: PageActions.IAttachmentCallback,
                                                   privilegesCallback: PageActions.IPrivilegesCallback,
                                                   thread?: ThreadRepository.Thread,
                                                   quoteCallback?: (message: ThreadMessageRepository.ThreadMessage) => void): Promise<HTMLElement> {
@@ -319,6 +322,7 @@ export module ThreadMessagesView {
         }
 
         const messagesById = {};
+        const attachmentsById = {};
 
         const allMessages = messages
             .filter(m => m)
@@ -343,10 +347,21 @@ export module ThreadMessagesView {
             messageContainer.append(flexContainer);
 
             flexContainer.append(createThreadMessageAuthor(message, thread));
-            flexContainer.append(createThreadMessageContent(message));
+            const messageContent = createThreadMessageContent(message);
+            flexContainer.append(messageContent);
             flexContainer.append(createThreadMessageActionLinks(message, quoteCallback));
 
             messageContainer.append(createThreadMessageFooter(message));
+
+            if (message.attachments) {
+
+                for (let attachment of message.attachments.filter(a => a)) {
+
+                    attachmentsById[attachment.id] = attachment;
+                }
+                messageContent.append(AttachmentsView.createAttachmentsOfMessageList(message.attachments,
+                    message));
+            }
 
             result.appendRaw('<hr class="uk-divider-icon" />');
         }
@@ -359,6 +374,8 @@ export module ThreadMessagesView {
         Views.setupThreadMessagesOfMessageParentThreadLinks(element);
         Views.setupThreadsWithTagsLinks(element);
         Views.setupAttachmentsAddedByUserLinks(element);
+
+        AttachmentsView.setupAttachmentActionEvents(element, attachmentsById, attachmentsCallback);
 
         setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback,
             quoteCallback);
@@ -956,6 +973,7 @@ export module ThreadMessagesView {
                                                     threadMessageCallback: PageActions.IThreadMessageCallback,
                                                     userCallback: PageActions.IUserCallback,
                                                     threadCallback: PageActions.IThreadCallback,
+                                                    attachmentsCallback: PageActions.IAttachmentCallback,
                                                     privilegesCallback: PageActions.IPrivilegesCallback): Promise<ThreadMessageCommentsPageContent> {
 
         collection = collection || ThreadMessageRepository.defaultThreadMessageCommentCollection();
@@ -982,7 +1000,7 @@ export module ThreadMessagesView {
         const listContainer = cE('div');
         DOMHelpers.addClasses(listContainer, 'thread-message-comments-list');
         listContainer.appendChild(await createCommentsList(collection, threadMessageCallback,
-            threadCallback, privilegesCallback, info.user));
+            threadCallback, attachmentsCallback, privilegesCallback, info.user));
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
@@ -996,6 +1014,7 @@ export module ThreadMessagesView {
     export async function createCommentsList(collection: ThreadMessageRepository.ThreadMessageCommentCollection,
                                              callback: PageActions.IThreadMessageCallback,
                                              threadCallback: PageActions.IThreadCallback,
+                                             attachmentsCallback: PageActions.IAttachmentCallback,
                                              privilegesCallback: PageActions.IPrivilegesCallback,
                                              user?: UserRepository.User): Promise<HTMLElement> {
 
@@ -1010,6 +1029,7 @@ export module ThreadMessagesView {
         }
 
         const messagesById = {};
+        const attachmentsById = {};
 
         const allComments = comments
             .filter(m => m)
@@ -1045,14 +1065,22 @@ export module ThreadMessagesView {
                 messageContainer.append(flex);
 
                 flex.append(createThreadMessageAuthor(message, null));
-                flex.append(createThreadMessageContent(message));
+                const messageContent = createThreadMessageContent(message);
+                flex.append(messageContent);
                 flex.append(createThreadMessageActionLinks(message, null));
+
+                if (message.attachments) {
+
+                    for (let attachment of message.attachments.filter(a => a)) {
+
+                        attachmentsById[attachment.id] = attachment;
+                    }
+                    messageContent.append(AttachmentsView.createAttachmentsOfMessageList(message.attachments,
+                        message));
+                }
             }
 
-            if (i < (comments.length - 1)) {
-
-                result.appendRaw('<hr class="uk-divider-icon" />');
-            }
+            result.appendRaw('<hr class="uk-divider-icon" />');
         }
 
         const element = result.toElement();
@@ -1066,6 +1094,7 @@ export module ThreadMessagesView {
         Views.setupAttachmentsAddedByUserLinks(element);
 
         setupThreadMessageActionEvents(element, messagesById, callback, threadCallback, privilegesCallback);
+        AttachmentsView.setupAttachmentActionEvents(element, attachmentsById, attachmentsCallback);
 
         setupMessageCommentLinks(element, callback);
 

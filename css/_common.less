@@ -337,6 +337,47 @@ html {
             }
         }
     }
+
+    .attachments {
+
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        .attachment {
+
+            margin: 10px 10px 0 0;
+            &:first-child {
+                margin-left: 0;
+            }
+            padding: 10px;
+            border: solid 1px @global-border;
+            border-radius: 5px;
+            display: inline-block;
+
+            .attachment-name.unapproved {
+
+                text-decoration: line-through;
+            }
+            .author {
+
+                font-size: 0.875em;
+            }
+            .attachment-actions {
+                width: 90px;
+                text-align: right;
+                margin-top: -10px;
+
+                a:not(:first-child):not(:nth-child(2)):not(:nth-child(2)) {
+                    margin-top: 10px;
+                }
+
+                a {
+                    margin-left: 10px !important;
+                }
+            }
+        }
+    }
 }
 
 .message-up-vote {

@@ -201,6 +201,13 @@ export module Privileges {
             return ForumWide.checkUserPrivilege(attachment.createdBy,
                 'delete_own_attachment', 'delete_any_attachment');
         }
+
+        export function canRemoveAttachmentFromMessage(attachment: AttachmentsRepository.Attachment,
+                                                       message: ThreadMessageRepository.ThreadMessage): boolean {
+
+            return hasPrivilege(message, 'remove_attachment')
+                || canDeleteAttachment(attachment);
+        }
     }
 
     export namespace User {

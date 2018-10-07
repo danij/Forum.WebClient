@@ -137,6 +137,8 @@ export module PageActions {
         editAttachmentName(id: string, newName: string): Promise<boolean>;
 
         deleteAttachment(id: string): Promise<boolean>;
+
+        removeAttachmentFromMessage(attachmentId: string, messageId: string): Promise<boolean>;
     }
 
     export interface IUserCallback {
@@ -503,6 +505,11 @@ export module PageActions {
         deleteAttachment(id: string): Promise<boolean> {
 
             return Pages.trueOrShowErrorAndFalse(AttachmentsRepository.deleteAttachment(id));
+        }
+
+        removeAttachmentFromMessage(attachmentId: string, messageId: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(AttachmentsRepository.removeAttachmentFromMessage(attachmentId, messageId));
         }
     }
 

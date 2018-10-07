@@ -73,8 +73,8 @@ export class ThreadMessagesPage implements Pages.Page {
             }, (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber), this.thread,
                 PageActions.getThreadCallback(), PageActions.getThreadMessageCallback(),
-                PageActions.getTagCallback(), PageActions.getUserCallback(), PageActions.getPrivilegesCallback(),
-                this.thread ? (message) => this.quoteCallback(message) : null);
+                PageActions.getTagCallback(), PageActions.getUserCallback(), PageActions.getAttachmentCallback(),
+                PageActions.getPrivilegesCallback(), this.thread ? (message) => this.quoteCallback(message) : null);
 
             Pages.setupSortControls(this, elements.sortControls);
 
@@ -189,7 +189,8 @@ export class ThreadMessagesPage implements Pages.Page {
 
             return await ThreadMessagesView.createThreadMessageList(messageCollection,
                 PageActions.getThreadMessageCallback(), PageActions.getThreadCallback(),
-                PageActions.getPrivilegesCallback(), this.thread, (message) => this.quoteCallback(message));
+                PageActions.getAttachmentCallback(), PageActions.getPrivilegesCallback(),
+                this.thread, (message) => this.quoteCallback(message));
         });
 
         Pages.scrollPage(scrollDirection);
