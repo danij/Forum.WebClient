@@ -64,6 +64,12 @@ export module AuthenticationView {
                 updateVoteHistoryNr(currentUser.newReceivedVotesNr);
                 updateQuoteHistoryNr(currentUser.newReceivedQuotesNr);
                 updateReceivedPrivateMessagesNr(currentUser.newReceivedPrivateMessagesNr);
+
+                if (currentUser.newReceivedVotesNr || currentUser.newReceivedQuotesNr
+                    || currentUser.newReceivedPrivateMessagesNr) {
+
+                    DOMHelpers.unHide(document.getElementById('logged-in-new-content'));
+                }
             }
             else {
 
@@ -112,16 +118,30 @@ export module AuthenticationView {
     export function updateVoteHistoryNr(value: number): void {
 
         document.getElementById('vote-history-nr').innerText = DisplayHelpers.intToString(value);
+        clearNewContentNotification();
     }
 
     export function updateQuoteHistoryNr(value: number): void {
 
         document.getElementById('quote-history-nr').innerText = DisplayHelpers.intToString(value);
+        clearNewContentNotification();
     }
 
     export function updateReceivedPrivateMessagesNr(value: number): void {
 
         document.getElementById('private-messages-nr').innerText = DisplayHelpers.intToString(value);
+        clearNewContentNotification();
+    }
+
+    export function clearNewContentNotification(): void {
+
+        const allCleared = ['vote-history-nr', 'quote-history-nr', 'private-messages-nr']
+            .map(id => document.getElementById(id).innerText)
+            .every(v => 0 === parseInt(v));
+
+        if (allCleared) {
+            DOMHelpers.hide(document.getElementById('logged-in-new-content'));
+        }
     }
 
     function showCreateUserModal(userCallback: PageActions.IUserCallback) {
