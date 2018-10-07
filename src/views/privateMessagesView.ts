@@ -158,7 +158,10 @@ export module PrivateMessagesView {
         const actions = dA('<div class="message-actions">');
         const messageId = DOMHelpers.escapeStringForAttribute(message.id);
 
-        actions.appendRaw(`<a uk-icon="icon: trash" class="delete-private-message-link" title="Delete message" data-message-id="${messageId}" uk-tooltip></a>`);
+        const replyTo = (message.source || message.destination).name;
+
+        actions.appendRaw(`<a uk-icon="icon: reply" class="reply-private-message-link" title="Reply" data-reply-to="${DOMHelpers.escapeStringForAttribute(replyTo)}" uk-tooltip></a>`);
+        actions.appendRaw(`<a uk-icon="icon: trash" class="delete-private-message-link" title="Delete message" data-message-id="${DOMHelpers.escapeStringForAttribute(messageId)}" uk-tooltip></a>`);
 
         return actions;
     }
@@ -188,6 +191,27 @@ export module PrivateMessagesView {
     function setupPrivateMessageActionEvents(element: HTMLElement,
                                              privateMessagesCallback: PageActions.IPrivateMessageCallback) {
 
+        DOMHelpers.addEventListeners(element, 'reply-private-message-link', 'click', async (ev) => {
+
+            const replyTo = DOMHelpers.getLink(ev).getAttribute('data-reply-to');
+
+            const destinationInput = document.getElementById('private-message-destination') as HTMLInputElement;
+
+            if (destinationInput.value == replyTo) {
+
+                destinationInput.scrollIntoView();
+                return;
+            }
+
+            if (destinationInput.value && (! EditViews.confirm(`You are writing a message to another user. Override with ${replyTo}?`))) {
+
+                return;
+            }
+
+            destinationInput.value = replyTo;
+            destinationInput.scrollIntoView();
+        });
+
         DOMHelpers.addEventListeners(element, 'delete-private-message-link', 'click', async (ev) => {
 
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
@@ -199,7 +223,6 @@ export module PrivateMessagesView {
                     const messageElement = DOMHelpers.goUpUntil(ev.target as HTMLElement, e => e.classList.contains('private-message'));
                     if (messageElement) {
 
-                        debugger;
                         const separator = messageElement.nextSibling as HTMLElement;
                         if (separator && separator.tagName.toLowerCase() == 'hr') {
 
