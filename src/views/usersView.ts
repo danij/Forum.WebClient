@@ -194,7 +194,7 @@ export module UsersView {
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{nrOfSubscribedThreads}', DisplayHelpers.intToString(user.subscribedThreadCount)));
 
-        if (Privileges.ForumWide.canViewAllAttachments()) {
+        if (Privileges.Attachment.canViewAllAttachments()) {
 
             content.appendRaw(('<li>\n' +
                 '    ' + attachmentsAddedByUserLink +'\n' +
@@ -388,7 +388,7 @@ export module UsersView {
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfSubscribedThreads}', DisplayHelpers.intToString(user.subscribedThreadCount)));
 
-        if (Privileges.ForumWide.canViewAllAttachments()) {
+        if (Privileges.Attachment.canViewAllAttachments()) {
 
             wrapper.appendRaw(('<div>\n' +
                 '    <div class="uk-float-left"><a ' + getAttachmentsAddedByUserLinkContent(user) + '>Attachments</a></div>\n' +

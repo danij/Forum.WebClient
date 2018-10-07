@@ -95,7 +95,7 @@ export module MasterPage {
 
     function afterGettingForumWidePrivileges() : void {
 
-        if (Privileges.ForumWide.canViewAllAttachments()) {
+        if (Privileges.Attachment.canViewAllAttachments()) {
 
             DOMHelpers.unHide(document.getElementById('attachments-page-link'));
             DOMHelpers.unHide(document.getElementById('others-page-dropdown'));

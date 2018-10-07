@@ -181,7 +181,7 @@ export module AttachmentsView {
                 const actionsColumn = dA('<td class="attachment-actions uk-text-right">');
                 row.append(actionsColumn);
 
-                if (Privileges.ForumWide.canEditAnyAttachmentApproval()) {
+                if (Privileges.Attachment.canEditAttachmentApproval(attachment)) {
 
                     actionsColumn.appendRaw(`<a uk-icon="icon: check" class="approve-attachment-link" title="Approve attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
                     actionsColumn.appendRaw(`<a uk-icon="icon: ban" class="unapprove-attachment-link" title="Unapprove attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
