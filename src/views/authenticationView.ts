@@ -68,7 +68,12 @@ export module AuthenticationView {
                 if (currentUser.newReceivedVotesNr || currentUser.newReceivedQuotesNr
                     || currentUser.newReceivedPrivateMessagesNr) {
 
-                    DOMHelpers.unHide(document.getElementById('logged-in-new-content'));
+                    const notificationIcon = document.getElementById('logged-in-new-content');
+                    DOMHelpers.forEach(notificationIcon.getElementsByTagName('path'), path => {
+
+                        path.setAttribute('fill', '#000');
+                    });
+                    DOMHelpers.unHide(notificationIcon);
                 }
             }
             else {
