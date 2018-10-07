@@ -16,13 +16,6 @@ export module ThreadMessageRepository {
         threadName: string;
     }
 
-    export interface ThreadMessageVote {
-
-        userId: string;
-        userName: string;
-        at: number;
-    }
-
     export interface ThreadMessageLastUpdated {
 
         userId: string;
