@@ -387,27 +387,36 @@ export module AttachmentsView {
             }
             {
                 const actionsContainer = dA('<div class="attachment-actions">');
-                flexContainer.append(actionsContainer);
+
+                let showAttachmentActions = false;
 
                 if (Privileges.Attachment.canEditAttachmentApproval(attachment)) {
 
                     actionsContainer.appendRaw(`<a uk-icon="icon: check" class="approve-attachment-link" title="Approve attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
                     actionsContainer.appendRaw(`<a uk-icon="icon: ban" class="unapprove-attachment-link" title="Unapprove attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                    showAttachmentActions = true;
                 }
 
                 if (Privileges.Attachment.canEditAttachmentName(attachment)) {
 
                     actionsContainer.appendRaw(`<a uk-icon="icon: file-edit" class="edit-attachment-name-link" title="Edit attachment name" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                    showAttachmentActions = true;
                 }
 
                 if (Privileges.Attachment.canRemoveAttachmentFromMessage(attachment, message)) {
 
                     actionsContainer.appendRaw(`<a uk-icon="icon: close" class="remove-attachment-from-message-link" title="Remove attachment from message" data-attachment-id="${attachment.id}" data-message-id="${message.id}" uk-tooltip></a>`);
+                    showAttachmentActions = true;
                 }
 
                 if (Privileges.Attachment.canDeleteAttachment(attachment)) {
 
                     actionsContainer.appendRaw(`<a uk-icon="icon: trash" class="delete-attachment-link" title="Delete attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                    showAttachmentActions = true;
+                }
+                if (showAttachmentActions) {
+
+                    flexContainer.append(actionsContainer);
                 }
             }
         }
