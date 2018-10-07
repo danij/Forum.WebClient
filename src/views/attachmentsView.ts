@@ -7,6 +7,7 @@ import {AttachmentsRepository} from "../services/attachmentsRepository";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {Pages} from "../pages/common";
 import {Privileges} from "../services/privileges";
+import {EditViews} from "./edit";
 
 export module AttachmentsView {
 
@@ -189,20 +190,21 @@ export module AttachmentsView {
 
                 if (Privileges.Attachment.canEditAttachmentName(attachment)) {
 
-                    actionsColumn.appendRaw(`<a uk-icon="icon: file-edit" class="edit-attachment-content-link" title="Edit attachment name" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                    actionsColumn.appendRaw(`<a uk-icon="icon: file-edit" class="edit-attachment-name-link" title="Edit attachment name" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
                 }
 
                 if (Privileges.Attachment.canDeleteAttachment(attachment)) {
 
-                    actionsColumn.appendRaw(`<a uk-icon="icon: trash" class="delete-attachment-message-link" title="Delete attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                    actionsColumn.appendRaw(`<a uk-icon="icon: trash" class="delete-attachment-link" title="Delete attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
                 }
             }
         }
 
         const result = table.toElement();
 
-        Views.setupThreadsOfUsersLinks(result);
+        setupAttachmentActionEvents(result, attachmentsById, callback);
 
+        Views.setupThreadsOfUsersLinks(result);
         Views.markElementForAnimatedDisplay(result, '.threads-table tbody');
 
         return result;
@@ -222,5 +224,85 @@ export module AttachmentsView {
         result.appendString(attachment.name);
 
         return result;
+    }
+
+    function setupAttachmentActionEvents(element: HTMLElement, attachmentsById,
+                                         callback: PageActions.IAttachmentCallback) {
+
+        function getAttachmentNameElement(ev: Event): HTMLElement {
+
+            return DOMHelpers.goUpUntilTag(ev.target as HTMLElement, 'tr')
+                .getElementsByClassName('attachment-name')[0] as HTMLElement;
+        }
+
+        DOMHelpers.addEventListeners(element, 'approve-attachment-link', 'click', async (ev) => {
+
+            const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
+            const attachment = attachmentsById[attachmentId];
+
+            if (attachment.approved) return;
+
+            if (await callback.approve(attachmentId)) {
+
+                attachment.approved = true;
+
+                DOMHelpers.removeClasses(getAttachmentNameElement(ev), 'unapproved');
+            }
+        });
+
+        DOMHelpers.addEventListeners(element, 'unapprove-attachment-link', 'click', async (ev) => {
+
+            const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
+            const attachment = attachmentsById[attachmentId];
+
+            if ( ! attachment.approved) return;
+
+            if (await callback.unapprove(attachmentId)) {
+
+                attachment.approved = false;
+
+                DOMHelpers.addClasses(getAttachmentNameElement(ev), 'unapproved');
+            }
+        });
+
+        DOMHelpers.addEventListeners(element, 'edit-attachment-name-link', 'click', async (ev) => {
+
+            const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
+            const attachment = attachmentsById[attachmentId];
+
+            const newName = (EditViews.getInput('Please enter the new attachment name', attachment.name) || '').trim();
+
+            if (newName.length && newName != attachment.name) {
+
+                const min = Views.DisplayConfig.attachmentNameLengths.min;
+                const max = Views.DisplayConfig.attachmentNameLengths.max;
+
+                if (newName.length < min) {
+
+                    Views.showWarningNotification(`Attachment name must be at least ${min} characters long.`);
+                    return;
+                }
+                if (newName.length > max) {
+
+                    Views.showWarningNotification(`Attachment name must be less than ${max} characters long.`);
+                    return;
+                }
+
+                if (await callback.editAttachmentName(attachmentId, newName)) {
+
+                    getAttachmentNameElement(ev).innerText = newName;
+                }
+            }
+        });
+
+        DOMHelpers.addEventListeners(element, 'delete-attachment-link', 'click', async (ev) => {
+
+            const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
+
+            if (EditViews.confirm('Are you sure you want to delete the selected attachment?')) {
+
+                EditViews.reloadPageIfOk(callback.deleteAttachment(attachmentId));
+            }
+        });
     }
 }

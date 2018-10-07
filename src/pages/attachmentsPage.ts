@@ -153,6 +153,7 @@ export class AttachmentsPage implements Pages.Page {
         }
 
         return Pages.appendToUrl(url, {
+            orderBy: this.orderBy,
             sortOrder: this.sortOrder,
             pageNumber: pageNumber
         });

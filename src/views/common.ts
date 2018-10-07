@@ -43,6 +43,7 @@ export module Views {
         threadNameLengths: LengthConfig;
         messageContentLengths: LengthConfig;
         privateMessageContentLengths: LengthConfig;
+        attachmentNameLengths: LengthConfig;
     }
 
     declare const displayConfig: DisplayConfig;

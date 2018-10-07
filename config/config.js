@@ -45,6 +45,10 @@ window.displayConfig = {
     privateMessageContentLengths: {
         min: 5,
         max: 65535
+    },
+    attachmentNameLengths: {
+        min: 2,
+        max: 128
     }
 };
 

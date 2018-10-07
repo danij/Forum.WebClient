@@ -8,6 +8,7 @@ import {PrivilegesRepository} from '../services/privilegesRepository';
 import {AuthRepository} from '../services/authRepository';
 import {RequestHandler} from '../services/requestHandler';
 import {PrivateMessageRepository} from "../services/privateMessageRepository";
+import {AttachmentsRepository} from "../services/attachmentsRepository";
 
 export module PageActions {
 
@@ -129,6 +130,13 @@ export module PageActions {
 
     export interface IAttachmentCallback {
 
+        approve(id: string): Promise<boolean>;
+
+        unapprove(id: string): Promise<boolean>;
+
+        editAttachmentName(id: string, newName: string): Promise<boolean>;
+
+        deleteAttachment(id: string): Promise<boolean>;
     }
 
     export interface IUserCallback {
@@ -477,6 +485,25 @@ export module PageActions {
 
     class AttachmentCallback implements IAttachmentCallback {
 
+        approve(id: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(AttachmentsRepository.editAttachmentApproved(id, true));
+        }
+
+        unapprove(id: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(AttachmentsRepository.editAttachmentApproved(id, false));
+        }
+
+        editAttachmentName(id: string, newName: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(AttachmentsRepository.editAttachmentName(id, newName));
+        }
+
+        deleteAttachment(id: string): Promise<boolean> {
+
+            return Pages.trueOrShowErrorAndFalse(AttachmentsRepository.deleteAttachment(id));
+        }
     }
 
     class UserCallback implements IUserCallback {

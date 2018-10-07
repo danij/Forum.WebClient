@@ -77,4 +77,25 @@ export module AttachmentsRepository {
 
         return result;
     }
+
+    export async function editAttachmentName(attachmentId: string, newName: string): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'attachments/name/' + encodeURIComponent(attachmentId) + '/' + encodeURIComponent(newName)
+        });
+    }
+
+    export async function editAttachmentApproved(attachmentId: string, newApproved: boolean): Promise<void> {
+
+        await RequestHandler.put({
+            path: 'attachments/approval/' + encodeURIComponent(attachmentId) + '/' + (newApproved ? 'true' : 'false')
+        });
+    }
+
+    export async function deleteAttachment(attachmentId: string): Promise<void> {
+
+        await RequestHandler.requestDelete({
+            path: 'attachments/' + encodeURIComponent(attachmentId)
+        });
+    }
 }
