@@ -139,6 +139,9 @@ export module AttachmentsView {
 
                 const attachmentLink = createAttachmentLink(attachment);
                 nameColumn.append(attachmentLink);
+
+                const idElement = dA(`<div class="uk-text-meta">${DOMHelpers.escapeStringForAttribute(attachment.id)}</div>`);
+                nameColumn.append(idElement);
             }
             {
                 const sizeColumn = dA('<td class="attachment-size uk-text-right">');
