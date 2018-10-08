@@ -353,15 +353,14 @@ export module ThreadMessagesView {
 
             messageContainer.append(createThreadMessageFooter(message));
 
-            if (message.attachments) {
+            message.attachments = message.attachments || [];
 
-                for (let attachment of message.attachments.filter(a => a)) {
+            for (let attachment of message.attachments.filter(a => a)) {
 
-                    attachmentsById[attachment.id] = attachment;
-                }
-                messageContent.append(AttachmentsView.createAttachmentsOfMessageList(message.attachments,
-                    message));
+                attachmentsById[attachment.id] = attachment;
             }
+            messageContent.append(AttachmentsView.createAttachmentsOfMessageList(message.attachments,
+                message));
 
             result.appendRaw('<hr class="uk-divider-icon" />');
         }
@@ -596,6 +595,12 @@ export module ThreadMessagesView {
 
             actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}" uk-tooltip></a>`);
         }
+
+        if (Privileges.Attachment.canAddAttachmentToMessage(message)) {
+
+            actions.appendRaw(`<a class="add-attachment-to-message-link" uk-icon="icon: upload" title="Add attachment" data-message-id="${message.id}"></a>`);
+        }
+
         if (Privileges.ThreadMessage.canViewThreadMessageRequiredPrivileges(message)
             || Privileges.ThreadMessage.canViewThreadMessageAssignedPrivileges(message)) {
 

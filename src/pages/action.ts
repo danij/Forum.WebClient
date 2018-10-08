@@ -138,6 +138,8 @@ export module PageActions {
 
         deleteAttachment(id: string): Promise<boolean>;
 
+        addAttachmentToMessage(attachmentId: string, messageId: string): Promise<AttachmentsRepository.Attachment>;
+
         removeAttachmentFromMessage(attachmentId: string, messageId: string): Promise<boolean>;
     }
 
@@ -505,6 +507,11 @@ export module PageActions {
         deleteAttachment(id: string): Promise<boolean> {
 
             return Pages.trueOrShowErrorAndFalse(AttachmentsRepository.deleteAttachment(id));
+        }
+
+        addAttachmentToMessage(attachmentId: string, messageId: string): Promise<AttachmentsRepository.Attachment> {
+
+            return Pages.getOrShowError(AttachmentsRepository.addAttachmentToMessage(attachmentId, messageId));
         }
 
         removeAttachmentFromMessage(attachmentId: string, messageId: string): Promise<boolean> {

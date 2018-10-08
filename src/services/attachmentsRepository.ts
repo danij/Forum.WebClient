@@ -99,6 +99,14 @@ export module AttachmentsRepository {
         });
     }
 
+    export async function addAttachmentToMessage(attachmentId: string,
+                                                 messageId: string): Promise<AttachmentsRepository.Attachment> {
+
+        return (await RequestHandler.post({
+            path: 'attachments/message/' + encodeURIComponent(attachmentId) + '/' + encodeURIComponent(messageId)
+        })).attachment as Attachment;
+    }
+
     export async function removeAttachmentFromMessage(attachmentId: string, messageId: string): Promise<void> {
 
         await RequestHandler.requestDelete({

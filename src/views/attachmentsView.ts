@@ -9,6 +9,7 @@ import {Pages} from "../pages/common";
 import {Privileges} from "../services/privileges";
 import {EditViews} from "./edit";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
+import {UserCache} from "../services/userCache";
 
 export module AttachmentsView {
 
@@ -104,7 +105,7 @@ export module AttachmentsView {
             return DOMHelpers.parseHTML('<span class="uk-text-warning">No attachments found</span>');
         }
 
-        const table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
+        const table = dA('<table class="uk-table uk-table-divider uk-table-middle uk-table-small">');
 
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
@@ -256,7 +257,7 @@ export module AttachmentsView {
             return attachmentElement.getElementsByClassName('attachment-name')[0] as HTMLElement;
         }
 
-        DOMHelpers.addEventListeners(element, 'approve-attachment-link', 'click', async (ev) => {
+        DOMHelpers.addEventListenersIncludingSelf(element, 'approve-attachment-link', 'click', async (ev) => {
 
             const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
             const attachment = attachmentsById[attachmentId];
@@ -271,7 +272,7 @@ export module AttachmentsView {
             }
         });
 
-        DOMHelpers.addEventListeners(element, 'unapprove-attachment-link', 'click', async (ev) => {
+        DOMHelpers.addEventListenersIncludingSelf(element, 'unapprove-attachment-link', 'click', async (ev) => {
 
             const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
             const attachment = attachmentsById[attachmentId];
@@ -286,7 +287,7 @@ export module AttachmentsView {
             }
         });
 
-        DOMHelpers.addEventListeners(element, 'edit-attachment-name-link', 'click', async (ev) => {
+        DOMHelpers.addEventListenersIncludingSelf(element, 'edit-attachment-name-link', 'click', async (ev) => {
 
             const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
             const attachment = attachmentsById[attachmentId];
@@ -317,7 +318,7 @@ export module AttachmentsView {
             }
         });
 
-        DOMHelpers.addEventListeners(element, 'delete-attachment-link', 'click', async (ev) => {
+        DOMHelpers.addEventListenersIncludingSelf(element, 'delete-attachment-link', 'click', async (ev) => {
 
             const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
 
@@ -330,7 +331,7 @@ export module AttachmentsView {
             }
         });
 
-        DOMHelpers.addEventListeners(element, 'remove-attachment-from-message-link', 'click', async (ev) => {
+        DOMHelpers.addEventListenersIncludingSelf(element, 'remove-attachment-from-message-link', 'click', async (ev) => {
 
             const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
@@ -343,6 +344,98 @@ export module AttachmentsView {
                 }
             }
         });
+
+        DOMHelpers.addEventListenersIncludingSelf(element, 'add-attachment-to-message-link', 'click', async (ev) => {
+
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+
+            showAddAttachmentModal(messageId, async selectedAttachmentId => {
+
+                const messageElement = DOMHelpers.goUpUntil((ev.target as HTMLElement), e => e.classList.contains('discussion-thread-message'));
+                const attachmentList = messageElement.getElementsByClassName('attachments')[0];
+
+                const attachment = await callback.addAttachmentToMessage(selectedAttachmentId, messageId);
+                const attachmentElement = createAttachmentsOfMessage(attachment, {
+                    id: messageId
+                } as ThreadMessageRepository.ThreadMessage).toElement();
+
+                attachmentsById[attachment.id] = attachment;
+                setupAttachmentActionEvents(attachmentElement, attachmentsById, callback);
+
+                attachmentList.appendChild(attachmentElement);
+            });
+        });
+    }
+
+    export function createAttachmentsOfMessage(attachment: AttachmentsRepository.Attachment,
+                                               message: ThreadMessageRepository.ThreadMessage): DOMAppender {
+
+        const result = dA(`<li class="attachment" data-attachment-id="${DOMHelpers.escapeStringForAttribute(attachment.id)}">`);
+
+        const flexContainer = dA('<div class="uk-flex">');
+        result.append(flexContainer);
+
+        const mainContainer = dA('<div class="uk-flex-1">');
+        flexContainer.append(mainContainer);
+        {
+            const nameContainer = dA('span');
+            mainContainer.append(nameContainer);
+
+            const attachmentLink = createAttachmentLink(attachment, false);
+            nameContainer.append(attachmentLink);
+        }
+        {
+            const detailsContainer = dA('div');
+            mainContainer.append(detailsContainer);
+
+            detailsContainer.appendRaw(('{Size} <span class="uk-text-meta">bytes</span>')
+                .replace('{Size}', DisplayHelpers.intToString(attachment.size)));
+
+            detailsContainer.appendRaw(' · <span class="uk-text-meta">{Added}</span>'
+                .replace('{Added}', DisplayHelpers.getDateTime(attachment.created)));
+
+            if (message && message.createdBy && (attachment.createdBy.id != message.createdBy.id)) {
+
+                detailsContainer.appendString(' · ');
+                detailsContainer.append(UsersView.createAuthorSmall(attachment.createdBy));
+            }
+        }
+        {
+            const actionsContainer = dA('<div class="attachment-actions">');
+
+            let showAttachmentActions = false;
+
+            if (Privileges.Attachment.canEditAttachmentApproval(attachment)) {
+
+                actionsContainer.appendRaw(`<a uk-icon="icon: check" class="approve-attachment-link" title="Approve attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                actionsContainer.appendRaw(`<a uk-icon="icon: ban" class="unapprove-attachment-link" title="Unapprove attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                showAttachmentActions = true;
+            }
+
+            if (Privileges.Attachment.canEditAttachmentName(attachment)) {
+
+                actionsContainer.appendRaw(`<a uk-icon="icon: file-edit" class="edit-attachment-name-link" title="Edit attachment name" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                showAttachmentActions = true;
+            }
+
+            if (Privileges.Attachment.canRemoveAttachmentFromMessage(attachment, message)) {
+
+                actionsContainer.appendRaw(`<a uk-icon="icon: close" class="remove-attachment-from-message-link" title="Remove attachment from message" data-attachment-id="${attachment.id}" data-message-id="${message.id}" uk-tooltip></a>`);
+                showAttachmentActions = true;
+            }
+
+            if (Privileges.Attachment.canDeleteAttachment(attachment)) {
+
+                actionsContainer.appendRaw(`<a uk-icon="icon: trash" class="delete-attachment-link" title="Delete attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
+                showAttachmentActions = true;
+            }
+            if (showAttachmentActions) {
+
+                flexContainer.append(actionsContainer);
+            }
+        }
+
+        return result;
     }
 
     export function createAttachmentsOfMessageList(attachments: AttachmentsRepository.Attachment[],
@@ -357,73 +450,105 @@ export module AttachmentsView {
 
         for (let attachment of attachments) {
 
-            const item = dA('<li class="attachment">');
-            result.append(item);
-
-            const flexContainer = dA('<div class="uk-flex">');
-            item.append(flexContainer);
-
-            const mainContainer = dA('<div class="uk-flex-1">');
-            flexContainer.append(mainContainer);
-            {
-                const nameContainer = dA('span');
-                mainContainer.append(nameContainer);
-
-                const attachmentLink = createAttachmentLink(attachment, false);
-                nameContainer.append(attachmentLink);
-            }
-            {
-                const detailsContainer = dA('div');
-                mainContainer.append(detailsContainer);
-
-                detailsContainer.appendRaw(('{Size} <span class="uk-text-meta">bytes</span>')
-                    .replace('{Size}', DisplayHelpers.intToString(attachment.size)));
-
-                detailsContainer.appendRaw(' · <span class="uk-text-meta">{Added}</span>'
-                    .replace('{Added}', DisplayHelpers.getDateTime(attachment.created)));
-
-                if (attachment.createdBy.id != message.createdBy.id) {
-
-                    detailsContainer.appendString(' · ');
-                    detailsContainer.append(UsersView.createAuthorSmall(attachment.createdBy));
-                }
-            }
-            {
-                const actionsContainer = dA('<div class="attachment-actions">');
-
-                let showAttachmentActions = false;
-
-                if (Privileges.Attachment.canEditAttachmentApproval(attachment)) {
-
-                    actionsContainer.appendRaw(`<a uk-icon="icon: check" class="approve-attachment-link" title="Approve attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
-                    actionsContainer.appendRaw(`<a uk-icon="icon: ban" class="unapprove-attachment-link" title="Unapprove attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
-                    showAttachmentActions = true;
-                }
-
-                if (Privileges.Attachment.canEditAttachmentName(attachment)) {
-
-                    actionsContainer.appendRaw(`<a uk-icon="icon: file-edit" class="edit-attachment-name-link" title="Edit attachment name" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
-                    showAttachmentActions = true;
-                }
-
-                if (Privileges.Attachment.canRemoveAttachmentFromMessage(attachment, message)) {
-
-                    actionsContainer.appendRaw(`<a uk-icon="icon: close" class="remove-attachment-from-message-link" title="Remove attachment from message" data-attachment-id="${attachment.id}" data-message-id="${message.id}" uk-tooltip></a>`);
-                    showAttachmentActions = true;
-                }
-
-                if (Privileges.Attachment.canDeleteAttachment(attachment)) {
-
-                    actionsContainer.appendRaw(`<a uk-icon="icon: trash" class="delete-attachment-link" title="Delete attachment" data-attachment-id="${attachment.id}" uk-tooltip></a>`);
-                    showAttachmentActions = true;
-                }
-                if (showAttachmentActions) {
-
-                    flexContainer.append(actionsContainer);
-                }
-            }
+            result.append(createAttachmentsOfMessage(attachment, message));
         }
 
         return result;
+    }
+
+    function showAddAttachmentModal(messageId: string, onSave: (id: string) => void): void {
+
+        const modal = document.getElementById('select-attachment-modal');
+        Views.showModal(modal);
+
+        const saveButton = DOMHelpers.removeEventListeners(
+            modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
+
+        const selectedIdElement = document.getElementById('selected-attachment-id') as HTMLInputElement;
+
+        selectedIdElement.value = '';
+
+        const latestContainer = document.getElementById('select-attachment-latest-container');
+        Views.changeContent(latestContainer, async () => {
+
+            const response = await Pages.getOrShowError(AttachmentsRepository.getAttachmentsAddedByUser(
+                UserCache.getUserById(Privileges.User.getCurrentUserId()), {
+                page: 0,
+                orderBy: 'created',
+                sort: 'descending'
+            } as AttachmentsRepository.GetAttachmentsRequest));
+
+            const table = dA('<table class="uk-table uk-table-divider uk-table-middle uk-table-small uk-table-justify">');
+
+            const tableHeader = '<thead>\n' +
+                '    <tr>\n' +
+                '        <th class="uk-table-expand">Attachment</th>\n' +
+                '        <th class="uk-text-right">Size</th>\n' +
+                '        <th class="uk-text-center">Added</th>\n' +
+                '    </tr>\n' +
+                '</thead>';
+            table.appendRaw(tableHeader);
+
+            const tbody = dA('<tbody>');
+            table.append(tbody);
+
+            const attachmentsById = {};
+
+            for (const attachment of response.attachments || []) {
+
+                if (! attachment) continue;
+
+                attachmentsById[attachment.id] = attachment;
+
+                const row = dA('<tr>');
+                tbody.append(row);
+                {
+                    const nameColumn = dA('<td class="uk-table-expand">');
+                    row.append(nameColumn);
+
+                    nameColumn.appendRaw(`<span uk-icon="icon: check" class="uk-icon-button attachment-selector" data-attachment-id="${DOMHelpers.escapeStringForAttribute(attachment.id)}"></span> `);
+
+                    const attachmentLink = createAttachmentLink(attachment);
+                    nameColumn.append(attachmentLink);
+                }
+                {
+                    const sizeColumn = dA('<td class="attachment-size uk-text-right">');
+                    row.append(sizeColumn);
+
+                    sizeColumn.appendRaw(('{Size} <span class="uk-text-meta">bytes</span>')
+                        .replace('{Size}', DisplayHelpers.intToString(attachment.size)));
+                }
+                {
+                    const createdColumn = dA('<td class="attachment-created uk-text-center">');
+                    row.append(createdColumn);
+
+                    createdColumn.appendRaw(('<div class="uk-text-meta">\n' +
+                        '    <span>{Added}</span>\n' +
+                        '</div>')
+                        .replace('{Added}', DisplayHelpers.getDateTime(attachment.created)));
+                }
+            }
+
+            const result = table.toElement();
+
+            DOMHelpers.forEach(result.getElementsByClassName('attachment-selector'), element => {
+
+                Views.onClick(element, () => {
+
+                    selectedIdElement.value = element.getAttribute('data-attachment-id');
+                });
+            });
+
+            return result;
+        });
+
+        Views.onClick(saveButton, () => {
+
+            const selectedId = selectedIdElement.value.trim();
+            if (selectedId.length) {
+
+                onSave(selectedId);
+            }
+        });
     }
 }

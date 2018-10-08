@@ -174,6 +174,23 @@ export module DOMHelpers {
         });
     }
 
+    export function addEventListenersIncludingSelf(element: HTMLElement, className: string, eventType: string,
+                                                   handler: (ev: Event) => void): void {
+
+        if (element.classList.contains(className)) {
+
+            element.addEventListener(eventType, ev => {
+
+                ev.preventDefault();
+                handler(ev);
+            });
+        }
+        else {
+
+            addEventListeners(element, className, eventType, handler);
+        }
+    }
+
     export function addEventListenersData(element: HTMLElement, dataName: string, eventType: string,
                                           handler: (ev: Event, value: string) => void): void {
 

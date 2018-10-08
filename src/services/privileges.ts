@@ -202,6 +202,11 @@ export module Privileges {
                 'delete_own_attachment', 'delete_any_attachment');
         }
 
+        export function canAddAttachmentToMessage(message: ThreadMessageRepository.ThreadMessage): boolean {
+
+            return hasPrivilege(message, 'add_attachment');
+        }
+
         export function canRemoveAttachmentFromMessage(attachment: AttachmentsRepository.Attachment,
                                                        message: ThreadMessageRepository.ThreadMessage): boolean {
 
@@ -213,6 +218,11 @@ export module Privileges {
     export namespace User {
 
         let currentUserId = '00000000-0000-0000-0000-000000000000';
+
+        export function getCurrentUserId(): string{
+
+            return currentUserId;
+        }
 
         export function updateCurrentUserId(id: string): void {
 
