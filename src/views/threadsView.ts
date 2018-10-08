@@ -14,6 +14,8 @@ import {ViewsExtra} from './extra';
 import {ThreadMessagesPage} from '../pages/threadMessagesPage';
 import {CategoryRepository} from '../services/categoryRepository';
 import {PrivilegesView} from './privilegesView';
+import {AttachmentsView} from "./attachmentsView";
+import {ThreadMessageRepository} from "../services/threadMessageRepository";
 
 export module ThreadsView {
 
@@ -717,7 +719,8 @@ export module ThreadsView {
     }
 
     export function createAddNewThreadContent(allTags: TagRepository.Tag[], tagCallback: PageActions.ITagCallback,
-                                              callback: (name: string, tagIds: string[], message: string) => Promise<string>): HTMLElement {
+                                              attachmentsCallback: PageActions.IAttachmentCallback,
+                                              callback: (name: string, tagIds: string[], message: string) => Promise<[string, string]>): HTMLElement {
 
         const result = cE('div');
 
@@ -748,6 +751,8 @@ export module ThreadsView {
             tagsContainer = TagsView.createTagSelectionView(tagCallback, allTags);
             div.appendChild(tagsContainer);
         }
+
+        const futureMessageCallback = new PageActions.AttachmentCallbackForFutureMessage(attachmentsCallback);
         {
             const div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
             form.appendChild(div);
@@ -757,6 +762,14 @@ export module ThreadsView {
             div.appendChild(newMessageContainer);
 
             editControl = new EditViews.EditControl(newMessageContainer);
+
+            newMessageContainer.appendChild(AttachmentsView.createAttachmentsOfMessageList([],
+                ThreadMessageRepository.emptyMessage()).toElement());
+
+            const link = DOMHelpers.parseHTML('<a class="add-attachment-to-message-link">Add attachment</a>');
+            newMessageContainer.appendChild(link);
+
+            AttachmentsView.setupAttachmentActionEvents(link, {}, futureMessageCallback);
         }
 
         const addButton = DOMHelpers.parseHTML('<button class="uk-button uk-button-primary uk-align-center">Add</button>');
@@ -769,9 +782,19 @@ export module ThreadsView {
 
             const message = (await editControl.getTextInternal()).trim();
 
-            const newThreadId = await callback(name, tagIds, message);
+            const [newThreadId, newMessageId] = await callback(name, tagIds, message);
             if (newThreadId && newThreadId.length) {
 
+                if (newMessageId) {
+
+                    for (let attachmentId of futureMessageCallback.getAddedAttachmentIds()) {
+
+                        try{
+                            await attachmentsCallback.addAttachmentToMessage(attachmentId, newMessageId);
+                        }
+                        catch {}
+                    }
+                }
                 new ThreadMessagesPage().displayForThread(newThreadId);
             }
         });

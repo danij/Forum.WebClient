@@ -59,7 +59,7 @@ export module PageActions {
 
     export interface IThreadCallback {
 
-        createThread(name: string, tagIds: string[], content: string): Promise<string>;
+        createThread(name: string, tagIds: string[], content: string): Promise<[string, string]>;
 
         deleteThread(id: string): Promise<boolean>;
 
@@ -310,15 +310,15 @@ export module PageActions {
 
     class ThreadCallback implements IThreadCallback {
 
-        async createThread(name: string, tagIds: string[], content: string): Promise<string> {
+        async createThread(name: string, tagIds: string[], content: string): Promise<[string, string]> {
 
-            const result = await Pages.getOrShowError(ThreadRepository.createThread(name));
+            const threadId = await Pages.getOrShowError(ThreadRepository.createThread(name));
 
-            await Pages.trueOrShowErrorAndFalse(this.editThreadTags(result, tagIds, null));
+            await Pages.trueOrShowErrorAndFalse(this.editThreadTags(threadId, tagIds, null));
 
-            await Pages.trueOrShowErrorAndFalse(this.addThreadMessage(result, content));
+            const messageId = await this.addThreadMessage(threadId, content);
 
-            return result;
+            return [threadId, messageId];
         }
 
         deleteThread(id: string): Promise<boolean> {
@@ -517,6 +517,63 @@ export module PageActions {
         removeAttachmentFromMessage(attachmentId: string, messageId: string): Promise<boolean> {
 
             return Pages.trueOrShowErrorAndFalse(AttachmentsRepository.removeAttachmentFromMessage(attachmentId, messageId));
+        }
+    }
+
+    export class AttachmentCallbackForFutureMessage implements IAttachmentCallback {
+
+        callback: IAttachmentCallback;
+        addedAttachmentIds: Set<string> = new Set();
+
+        constructor(actualCallback: IAttachmentCallback) {
+
+            this.callback = actualCallback;
+        }
+
+        getAddedAttachmentIds(): string[] {
+
+            return Array.from(this.addedAttachmentIds);
+        }
+
+        async addAttachmentToMessage(attachmentId: string, messageId: string): Promise<AttachmentsRepository.Attachment> {
+
+            if (this.addedAttachmentIds.has(attachmentId)) return null;
+
+            const attachment = Pages.getOrShowError(AttachmentsRepository.getAttachment(attachmentId));
+            if (attachment) {
+
+                this.addedAttachmentIds.add(attachmentId);
+            }
+            return attachment;
+        }
+
+        approve(id: string): Promise<boolean> {
+
+            return this.callback.approve(id);
+        }
+
+        deleteAttachment(id: string): Promise<boolean> {
+
+            this.addedAttachmentIds.delete(id);
+
+            return this.callback.deleteAttachment(id);
+        }
+
+        editAttachmentName(id: string, newName: string): Promise<boolean> {
+
+            return this.callback.editAttachmentName(id, newName);
+        }
+
+        removeAttachmentFromMessage(attachmentId: string, messageId: string): Promise<boolean> {
+
+            this.addedAttachmentIds.delete(attachmentId);
+
+            return Promise.resolve(true);
+        }
+
+        unapprove(id: string): Promise<boolean> {
+
+            return this.callback.unapprove(id);
         }
     }
 

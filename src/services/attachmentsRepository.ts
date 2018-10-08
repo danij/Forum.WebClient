@@ -78,6 +78,13 @@ export module AttachmentsRepository {
         return result;
     }
 
+    export async function getAttachment(attachmentId: string): Promise<Attachment> {
+
+        return (await RequestHandler.get({
+            path: 'attachment/' + encodeURIComponent(attachmentId)
+        })).attachment as Attachment;
+    }
+
     export async function editAttachmentName(attachmentId: string, newName: string): Promise<void> {
 
         await RequestHandler.put({

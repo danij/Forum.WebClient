@@ -347,11 +347,14 @@ export module AttachmentsView {
 
         DOMHelpers.addEventListenersIncludingSelf(element, 'add-attachment-to-message-link', 'click', async (ev) => {
 
-            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
+            const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id') || '';
 
             showAddAttachmentModal(messageId, async selectedAttachmentId => {
 
-                const messageElement = DOMHelpers.goUpUntil((ev.target as HTMLElement), e => e.classList.contains('discussion-thread-message'));
+                const messageElement = DOMHelpers.goUpUntil((ev.target as HTMLElement), e => {
+
+                    return e.classList.contains('discussion-thread-message') || e.classList.contains('reply-container')
+                });
                 const attachmentList = messageElement.getElementsByClassName('attachments')[0];
 
                 const attachment = await callback.addAttachmentToMessage(selectedAttachmentId, messageId);
@@ -370,7 +373,7 @@ export module AttachmentsView {
     export function createAttachmentsOfMessage(attachment: AttachmentsRepository.Attachment,
                                                message: ThreadMessageRepository.ThreadMessage): DOMAppender {
 
-        const result = dA(`<li class="attachment" data-attachment-id="${DOMHelpers.escapeStringForAttribute(attachment.id)}">`);
+        const result = dA(`<li class="attachment">`);
 
         const flexContainer = dA('<div class="uk-flex">');
         result.append(flexContainer);
@@ -506,7 +509,7 @@ export module AttachmentsView {
                     const nameColumn = dA('<td class="uk-table-expand">');
                     row.append(nameColumn);
 
-                    nameColumn.appendRaw(`<span uk-icon="icon: check" class="uk-icon-button attachment-selector" data-attachment-id="${DOMHelpers.escapeStringForAttribute(attachment.id)}"></span> `);
+                    nameColumn.appendRaw(`<span uk-icon="icon: chevron-right" class="uk-icon-button attachment-selector" data-attachment-id="${DOMHelpers.escapeStringForAttribute(attachment.id)}"></span> `);
 
                     const attachmentLink = createAttachmentLink(attachment);
                     nameColumn.append(attachmentLink);

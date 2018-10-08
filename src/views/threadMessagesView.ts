@@ -265,7 +265,7 @@ export module ThreadMessagesView {
         resultList.appendChild(result.paginationTop =
             Views.createPaginationControl(collection, 'thread messages', onPageNumberChange, getLinkForPage));
 
-        const editControl = thread ? createNewThreadMessageControl(thread, threadCallback) : null;
+        const editControl = thread ? createNewThreadMessageControl(thread, threadCallback, attachmentsCallback) : null;
 
         const listContainer = cE('div');
         DOMHelpers.addClasses(listContainer, 'thread-message-list');
@@ -889,7 +889,8 @@ export module ThreadMessagesView {
     }
 
     function createNewThreadMessageControl(thread: ThreadRepository.Thread,
-                                           callback: PageActions.IThreadCallback): MessageEditControl {
+                                           callback: PageActions.IThreadCallback,
+                                           attachmentsCallback: PageActions.IAttachmentCallback): MessageEditControl {
 
         const result = cE('div');
         DOMHelpers.addClasses(result, 'reply-container');
@@ -899,6 +900,15 @@ export module ThreadMessagesView {
         if (Privileges.Thread.canAddNewThreadMessage(thread)) {
 
             editControl = new EditViews.EditControl(result);
+
+            result.appendChild(AttachmentsView.createAttachmentsOfMessageList([],
+                ThreadMessageRepository.emptyMessage()).toElement());
+
+            const link = DOMHelpers.parseHTML('<a class="add-attachment-to-message-link">Add attachment</a>');
+            result.appendChild(link);
+
+            const futureMessageCallback = new PageActions.AttachmentCallbackForFutureMessage(attachmentsCallback);
+            AttachmentsView.setupAttachmentActionEvents(link, {}, futureMessageCallback);
 
             const button = cE('button');
             result.appendChild(button);
@@ -925,7 +935,16 @@ export module ThreadMessagesView {
                 }
 
                 const newMessageId = await callback.addThreadMessage(thread.id, text);
+
                 if (newMessageId) {
+
+                    for (let attachmentId of futureMessageCallback.getAddedAttachmentIds()) {
+
+                        try{
+                            await attachmentsCallback.addAttachmentToMessage(attachmentId, newMessageId);
+                        }
+                        catch {}
+                    }
 
                     (new ThreadMessagesPage()).displayForThreadMessage(newMessageId);
                 }

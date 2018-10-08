@@ -58,6 +58,14 @@ export module ThreadMessageRepository {
         pageSize: number;
     }
 
+    export function emptyMessage(): ThreadMessage {
+
+        return {
+
+            id: ''
+        } as ThreadMessage;
+    }
+
     export function defaultThreadMessageCollection(): ThreadMessageCollection {
 
         return {
