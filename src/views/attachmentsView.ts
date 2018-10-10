@@ -481,6 +481,11 @@ export module AttachmentsView {
                 sort: 'descending'
             } as AttachmentsRepository.GetAttachmentsRequest));
 
+            if (( ! response ) || ( ! response.attachments) || ( ! response.attachments.length)) {
+
+                return DOMHelpers.parseHTML('<span class="uk-text-warning">No attachments found</span>');
+            }
+
             const table = dA('<table class="uk-table uk-table-divider uk-table-middle uk-table-small uk-table-justify">');
 
             const tableHeader = '<thead>\n' +

@@ -68,6 +68,10 @@ export module AttachmentsRepository {
     export async function getAttachmentsAddedByUser(user: UserRepository.User,
                                                     request: GetAttachmentsRequest): Promise<AttachmentCollection> {
 
+        if (( ! user) || ( ! user.id)) return {
+            attachments: []
+        } as AttachmentCollection;
+
         const result = filterAttachmentNulls(await RequestHandler.get({
             path: 'attachments/user/' + encodeURIComponent(user.id),
             query: request

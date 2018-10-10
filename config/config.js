@@ -89,5 +89,5 @@ window.registerConfig = {
 
 window.debugConfig = {
 
-    enableAllPrivileges: true
+    enableAllPrivileges: false
 };
