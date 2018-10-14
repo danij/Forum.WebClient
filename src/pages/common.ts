@@ -157,9 +157,14 @@ export module Pages {
     const categoryRootRegex = /^[\/]?category\/([^/]+)\/([^/]+)/;
     const docSourceRegex = /\/documentation\/([^/]+)/;
 
+    function trimQuery(url: string): string {
+
+        return url.split('?')[0];
+    }
+
     export function getOrderBy(url: string): string {
 
-        const match = url.match(orderByRegex);
+        const match = trimQuery(url).match(orderByRegex);
         if (match && match.length) {
 
             return match[1].trim();
@@ -169,7 +174,7 @@ export module Pages {
 
     export function getSortOrder(url: string): string {
 
-        const match = url.match(sortOrderRegex);
+        const match = trimQuery(url).match(sortOrderRegex);
         if (match && match.length) {
 
             return match[1].trim();
@@ -179,7 +184,7 @@ export module Pages {
 
     export function getPageNumber(url: string): number {
 
-        const match = url.match(pageNumberRegex);
+        const match = trimQuery(url).match(pageNumberRegex);
         if (match && match.length) {
 
             return Math.max(parseInt(match[1]) - 1, 0);
@@ -189,7 +194,7 @@ export module Pages {
 
     export function getTagName(url: string): string {
 
-        const match = url.match(tagNameRegex);
+        const match = trimQuery(url).match(tagNameRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[1]);
@@ -199,7 +204,7 @@ export module Pages {
 
     export function getThreadId(url: string): string {
 
-        const match = url.match(threadIdRegex);
+        const match = trimQuery(url).match(threadIdRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[2]);
@@ -209,7 +214,7 @@ export module Pages {
 
     export function getThreadMessageId(url: string): string {
 
-        const match = url.match(threadMessageIdRegex);
+        const match = trimQuery(url).match(threadMessageIdRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[1]);
@@ -219,7 +224,7 @@ export module Pages {
 
     export function getUserName(url: string): string {
 
-        const match = url.match(userNameRegex);
+        const match = trimQuery(url).match(userNameRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[1]);
@@ -229,7 +234,7 @@ export module Pages {
 
     export function getSubscribedByUserName(url: string): string {
 
-        const match = url.match(subscribedByUserNameRegex);
+        const match = trimQuery(url).match(subscribedByUserNameRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[1]);
@@ -239,7 +244,7 @@ export module Pages {
 
     export function getCategory(url: string): IdNamePair {
 
-        const match = url.match(categoryRootRegex);
+        const match = trimQuery(url).match(categoryRootRegex);
         if (match && match.length) {
 
             return {
@@ -252,7 +257,7 @@ export module Pages {
 
     export function getDocSource(url: string): string {
 
-        const match = url.match(docSourceRegex);
+        const match = trimQuery(url).match(docSourceRegex);
         if (match && match.length) {
 
             return decodeURIComponent(match[1]);
