@@ -142,6 +142,18 @@ export module EditViews {
             grid.appendChild(this.previewContainer);
 
             this.setupEvents();
+            this.fixTextAreaHeight();
+        }
+
+        private fixTextAreaHeight(): void {
+
+            setTimeout(() => {
+
+                const height = this.textArea.clientHeight;
+                this.textArea.style.height = `${height + 1}px`;
+                this.textArea.style.height = `${height}px`;
+
+            }, 100);
         }
 
         getTextInternal(): string {
