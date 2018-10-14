@@ -10,7 +10,7 @@
     "highlight.js": "^9.12.0",
     "katex": "^0.10.0-rc.1",
     "remarkable": "^1.7.1",
-    "uikit": "^3.0.0-rc.16"
+    "uikit": "^3.0.0-rc.19"
   },
   "devDependencies": {
     "@webpack-cli/migrate": "^0.1.0",
