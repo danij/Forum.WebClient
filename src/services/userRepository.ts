@@ -55,6 +55,7 @@ export module UserRepository {
 
     export const EmptyUserId: string = '';
 
+    export const AnonymousUserId: string = '00000000-0000-0000-0000-000000000000';
     export const AnonymousUserName: string = '<anonymous>';
     export const UnknownUserName: string = '<unknown>';
 

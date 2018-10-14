@@ -68,7 +68,7 @@ export module AttachmentsRepository {
     export async function getAttachmentsAddedByUser(user: UserRepository.User,
                                                     request: GetAttachmentsRequest): Promise<AttachmentCollection> {
 
-        if (( ! user) || ( ! user.id)) return {
+        if (( ! user) || ( ! user.id) || (user.id == UserRepository.AnonymousUserId)) return {
             attachments: []
         } as AttachmentCollection;
 
