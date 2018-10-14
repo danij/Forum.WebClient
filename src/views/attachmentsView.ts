@@ -468,8 +468,11 @@ export module AttachmentsView {
             modal.getElementsByClassName('uk-button-primary')[0] as HTMLElement);
 
         const selectedIdElement = document.getElementById('selected-attachment-id') as HTMLInputElement;
-
         selectedIdElement.value = '';
+        selectedIdElement.onkeypress = (ev) => {
+
+            if ('Enter' === ev.key) ev.preventDefault();
+        };
 
         const latestContainer = document.getElementById('select-attachment-latest-container');
         Views.changeContent(latestContainer, async () => {
