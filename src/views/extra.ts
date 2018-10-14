@@ -163,12 +163,7 @@ export module ViewsExtra {
             return;
         }
 
-        if (Pages.isLocalUrl(src)) {
-
-            return;
-        }
-
-        if (ConsentRepository.hasConsentedToLoadingExternalContent()) {
+        if (Pages.isLocalUrl(src) || ConsentRepository.hasConsentedToLoadingExternalContent()) {
 
             loadImage(imageElement, src);
         }
