@@ -403,6 +403,11 @@ export module Pages {
         return `${masterPageConfig.baseUri}/attachment/${encodeURIComponent(id)}`;
     }
 
+    export function getAttachmentUploadUrl(): string {
+
+        return `${masterPageConfig.baseUri}/attachment/`;
+    }
+
     export function getUserLogoSrc(user: UserRepository.User): string {
 
         return getApiUrl(`users/logo/${user.id}`);

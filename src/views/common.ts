@@ -10,6 +10,8 @@ import {ThreadMessageCommentsPage} from '../pages/threadMessageCommentsPage';
 import {DocumentationView} from './documentationView';
 import {PageActions} from '../pages/action';
 import {AttachmentsPage} from "../pages/attachmentsPage";
+import {AttachmentsRepository} from "../services/attachmentsRepository";
+import {RequestHandler} from "../services/requestHandler";
 
 export module Views {
 
@@ -725,5 +727,57 @@ export module Views {
             }
             lastAutoResize = now;
         });
+    }
+
+    export async function setupUpload(uploadElement: HTMLElement, progressElement: HTMLProgressElement, url: string,
+                                      afterUpload: (newAttachment: AttachmentsRepository.Attachment) => void): Promise<void> {
+
+        const doubleSubmit = await RequestHandler.getDoubleSubmitCookie();
+
+        UIkit.upload(uploadElement, {
+
+            url: url,
+            multiple: false,
+            beforeSend: environment => {
+
+                environment.headers[RequestHandler.getDoubleSubmitHeaderName()] = doubleSubmit;
+            },
+            loadStart: e => {
+
+                DOMHelpers.unHide(progressElement);
+                progressElement.max = e.total;
+                progressElement.value = e.loaded;
+            },
+            progress: e => {
+
+                progressElement.max = e.total;
+                progressElement.value = e.loaded;
+            },
+            loadEnd: e => {
+
+                progressElement.max = e.total;
+                progressElement.value = e.loaded;
+            },
+            error: ex => {
+
+                DOMHelpers.hide(progressElement);
+                Views.showDangerNotification('Error uploading file: ' + ex.message);
+            },
+            completeAll: (request: XMLHttpRequest) => {
+
+                try {
+
+                    afterUpload(RequestHandler.parseContentAs(request));
+                }
+                catch (ex) {
+
+                    Views.showDangerNotification('Error uploading file: ' + ex.message);
+                }
+                setTimeout(() => {
+
+                    DOMHelpers.hide(progressElement);
+                }, 500);
+            }
+        })
     }
 }

@@ -58,7 +58,8 @@ export module RequestHandler {
         'Not updated since last check',
         'Unauthorized',
         'Throttled',
-        'User with same auth already exists'
+        'User with same auth already exists',
+        'Quota exceeded'
     ];
 
     function getStatusCode(statusCode: number): string {
@@ -72,7 +73,12 @@ export module RequestHandler {
 
     let getDoubleSubmitCookiePromise: Promise<string>;
 
-    async function getDoubleSubmitCookie(): Promise<string> {
+    export function getDoubleSubmitHeaderName(): string {
+
+        return 'X-Double-Submit';
+    }
+
+    export async function getDoubleSubmitCookie(): Promise<string> {
 
         if ( ! ConsentRepository.hasConsentedToUsingRequiredCookies()) {
 
@@ -202,6 +208,23 @@ export module RequestHandler {
         responseText = responseText.substr(serviceConfig.responsePrefix.length);
 
         return responseText.length ? JSON.parse(responseText) : {};
+    }
+
+    export function parseContentAs<T>(xmlHttp: XMLHttpRequest): T {
+
+        const content = parseContent(xmlHttp.responseText);
+
+        if (null == content) {
+
+            throw new Error("No content received");
+        }
+        else if (content.status) {
+
+            const statusText = content.statusText || getStatusCode(content.status);
+            throw new Error(statusText);
+        }
+
+        return content as T;
     }
 
     export function get(request: Request): Promise<any> {

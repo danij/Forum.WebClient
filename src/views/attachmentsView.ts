@@ -474,8 +474,46 @@ export module AttachmentsView {
             if ('Enter' === ev.key) ev.preventDefault();
         };
 
+        const tableContainer = cE('div');
+
         const latestContainer = document.getElementById('select-attachment-latest-container');
         Views.changeContent(latestContainer, async () => {
+
+            let currentAttachments: AttachmentsRepository.Attachment[] = [];
+
+            const result = cE('div');
+
+            if (Privileges.Attachment.canCreateAttachment()) {
+
+                const uploadElement = DOMHelpers.parseHTML("<div class=\"js-upload uk-placeholder uk-text-center\">\n" +
+                    "    <span uk-icon=\"icon: upload\"></span>\n" +
+                    "    <span class=\"uk-text-middle\">Drop attachment here or</span>\n" +
+                    "    <div uk-form-custom>\n" +
+                    "        <input type=\"file\">\n" +
+                    "        <span class=\"uk-link\">choose one</span>\n" +
+                    "    </div>\n" +
+                    "</div>");
+                result.appendChild(uploadElement);
+
+                const progressElement = DOMHelpers.parseHTML(
+                    '<progress class="uk-progress uk-hidden" value="0" max="100"></progress>') as HTMLProgressElement;
+                result.appendChild(progressElement);
+
+                Views.setupUpload(uploadElement, progressElement, Pages.getAttachmentUploadUrl(), newAttachment => {
+
+                    currentAttachments.splice(0, 0, newAttachment);
+
+                    Views.changeContent(tableContainer, () => {
+
+                        return Promise.resolve(createAttachmentSelectionTable(currentAttachments, selectedIdElement));
+                    });
+                });
+
+            } else {
+
+                result.appendChild(DOMHelpers.parseHTML(
+                    '<span class="uk-text-warning">Insufficient privileges to create new attachments</span>'));
+            }
 
             const response = await Pages.getOrShowError(AttachmentsRepository.getAttachmentsAddedByUser(
                 UserCache.getUserById(Privileges.User.getCurrentUserId()), {
@@ -484,71 +522,11 @@ export module AttachmentsView {
                 sort: 'descending'
             } as AttachmentsRepository.GetAttachmentsRequest));
 
-            if (( ! response ) || ( ! response.attachments) || ( ! response.attachments.length)) {
+            result.appendChild(tableContainer);
 
-                return DOMHelpers.parseHTML('<span class="uk-text-warning">No attachments found</span>');
-            }
+            currentAttachments = response.attachments || [];
 
-            const table = dA('<table class="uk-table uk-table-divider uk-table-middle uk-table-small uk-table-justify">');
-
-            const tableHeader = '<thead>\n' +
-                '    <tr>\n' +
-                '        <th class="uk-table-expand">Attachment</th>\n' +
-                '        <th class="uk-text-right">Size</th>\n' +
-                '        <th class="uk-text-center">Added</th>\n' +
-                '    </tr>\n' +
-                '</thead>';
-            table.appendRaw(tableHeader);
-
-            const tbody = dA('<tbody>');
-            table.append(tbody);
-
-            const attachmentsById = {};
-
-            for (const attachment of response.attachments || []) {
-
-                if (! attachment) continue;
-
-                attachmentsById[attachment.id] = attachment;
-
-                const row = dA('<tr>');
-                tbody.append(row);
-                {
-                    const nameColumn = dA('<td class="uk-table-expand">');
-                    row.append(nameColumn);
-
-                    nameColumn.appendRaw(`<span uk-icon="icon: chevron-right" class="uk-icon-button attachment-selector" data-attachment-id="${DOMHelpers.escapeStringForAttribute(attachment.id)}"></span> `);
-
-                    const attachmentLink = createAttachmentLink(attachment);
-                    nameColumn.append(attachmentLink);
-                }
-                {
-                    const sizeColumn = dA('<td class="attachment-size uk-text-right">');
-                    row.append(sizeColumn);
-
-                    sizeColumn.appendRaw(('{Size} <span class="uk-text-meta">bytes</span>')
-                        .replace('{Size}', DisplayHelpers.intToString(attachment.size)));
-                }
-                {
-                    const createdColumn = dA('<td class="attachment-created uk-text-center">');
-                    row.append(createdColumn);
-
-                    createdColumn.appendRaw(('<div class="uk-text-meta">\n' +
-                        '    <span>{Added}</span>\n' +
-                        '</div>')
-                        .replace('{Added}', DisplayHelpers.getDateTime(attachment.created)));
-                }
-            }
-
-            const result = table.toElement();
-
-            DOMHelpers.forEach(result.getElementsByClassName('attachment-selector'), element => {
-
-                Views.onClick(element, () => {
-
-                    selectedIdElement.value = element.getAttribute('data-attachment-id');
-                });
-            });
+            tableContainer.appendChild(createAttachmentSelectionTable(currentAttachments, selectedIdElement));
 
             return result;
         });
@@ -561,5 +539,76 @@ export module AttachmentsView {
                 onSave(selectedId);
             }
         });
+    }
+
+    function createAttachmentSelectionTable(attachments: AttachmentsRepository.Attachment[],
+                                            selectedIdElement: HTMLInputElement): HTMLElement {
+
+        if (( ! attachments) || ( ! attachments.length)) {
+
+            return DOMHelpers.parseHTML('<span class="uk-text-warning">No attachments found</span>');
+        }
+        const table = dA('<table class="uk-table uk-table-divider uk-table-middle uk-table-small uk-table-justify">');
+
+        const tableHeader = '<thead>\n' +
+            '    <tr>\n' +
+            '        <th class="uk-table-expand">Attachment</th>\n' +
+            '        <th class="uk-text-right">Size</th>\n' +
+            '        <th class="uk-text-center">Added</th>\n' +
+            '    </tr>\n' +
+            '</thead>';
+        table.appendRaw(tableHeader);
+
+        const tbody = dA('<tbody>');
+        table.append(tbody);
+
+        const attachmentsById = {};
+
+        for (const attachment of attachments || []) {
+
+            if (! attachment) continue;
+
+            attachmentsById[attachment.id] = attachment;
+
+            const row = dA('<tr>');
+            tbody.append(row);
+            {
+                const nameColumn = dA('<td class="uk-table-expand">');
+                row.append(nameColumn);
+
+                nameColumn.appendRaw(`<span uk-icon="icon: chevron-right" class="uk-icon-button attachment-selector" data-attachment-id="${DOMHelpers.escapeStringForAttribute(attachment.id)}"></span> `);
+
+                const attachmentLink = createAttachmentLink(attachment);
+                nameColumn.append(attachmentLink);
+            }
+            {
+                const sizeColumn = dA('<td class="attachment-size uk-text-right">');
+                row.append(sizeColumn);
+
+                sizeColumn.appendRaw(('{Size} <span class="uk-text-meta">bytes</span>')
+                    .replace('{Size}', DisplayHelpers.intToString(attachment.size)));
+            }
+            {
+                const createdColumn = dA('<td class="attachment-created uk-text-center">');
+                row.append(createdColumn);
+
+                createdColumn.appendRaw(('<div class="uk-text-meta">\n' +
+                    '    <span>{Added}</span>\n' +
+                    '</div>')
+                    .replace('{Added}', DisplayHelpers.getDateTime(attachment.created)));
+            }
+        }
+
+        const result = table.toElement();
+
+        DOMHelpers.forEach(result.getElementsByClassName('attachment-selector'), element => {
+
+            Views.onClick(element, () => {
+
+                selectedIdElement.value = element.getAttribute('data-attachment-id');
+            });
+        });
+
+        return result;
     }
 }
