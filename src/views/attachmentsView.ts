@@ -552,7 +552,7 @@ export module AttachmentsView {
 
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
-            '        <th class="uk-table-expand">Attachment</th>\n' +
+            '        <th class="uk-table-expand">Already Uploaded</th>\n' +
             '        <th class="uk-text-right">Size</th>\n' +
             '        <th class="uk-text-center">Added</th>\n' +
             '    </tr>\n' +
@@ -576,7 +576,7 @@ export module AttachmentsView {
                 const nameColumn = dA('<td class="uk-table-expand">');
                 row.append(nameColumn);
 
-                nameColumn.appendRaw(`<span uk-icon="icon: chevron-right" class="uk-icon-button attachment-selector" data-attachment-id="${DOMHelpers.escapeStringForAttribute(attachment.id)}"></span> `);
+                nameColumn.appendRaw(`<span uk-icon="icon: plus" class="uk-icon-button attachment-selector" data-attachment-id="${DOMHelpers.escapeStringForAttribute(attachment.id)}"></span> `);
 
                 const attachmentLink = createAttachmentLink(attachment);
                 nameColumn.append(attachmentLink);
