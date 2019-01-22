@@ -598,7 +598,7 @@ export module ThreadMessagesView {
 
         if (Privileges.Attachment.canAddAttachmentToMessage(message)) {
 
-            actions.appendRaw(`<a class="add-attachment-to-message-link" uk-icon="icon: upload" title="Add attachment" data-message-id="${message.id}"></a>`);
+            actions.appendRaw(`<a class="add-attachment-to-message-link" uk-icon="icon: upload" title="Add attachment" data-message-id="${message.id}" uk-tooltip></a>`);
         }
 
         if (Privileges.ThreadMessage.canViewThreadMessageRequiredPrivileges(message)
@@ -1022,7 +1022,7 @@ export module ThreadMessagesView {
             Views.createPaginationControl(collection, 'thread message comments', onPageNumberChange, getLinkForPage));
 
         const listContainer = cE('div');
-        DOMHelpers.addClasses(listContainer, 'thread-message-comments-list');
+        DOMHelpers.addClasses(listContainer, 'thread-message-comments-list', 'uk-no-boot');
         listContainer.appendChild(await createCommentsList(collection, threadMessageCallback,
             threadCallback, attachmentsCallback, privilegesCallback, info.user));
         resultList.appendChild(listContainer);
@@ -1044,7 +1044,7 @@ export module ThreadMessagesView {
 
         const comments = collection.messageComments || [];
 
-        const result = dA('<div class="uk-container uk-container-expand">');
+        const result = dA('<div class="uk-container uk-container-expand uk-no-boot">');
 
         if (comments.length < 1) {
 
