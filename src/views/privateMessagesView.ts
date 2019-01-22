@@ -160,8 +160,8 @@ export module PrivateMessagesView {
 
         const replyTo = (message.source || message.destination).name;
 
-        actions.appendRaw(`<a uk-icon="icon: reply" class="reply-private-message-link" title="Reply" data-reply-to="${DOMHelpers.escapeStringForAttribute(replyTo)}" uk-tooltip></a>`);
-        actions.appendRaw(`<a uk-icon="icon: trash" class="delete-private-message-link" title="Delete message" data-message-id="${DOMHelpers.escapeStringForAttribute(messageId)}" uk-tooltip></a>`);
+        actions.appendRaw(`<a uk-icon="icon: reply" class="reply-private-message-link" title="Reply" data-reply-to="${DOMHelpers.escapeStringForAttribute(replyTo)}"></a>`);
+        actions.appendRaw(`<a uk-icon="icon: trash" class="delete-private-message-link" title="Delete message" data-message-id="${DOMHelpers.escapeStringForAttribute(messageId)}"></a>`);
 
         return actions;
     }

@@ -81,7 +81,6 @@ export module EditViews {
             DOMHelpers.addClasses(span, ...classes);
         }
         span.setAttribute('uk-icon', 'icon: ' + icon);
-        span.setAttribute('uk-tooltip', '');
         span.setAttribute('title', tooltip);
 
         result.appendChild(span);
@@ -101,7 +100,6 @@ export module EditViews {
             DOMHelpers.addClasses(span, ...classes.trim().split(' '));
         }
         span.setAttribute('uk-icon', 'icon: trash');
-        span.setAttribute('uk-tooltip', '');
         span.setAttribute('title', tooltip);
 
         result.appendChild(span);
@@ -251,7 +249,6 @@ export module EditViews {
                         refreshMath(link);
                     }
                     link.setAttribute('title', action.title);
-                    link.setAttribute('uk-tooltip', '');
 
                     Views.onClick(link, () => { action.callback(); });
                 }

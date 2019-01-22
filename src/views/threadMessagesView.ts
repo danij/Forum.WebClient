@@ -541,7 +541,7 @@ export module ThreadMessagesView {
             const signatureContainer = dA('<div class="uk-text-center uk-flex-1 message-signature">');
             container.append(signatureContainer);
 
-            const signature = dA('<span title="User signature" uk-tooltip>');
+            const signature = dA('<span title="User signature">');
             signatureContainer.append(signature);
             signature.appendRaw(ViewsExtra.wrapEmojis(DOMHelpers.escapeStringForContent(author.signature)));
         }
@@ -589,40 +589,40 @@ export module ThreadMessagesView {
 
         if (Privileges.ThreadMessage.canEditThreadMessageApproval(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: check" class="approve-thread-message-link" title="Approve Content" data-message-id="${messageId}" uk-tooltip></a>`);
-            actions.appendRaw(`<a uk-icon="icon: ban" class="unapprove-thread-message-link" title="Unapprove Content" data-message-id="${messageId}" uk-tooltip></a>`);
+            actions.appendRaw(`<a uk-icon="icon: check" class="approve-thread-message-link" title="Approve Content" data-message-id="${messageId}"></a>`);
+            actions.appendRaw(`<a uk-icon="icon: ban" class="unapprove-thread-message-link" title="Unapprove Content" data-message-id="${messageId}"></a>`);
         }
 
         if (Privileges.ThreadMessage.canEditThreadMessageContent(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}" uk-tooltip></a>`);
+            actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}"></a>`);
         }
 
         if (Privileges.Attachment.canAddAttachmentToMessage(message)) {
 
-            actions.appendRaw(`<a class="add-attachment-to-message-link" uk-icon="icon: upload" title="Add attachment" data-message-id="${message.id}" uk-tooltip></a>`);
+            actions.appendRaw(`<a class="add-attachment-to-message-link" uk-icon="icon: upload" title="Add attachment" data-message-id="${message.id}"></a>`);
         }
 
         if (Privileges.ThreadMessage.canViewThreadMessageRequiredPrivileges(message)
             || Privileges.ThreadMessage.canViewThreadMessageAssignedPrivileges(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: settings" class="show-thread-message-privileges-link" title="Privileges" data-message-id="${messageId}" uk-tooltip></a>`);
+            actions.appendRaw(`<a uk-icon="icon: settings" class="show-thread-message-privileges-link" title="Privileges" data-message-id="${messageId}"></a>`);
         }
         if (Privileges.ThreadMessage.canMoveThreadMessage(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: move" class="move-thread-message-link" title="Move to different thread" data-message-id="${messageId}" uk-tooltip></a>`);
+            actions.appendRaw(`<a uk-icon="icon: move" class="move-thread-message-link" title="Move to different thread" data-message-id="${messageId}"></a>`);
         }
         if (Privileges.ThreadMessage.canDeleteThreadMessage(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: trash" class="delete-thread-message-link" title="Delete message" data-message-id="${messageId}" uk-tooltip></a>`);
+            actions.appendRaw(`<a uk-icon="icon: trash" class="delete-thread-message-link" title="Delete message" data-message-id="${messageId}"></a>`);
         }
         if (Privileges.ThreadMessage.canCommentThreadMessage(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: warning" class="comment-thread-message-link" title="Flag & comment" data-message-id="${messageId}" uk-tooltip></a>`);
+            actions.appendRaw(`<a uk-icon="icon: warning" class="comment-thread-message-link" title="Flag & comment" data-message-id="${messageId}"></a>`);
         }
         if (quoteCallback) {
 
-            actions.appendRaw(`<a uk-icon="icon: quote-right" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}" uk-tooltip></a>`);
+            actions.appendRaw(`<a uk-icon="icon: quote-right" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}"></a>`);
         }
 
         return actions;
@@ -792,7 +792,7 @@ export module ThreadMessagesView {
         return value.replace(/\d+/, (value) => (parseInt(value) + adjustement).toString());
     }
 
-    const solvedCommentSpan = '<span class="uk-icon-button uk-float-right" uk-icon="check" title="Already solved" uk-tooltip></span>';
+    const solvedCommentSpan = '<span class="uk-icon-button uk-float-right" uk-icon="check" title="Already solved"></span>';
 
     async function showThreadMessageComments(message: ThreadMessageRepository.ThreadMessage,
                                              callback: PageActions.IThreadMessageCallback): Promise<void> {
@@ -864,7 +864,7 @@ export module ThreadMessagesView {
         else if (Privileges.ThreadMessage.canSolveThreadMessageComment(comment.message)) {
 
             const data = `data-comment-id="${DOMHelpers.escapeStringForAttribute(comment.id)}"`;
-            contentDiv.appendRaw(`<a class="solve-message-comment-link uk-float-right" ${data} title="Set comment to solved" uk-tooltip><span class="uk-icon" uk-icon="check"></span></a>`);
+            contentDiv.appendRaw(`<a class="solve-message-comment-link uk-float-right" ${data} title="Set comment to solved"><span class="uk-icon" uk-icon="check"></span></a>`);
         }
 
         const paragraph = dA('<p>');

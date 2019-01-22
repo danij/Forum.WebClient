@@ -173,7 +173,7 @@ export module ThreadsView {
                 row.append(nameColumn);
 
                 if (thread.pinned) {
-                    nameColumn.append(dA(`<span class="uk-icon pinned-icon" uk-icon="icon: star; ratio: 1.5" title="Thread is pinned" uk-tooltip>`));
+                    nameColumn.append(dA(`<span class="uk-icon pinned-icon" uk-icon="icon: star; ratio: 1.5" title="Thread is pinned">`));
                 }
 
                 const threadLink = createThreadsLink(thread, true, true);

@@ -102,7 +102,7 @@ export module CategoriesView {
                 const dataAttribute = DOMHelpers.concatAttributes(attributes);
                 const link = dA(`<a class="edit-display-order-link" ${dataAttribute}>`);
                 nameColumn.append(link);
-                link.append(dA('<span class="uk-icon" uk-icon="icon: move" uk-tooltip title="Edit category display order">'))
+                link.append(dA('<span class="uk-icon" uk-icon="icon: move" title="Edit category display order">'))
             }
             else {
 
@@ -225,7 +225,6 @@ export module CategoriesView {
             if (value.description && value.description.length) {
 
                 link.setAttribute('title', value.description);
-                link.setAttribute('uk-tooltip', '');
             }
 
             link.setAttribute('data-categoryid', value.id);
