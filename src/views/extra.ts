@@ -76,7 +76,7 @@ export module ViewsExtra {
         }
     }
 
-    const emojiFind = emojiRegexProvider();
+    const emojiFind = (<any>emojiRegexProvider)();
 
     export function wrapEmojis(content: string): string {
 
