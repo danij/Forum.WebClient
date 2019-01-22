@@ -80,7 +80,7 @@ export module TagsView {
             return tableContainer.toElement();
         }
 
-        const tableHeader = '<thead>\n' +
+        const tableHeader = '<thead uk-no-boot>\n' +
             '    <tr>\n' +
             '        <th class="uk-table-expand">Tag</th>\n' +
             '        <th class="uk-text-center uk-table-shrink">Statistics</th>\n' +
@@ -132,7 +132,7 @@ export module TagsView {
                 }
             }
             {
-                const statisticsColumn = ('<td class="tag-statistics uk-table-shrink">\n' +
+                const statisticsColumn = ('<td class="tag-statistics uk-table-shrink" uk-no-boot>\n' +
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +

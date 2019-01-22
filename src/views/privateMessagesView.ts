@@ -134,7 +134,7 @@ export module PrivateMessagesView {
 
     function createPrivateMessageDetails(message: PrivateMessageRepository.PrivateMessage) {
 
-        const messageDetailsContainer = dA(`<div class="uk-card-badge message-time-container">`);
+        const messageDetailsContainer = dA(`<div class="uk-card-badge message-time-container" uk-no-boot>`);
         messageDetailsContainer.appendRaw(`<span class="message-time">${DisplayHelpers.getDateTime(message.created)} </span>`);
 
         if (message.ip && message.ip.length) {

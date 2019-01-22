@@ -149,7 +149,7 @@ export module ThreadsView {
 
         const table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
 
-        const tableHeader = '<thead>\n' +
+        const tableHeader = '<thead uk-no-boot>\n' +
             '    <tr>\n' +
             '        <th class="uk-table-expand">Thread</th>\n' +
             '        <th class="uk-text-center thread-created-header uk-table-shrink">Added</th>\n' +
@@ -202,7 +202,7 @@ export module ThreadsView {
                 }
             }
             {
-                const createdColumn = dA('<td class="thread-created uk-text-center uk-table-shrink">');
+                const createdColumn = dA('<td class="thread-created uk-text-center uk-table-shrink" uk-no-boot>');
                 row.append(createdColumn);
 
                 createdColumn.append(UsersView.createAuthorSmall(thread.createdBy));
@@ -213,7 +213,7 @@ export module ThreadsView {
                     .replace('{Added}', DisplayHelpers.getDateTime(thread.created)));
             }
             {
-                const statisticsColumn = ('<td class="thread-statistics uk-table-shrink">\n' +
+                const statisticsColumn = ('<td class="thread-statistics uk-table-shrink" uk-no-boot>\n' +
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
@@ -247,7 +247,7 @@ export module ThreadsView {
 
                     container.append(UsersView.createUserLogoSmall(latestMessage.createdBy));
 
-                    const timeFlex = dA('<div class="date-time-flex">');
+                    const timeFlex = dA('<div class="date-time-flex" uk-no-boot>');
                     container.append(timeFlex);
 
                     timeFlex.append(UsersView.createAuthorSmall(latestMessage.createdBy));
@@ -260,6 +260,7 @@ export module ThreadsView {
                     const messageContent = latestMessage.content || 'empty';
 
                     const messageLink = cE('a');
+                    messageLink.setAttribute('uk-no-boot', '');
                     DOMHelpers.addClasses(messageLink, 'recent-message-link');
                     if ( ! latestMessage.approved) {
 
@@ -302,7 +303,7 @@ export module ThreadsView {
 
             atLeastOneThread = true;
 
-            const element = dA('<div class="recent-thread">');
+            const element = dA('<div class="recent-thread" uk-no-boot>');
             result.append(element);
 
             const time = dA('<span class="time-ago">');
@@ -547,6 +548,7 @@ export module ThreadsView {
             const title = cE('div');
             card.appendChild(title);
 
+            title.setAttribute('uk-no-boot', '');
             DOMHelpers.addClasses(title, 'uk-align-left', 'thread-title');
 
             title.appendChild(approvalNotification);

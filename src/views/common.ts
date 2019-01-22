@@ -142,7 +142,7 @@ export module Views {
 
         const container = DOMHelpers.parseHTML(
             '<ul class="uk-pagination uk-flex-center uk-margin-remove-left uk-margin-remove-top uk-margin-remove-bottom" uk-margin>' +
-            '<li>Page:</li>' +
+            '<li uk-no-boot>Page:</li>' +
             '</ul>');
         result.appendChild(container);
 
@@ -164,6 +164,7 @@ export module Views {
         function addPageLink(pageNumber: number) {
 
             const listElement = cE('li');
+            listElement.setAttribute('uk-no-boot', '');
             container.appendChild(listElement);
 
             const link = cE('a');
@@ -182,6 +183,7 @@ export module Views {
         function addEllipsis(): void {
 
             const listElement = cE('li');
+            listElement.setAttribute('uk-no-boot', '');
             container.appendChild(listElement);
             DOMHelpers.addClasses(listElement, 'pointer-cursor');
 
@@ -261,6 +263,7 @@ export module Views {
         }
 
         const total = cE('span');
+        total.setAttribute('uk-no-boot', '');
         result.appendChild(total);
         DOMHelpers.addClasses(total, 'uk-flex', 'uk-flex-center', 'uk-text-meta', 'pagination-total');
         total.innerText = `${DisplayHelpers.intToString(info.totalCount)} ${totalString}`;

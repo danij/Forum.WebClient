@@ -107,7 +107,7 @@ export module AttachmentsView {
 
         const table = dA('<table class="uk-table uk-table-divider uk-table-middle uk-table-small">');
 
-        const tableHeader = '<thead>\n' +
+        const tableHeader = '<thead uk-no-boot>\n' +
             '    <tr>\n' +
             '        <th class="uk-table-expand">Attachment</th>\n' +
             '        <th class="uk-text-right">Size</th>\n' +
@@ -135,7 +135,7 @@ export module AttachmentsView {
             tbody.append(row);
 
             {
-                const nameColumn = dA('<td class="uk-table-expand">');
+                const nameColumn = dA('<td class="uk-table-expand" uk-no-boot>');
                 row.append(nameColumn);
 
                 const attachmentLink = createAttachmentLink(attachment);
@@ -145,14 +145,14 @@ export module AttachmentsView {
                 nameColumn.append(idElement);
             }
             {
-                const sizeColumn = dA('<td class="attachment-size uk-text-right">');
+                const sizeColumn = dA('<td class="attachment-size uk-text-right" uk-no-boot>');
                 row.append(sizeColumn);
 
                 sizeColumn.appendRaw(('{Size}<div class="uk-text-meta">bytes</div>')
                     .replace('{Size}', DisplayHelpers.intToString(attachment.size)));
             }
             {
-                const createdColumn = dA('<td class="attachment-created uk-text-center">');
+                const createdColumn = dA('<td class="attachment-created uk-text-center" uk-no-boot>');
                 row.append(createdColumn);
 
                 createdColumn.appendRaw(('<div class="uk-text-meta">\n' +
@@ -161,7 +161,7 @@ export module AttachmentsView {
                     .replace('{Added}', DisplayHelpers.getDateTime(attachment.created)));
             }
             {
-                const createdByColumn = dA('<td class="uk-text-center uk-table-shrink">');
+                const createdByColumn = dA('<td class="uk-text-center uk-table-shrink" uk-no-boot>');
                 row.append(createdByColumn);
 
                 createdByColumn.append(UsersView.createAuthorSmall(attachment.createdBy));
@@ -172,7 +172,7 @@ export module AttachmentsView {
                 }
             }
             {
-                const statisticsColumn = ('<td class="attachment-statistics uk-table-shrink">\n' +
+                const statisticsColumn = ('<td class="attachment-statistics uk-table-shrink" uk-no-boot>\n' +
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfDownloads}</td>\n' +
@@ -378,7 +378,7 @@ export module AttachmentsView {
         const flexContainer = dA('<div class="uk-flex">');
         result.append(flexContainer);
 
-        const mainContainer = dA('<div class="uk-flex-1">');
+        const mainContainer = dA('<div class="uk-flex-1" uk-no-boot>');
         flexContainer.append(mainContainer);
         {
             const nameContainer = dA('span');

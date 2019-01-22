@@ -69,7 +69,7 @@ export module ThreadMessagesView {
 
             atLeastOneMessage = true;
 
-            const element = dA('<div class="recent-message">');
+            const element = dA('<div class="recent-message" uk-no-boot>');
             result.append(element);
 
             element.append(createMessageShortView(message, false));
@@ -417,7 +417,7 @@ export module ThreadMessagesView {
     function createThreadMessageDetails(message: ThreadMessageRepository.ThreadMessage, showParentThreadName: boolean) {
 
         const extraClass = showParentThreadName ? 'right' : '';
-        const messageDetailsContainer = dA(`<div class="uk-card-badge message-time-container ${extraClass}">`);
+        const messageDetailsContainer = dA(`<div class="uk-card-badge message-time-container ${extraClass}" uk-no-boot>`);
         messageDetailsContainer.appendRaw(`<span class="message-time">${DisplayHelpers.getDateTime(message.created)} </span>`);
 
         if (message.lastUpdated && message.lastUpdated.at) {
@@ -476,7 +476,7 @@ export module ThreadMessagesView {
 
         const author = message.createdBy;
 
-        const container = dA('<div class="uk-flex">');
+        const container = dA('<div class="uk-flex" uk-no-boot>');
 
         let upVotesNr = (message.nrOfUpVotes || (message.nrOfUpVotes == 0))
             ? DisplayHelpers.intToString(message.nrOfUpVotes)
@@ -558,7 +558,9 @@ export module ThreadMessagesView {
         const unapprovedClass = message.approved ? '' : 'unapproved';
         const unapprovedTitle = message.approved ? '' : ' title="Not yet approved. Message is only visible to the author and privileged users."';
         const content = dA(`<div class="message-content ${unapprovedClass} render-math uk-flex-1" ${unapprovedTitle}>`);
-        content.appendRaw(ViewsExtra.expandContent(message.content));
+        const wrapper = dA('<div uk-no-boot>');
+        content.append(wrapper);
+        wrapper.appendRaw(ViewsExtra.expandContent(message.content));
 
         if (message.lastUpdated && message.lastUpdated.at) {
 
@@ -568,7 +570,7 @@ export module ThreadMessagesView {
             }
 
             const details = dA('<span class="uk-text-warning">');
-            content.append(details);
+            wrapper.append(details);
 
             if (message.lastUpdated.userName) {
 
@@ -1022,7 +1024,7 @@ export module ThreadMessagesView {
             Views.createPaginationControl(collection, 'thread message comments', onPageNumberChange, getLinkForPage));
 
         const listContainer = cE('div');
-        DOMHelpers.addClasses(listContainer, 'thread-message-comments-list', 'uk-no-boot');
+        DOMHelpers.addClasses(listContainer, 'thread-message-comments-list');
         listContainer.appendChild(await createCommentsList(collection, threadMessageCallback,
             threadCallback, attachmentsCallback, privilegesCallback, info.user));
         resultList.appendChild(listContainer);
@@ -1044,7 +1046,7 @@ export module ThreadMessagesView {
 
         const comments = collection.messageComments || [];
 
-        const result = dA('<div class="uk-container uk-container-expand uk-no-boot">');
+        const result = dA('<div class="uk-container uk-container-expand">');
 
         if (comments.length < 1) {
 
@@ -1166,6 +1168,7 @@ export module ThreadMessagesView {
         if (threadId) {
 
             threadTitleElement = cE('a');
+            threadTitleElement.setAttribute('uk-no-boot', '');
             DOMHelpers.addClasses(threadTitleElement, 'recent-message-thread-link');
             if (anyMessage.parentThread && (! anyMessage.parentThread.approved)) {
 
@@ -1183,7 +1186,7 @@ export module ThreadMessagesView {
         threadTitleElement.innerText = threadTitle;
         container.appendElement(threadTitleElement);
 
-        const timeFlex = dA('<div class="date-time-flex">');
+        const timeFlex = dA('<div class="date-time-flex" uk-no-boot>');
         container.append(timeFlex);
 
         timeFlex.append(UsersView.createAuthorSmall(message.createdBy));
@@ -1203,6 +1206,7 @@ export module ThreadMessagesView {
         if (message.id) {
 
             messageLink = cE('a');
+            messageLink.setAttribute('uk-no-boot', '');
             DOMHelpers.addClasses(messageLink, 'recent-message-link');
             if ( ! message.approved) {
 

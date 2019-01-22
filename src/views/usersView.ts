@@ -357,7 +357,7 @@ export module UsersView {
 
     function createUserInList(user: UserRepository.User): DOMAppender {
 
-        const result = dA('<div>');
+        const result = dA('<div uk-no-boot>');
 
         const card = dA('<div class="uk-card uk-card-default uk-card-body">');
         result.append(card);
