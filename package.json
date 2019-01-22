@@ -38,7 +38,7 @@
     "type": "git",
     "url": "git+https://github.com/danij/Forum.WebClient.git"
   },
-  "author": "",
+  "author": "Daniel Jurcau",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/danij/Forum.WebClient/issues"
