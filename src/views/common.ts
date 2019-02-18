@@ -532,12 +532,70 @@ export module Views {
         }
         container.innerHTML = '';
 
-        container.appendChild(newPageContent);
+        container.appendChild(addProgressiveAppend(newPageContent));
 
         if (refreshMath) {
 
             ViewsExtra.refreshMath(container);
         }
+    }
+
+    function addProgressiveAppend(element: HTMLElement): HTMLElement {
+
+        const childCountThreshold = 7;
+        const elementWithMoreChildNodes = getElementWithChildrenCountAtLeast(element, childCountThreshold);
+
+        if (elementWithMoreChildNodes) {
+
+            const insertLater = removeChildrenExceptFirst(elementWithMoreChildNodes, childCountThreshold);
+            setTimeout(() => {
+
+                const fragment = document.createDocumentFragment();
+                for (const element of insertLater) {
+
+                    fragment.appendChild(element);
+                }
+                elementWithMoreChildNodes.appendChild(fragment);
+            }, 0);
+        }
+        return element;
+    }
+
+    function getElementWithChildrenCountAtLeast(root: HTMLElement, n: number): HTMLElement {
+
+        const skipTagNames = ['THEAD'];
+        let currentLevel = [root];
+
+        while (currentLevel.length) {
+
+            const currentElements = currentLevel;
+            currentLevel = [];
+
+            for (const element of currentElements) {
+                if (skipTagNames.indexOf(element.tagName) > 0) continue;
+
+                const children = element.children;
+                if (children.length > n) return element;
+
+                for (let i = 0; i < children.length; ++i) {
+                    currentLevel.push(children[i] as HTMLElement);
+                }
+            }
+        }
+        return null;
+    }
+
+    function removeChildrenExceptFirst(root: HTMLElement, n: number): HTMLElement[] {
+
+        const result = [];
+        const initialCount = root.children.length;
+
+        for (let i = n; i < initialCount; ++i) {
+
+            result.push(root.removeChild(root.lastChild));
+        }
+        result.reverse();
+        return result;
     }
 
     export function addClickIfElementExists(element, listener): void {
