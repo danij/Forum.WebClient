@@ -215,7 +215,6 @@ export module AttachmentsView {
         setupAttachmentActionEvents(result, attachmentsById, callback);
 
         Views.setupThreadsOfUsersLinks(result);
-        Views.markElementForAnimatedDisplay(result, '.threads-table tbody');
 
         return result;
     }

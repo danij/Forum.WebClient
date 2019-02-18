@@ -286,8 +286,6 @@ export module ThreadsView {
         Views.setupThreadMessagesOfMessageParentThreadLinks(result);
         Views.setupAttachmentsAddedByUserLinks(result);
 
-        Views.markElementForAnimatedDisplay(result, '.threads-table tbody');
-
         return result;
     }
 

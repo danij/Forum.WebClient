@@ -160,8 +160,6 @@ export module TagsView {
         Views.setupThreadMessagesOfThreadsLinks(result);
         Views.setupThreadMessagesOfMessageParentThreadLinks(result);
 
-        Views.markElementForAnimatedDisplay(result, '.tags-table tbody');
-
         return result;
     }
 

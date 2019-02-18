@@ -518,24 +518,6 @@ export module Views {
         return appender;
     }
 
-    const animatedDisplaySelectorAttribute = 'animated-display-selector';
-    const nrOfElementsToAnimate = 20;
-
-    export function markElementForAnimatedDisplay(element: HTMLElement, selector: string): void {
-
-        element.setAttribute(animatedDisplaySelectorAttribute, selector);
-    }
-
-    export function getElementMarkedForAnimatedDisplay(element: HTMLElement): HTMLElement {
-
-        if (element.attributes.getNamedItem(animatedDisplaySelectorAttribute)) {
-
-            return element;
-        }
-
-        return element.querySelector(`[${animatedDisplaySelectorAttribute}]`) as HTMLElement;
-    }
-
     export function setContent(container: HTMLElement, newPageContent: HTMLElement, refreshMath: boolean) {
 
         const scrollContainer = DOMHelpers.goUpUntil(container, e => 'page-content-container' === e.id);
@@ -550,68 +532,12 @@ export module Views {
         }
         container.innerHTML = '';
 
-        const elementWithAnimationDisplaySelector = getElementMarkedForAnimatedDisplay(newPageContent);
-
-        const animatedDisplaySelector = elementWithAnimationDisplaySelector
-            ? elementWithAnimationDisplaySelector.getAttribute(animatedDisplaySelectorAttribute)
-            : null;
-        if (animatedDisplaySelector && animatedDisplaySelector.length) {
-
-            setContentWithAnimation(container, newPageContent, animatedDisplaySelector, refreshMath);
-        }
-        else {
-            container.appendChild(newPageContent);
-
-            if (refreshMath) {
-
-                ViewsExtra.refreshMath(container);
-            }
-        }
-    }
-
-    function transferChildElementsToArray(container: HTMLElement): HTMLElement[] {
-
-        const result: HTMLElement[] = [];
-        while (container.lastChild) {
-
-            result.push(container.lastChild as HTMLElement);
-            container.removeChild(container.lastChild);
-        }
-        return result.reverse();
-    }
-
-    function setContentWithAnimation(container: HTMLElement, newPageContent: HTMLElement, selector: string,
-                                     refreshMath: boolean) {
-
-        const subContainer = (newPageContent.querySelector(selector) as HTMLElement) || newPageContent;
-
-        const subContainerChildren = transferChildElementsToArray(subContainer);
-
-        const toAnimate = subContainerChildren.slice(0, nrOfElementsToAnimate);
-        const toSimplyAdd = subContainerChildren.slice(nrOfElementsToAnimate, subContainerChildren.length);
-
-        setTimeout(() => {
-
-            for (let element of toAnimate) {
-
-                DOMHelpers.addClasses(element, 'uk-animation-fade', 'uk-animation-fast');
-                subContainer.appendChild(element);
-            }
-        }, 0);
-
-        setTimeout(() => {
-
-            for (let element of toSimplyAdd) {
-
-                subContainer.appendChild(element);
-            }
-            if (refreshMath) {
-
-                ViewsExtra.refreshMath(container);
-            }
-        }, 250);
-
         container.appendChild(newPageContent);
+
+        if (refreshMath) {
+
+            ViewsExtra.refreshMath(container);
+        }
     }
 
     export function addClickIfElementExists(element, listener): void {
