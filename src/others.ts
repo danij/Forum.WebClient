@@ -5,10 +5,12 @@ import * as Remarkable from 'remarkable';
 import 'katex';
 import * as renderMathInElement from 'katex/dist/contrib/auto-render';
 import '@webcomponents/template';
+import * as hljs from 'highlight.js/lib/index.js';
 
 (<any>window).UIkit = UIkit;
 (<any>window).Remarkable = Remarkable;
 (<any>window).renderMathInElement = renderMathInElement;
+(<any>window).hljs = hljs;
 
 UIkit.use(UIkitIcons);
 

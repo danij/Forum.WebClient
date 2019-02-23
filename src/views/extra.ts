@@ -6,7 +6,6 @@ import {UserCache} from "../services/userCache";
 import {UsersView} from "./usersView";
 import {Views} from "./common";
 import * as emojiRegexProvider from 'emoji-regex';
-import * as hljs from 'highlight.js/lib/index.js';
 
 export module ViewsExtra {
 
@@ -15,6 +14,7 @@ export module ViewsExtra {
     let remarkable: any;
 
     declare var Remarkable: any;
+    declare var hljs: any;
     declare var renderMathInElement: (element: HTMLElement, options: any) => void;
 
     export function init() {
