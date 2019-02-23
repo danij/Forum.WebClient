@@ -6,11 +6,13 @@ import 'katex';
 import * as renderMathInElement from 'katex/dist/contrib/auto-render';
 import '@webcomponents/template';
 import * as hljs from 'highlight.js/lib/index.js';
+import * as emojiRegexProvider from 'emoji-regex';
 
 (<any>window).UIkit = UIkit;
 (<any>window).Remarkable = Remarkable;
 (<any>window).renderMathInElement = renderMathInElement;
 (<any>window).hljs = hljs;
+(<any>window).emojiRegexProvider = emojiRegexProvider;
 
 UIkit.use(UIkitIcons);
 

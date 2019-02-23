@@ -5,7 +5,6 @@ import {DisplayHelpers} from "../helpers/displayHelpers";
 import {UserCache} from "../services/userCache";
 import {UsersView} from "./usersView";
 import {Views} from "./common";
-import * as emojiRegexProvider from 'emoji-regex';
 
 export module ViewsExtra {
 
@@ -15,6 +14,7 @@ export module ViewsExtra {
 
     declare var Remarkable: any;
     declare var hljs: any;
+    declare var emojiRegexProvider: any;
     declare var renderMathInElement: (element: HTMLElement, options: any) => void;
 
     export function init() {
@@ -76,7 +76,7 @@ export module ViewsExtra {
         }
     }
 
-    const emojiFind = (<any>emojiRegexProvider)();
+    const emojiFind = emojiRegexProvider();
 
     export function wrapEmojis(content: string): string {
 
