@@ -608,7 +608,7 @@ export module Views {
 
     function closeDropdowns(): void {
 
-        document.body.click();
+        document.dispatchEvent(new PointerEvent('pointerup', {bubbles: true}));
     }
 
     export function onClick(element: HTMLElement, callback: (ev) => void): void {
