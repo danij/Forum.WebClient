@@ -140,7 +140,7 @@ export module CategoriesView {
             }
         }
         if ( ! justName) {
-            const tagColumn = dA('<td class="uk-text-center uk-table-shrink">');
+            const tagColumn = dA('<td class="category-tags uk-text-center uk-table-shrink">');
             row.append(tagColumn);
 
             for (const tag of category.tags) {
