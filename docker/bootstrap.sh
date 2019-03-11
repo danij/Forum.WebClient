@@ -3,6 +3,7 @@ HOSTNAME="$1"
 
 mkdir /forum/config/Forum.WebClient
 mkdir /forum/config/Forum.WebClient/doc
+mkdir /forum/config/https
 
 cp /var/www/html/config/config.js /forum/config/Forum.WebClient/config.js
 
