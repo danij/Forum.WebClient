@@ -5,7 +5,7 @@ mkdir /forum/config/Forum.WebClient
 mkdir /forum/config/Forum.WebClient/doc
 mkdir /forum/config/https
 
-cp -r /var/www-old /var/www
+cp -r /var/www-old/* /var/www
 cp /var/www/html/config/config.js /forum/config/Forum.WebClient/config.js
 
 sed -i 's#"google"#//"google"#' /forum/config/Forum.WebClient/config.js
