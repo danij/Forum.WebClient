@@ -430,6 +430,7 @@ export module AuthenticationView {
     export function renderCheckNotARobot(container: HTMLElement): boolean {
 
         if ( ! registerConfig.reCAPTCHASiteKey) return false;
+        if ( ! grecaptcha) return false;
 
         const existingId = container.getAttribute(reCaptchaAttribute);
         if (existingId) {
