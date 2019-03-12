@@ -12,12 +12,17 @@ export module UserCache {
     const usersById: any = {};
     const idsByName: any = {};
 
+    function getUserIdForCache(id: string) : string {
+
+        return id.toLowerCase().replace(/-/g, '');
+    }
+
     export function process(user: UserRepository.User): void {
 
         if ( ! user) return;
         if ( ! user.id) return;
 
-        usersById[user.id.toLowerCase()] = user;
+        usersById[getUserIdForCache(user.id)] = user;
         idsByName[user.name.toLowerCase()] = user.id;
     }
 
@@ -219,7 +224,7 @@ export module UserCache {
 
         return searchUniqueUsersById(Array.from(new Set(
             ids
-                .map(n => n.toLowerCase())
+                .map(n => getUserIdForCache(n))
                 .filter(n => ! (n in usersById)))));
     }
 
@@ -234,7 +239,7 @@ export module UserCache {
             const users = await UserRepository.getMultipleById(batch);
             for (let i = 0; i < batch.length; ++i) {
 
-                usersById[batch[i]] = users[i];
+                usersById[getUserIdForCache(batch[i])] = users[i];
             }
         }
     }
@@ -258,7 +263,7 @@ export module UserCache {
 
     export function getUserById(id: string): UserRepository.User {
 
-        return usersById[id.toLowerCase()];
+        return usersById[getUserIdForCache(id)];
     }
 
     export async function getUserByName(name: string): Promise<UserRepository.User> {
@@ -273,7 +278,7 @@ export module UserCache {
         if (user) {
 
             idsByName[name.toLowerCase()] = user.id;
-            usersById[user.id.toLowerCase()] = user;
+            usersById[getUserIdForCache(user.id.toLowerCase())] = user;
         }
 
         return user;
