@@ -468,10 +468,25 @@ export module EditViews {
 
                 const id = UserCache.getIdByName(name);
 
-                return id ? `@${id}@` : `@@${name}@@`;
+                return id ? `@${userIdToDashed(id)}@` : `@@${name}@@`;
             });
 
             return content;
         }
+    }
+
+    function userIdToDashed(id: string): string {
+
+        if (32 == id.length) {
+
+            const lengths = [8, 4, 4, 4, 12];
+            const indexes = [];
+            for (let i = 0, current = 0; i < lengths.length; current += lengths[i++]) {
+
+                indexes.push([current, current + lengths[i]]);
+            }
+            return indexes.map(l => id.slice(l[0], l[1])).join('-');
+        }
+        return id;
     }
 }
