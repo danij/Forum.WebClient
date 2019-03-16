@@ -4,6 +4,7 @@ HOSTNAME="$1"
 mkdir /forum/config/Forum.WebClient
 mkdir /forum/config/Forum.WebClient/doc
 mkdir /forum/config/https
+mkdir /forum/logs/nginx
 
 cp -r /var/www-old/* /var/www
 cp /var/www/html/config/config.js /forum/config/Forum.WebClient/config.js
