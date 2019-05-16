@@ -91,3 +91,12 @@ window.debugConfig = {
 
     enableAllPrivileges: false
 };
+
+if ('MutationObserver' in window) {
+    //prevent UIkit from automatically tracking mutations
+    window['MutationObserver'] = function() {
+        return {
+            observe: function() {}
+        };
+    };
+}

@@ -69,7 +69,7 @@ export module ThreadMessagesView {
 
             atLeastOneMessage = true;
 
-            const element = dA('<div class="recent-message" uk-no-boot>');
+            const element = dA('<div class="recent-message">');
             result.append(element);
 
             element.append(createMessageShortView(message, false));
@@ -417,7 +417,7 @@ export module ThreadMessagesView {
     function createThreadMessageDetails(message: ThreadMessageRepository.ThreadMessage, showParentThreadName: boolean) {
 
         const extraClass = showParentThreadName ? 'right' : '';
-        const messageDetailsContainer = dA(`<div class="uk-card-badge message-time-container ${extraClass}" uk-no-boot>`);
+        const messageDetailsContainer = dA(`<div class="uk-card-badge message-time-container ${extraClass}">`);
         messageDetailsContainer.appendRaw(`<span class="message-time">${DisplayHelpers.getDateTime(message.created)} </span>`);
 
         if (message.lastUpdated && message.lastUpdated.at) {
@@ -476,7 +476,7 @@ export module ThreadMessagesView {
 
         const author = message.createdBy;
 
-        const container = dA('<div class="uk-flex" uk-no-boot>');
+        const container = dA('<div class="uk-flex">');
 
         let upVotesNr = (message.nrOfUpVotes || (message.nrOfUpVotes == 0))
             ? DisplayHelpers.intToString(message.nrOfUpVotes)
@@ -558,7 +558,7 @@ export module ThreadMessagesView {
         const unapprovedClass = message.approved ? '' : 'unapproved';
         const unapprovedTitle = message.approved ? '' : ' title="Not yet approved. Message is only visible to the author and privileged users."';
         const content = dA(`<div class="message-content ${unapprovedClass} render-math uk-flex-1" ${unapprovedTitle}>`);
-        const wrapper = dA('<div uk-no-boot>');
+        const wrapper = dA('<div>');
         content.append(wrapper);
         wrapper.appendRaw(ViewsExtra.expandContent(message.content));
 
@@ -1168,7 +1168,6 @@ export module ThreadMessagesView {
         if (threadId) {
 
             threadTitleElement = cE('a');
-            threadTitleElement.setAttribute('uk-no-boot', '');
             DOMHelpers.addClasses(threadTitleElement, 'recent-message-thread-link');
             if (anyMessage.parentThread && (! anyMessage.parentThread.approved)) {
 
@@ -1186,7 +1185,7 @@ export module ThreadMessagesView {
         threadTitleElement.innerText = threadTitle;
         container.appendElement(threadTitleElement);
 
-        const timeFlex = dA('<div class="date-time-flex" uk-no-boot>');
+        const timeFlex = dA('<div class="date-time-flex">');
         container.append(timeFlex);
 
         timeFlex.append(UsersView.createAuthorSmall(message.createdBy));
@@ -1206,7 +1205,6 @@ export module ThreadMessagesView {
         if (message.id) {
 
             messageLink = cE('a');
-            messageLink.setAttribute('uk-no-boot', '');
             DOMHelpers.addClasses(messageLink, 'recent-message-link');
             if ( ! message.approved) {
 

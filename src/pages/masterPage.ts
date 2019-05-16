@@ -30,6 +30,8 @@ export module MasterPage {
 
     export async function bootstrap(): Promise<void> {
 
+        Views.setupUIkit();
+
         MasterView.loadFavoriteTheme();
 
         MasterView.applyPageConfig(masterPageConfig, PageActions.getDocumentationCallback());

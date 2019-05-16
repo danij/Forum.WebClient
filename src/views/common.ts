@@ -21,6 +21,9 @@ export module Views {
     import IDocumentationCallback = PageActions.IDocumentationCallback;
 
     declare var UIkit: any;
+    const UIkitToUpdateOnPageLoad = ['navbar', 'icon', 'modal', 'close', 'tab'];
+    const UIkitToUpdateAfterAddingElements = ['dropdown', 'tab', 'grid', 'card',
+        ['pagination-previous', 'paginationPrevious'], ['pagination-next', 'paginationNext']];
 
     interface LengthConfig {
 
@@ -55,6 +58,26 @@ export module Views {
 
         orderBy: string,
         sortOrder: string
+    }
+
+    function applyUIkit(parent: ParentNode, what: string | string[]): void {
+
+        let toSearch : string, method : string;
+        if ('string' === typeof what) {
+
+            toSearch = what;
+            method = what;
+        } else {
+
+            toSearch = what[0];
+            method = what[1];
+        }
+        DOMHelpers.forEach(parent.querySelectorAll(`[uk-${toSearch}]`), e => UIkit[method](e));
+    }
+
+    export function setupUIkit(): void {
+
+        UIkitToUpdateOnPageLoad.forEach(item => applyUIkit(document, item));
     }
 
     export async function changeContent(container: HTMLElement, handler: () => Promise<HTMLElement>,
@@ -142,7 +165,7 @@ export module Views {
 
         const container = DOMHelpers.parseHTML(
             '<ul class="uk-pagination uk-flex-center uk-margin-remove-left uk-margin-remove-top uk-margin-remove-bottom" uk-margin>' +
-            '<li uk-no-boot>Page:</li>' +
+            '<li>Page:</li>' +
             '</ul>');
         result.appendChild(container);
 
@@ -152,6 +175,7 @@ export module Views {
 
             const previous = DOMHelpers.parseHTML('<li><a><span uk-pagination-previous></span></a></li>');
             container.appendChild(previous);
+            processUIkitElements(previous);
             Views.onClick(previous, () => { onPageNumberChange(info.page - 1); });
         }
 
@@ -164,7 +188,6 @@ export module Views {
         function addPageLink(pageNumber: number) {
 
             const listElement = cE('li');
-            listElement.setAttribute('uk-no-boot', '');
             container.appendChild(listElement);
 
             const link = cE('a');
@@ -183,7 +206,6 @@ export module Views {
         function addEllipsis(): void {
 
             const listElement = cE('li');
-            listElement.setAttribute('uk-no-boot', '');
             container.appendChild(listElement);
             DOMHelpers.addClasses(listElement, 'pointer-cursor');
 
@@ -259,11 +281,11 @@ export module Views {
 
             const next = DOMHelpers.parseHTML('<li><a><span uk-pagination-next></span></a></li>');
             container.appendChild(next);
+            processUIkitElements(next);
             Views.onClick(next, () => { onPageNumberChange(info.page + 1); });
         }
 
         const total = cE('span');
-        total.setAttribute('uk-no-boot', '');
         result.appendChild(total);
         DOMHelpers.addClasses(total, 'uk-flex', 'uk-flex-center', 'uk-text-meta', 'pagination-total');
         total.innerText = `${DisplayHelpers.intToString(info.totalCount)} ${totalString}`;
@@ -534,10 +556,34 @@ export module Views {
 
         container.appendChild(addProgressiveAppend(newPageContent));
 
+        processUIkitElements(container);
         if (refreshMath) {
 
             ViewsExtra.refreshMath(container);
         }
+    }
+
+    function processUIkitElements(container: HTMLElement): void {
+
+        processUIkitElementsExceptImages(container);
+        //previous processing may create new images (e.g. for pagination)
+        processImages(container);
+    }
+
+    function processImages(container: HTMLElement): void {
+
+        const images = container.querySelectorAll('[uk-icon]');
+        DOMHelpers.forEach(images, image => {
+            if (image.hasChildNodes()) {
+                return;
+            }
+            UIkit.icon(images);
+        });
+    }
+
+    function processUIkitElementsExceptImages(container: HTMLElement): void {
+
+        UIkitToUpdateAfterAddingElements.forEach(item => applyUIkit(container, item));
     }
 
     function addProgressiveAppend(element: HTMLElement): HTMLElement {
@@ -556,6 +602,10 @@ export module Views {
                     fragment.appendChild(element);
                 }
                 elementWithMoreChildNodes.appendChild(fragment);
+                for (const element of insertLater) {
+
+                    processUIkitElements(element);
+                }
             }, 0);
         }
         return element;

@@ -43,7 +43,7 @@ export module CategoriesView {
             return tableContainer.toElement();
         }
 
-        const tableHeader = '<thead uk-no-boot>\n' +
+        const tableHeader = '<thead>\n' +
             '    <tr>\n' +
             '        <th class="uk-table-expand">Category</th>\n' +
             '        <th class="uk-text-center category-tags-header uk-table-shrink">Tags</th>\n' +
@@ -113,13 +113,13 @@ export module CategoriesView {
             nameColumn.append(nameLink);
             nameColumn.appendRaw('<br/>');
 
-            const description = dA('<span class="category-description" uk-no-boot>');
+            const description = dA('<span class="category-description">');
             nameColumn.append(description);
             description.appendString(category.description);
 
             if (( ! showingRootCategories) && category.children && category.children.length) {
 
-                const container = dA('<div uk-no-boot>');
+                const container = dA('<div>');
                 nameColumn.append(container);
 
                 const childCategoryElement = dA('<span class="category-children uk-text-small">');
@@ -153,7 +153,7 @@ export module CategoriesView {
         }
         if ( ! justName) {
 
-            const statisticsColumn = ('<td class="category-statistics uk-table-shrink" uk-no-boot>\n' +
+            const statisticsColumn = ('<td class="category-statistics uk-table-shrink">\n' +
                 '    <table>\n' +
                 '        <tr>\n' +
                 '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +
