@@ -302,6 +302,19 @@ export module ViewsExtra {
         adjustMessageContent(container);
     }
 
+    const userIdNoSeparatorRegexValue = "\\@([a-f0-9]{8})([a-f0-9]{4})([a-f0-9]{4})([a-f0-9]{4})([a-f0-9]{12})\\@";
+
+    export function expandUserId(input: string) : string {
+
+        const regex = new RegExp(userIdNoSeparatorRegexValue, 'gi');
+        const match = regex.exec(input);
+        if (match) {
+
+            return '@' + match.slice(1).join('-') + '@';
+        }
+        return input;
+    }
+
     const userIdReferenceRegexValue = "\\@([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\\@";
 
     function matchMultipleUserIds(input: string, callback: (string) => void): void {

@@ -167,7 +167,8 @@ export module EditViews {
         insertQuote(message: ThreadMessageRepository.ThreadMessage): void {
 
             const quotedContent = message.content.split(/\n/).map((line) => `> ${line}`).join('\n');
-            this.addTextAtCurrentPosition(`\n\n> quote|${message.id}|${message.created}|@${message.createdBy.id}@\n>\n${quotedContent}`);
+            const messageId = ViewsExtra.expandUserId(`@${message.createdBy.id}@`);
+            this.addTextAtCurrentPosition(`\n\n> quote|${message.id}|${message.created}|${messageId}\n>\n${quotedContent}`);
         }
 
         private setupEvents(): void {
