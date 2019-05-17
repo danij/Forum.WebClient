@@ -31,7 +31,7 @@ export class HomePage implements Pages.Page {
             const categories = await Pages.getOrShowError(CategoryRepository.getRootCategories());
             if (null == categories) return;
 
-            return CategoriesView.createRootCategoriesDisplay(categories, PageActions.getCategoryCallback());
+            return await CategoriesView.createRootCategoriesDisplay(categories, PageActions.getCategoryCallback());
         });
     }
 
@@ -50,7 +50,7 @@ export class HomePage implements Pages.Page {
             let threadList : HTMLElement = null;
 
             if (null != threadCollection) {
-                const threadElements = ThreadsView.createThreadsPageContent(threadCollection, {
+                const threadElements = await ThreadsView.createThreadsPageContent(threadCollection, {
                     orderBy: this.orderBy,
                     sortOrder: this.sortOrder,
                 }, (value: number) => this.onPageNumberChange(value),
@@ -65,7 +65,7 @@ export class HomePage implements Pages.Page {
                 threadList = threadElements.list;
             }
 
-            return CategoriesView.createCategoryDisplay(this.category, threadList, PageActions.getCategoryCallback(),
+            return await CategoriesView.createCategoryDisplay(this.category, threadList, PageActions.getCategoryCallback(),
                 PageActions.getTagCallback(),
                 PageActions.getPrivilegesCallback());
         });
@@ -135,7 +135,7 @@ export class HomePage implements Pages.Page {
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
             this.bottomPaginationControl = newBottomPaginationControl;
 
-            return ThreadsView.createThreadsTable(threadCollection.threads);
+            return await ThreadsView.createThreadsTable(threadCollection.threads);
         });
 
         Pages.scrollPage(scrollDirection);

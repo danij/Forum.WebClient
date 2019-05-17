@@ -70,13 +70,13 @@ export module ThreadsView {
         return result;
     }
 
-    export function createThreadsPageContent(collection: ThreadRepository.ThreadCollection,
-                                             info: ThreadPageDisplayInfo,
-                                             onPageNumberChange: Views.PageNumberChangeCallback,
-                                             getLinkForPage: Views.GetLinkForPageCallback,
-                                             tagCallback: PageActions.ITagCallback,
-                                             userCallback: PageActions.IUserCallback,
-                                             privilegesCallback: PageActions.IPrivilegesCallback) {
+    export async function createThreadsPageContent(collection: ThreadRepository.ThreadCollection,
+                                                   info: ThreadPageDisplayInfo,
+                                                   onPageNumberChange: Views.PageNumberChangeCallback,
+                                                   getLinkForPage: Views.GetLinkForPageCallback,
+                                                   tagCallback: PageActions.ITagCallback,
+                                                   userCallback: PageActions.IUserCallback,
+                                                   privilegesCallback: PageActions.IPrivilegesCallback) {
 
         collection = collection || ThreadRepository.defaultThreadCollection();
 
@@ -101,7 +101,7 @@ export module ThreadsView {
         const tableContainer = cE('div');
         resultList.appendChild(tableContainer);
         DOMHelpers.addClasses(tableContainer, 'threads-table');
-        tableContainer.appendChild(createThreadsTable(collection.threads));
+        tableContainer.appendChild(await createThreadsTable(collection.threads));
 
         resultList.appendChild(
             result.paginationBottom = Views.createPaginationControl(collection, 'threads',
@@ -140,12 +140,17 @@ export module ThreadsView {
             '</div>');
     }
 
-    export function createThreadsTable(threads: ThreadRepository.Thread[]): HTMLElement {
+    export async function createThreadsTable(threads: ThreadRepository.Thread[]): Promise<HTMLElement> {
 
         if (threads.length < 1) {
 
             return DOMHelpers.parseHTML('<span class="uk-text-warning">No threads found</span>');
         }
+
+        const allMessages = threads
+            .filter(t => t && t.latestMessage)
+            .map(t => t.latestMessage.content);
+        await ViewsExtra.searchUsersById(allMessages);
 
         const table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
 

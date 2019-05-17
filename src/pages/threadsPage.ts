@@ -48,7 +48,7 @@ export class ThreadsPage implements Pages.Page {
             const threadCollection = await this.getThreadCollection();
             if (null == threadCollection) return;
 
-            const elements = ThreadsView.createThreadsPageContent(threadCollection, {
+            const elements = await ThreadsView.createThreadsPageContent(threadCollection, {
                     orderBy: this.orderBy,
                     sortOrder: this.sortOrder,
                     tag: this.tag,
@@ -188,7 +188,7 @@ export class ThreadsPage implements Pages.Page {
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
             this.bottomPaginationControl = newBottomPaginationControl;
 
-            return ThreadsView.createThreadsTable(threadCollection.threads);
+            return await ThreadsView.createThreadsTable(threadCollection.threads);
         });
 
         Pages.scrollPage(scrollDirection);

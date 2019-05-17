@@ -10,6 +10,7 @@ import {EditViews} from './edit';
 import {TagRepository} from '../services/tagRepository';
 import {PrivilegesView} from './privilegesView';
 import {ThreadMessagesView} from './threadMessagesView';
+import {ViewsExtra} from "./extra";
 
 export module CategoriesView {
 
@@ -30,8 +31,13 @@ export module CategoriesView {
         return result;
     }
 
-    export function createCategoriesTable(categories: CategoryRepository.Category[], showingRootCategories: boolean,
-                                          callback: PageActions.ICategoryCallback): HTMLElement {
+    export async function createCategoriesTable(categories: CategoryRepository.Category[], showingRootCategories: boolean,
+                                          callback: PageActions.ICategoryCallback): Promise<HTMLElement> {
+
+        const allMessages = categories
+            .filter(c => c && c.latestMessage)
+            .map(c => c.latestMessage.content);
+        await ViewsExtra.searchUsersById(allMessages);
 
         const tableContainer = dA('<div class="categories-table">');
         const table = dA('<table class="uk-table uk-table-divider uk-table-middle">');
@@ -367,11 +373,11 @@ export module CategoriesView {
         return result;
     }
 
-    export function createRootCategoriesDisplay(categories: CategoryRepository.Category[],
-                                                callback: PageActions.ICategoryCallback): HTMLElement {
+    export async function createRootCategoriesDisplay(categories: CategoryRepository.Category[],
+                                                      callback: PageActions.ICategoryCallback): Promise<HTMLElement> {
 
         const result = cE('div');
-        result.appendChild(createCategoriesTable(categories, true, callback));
+        result.appendChild(await createCategoriesTable(categories, true, callback));
 
         if (Privileges.ForumWide.canAddNewRootCategory()) {
 
@@ -381,11 +387,11 @@ export module CategoriesView {
         return result;
     }
 
-    export function createCategoryDisplay(category: CategoryRepository.Category,
-                                          threadList: HTMLElement,
-                                          callback: PageActions.ICategoryCallback,
-                                          tagCallback: PageActions.ITagCallback,
-                                          privilegesCallback: PageActions.IPrivilegesCallback): HTMLElement {
+    export async function createCategoryDisplay(category: CategoryRepository.Category,
+                                                threadList: HTMLElement,
+                                                callback: PageActions.ICategoryCallback,
+                                                tagCallback: PageActions.ITagCallback,
+                                                privilegesCallback: PageActions.IPrivilegesCallback): Promise<HTMLElement> {
 
         const result = cE('div');
         result.appendChild(createCategoryHeader(category, callback, tagCallback, privilegesCallback));
@@ -394,7 +400,7 @@ export module CategoriesView {
 
         if (category.children && category.children.length) {
 
-            result.appendChild(createCategoriesTable(category.children, false, callback));
+            result.appendChild(await createCategoriesTable(category.children, false, callback));
             separatorNeeded = true;
         }
 

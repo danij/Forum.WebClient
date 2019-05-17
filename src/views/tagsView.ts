@@ -8,6 +8,7 @@ import {Privileges} from '../services/privileges';
 import {EditViews} from './edit';
 import {PrivilegesView} from './privilegesView';
 import {ThreadMessagesView} from './threadMessagesView';
+import {ViewsExtra} from "./extra";
 
 export module TagsView {
 
@@ -39,8 +40,8 @@ export module TagsView {
         list: HTMLElement
     }
 
-    export function createTagsPageContent(tags: TagRepository.Tag[], info: Views.SortInfo,
-                                          callback: PageActions.ITagCallback): TagsPageContent {
+    export async function createTagsPageContent(tags: TagRepository.Tag[], info: Views.SortInfo,
+                                                callback: PageActions.ITagCallback): Promise<TagsPageContent> {
 
         const result = new TagsPageContent();
 
@@ -57,7 +58,7 @@ export module TagsView {
         resultList.appendChild(tagsList);
 
         DOMHelpers.addClasses(tagsList, 'tags-list');
-        tagsList.appendChild(this.createTagsTable(tags));
+        tagsList.appendChild(await this.createTagsTable(tags));
 
         if (Privileges.ForumWide.canAddNewTag()) {
 
@@ -68,7 +69,12 @@ export module TagsView {
         return result;
     }
 
-    export function createTagsTable(tags: TagRepository.Tag[]): HTMLElement {
+    export async function createTagsTable(tags: TagRepository.Tag[]): Promise<HTMLElement> {
+
+        const allMessages = tags
+            .filter(t => t && t.latestMessage)
+            .map(t => t.latestMessage.content);
+        await ViewsExtra.searchUsersById(allMessages);
 
         const tableContainer = dA('<div class="tags-table">');
         const table = dA('<table class="uk-table uk-table-divider uk-table-middle">');

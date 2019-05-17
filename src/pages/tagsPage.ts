@@ -23,7 +23,7 @@ export class TagsPage implements Pages.Page {
             const tagCollection = await this.getAllTags();
             if (null == tagCollection) return;
 
-            const elements = TagsView.createTagsPageContent(tagCollection.tags, {
+            const elements = await TagsView.createTagsPageContent(tagCollection.tags, {
                 orderBy: this.orderBy,
                 sortOrder: this.sortOrder
             }, PageActions.getTagCallback());
@@ -63,7 +63,7 @@ export class TagsPage implements Pages.Page {
 
             if (null == tagCollection) return null;
 
-            return TagsView.createTagsTable(tagCollection.tags);
+            return await TagsView.createTagsTable(tagCollection.tags);
         });
     }
 
