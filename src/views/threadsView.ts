@@ -273,7 +273,7 @@ export module ThreadsView {
                     messageLink.setAttribute('title', messageContent);
                     messageLink.setAttribute('href', Pages.getThreadMessagesOfMessageParentThreadUrlFull(latestMessage.id));
                     messageLink.setAttribute('data-threadmessageid', latestMessage.id);
-                    messageLink.innerText = messageContent;
+                    messageLink.innerText = ViewsExtra.replaceUserIdReferencesWithName(messageContent);
                     container.appendElement(messageLink);
                 }
             }
