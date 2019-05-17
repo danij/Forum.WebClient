@@ -90,6 +90,7 @@ export module Views {
 
             container.appendChild(disabledElement);
             container.appendChild(spinner);
+            UIkit.spinner(spinner);
             spinner.style.display = 'block';
 
         }, displayConfig.showSpinnerAfterMilliSeconds);
@@ -698,7 +699,9 @@ export module Views {
                 DOMHelpers.removeClasses(element, 'uk-button-primary');
 
                 element.innerText = '';
-                element.appendChild(DOMHelpers.parseHTML('<div uk-spinner></div>'))
+                const spinnerElement = DOMHelpers.parseHTML('<div uk-spinner></div>');
+                element.appendChild(spinnerElement);
+                UIkit.spinner(spinnerElement);
 
                 await callback(ev);
             }
