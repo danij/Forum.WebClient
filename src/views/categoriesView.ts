@@ -31,10 +31,23 @@ export module CategoriesView {
         return result;
     }
 
+    function getCategoriesWithSubcategories(categories: CategoryRepository.Category[]) : CategoryRepository.Category[] {
+
+        const result = [];
+
+        for (const category of categories.filter(c => c)) {
+
+            result.push(category);
+            result.push(...category.children.filter(c => c));
+        }
+
+        return result;
+    }
+
     export async function createCategoriesTable(categories: CategoryRepository.Category[], showingRootCategories: boolean,
                                           callback: PageActions.ICategoryCallback): Promise<HTMLElement> {
 
-        const allMessages = categories
+        const allMessages = getCategoriesWithSubcategories(categories)
             .filter(c => c && c.latestMessage)
             .map(c => c.latestMessage.content);
         await ViewsExtra.searchUsersById(allMessages);
