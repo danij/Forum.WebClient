@@ -23,7 +23,8 @@ export module Views {
     declare var UIkit: any;
     const UIkitToUpdateOnPageLoad = ['navbar', 'icon', 'modal', 'close', 'tab'];
     const UIkitToUpdateAfterAddingElements = ['dropdown', 'tab', 'grid', 'card',
-        ['pagination-previous', 'paginationPrevious'], ['pagination-next', 'paginationNext']];
+        ['pagination-previous', 'paginationPrevious'], ['pagination-next', 'paginationNext'],
+        ['form-custom', 'formCustom']];
 
     interface LengthConfig {
 
