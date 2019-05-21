@@ -61,7 +61,9 @@ export module Views {
         sortOrder: string
     }
 
-    function applyUIkit(parent: ParentNode, what: string | string[]): void {
+    function applyUIkit(parent: ParentNode & Node, what: string | string[]): void {
+
+        if ( ! (parent && parent.hasChildNodes())) return;
 
         let toSearch : string, method : string;
         if ('string' === typeof what) {
@@ -574,6 +576,8 @@ export module Views {
     }
 
     function processImages(container: HTMLElement): void {
+
+        if ( ! (container && container.hasChildNodes())) return;
 
         const images = container.querySelectorAll('[uk-icon]');
         DOMHelpers.forEach(images, image => {
