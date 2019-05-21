@@ -179,7 +179,6 @@ export module Views {
 
             const previous = DOMHelpers.parseHTML('<li><a><span uk-pagination-previous></span></a></li>');
             container.appendChild(previous);
-            processUIkitElements(previous);
             Views.onClick(previous, () => { onPageNumberChange(info.page - 1); });
         }
 
@@ -285,7 +284,6 @@ export module Views {
 
             const next = DOMHelpers.parseHTML('<li><a><span uk-pagination-next></span></a></li>');
             container.appendChild(next);
-            processUIkitElements(next);
             Views.onClick(next, () => { onPageNumberChange(info.page + 1); });
         }
 
@@ -294,7 +292,21 @@ export module Views {
         DOMHelpers.addClasses(total, 'uk-flex', 'uk-flex-center', 'uk-text-meta', 'pagination-total');
         total.innerText = `${DisplayHelpers.intToString(info.totalCount)} ${totalString}`;
 
+        scheduleOnAttachToDocumentBody(result, () => processUIkitElements(result));
+
         return result;
+    }
+
+    function scheduleOnAttachToDocumentBody(element: HTMLElement, handler: () => void) : void {
+
+        const interval = setInterval(() => {
+
+            if (document.body.contains(element)) {
+
+                handler();
+                clearInterval(interval);
+            }
+        }, 50);
     }
 
     export function createOrderByLabel(value: string, title: string, info: SortInfo): string {
