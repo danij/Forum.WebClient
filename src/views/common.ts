@@ -454,6 +454,7 @@ export module Views {
 
     export function scrollContainerTo(element: HTMLElement): void {
 
+        if ( ! element) return;
         setTimeout(() => {
 
             element.scrollIntoView();

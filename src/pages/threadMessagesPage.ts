@@ -86,14 +86,15 @@ export class ThreadMessagesPage implements Pages.Page {
 
         }).then(() => {
 
-            if (jumpToId) {
+            setTimeout(() => {
+                if (jumpToId) {
 
-                Views.scrollContainerTo(document.getElementById(jumpToId));
-            }
-            else {
+                    Views.scrollContainerTo(document.getElementById(jumpToId));
+                } else {
 
-                Views.scrollContainerTo(document.getElementsByClassName('page-content')[0].children[0] as HTMLElement);
-            }
+                    Views.scrollContainerTo(document.getElementsByClassName('page-content')[0].children[0] as HTMLElement);
+                }
+            }, 100);
         })
     }
 
