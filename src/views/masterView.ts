@@ -26,12 +26,24 @@ export module MasterView {
 
         document.title = config.title;
 
-        const footerLinks = document.getElementById('subnav-links');
+        const subNavLinks = document.getElementById('subnav-links');
 
-        for (let footerLink of config.navLinks) {
+        for (let subNavLink of config.navLinks) {
 
-            footerLinks.appendChild(createNavLink(footerLink, docCallback));
+            subNavLinks.appendChild(createNavLink(subNavLink, docCallback));
         }
+
+        setTimeout(() => {
+            //wait for renderer to load
+            const newsItems = document.getElementById('news');
+            for (let newsItem of config.newsItems) {
+
+                const item = cE("li");
+                item.innerHTML = DOMHelpers.parseHTML(ViewsExtra.expandContent(newsItem)).innerHTML;
+                newsItems.appendChild(item);
+            }
+            ViewsExtra.refreshMath(newsItems);
+        }, 0);
     }
 
     function createNavLink(link: Pages.PageLink, docCallback: IDocumentationCallback) : HTMLLIElement {

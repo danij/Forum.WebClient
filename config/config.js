@@ -75,6 +75,10 @@ window.masterPageConfig = {
         title: "Terms of Service",
         docName: window.displayConfig.termsOfServiceDocName
     }],
+    newsItems: [
+        'Sample *News*',
+        'Sample *News* #2'
+    ],
     externalImagesWarningFormat: 'External link: {title}'
 };
 

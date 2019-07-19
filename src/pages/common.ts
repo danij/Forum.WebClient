@@ -47,6 +47,7 @@ export module Pages {
         baseUri: string
         title: string
         navLinks: PageLink[],
+        newsItems: string[],
         allowedAuthProviders: string[],
         externalImagesWarningFormat: string
     }
