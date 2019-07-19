@@ -362,11 +362,31 @@ export module Pages {
         return getUrl(getThreadMessagesOfThreadUrl(thread.id, thread.name, page));
     }
 
+    function trim(input: string, c: string) {
+
+        let start = 0, stop = input.length;
+        for (let i = 0; i < input.length; ++i) {
+            if (c == input[i]) {
+                ++start;
+            } else {
+                break;
+            }
+        }
+        for (let i = input.length - 1; i >= 0; --i) {
+            if (c == input[i]) {
+                --stop;
+            } else {
+                break;
+            }
+        }
+        return input.slice(start, stop);
+    }
+
     export function getThreadMessagesOfThreadUrl(id: string, name: string, page?: number): string {
 
         if (Views.DisplayConfig.useDashesForThreadNameInUrl) {
 
-            name = name.replace(/\s/g, '-');
+            name = trim(name.replace(/[\s!?+]/g, '-'), '-');
         }
 
         let result = `thread/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
