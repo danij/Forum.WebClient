@@ -1335,7 +1335,7 @@ html {
 }
 
 em {
-    color: initial;
+    color: @global-color;
 }
 
 #search-modal .uk-modal-dialog {
@@ -1673,6 +1673,8 @@ form.assign-privileges-form {
     #news {
 
         margin: 0;
+        padding: 0 0 5px 0;
         list-style-type: none;
+        border-bottom: solid 1px @global-border;
     }
 }
