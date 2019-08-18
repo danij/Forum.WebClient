@@ -587,24 +587,28 @@ export module Views {
 
     export function processUIkitElements(container: HTMLElement): void {
 
-        processUIkitElementsExceptImages(container);
-        //previous processing may create new images (e.g. for pagination)
-        processImages(container);
+        const interval = setInterval(() => {
+            if (document.body.contains(container)) {
+                clearInterval(interval);
+
+                processUIkitElementsExceptImages(container);
+                //previous processing may create new images (e.g. for pagination)
+                processImages(container);
+            }
+        }, 100);
     }
 
     function processImages(container: HTMLElement): void {
 
         if ( ! (container && container.hasChildNodes())) return;
 
-        setTimeout(() => {
-            const images = container.querySelectorAll('[uk-icon]');
-            DOMHelpers.forEach(images, image => {
-                if (image.hasChildNodes()) {
-                    return;
-                }
-                UIkit.icon(image);
-            });
-        }, 0);
+        const images = container.querySelectorAll('[uk-icon]');
+        DOMHelpers.forEach(images, image => {
+            if (image.hasChildNodes()) {
+                return;
+            }
+            UIkit.icon(image);
+        });
     }
 
     function processUIkitElementsExceptImages(container: HTMLElement): void {
