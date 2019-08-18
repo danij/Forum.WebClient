@@ -1164,6 +1164,22 @@ export module ThreadMessagesView {
 
         } as ThreadRepository.Thread);
 
+        {
+            const timeFlex = dA('<div class="date-time-flex">');
+            container.append(timeFlex);
+
+            timeFlex.append(UsersView.createAuthorSmall(message.createdBy));
+            const recentMessageTime = dA('<div class="recent-message-time uk-text-meta">');
+            timeFlex.append(recentMessageTime);
+
+            const recentMessageTimeContent = cE('span');
+            if (message.created) {
+
+                recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(message.created);
+            }
+            recentMessageTime.appendElement(recentMessageTimeContent);
+        }
+
         let threadTitleElement: HTMLElement;
         if (threadId) {
 
@@ -1184,20 +1200,6 @@ export module ThreadMessagesView {
         }
         threadTitleElement.innerText = threadTitle;
         container.appendElement(threadTitleElement);
-
-        const timeFlex = dA('<div class="date-time-flex">');
-        container.append(timeFlex);
-
-        timeFlex.append(UsersView.createAuthorSmall(message.createdBy));
-        const recentMessageTime = dA('<div class="recent-message-time uk-text-meta">');
-        timeFlex.append(recentMessageTime);
-
-        const recentMessageTimeContent = cE('span');
-        if (message.created) {
-
-            recentMessageTimeContent.innerHTML = DisplayHelpers.getDateTime(message.created);
-        }
-        recentMessageTime.appendElement(recentMessageTimeContent);
 
         const messageContent = message.content || 'empty';
 
