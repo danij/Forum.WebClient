@@ -587,15 +587,24 @@ export module Views {
 
     export function processUIkitElements(container: HTMLElement): void {
 
-        const interval = setInterval(() => {
-            if (document.body.contains(container)) {
-                clearInterval(interval);
+        function process() {
 
-                processUIkitElementsExceptImages(container);
-                //previous processing may create new images (e.g. for pagination)
-                processImages(container);
-            }
-        }, 100);
+            processUIkitElementsExceptImages(container);
+            //previous processing may create new images (e.g. for pagination)
+            processImages(container);
+        }
+
+        if (document.body.contains(container)) {
+            process();
+        }
+        else {
+            const interval = setInterval(() => {
+                if (document.body.contains(container)) {
+                    clearInterval(interval);
+                    process();
+                }
+            }, 100);
+        }
     }
 
     function processImages(container: HTMLElement): void {
