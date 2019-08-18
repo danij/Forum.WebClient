@@ -387,7 +387,9 @@ export module Pages {
 
         if (Views.DisplayConfig.useDashesForThreadNameInUrl) {
 
-            name = trim(name.replace(/[\s!?+]/g, '-'), '-');
+            name = name.replace(/[\s.!?+]/g, '-');
+            name = name.replace(/[-]+/g, '-');
+            name = trim(name, '-');
         }
 
         let result = `thread/${encodeURIComponentMax(name, maxNameSizeInUrl)}/${encodeURIComponent(id)}`;
