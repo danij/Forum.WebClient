@@ -102,7 +102,7 @@ export module CategoriesView {
 
         const justName = showingRootCategories && (( ! category.tags) || (0 == category.tags.length));
 
-        const row = dA('tr');
+        const row = dA(level > 0 ? 'tr' : '<tr class="row-separator">');
         container.append(row);
 
         {
