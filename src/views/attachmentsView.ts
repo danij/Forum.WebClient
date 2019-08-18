@@ -545,7 +545,7 @@ export module AttachmentsView {
 
         if (( ! attachments) || ( ! attachments.length)) {
 
-            return DOMHelpers.parseHTML('<span class="uk-text-warning">No attachments found</span>');
+            return DOMHelpers.parseHTML('<span class="uk-text-warning">No previously uploaded attachments found</span>');
         }
         const table = dA('<table class="uk-table uk-table-divider uk-table-middle uk-table-small uk-table-justify">');
 
