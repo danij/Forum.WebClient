@@ -255,6 +255,7 @@ export module EditViews {
                 }
             }
 
+            Views.processUIkitElements(list);
             return list;
         }
 

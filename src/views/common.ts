@@ -580,7 +580,7 @@ export module Views {
         }
     }
 
-    function processUIkitElements(container: HTMLElement): void {
+    export function processUIkitElements(container: HTMLElement): void {
 
         processUIkitElementsExceptImages(container);
         //previous processing may create new images (e.g. for pagination)
@@ -591,13 +591,15 @@ export module Views {
 
         if ( ! (container && container.hasChildNodes())) return;
 
-        const images = container.querySelectorAll('[uk-icon]');
-        DOMHelpers.forEach(images, image => {
-            if (image.hasChildNodes()) {
-                return;
-            }
-            UIkit.icon(images);
-        });
+        setTimeout(() => {
+            const images = container.querySelectorAll('[uk-icon]');
+            DOMHelpers.forEach(images, image => {
+                if (image.hasChildNodes()) {
+                    return;
+                }
+                UIkit.icon(image);
+            });
+        }, 0);
     }
 
     function processUIkitElementsExceptImages(container: HTMLElement): void {
