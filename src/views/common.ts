@@ -502,6 +502,11 @@ export module Views {
             status: status,
             timeout: timeout
         });
+        setTimeout(() => {
+            DOMHelpers.forEach(document.getElementsByClassName('uk-notification-close'), close => {
+                UIkit.close(close);
+            });
+        }, 1000);
     }
 
     export function showPrimaryNotification(message: string) {
