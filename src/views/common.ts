@@ -299,14 +299,19 @@ export module Views {
 
     function scheduleOnAttachToDocumentBody(element: HTMLElement, handler: () => void) : void {
 
-        const interval = setInterval(() => {
+        if (document.body.contains(element)) {
+            handler();
+        }
+        else {
+            const interval = setInterval(() => {
 
-            if (document.body.contains(element)) {
+                if (document.body.contains(element)) {
 
-                handler();
-                clearInterval(interval);
-            }
-        }, 50);
+                    handler();
+                    clearInterval(interval);
+                }
+            }, 50);
+        }
     }
 
     export function createOrderByLabel(value: string, title: string, info: SortInfo): string {
@@ -587,24 +592,12 @@ export module Views {
 
     export function processUIkitElements(container: HTMLElement): void {
 
-        function process() {
+        scheduleOnAttachToDocumentBody(container, () => {
 
             processUIkitElementsExceptImages(container);
             //previous processing may create new images (e.g. for pagination)
             processImages(container);
-        }
-
-        if (document.body.contains(container)) {
-            process();
-        }
-        else {
-            const interval = setInterval(() => {
-                if (document.body.contains(container)) {
-                    clearInterval(interval);
-                    process();
-                }
-            }, 100);
-        }
+        });
     }
 
     function processImages(container: HTMLElement): void {
