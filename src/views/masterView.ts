@@ -28,7 +28,7 @@ export module MasterView {
 
         const subNavLinks = document.getElementById('subnav-links');
 
-        for (let subNavLink of config.navLinks) {
+        for (let subNavLink of config.navLinks || []) {
 
             subNavLinks.appendChild(createNavLink(subNavLink, docCallback));
         }
@@ -36,7 +36,7 @@ export module MasterView {
         setTimeout(() => {
             //wait for renderer to load
             const newsItems = document.getElementById('news');
-            for (let newsItem of config.newsItems) {
+            for (let newsItem of config.newsItems || []) {
 
                 const item = cE("li");
                 item.innerHTML = DOMHelpers.parseHTML(ViewsExtra.expandContent(newsItem)).innerHTML;
