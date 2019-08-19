@@ -979,7 +979,7 @@ export module ThreadMessagesView {
         container.innerHTML = '';
         changeReasonInput.value = '';
 
-        const editControl = new EditViews.EditControl(container, initialText);
+        const editControl = new EditViews.EditControl(container, initialText, false);
 
         Views.onClick(saveButton, async () => {
 

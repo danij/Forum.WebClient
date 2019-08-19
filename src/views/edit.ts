@@ -113,7 +113,7 @@ export module EditViews {
         private previewContainer: HTMLDivElement;
         private resultContainer: HTMLDivElement;
 
-        constructor(container: HTMLElement, initialText: string = '') {
+        constructor(container: HTMLElement, initialText: string = '', horizontal: boolean = true) {
 
             this.textArea = cE('textarea') as HTMLTextAreaElement;
             DOMHelpers.addClasses(this.textArea, 'uk-textarea');
@@ -129,6 +129,9 @@ export module EditViews {
             const grid = cE('div');
             container.appendChild(grid);
             DOMHelpers.addClasses(grid, 'uk-grid');
+            if (horizontal) {
+                DOMHelpers.addClasses(grid, 'uk-child-width-expand', 'uk-grid-divider');
+            }
             grid.setAttribute('uk-grid', '');
 
             const textAreaContainer = cE('div');
