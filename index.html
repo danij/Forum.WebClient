@@ -42,30 +42,30 @@
                 <ul class="uk-navbar-nav uk-text-center">
                     <li id="home-page-link"><a data-href="home">
                         <div><span uk-icon="icon: home"></span>
-                            <div class="uk-navbar-subtitle">Home</div>
+                            <div class="uk-navbar-subtitle" translate>Home</div>
                         </div>
                     </a></li>
                     <li id="tags-page-link"><a data-href="tags">
                         <div><span uk-icon="icon: tag"></span>
-                            <div class="uk-navbar-subtitle">Tags</div>
+                            <div class="uk-navbar-subtitle" translate>Tags</div>
                         </div>
                     </a></li>
                     <li id="threads-page-link"><a data-href="threads">
                         <div><span uk-icon="icon: list"></span>
-                            <div class="uk-navbar-subtitle">Threads</div>
+                            <div class="uk-navbar-subtitle" translate>Threads</div>
                         </div>
                     </a></li>
                     <li id="others-page-dropdown" class="uk-hidden">
                         <a data-href="#" class="uk-text-center">
                             <div><span uk-icon="icon: more"></span>
-                                <div class="uk-navbar-subtitle">Others</div>
+                                <div class="uk-navbar-subtitle" translate>Others</div>
                             </div>
                         </a>
                         <div class="uk-navbar-dropdown uk-text-left">
                             <ul class="uk-nav uk-navbar-dropdown-nav">
-                                <li id="attachments-page-link" class="uk-hidden"><a data-href="view_attachments">
+                                <li id="attachments-page-link" class="uk-hidden"><a data-href="view_attachments" translate>
                                     <span uk-icon="icon: download"></span> Attachments</a></li>
-                                <li id="comments-page-link" class="uk-hidden"><a data-href="thread_message_comments">
+                                <li id="comments-page-link" class="uk-hidden"><a data-href="thread_message_comments" translate>
                                     <span uk-icon="icon: warning" class="no-color"></span> Commented Messages</a></li>
                             </ul>
                         </div>
@@ -79,17 +79,17 @@
                 <ul class="uk-navbar-nav">
                     <li id="show-search-modal"><a class="uk-text-center">
                         <div><span uk-icon="icon: search"></span>
-                            <div class="uk-navbar-subtitle">Search</div>
+                            <div class="uk-navbar-subtitle" translate>Search</div>
                         </div>
                     </a></li>
                     <li id="users-page-link"><a data-href="users" class="uk-text-center">
                         <div><span uk-icon="icon: users"></span>
-                            <div class="uk-navbar-subtitle">Users</div>
+                            <div class="uk-navbar-subtitle" translate>Users</div>
                         </div>
                     </a></li>
                     <li id="forum-wide-privileges-link" class="uk-hidden"><a data-href="#" class="uk-text-center" id="settings">
                         <div><span uk-icon="icon: settings"></span>
-                            <div class="uk-navbar-subtitle">Settings</div>
+                            <div class="uk-navbar-subtitle" translate>Settings</div>
                         </div>
                     </a></li>
                     <li id="new-thread-page-link" class="uk-hidden"><a data-href="threads/new" class="uk-text-center">
@@ -105,38 +105,38 @@
         <ul class="uk-navbar-nav">
             <li><a data-href="#" id="login-link" class="uk-text-center">
                 <div><span uk-icon="icon: sign-in"></span>
-                    <div class="uk-navbar-subtitle">Login</div>
+                    <div class="uk-navbar-subtitle" translate>Login</div>
                 </div>
             </a></li>
             <li>
                 <a data-href="#" id="logged-in-link" class="uk-text-center uk-hidden">
                     <div><span uk-icon="icon: user"></span>
-                        <div class="uk-navbar-subtitle">My User</div>
+                        <div class="uk-navbar-subtitle" translate>My User</div>
                     </div>
                     <span id="logged-in-new-content" class="uk-hidden" uk-icon="bell"></span>
                 </a>
                 <div class="uk-navbar-dropdown">
                     <ul class="uk-nav uk-navbar-dropdown-nav">
                         <li><a href="#" id="create-user-name-link" class="uk-hidden">
-                            <span uk-icon="icon: warning"></span> No user name has been yet created. Click here to create one.</a></li>
+                            <span uk-icon="icon: warning"></span> NO_USER_YET</a></li>
                         <li><a href="#" id="my-user-link" class="uk-hidden"></a></li>
-                        <li><a href="#" id="change-password-link" class="uk-hidden">Change Password</a></li>
+                        <li><a href="#" id="change-password-link" class="uk-hidden" translate>Change Password</a></li>
                         <li class="uk-nav-divider"></li>
                         <li>
-                            <a href="#" id="vote-history-link">Received Votes</a>
+                            <a href="#" id="vote-history-link" translate>Received Votes</a>
                             <span id="vote-history-nr" class="auth-statistic uk-badge">0</span>
                         </li>
                         <li>
-                            <a href="#" id="quote-history-link">Quoted By</a>
+                            <a href="#" id="quote-history-link" translate>Quoted By</a>
                             <span id="quote-history-nr" class="auth-statistic uk-badge">0</span>
                         </li>
                         <li class="uk-nav-divider"></li>
                         <li>
-                            <a href="#" id="private-messages-link">Private Messages</a>
+                            <a href="#" id="private-messages-link" translate>Private Messages</a>
                             <span id="private-messages-nr" class="auth-statistic uk-badge">0</span>
                         </li>
                         <li class="uk-nav-divider"></li>
-                        <li><a href="#" id="logout-link"><span uk-icon="icon: sign-out"></span> Logout</a></li>
+                        <li><a href="#" id="logout-link" translate><span uk-icon="icon: sign-out"></span> Logout</a></li>
                     </ul>
                 </div>
             </li>
@@ -152,7 +152,7 @@
 <div class="page-content">
     <div class="uk-nav-sub uk-flex uk-flex-center">
         <ul class="uk-subnav uk-subnav-divider" id="subnav-links">
-            <li><a href="#" id="reopen-consent-modal">Consent</a></li>
+            <li><a href="#" id="reopen-consent-modal" translate>Consent</a></li>
         </ul>
     </div>
     <div class="uk-nav-sub" id="news-container">
@@ -169,7 +169,7 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Recent Threads</h2>
+            <h2 class="uk-modal-title" translate>Recent Threads</h2>
         </div>
         <div class="uk-modal-body">
             <div class="recent-threads-content"></div>
@@ -181,7 +181,7 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Recent Messages</h2>
+            <h2 class="uk-modal-title" translate>Recent Messages</h2>
         </div>
         <div class="uk-modal-body">
             <div class="recent-messages-content"></div>
@@ -193,7 +193,7 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Received Votes</h2>
+            <h2 class="uk-modal-title" translate>Received Votes</h2>
         </div>
         <div class="uk-modal-body">
             <div class="received-votes-content"></div>
@@ -205,7 +205,7 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Received Quotes</h2>
+            <h2 class="uk-modal-title">Quoted By</h2>
         </div>
         <div class="uk-modal-body">
             <div class="quoted-messages-content"></div>
@@ -217,14 +217,14 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Select Tags</h2>
+            <h2 class="uk-modal-title" translate>Select Tags</h2>
         </div>
         <div class="uk-modal-body">
             <form></form>
         </div>
         <div class="uk-modal-footer uk-text-right">
-            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-            <button class="uk-button uk-button-primary uk-modal-close" type="button">Save</button>
+            <button class="uk-button uk-button-default uk-modal-close" type="button" translate>Cancel</button>
+            <button class="uk-button uk-button-primary uk-modal-close" type="button" translate>Save</button>
         </div>
     </div>
 </div>
@@ -233,7 +233,7 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Select Tag</h2>
+            <h2 class="uk-modal-title" translate>Select Tag</h2>
         </div>
         <div class="uk-modal-body">
             <form>
@@ -243,8 +243,8 @@
             </form>
         </div>
         <div class="uk-modal-footer uk-text-right">
-            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-            <button class="uk-button uk-button-primary uk-modal-close" type="button">Save</button>
+            <button class="uk-button uk-button-default uk-modal-close" type="button" translate>Cancel</button>
+            <button class="uk-button uk-button-primary uk-modal-close" type="button" translate>Save</button>
         </div>
     </div>
 </div>
@@ -253,15 +253,15 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Select Category Parent</h2>
+            <h2 class="uk-modal-title" translate>Select Category Parent</h2>
         </div>
         <div class="uk-modal-body">
             <form>
             </form>
         </div>
         <div class="uk-modal-footer uk-text-right">
-            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-            <button class="uk-button uk-button-primary uk-modal-close" type="button">Save</button>
+            <button class="uk-button uk-button-default uk-modal-close" type="button" translate>Cancel</button>
+            <button class="uk-button uk-button-primary uk-modal-close" type="button" translate>Save</button>
         </div>
     </div>
 </div>
@@ -270,12 +270,12 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Select Thread</h2>
+            <h2 class="uk-modal-title" translate>Select Thread</h2>
         </div>
         <div class="uk-modal-body">
             <form class="uk-form-stacked">
                 <div>
-                    <label class="uk-form-label" for="search-thread-by-name">Search Thread by Initial</label>
+                    <label class="uk-form-label" for="search-thread-by-name" translate>Search Thread by Initial</label>
                     <div class="uk-form-controls">
                         <input class="uk-input" id="search-thread-by-name" />
                     </div>
@@ -285,7 +285,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="uk-form-label" for="selected-thread-id">Selected Thread Id</label>
+                    <label class="uk-form-label" for="selected-thread-id" translate>Selected Thread Id</label>
                     <div class="uk-form-controls">
                         <input class="uk-input" id="selected-thread-id" />
                     </div>
@@ -293,8 +293,8 @@
             </form>
         </div>
         <div class="uk-modal-footer uk-text-right">
-            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-            <button class="uk-button uk-button-primary uk-modal-close" type="button">Save</button>
+            <button class="uk-button uk-button-default uk-modal-close" type="button" translate>Cancel</button>
+            <button class="uk-button uk-button-primary uk-modal-close" type="button" translate>Save</button>
         </div>
     </div>
 </div>
@@ -303,7 +303,7 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Subscribed Users</h2>
+            <h2 class="uk-modal-title" translate>Subscribed Users</h2>
         </div>
         <div class="uk-modal-body">
             <div class="subscribed-users-content users-list"></div>
@@ -315,7 +315,7 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Online Users</h2>
+            <h2 class="uk-modal-title" translate>Online Users</h2>
         </div>
         <div class="uk-modal-body">
             <div class="online-users-content users-list"></div>
@@ -327,15 +327,15 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Edit Message</h2>
+            <h2 class="uk-modal-title" translate>Edit Message</h2>
         </div>
         <div class="uk-modal-body">
         </div>
         <div class="uk-modal-footer uk-text-right uk-flex">
-            <label class="uk-margin-right">Change Reason:</label>
+            <label class="uk-margin-right" translate>Change Reason:</label>
             <input type="text" class="change-reason-input uk-input uk-form-small uk-flex-1" />
-            <button class="uk-button uk-button-default uk-form-small uk-modal-close uk-margin-left" type="button">Cancel</button>
-            <button class="uk-button uk-button-primary uk-form-small uk-margin-left" type="button">Save</button>
+            <button class="uk-button uk-button-default uk-form-small uk-modal-close uk-margin-left" type="button" translate>Cancel</button>
+            <button class="uk-button uk-button-primary uk-form-small uk-margin-left" type="button" translate>Save</button>
         </div>
     </div>
 </div>
@@ -344,7 +344,7 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Message Comments</h2>
+            <h2 class="uk-modal-title" translate>Message Comments</h2>
         </div>
         <div class="uk-modal-body">
             <div class="message-comments-container"></div>
@@ -356,18 +356,18 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Search</h2>
+            <h2 class="uk-modal-title" translate>Search</h2>
         </div>
         <div class="uk-modal-body">
             <div class="search-header">
                 <div class="uk-form-controls uk-text-center uk-margin-bottom">
-                    <label><input class="uk-radio" type="radio" name="searchFor" value="threadMessage" checked="checked"> Individual Thread Message</label>
-                    <label><input class="uk-radio" type="radio" name="searchFor" value="thread"> Thread Name</label>
-                    <label><input class="uk-radio" type="radio" name="searchFor" value="user"> User Name</label>
+                    <label><input class="uk-radio" type="radio" name="searchFor" value="threadMessage" checked="checked" translate> Individual Thread Message</label>
+                    <label><input class="uk-radio" type="radio" name="searchFor" value="thread" translate> Thread Name</label>
+                    <label><input class="uk-radio" type="radio" name="searchFor" value="user" translate> User Name</label>
                 </div>
                 <div class="uk-form-controls uk-margin-bottom">
                     <input class="uk-input" type="text" id="searchInput" />
-                    <button id="searchButton" class="uk-button uk-button-primary">Search</button>
+                    <button id="searchButton" class="uk-button uk-button-primary" translate>Search</button>
                 </div>
             </div>
             <hr/>
@@ -381,7 +381,7 @@
 <div id="privileges-modal" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <button class="uk-modal-close-default" type="button" uk-close></button>
-        <h2 class="uk-modal-title render-math">Privileges</h2>
+        <h2 class="uk-modal-title render-math" translate>Privileges</h2>
 
         <div class="privileges-part1">
         </div>
@@ -394,14 +394,14 @@
 <div id="consent-modal" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <button class="uk-modal-close-default" type="button" uk-close></button>
-        <h2 class="uk-modal-title">Consent Required</h2>
+        <h2 class="uk-modal-title" translate>Consent Required</h2>
 
         <ul uk-tab class="uk-flex-center uk-tab">
             <li class="uk-active" aria-expanded="true">
-                <a href="#">Cookies</a>
+                <a href="#" translate>Cookies</a>
             </li>
             <li aria-expanded="false">
-                <a href="#">External Images/Videos</a>
+                <a href="#" translate>External Images/Videos</a>
             </li>
         </ul>
         <ul class="uk-switcher">
@@ -487,7 +487,7 @@
 <div id="login-modal" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <button class="uk-modal-close-default" type="button" uk-close></button>
-        <h2 class="uk-modal-title">Login</h2>
+        <h2 class="uk-modal-title" translate>Login</h2>
 
         <div class="uk-margin">
             <input type="checkbox" id="show-in-online-users" class="uk-checkbox" />
@@ -512,20 +512,20 @@
                             <input type="password" id="login-custom-password" class="uk-input" placeholder="password" />
                         </div>
                         <div class="uk-margin uk-text-center">
-                            <button id="login-custom-button" class="uk-button uk-button-primary">Log in</button>
+                            <button id="login-custom-button" class="uk-button uk-button-primary" translate>Log in</button>
                         </div>
                         <div class="uk-margin uk-hidden" id="login-check-not-a-robot">
                         </div>
                     </form>
                     <span>
-                        <a href="#" id="register-link" class="uk-align-left uk-margin-remove">Create new account</a>
-                        <a href="#" id="forgotten-password" class="uk-align-right uk-margin-remove">Forgot the password?</a>
+                        <a href="#" id="register-link" class="uk-align-left uk-margin-remove" translate>Create new account</a>
+                        <a href="#" id="forgotten-password" class="uk-align-right uk-margin-remove" translate>Forgot the password?</a>
                     </span>
                 </div>
             </div>
             <div class="login-column-wrapper">
                 <div id="login-different-providers" class="uk-hidden">
-                    <p>With a different provider:</p>
+                    <p translate>With a different provider:</p>
                     <div class="uk-text-center uk-hidden" id="login-container-google">
                         <!--https://developers.google.com/identity/branding-guidelines-->
                         <a id="login-with-google"></a>
@@ -539,25 +539,25 @@
 <div id="register-modal" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <button class="uk-modal-close-default" type="button" uk-close></button>
-        <h2 class="uk-modal-title">Register a New Account</h2>
+        <h2 class="uk-modal-title" translate>Register a New Account</h2>
 
-        <p>When registering, a confirmation link will be sent to the email you provide. Registration will only be complete after confirmation.</p>
+        <p translate>REGISTER_CONFIRMATION_WARNING</p>
         <form>
             <div class="uk-margin">
-                <input type="text" id="register-email" class="uk-input" placeholder="email" />
+                <input type="text" id="register-email" class="uk-input" placeholder="email" translate />
             </div>
             <div class="uk-margin">
-                <input type="password" id="register-password" class="uk-input" placeholder="password for the new account" />
+                <input type="password" id="register-password" class="uk-input" placeholder="password for the new account" translate />
             </div>
             <div class="uk-margin">
-                <input type="password" id="register-password-confirm" class="uk-input" placeholder="confirm password" />
+                <input type="password" id="register-password-confirm" class="uk-input" placeholder="confirm password" translate />
             </div>
             <ul uk-tab class="uk-flex-center uk-tab uk-margin-remove-bottom">
                 <li class="uk-active" aria-expanded="true">
-                    <a href="#">Privacy Policy</a>
+                    <a href="#" translate>Privacy Policy</a>
                 </li>
                 <li aria-expanded="false">
-                    <a href="#">Terms Of Service</a>
+                    <a href="#" translate>Terms Of Service</a>
                 </li>
             </ul>
             <ul class="uk-switcher">
@@ -566,16 +566,16 @@
             </ul>
             <div class="uk-margin">
                 <input type="checkbox" id="register-accept-privacy-and-tos" class="uk-checkbox" />
-                <label for="register-accept-privacy-and-tos">I agree to the Privacy Policy and Terms of Service</label>
+                <label for="register-accept-privacy-and-tos" translate>I agree to the Privacy Policy and Terms of Service</label>
             </div>
             <div class="uk-margin uk-hidden">
                 <input type="checkbox" id="register-confirm-min-age" class="uk-checkbox" />
-                <label for="register-confirm-min-age">I am at least {age} years old</label>
+                <label for="register-confirm-min-age" translate>I am at least {age} years old</label>
             </div>
             <div class="uk-margin uk-hidden" id="register-check-not-a-robot">
             </div>
             <div class="uk-margin uk-text-center uk-hidden">
-                <button id="register-button" class="uk-button uk-button-primary">Create account</button>
+                <button id="register-button" class="uk-button uk-button-primary" translate>Create account</button>
             </div>
         </form>
     </div>
@@ -584,7 +584,7 @@
 <div id="create-user-name-modal" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <button class="uk-modal-close-default" type="button" uk-close></button>
-        <h2 class="uk-modal-title">Create User Name</h2>
+        <h2 class="uk-modal-title" translate>Create User Name</h2>
 
         <div>
             <div class="uk-margin">
@@ -612,7 +612,7 @@
 <div id="change-password-modal" uk-modal>
     <div class="uk-modal-dialog uk-modal-body">
         <button class="uk-modal-close-default" type="button" uk-close></button>
-        <h2 class="uk-modal-title">Change Password</h2>
+        <h2 class="uk-modal-title" translate>Change Password</h2>
 
         <form>
             <div class="uk-margin">
@@ -630,7 +630,7 @@
             <div class="uk-margin uk-hidden" id="change-password-check-not-a-robot">
             </div>
             <div class="uk-margin uk-text-center">
-                <button id="change-password-button" class="uk-button uk-button-primary">Change Password</button>
+                <button id="change-password-button" class="uk-button uk-button-primary" translate>Change Password</button>
             </div>
         </form>
     </div>
@@ -648,14 +648,14 @@
     <div class="uk-modal-dialog uk-margin-auto-vertical">
         <button class="uk-modal-close-default" type="button" uk-close></button>
         <div class="uk-modal-header">
-            <h2 class="uk-modal-title">Select Attachment</h2>
+            <h2 class="uk-modal-title" translate>Select Attachment</h2>
         </div>
         <div class="uk-modal-body">
             <form class="uk-form-stacked">
                 <div class="uk-margin" id="select-attachment-latest-container">
                 </div>
                 <div>
-                    <label class="uk-form-label" for="selected-attachment-id">Selected Attachment Id <span class="uk-text-muted">(an existing attachment id can also be pasted)</span></label>
+                    <label class="uk-form-label" for="selected-attachment-id" translate>Selected Attachment Id <span class="uk-text-muted" translate>(an existing attachment id can also be pasted)</span></label>
                     <div class="uk-form-controls">
                         <input class="uk-input" id="selected-attachment-id" />
                     </div>
@@ -663,8 +663,8 @@
             </form>
         </div>
         <div class="uk-modal-footer uk-text-right">
-            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-            <button class="uk-button uk-button-primary uk-modal-close" type="button">Save</button>
+            <button class="uk-button uk-button-default uk-modal-close" type="button" translate>Cancel</button>
+            <button class="uk-button uk-button-primary uk-modal-close" type="button" translate>Save</button>
         </div>
     </div>
 </div>
@@ -675,8 +675,14 @@
     </span>
     <div class="uk-float-left">
         <select id="theme-select" class="uk-select">
-            <option value="default" selected>Default Theme</option>
-            <option value="dark">Dark Theme</option>
+            <option value="default" selected translate>Default Theme</option>
+            <option value="dark" translate>Dark Theme</option>
+        </select>
+    </div>
+    <div class="uk-float-right">
+        <select id="language-select" class="uk-select">
+            <option value="en" selected>English</option>
+            <option value="ro">Română</option>
         </select>
     </div>
 </div>

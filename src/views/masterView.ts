@@ -15,11 +15,14 @@ import {ScrollSpy} from './scrollSpy';
 import {DocPage} from '../pages/docPage';
 import {PageActions} from '../pages/action';
 import {ThemeRepository} from "../services/themeRepository";
+import {LanguageRepository} from "../services/languageRepository";
+import {LanguageService} from "../services/languageService";
 
 export module MasterView {
 
     import cE = DOMHelpers.cE;
     import IDocumentationCallback = PageActions.IDocumentationCallback;
+    import L = LanguageService.translate;
     const FooterSeparator = ' · ';
 
     export function applyPageConfig(config: Pages.MasterPageConfig, docCallback: IDocumentationCallback) {
@@ -71,13 +74,13 @@ export module MasterView {
     function getStatisticsText(statistics: StatisticsRepository.EntityCount): string {
 
         const values = [
-            ['users', DisplayHelpers.intToString(statistics.users)],
-            ['threads', DisplayHelpers.intToString(statistics.discussionThreads)],
-            ['thread messages', DisplayHelpers.intToString(statistics.discussionMessages)],
-            ['tags', DisplayHelpers.intToString(statistics.discussionTags)],
-            ['categories', DisplayHelpers.intToString(statistics.discussionCategories)],
+            ['USERS_COUNT', DisplayHelpers.intToString(statistics.users)],
+            ['THREADS_COUNT', DisplayHelpers.intToString(statistics.discussionThreads)],
+            ['THREAD_MESSAGES_COUNT', DisplayHelpers.intToString(statistics.discussionMessages)],
+            ['TAGS_COUNT', DisplayHelpers.intToString(statistics.discussionTags)],
+            ['CATEGORIES_COUNT', DisplayHelpers.intToString(statistics.discussionCategories)],
         ];
-        return values.map(t => `${t[1]} ${t[0]}`).join(FooterSeparator);
+        return values.map(t => L(t[0], t[1])).join(FooterSeparator);
     }
 
     function showOnlineUsers(link: HTMLAnchorElement, users: UserRepository.User[]) {
@@ -85,7 +88,7 @@ export module MasterView {
         link.innerText = '';
         link = DOMHelpers.removeEventListeners(link);
 
-        link.innerText = DisplayHelpers.intToString(users.length) + ' users online';
+        link.innerText = L('USERS_ONLINE', DisplayHelpers.intToString(users.length));
 
         Views.onClick(link, () => {
 
@@ -108,7 +111,7 @@ export module MasterView {
             span.innerText = getStatisticsText(value);
 
             const visitorsStatistics = document.getElementById('visitors-statistics');
-            visitorsStatistics.innerText = `(${DisplayHelpers.intToString(value.visitors)} total visitors)`;
+            visitorsStatistics.innerText = L('VISITORS_COUNT', DisplayHelpers.intToString(value.visitors));
         });
         UserRepository.getOnlineUsers().then(users => {
 
@@ -326,7 +329,7 @@ export module MasterView {
         }
     }
 
-    export function changeTheme(theme: string): void {
+    function changeTheme(theme: string): void {
 
         const linkElement = document.getElementById('theme-link') as HTMLLinkElement;
 
@@ -342,6 +345,27 @@ export module MasterView {
 
             changeTheme(selectedTheme);
             ThemeRepository.saveFavoriteTheme(selectedTheme);
+        };
+    }
+
+    export function loadLanguage(): void {
+
+        const language = LanguageRepository.getLanguage();
+
+        const selectElement = document.getElementById('language-select') as HTMLSelectElement;
+        selectElement.value = language;
+        LanguageService.setLanguage(language);
+    }
+
+    export function setupLanguageSelector(): void {
+
+        const selectElement = document.getElementById('language-select') as HTMLSelectElement;
+        selectElement.onchange = (ev) => {
+
+            const selectedLanguage = selectElement.value;
+
+            LanguageRepository.saveLanguage(selectedLanguage);
+            location.reload();
         };
     }
 }

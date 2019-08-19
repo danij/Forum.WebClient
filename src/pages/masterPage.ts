@@ -32,6 +32,7 @@ export module MasterPage {
 
         Views.setupUIkit();
 
+        MasterView.loadLanguage();
         MasterView.loadFavoriteTheme();
 
         MasterView.applyPageConfig(masterPageConfig, PageActions.getDocumentationCallback());
@@ -62,6 +63,7 @@ export module MasterPage {
         loadCurrentPage();
 
         MasterView.setupThemeSelector();
+        MasterView.setupLanguageSelector();
     }
 
     function setupLinks() : void {

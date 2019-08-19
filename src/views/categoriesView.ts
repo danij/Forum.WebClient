@@ -11,12 +11,14 @@ import {TagRepository} from '../services/tagRepository';
 import {PrivilegesView} from './privilegesView';
 import {ThreadMessagesView} from './threadMessagesView';
 import {ViewsExtra} from "./extra";
+import {LanguageService} from "../services/languageService";
 
 export module CategoriesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
+    import L = LanguageService.translate;
 
     export function createCategoryLink(category: CategoryRepository.Category,
                                        addSpace: boolean = false,
@@ -58,16 +60,16 @@ export module CategoriesView {
 
         if (categories.length < 1) {
 
-            table.appendRaw('<span class="uk-text-warning">No categories found</span>');
+            table.appendRaw(`<span class="uk-text-warning">${L('No categories found')}</span>`);
             return tableContainer.toElement();
         }
 
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
-            '        <th class="uk-table-expand">Category</th>\n' +
-            '        <th class="uk-text-center category-tags-header uk-table-shrink">Tags</th>\n' +
-            '        <th class="uk-text-center uk-table-shrink">Statistics</th>\n' +
-            '        <th class="uk-text-right latest-message-header">Latest Message</th>\n' +
+            `        <th class="uk-table-expand">${L('Category')}</th>\n` +
+            `        <th class="uk-text-center category-tags-header uk-table-shrink">${L('Tags')}</th>\n` +
+            `        <th class="uk-text-center uk-table-shrink">${L('Statistics')}</th>\n` +
+            `        <th class="uk-text-right latest-message-header">${L('Latest Message')}</th>\n` +
             '    </tr>\n' +
             '</thead>';
         table.appendRaw(tableHeader);
@@ -121,7 +123,7 @@ export module CategoriesView {
                 const dataAttribute = DOMHelpers.concatAttributes(attributes);
                 const link = dA(`<a class="edit-display-order-link" ${dataAttribute}>`);
                 nameColumn.append(link);
-                link.append(dA('<span class="uk-icon" uk-icon="icon: move" title="Edit category display order">'))
+                link.append(dA(`<span class="uk-icon" uk-icon="icon: move" title="${L('Edit category display order')}">`))
             }
             else {
 
@@ -142,7 +144,7 @@ export module CategoriesView {
                 nameColumn.append(container);
 
                 const childCategoryElement = dA('<span class="category-children uk-text-small">');
-                container.appendRaw('<span class="uk-text-meta">Subcategories:</span> ');
+                container.appendRaw(`<span class="uk-text-meta">${L('Subcategories:')}</span> `);
                 container.append(childCategoryElement);
 
                 for (let i = 0; i < category.children.length; ++i) {
@@ -176,11 +178,11 @@ export module CategoriesView {
                 '    <table>\n' +
                 '        <tr>\n' +
                 '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +
-                '            <td class="spaced-number uk-text-left uk-text-meta">threads</td>\n' +
+                `            <td class="spaced-number uk-text-left uk-text-meta">${L('threads')}</td>\n` +
                 '        </tr>\n' +
                 '        <tr>\n' +
                 '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
-                '            <td class="spaced-number uk-text-left uk-text-meta">messages</td>\n' +
+                `            <td class="spaced-number uk-text-left uk-text-meta">${L('messages')}</td>\n` +
                 '        </tr>\n' +
                 '    </table>\n' +
                 '</td>')
@@ -217,7 +219,7 @@ export module CategoriesView {
 
             Views.onClick(deleteLink, () => {
 
-                if (EditViews.confirm(`Are you sure you want to delete the following category: ${category.name}?`)) {
+                if (EditViews.confirm(L('CONFIRM_DELETE_CATEGORY', category.name))) {
 
                     EditViews.goToHomePageIfOk(callback.deleteCategory(category.id));
                 }
@@ -265,7 +267,7 @@ export module CategoriesView {
 
         if (Privileges.Category.canEditCategoryParent(category)) {
 
-            const link = EditViews.createEditLink('Edit category parent', 'git-branch');
+            const link = EditViews.createEditLink(L('Edit category parent'), 'git-branch');
             element.appendChild(link);
             Views.onClick(link, async () => {
 
@@ -291,11 +293,11 @@ export module CategoriesView {
 
         if (Privileges.Category.canEditCategoryName(category)) {
 
-            const link = EditViews.createEditLink('Edit category name');
+            const link = EditViews.createEditLink(L('Edit category name'));
             element.appendChild(link);
             Views.onClick(link, () => {
 
-                const name = EditViews.getInput('Edit category name', category.name);
+                const name = EditViews.getInput(L('Edit category name'), category.name);
                 if (name && name.length && (name != category.name)) {
 
                     EditViews.doIfOk(callback.editCategoryName(category.id, name), () => {
@@ -319,20 +321,20 @@ export module CategoriesView {
         const threadCount = cE('span');
         element.appendChild(threadCount);
         DOMHelpers.addClasses(threadCount, 'uk-margin-left');
-        threadCount.innerText = `${DisplayHelpers.intToString(category.threadTotalCount)} threads`;
+        threadCount.innerText = L('THREAD_COUNT', DisplayHelpers.intToString(category.threadTotalCount));
 
         const messageCount = cE('span');
         element.appendChild(messageCount);
         DOMHelpers.addClasses(messageCount, 'uk-margin-left');
-        messageCount.innerText = `${DisplayHelpers.intToString(category.messageTotalCount)} messages`;
+        messageCount.innerText = L('MESSAGE_COUNT', DisplayHelpers.intToString(category.messageTotalCount));
 
         if (Privileges.Category.canEditCategoryDescription(category)) {
 
-            const link = EditViews.createEditLink('Edit category description');
+            const link = EditViews.createEditLink(L('Edit category description'));
             descriptionContainer.appendChild(link);
             Views.onClick(link, () => {
 
-                const description = EditViews.getInput('Edit category description', category.description);
+                const description = EditViews.getInput(L('Edit category description'), category.description);
                 if (description && description.length && (description != category.description)) {
 
                     EditViews.doIfOk(callback.editCategoryDescription(category.id, description), () => {
@@ -345,7 +347,7 @@ export module CategoriesView {
         if (Privileges.Category.canViewCategoryRequiredPrivileges(category)
             || Privileges.Category.canViewCategoryAssignedPrivileges(category)) {
 
-            const link = EditViews.createEditLink('Privileges', 'settings');
+            const link = EditViews.createEditLink(L('Privileges'), 'settings');
             result.appendChild(link);
 
             Views.onClick(link, () => {
@@ -358,7 +360,7 @@ export module CategoriesView {
 
         if (Privileges.Category.canEditCategoryTags(category)) {
 
-            const link = EditViews.createEditLink('Edit category tags', 'tag');
+            const link = EditViews.createEditLink(L('Edit category tags'), 'tag');
             result.appendChild(link);
             Views.onClick(link, async () => {
 
@@ -439,11 +441,11 @@ export module CategoriesView {
 
     function createAddNewRootCategoryElement(callback: PageActions.ICategoryCallback): HTMLElement {
 
-        const button = EditViews.createAddNewButton('Add Root Category');
+        const button = EditViews.createAddNewButton(L('Add Root Category'));
 
         Views.onClick(button, () => {
 
-            const name = EditViews.getInput('Enter the new category name');
+            const name = EditViews.getInput(L('Enter the new category name'));
             if ((null === name) || (name.length < 1)) return;
 
             EditViews.reloadPageIfOk(callback.createRootCategory(name));
@@ -454,11 +456,11 @@ export module CategoriesView {
 
     function createAddNewSubCategoryElement(parentId: string, callback: PageActions.ICategoryCallback): HTMLElement {
 
-        const button = EditViews.createAddNewButton('Add Sub Category');
+        const button = EditViews.createAddNewButton(L('Add Sub Category'));
 
         Views.onClick(button, () => {
 
-            const name = EditViews.getInput('Enter the new sub category name');
+            const name = EditViews.getInput(L('Enter the new sub category name'));
             if ((null === name) || (name.length < 1)) return;
 
             EditViews.reloadPageIfOk(callback.createSubCategory(parentId, name));
@@ -477,7 +479,7 @@ export module CategoriesView {
             const categoryId = link.getAttribute('data-category-id');
             const categoryDisplayOrder = link.getAttribute('data-category-display-order');
 
-            const newValue = parseInt(EditViews.getInput('Edit category display order', categoryDisplayOrder));
+            const newValue = parseInt(EditViews.getInput(L('Edit category display order'), categoryDisplayOrder));
             if ((newValue >= 0) && (newValue.toString() != categoryDisplayOrder)) {
 
                 EditViews.reloadPageIfOk(callback.editCategoryDisplayOrder(categoryId, newValue));
