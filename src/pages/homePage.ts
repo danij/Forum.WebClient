@@ -7,6 +7,8 @@ import {ThreadRepository} from '../services/threadRepository';
 import {Views} from '../views/common';
 import {PageActions} from './action';
 import {DOMHelpers} from '../helpers/domHelpers';
+import {LanguageService} from "../services/languageService";
+import L = LanguageService.translate;
 
 /**
  * The home page displays the root categories
@@ -123,13 +125,13 @@ export class HomePage implements Pages.Page {
 
             if (null == threadCollection) return;
 
-            const newTopPaginationControl = Views.createPaginationControl(threadCollection, 'threads',
+            const newTopPaginationControl = Views.createPaginationControl(threadCollection, L('threads'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            const newBottomPaginationControl = Views.createPaginationControl(threadCollection, 'threads',
+            const newBottomPaginationControl = Views.createPaginationControl(threadCollection, L('threads'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);

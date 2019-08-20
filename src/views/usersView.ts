@@ -10,12 +10,14 @@ import {UsersPage} from '../pages/usersPage';
 import {ThreadsPage} from '../pages/threadsPage';
 import {ViewsExtra} from './extra';
 import {PrivilegesView} from './privilegesView';
+import {LanguageService} from "../services/languageService";
 
 export module UsersView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
+    import L = LanguageService.translate;
 
     function getUserLogoColor(id: string): string {
 
@@ -163,17 +165,17 @@ export module UsersView {
 
         if (UserRepository.isValidUser(user)) {
 
-            threadsOfUserLink = `<a class="align-left" ${getThreadsOfUserLinkContent(user)}>Threads</a>`;
-            threadMessagesOfUserLink = `<a class="align-left" ${getMessagesOfUserLinkContent(user)}>Messages</a>`;
-            subscribedThreadsOfUserLink = `<a class="align-left" ${getSubscribedThreadsOfUserLinkContent(user)}>Subscribed Threads</a>`;
-            attachmentsAddedByUserLink = `<a class="align-left" ${getAttachmentsAddedByUserLinkContent(user)}>Attachments</a>`;
+            threadsOfUserLink = `<a class="align-left" ${getThreadsOfUserLinkContent(user)}>${L('Threads')}</a>`;
+            threadMessagesOfUserLink = `<a class="align-left" ${getMessagesOfUserLinkContent(user)}>${L('Messages')}</a>`;
+            subscribedThreadsOfUserLink = `<a class="align-left" ${getSubscribedThreadsOfUserLinkContent(user)}>${L('Subscribed Threads')}</a>`;
+            attachmentsAddedByUserLink = `<a class="align-left" ${getAttachmentsAddedByUserLinkContent(user)}>${L('Attachments')}</a>`;
         }
         else {
 
-            threadsOfUserLink = 'Threads';
-            threadMessagesOfUserLink = 'Messages';
-            subscribedThreadsOfUserLink = 'Subscribed Threads';
-            attachmentsAddedByUserLink = 'Attachments';
+            threadsOfUserLink = L('Threads');
+            threadMessagesOfUserLink = L('Messages');
+            subscribedThreadsOfUserLink = L('Subscribed Threads');
+            attachmentsAddedByUserLink = L('Attachments');
         }
 
         content.appendRaw(('<li>\n' +
@@ -203,10 +205,10 @@ export module UsersView {
                 '</li>').replace('{nrOfAttachments}', DisplayHelpers.intToStringNull(user.attachmentCount)));
         }
 
-        content.appendRaw('<li class="uk-nav-header">Activity</li>');
+        content.appendRaw(`<li class="uk-nav-header">${L('Activity')}</li>`);
         content.appendRaw(('<li>\n' +
             '<span class="align-left">\n' +
-            '    <span>Joined</span>\n' +
+            `    <span>${L('Joined')}</span>\n` +
             '</span>\n' +
             '    <span class="uk-badge align-right">{joined}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
@@ -215,24 +217,24 @@ export module UsersView {
 
         content.appendRaw(('<li>\n' +
             '<span class="align-left">\n' +
-            '    <span>Last seen</span>\n' +
+            `    <span>${L('Last seen')}</span>\n` +
             '</span>\n' +
             '    <span class="uk-badge align-right">{lastSeen}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>')
             .replace('{lastSeen}', DisplayHelpers.getDateTime(user.lastSeen)));
 
-        content.appendRaw('<li class="uk-nav-header">Feedback Received</li>');
+        content.appendRaw(`<li class="uk-nav-header">${L('Feedback Received')}</li>`);
         content.appendRaw(('<li>\n' +
             '<span class="align-left">\n' +
-            '    <span>Up votes</span>\n' +
+            `    <span>${L('Up votes')}</span>\n` +
             '</span>\n' +
             '    <span class="uk-badge align-right">{receivedUpVotes}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</li>').replace('{receivedUpVotes}', DisplayHelpers.intToString(user.receivedUpVotes)));
         content.appendRaw(('<li>\n' +
             '<span class="align-left">\n' +
-            '    <span>Down votes</span>\n' +
+            `    <span>${L('Down votes')}</span>\n` +
             '</span>\n' +
             '    <span class="uk-badge align-right">{receivedDownVotes}</span>\n' +
             '    <div class="uk-clearfix"></div>\n' +
@@ -265,7 +267,7 @@ export module UsersView {
 
         resultList.appendChild(result.sortControls = createUserListSortControls(info));
         resultList.appendChild(
-            result.paginationTop = Views.createPaginationControl(collection, 'users',
+            result.paginationTop = Views.createPaginationControl(collection, L('users'),
                 onPageNumberChange, getLinkForPage));
 
         const usersList = cE('div');
@@ -275,7 +277,7 @@ export module UsersView {
         usersList.appendChild(createUserListContent(collection.users));
 
         resultList.appendChild(
-            result.paginationBottom = Views.createPaginationControl(collection, 'users',
+            result.paginationBottom = Views.createPaginationControl(collection, L('users'),
                 onPageNumberChange, getLinkForPage));
 
         result.list = resultList;
@@ -289,16 +291,16 @@ export module UsersView {
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="order-by">\n' +
             '                Sort by:\n' +
-            Views.createOrderByLabel('name', 'Name', info) +
-            Views.createOrderByLabel('created', 'Created', info) +
-            Views.createOrderByLabel('lastseen', 'Last Seen', info) +
-            Views.createOrderByLabel('threadcount', 'Thread Count', info) +
-            Views.createOrderByLabel('messagecount', 'Message Count', info) +
+            Views.createOrderByLabel('name', L('Name'), info) +
+            Views.createOrderByLabel('created', L('Created'), info) +
+            Views.createOrderByLabel('lastseen', L('Last Seen'), info) +
+            Views.createOrderByLabel('threadcount', L('Thread Count'), info) +
+            Views.createOrderByLabel('messagecount', L('Message Count'), info) +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
             '                <select class="uk-select" name="sortOrder">\n' +
-            Views.createSortOrderOption('ascending', 'Ascending', info) +
-            Views.createSortOrderOption('descending', 'Descending', info) +
+            Views.createSortOrderOption('ascending', L('Ascending'), info) +
+            Views.createSortOrderOption('descending', L('Descending'), info) +
             '                </select>\n' +
             '            </div>\n' +
             '        </div>\n' +
@@ -318,7 +320,7 @@ export module UsersView {
             }
         }
         else {
-            usersListGrid.appendRaw('<span class="uk-text-warning">No users found</span>');
+            usersListGrid.appendRaw(`<span class="uk-text-warning">${L('No users found')}</span>`);
         }
 
         const result = usersListGrid.toElement();
@@ -371,19 +373,19 @@ export module UsersView {
         wrapper.append(createUserTitleElement(user));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a ' + getThreadsOfUserLinkContent(user) + '>Threads</a></div>\n' +
+            '    <div class="uk-float-left"><a ' + getThreadsOfUserLinkContent(user) + `>${L('Threads')}</a></div>\n` +
             '    <div class="uk-float-right">{nrOfThreads}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfThreads}', DisplayHelpers.intToString(user.threadCount)));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a ' + getMessagesOfUserLinkContent(user) + '>Messages</a></div>\n' +
+            '    <div class="uk-float-left"><a ' + getMessagesOfUserLinkContent(user) + `>${L('Messages')}</a></div>\n` +
             '    <div class="uk-float-right">{nrOfMessages}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfMessages}', DisplayHelpers.intToString(user.messageCount)));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left"><a ' + getSubscribedThreadsOfUserLinkContent(user) + '>Subscribed</a></div>\n' +
+            '    <div class="uk-float-left"><a ' + getSubscribedThreadsOfUserLinkContent(user) + `>${L('Subscribed')}</a></div>\n` +
             '    <div class="uk-float-right">{nrOfSubscribedThreads}</div>\n' +
             '    <div class="uk-clearfix"></div>\n' +
             '</div>').replace('{nrOfSubscribedThreads}', DisplayHelpers.intToString(user.subscribedThreadCount)));
@@ -391,14 +393,14 @@ export module UsersView {
         if (Privileges.Attachment.canViewAllAttachments()) {
 
             wrapper.appendRaw(('<div>\n' +
-                '    <div class="uk-float-left"><a ' + getAttachmentsAddedByUserLinkContent(user) + '>Attachments</a></div>\n' +
+                '    <div class="uk-float-left"><a ' + getAttachmentsAddedByUserLinkContent(user) + `>${L('Attachments')}</a></div>\n` +
                 '    <div class="uk-float-right">{nrOfAttachments}</div>\n' +
                 '    <div class="uk-clearfix"></div>\n' +
                 '</div>').replace('{nrOfAttachments}', DisplayHelpers.intToStringNull(user.attachmentCount)));
         }
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left">Joined</div>\n' +
+            `    <div class="uk-float-left">${L('Joined')}</div>\n` +
             '    <div class="uk-float-right min-date">\n' +
             '        <span>{Joined}</span>\n' +
             '    </div>\n' +
@@ -407,7 +409,7 @@ export module UsersView {
             .replace('{Joined}', DisplayHelpers.getShortDate(user.created)));
 
         wrapper.appendRaw(('<div>\n' +
-            '    <div class="uk-float-left">Last Seen</div>\n' +
+            `    <div class="uk-float-left">${L('Last Seen')}</div>\n` +
             '    <div class="uk-float-right min-date">\n' +
             '        <span>{LastSeen}</span>\n' +
             '    </div>\n' +
@@ -446,18 +448,18 @@ export module UsersView {
 
         left.append(createUserTitleElement(user));
 
-        const threadsLink = '<a ' + getThreadsOfUserLinkContent(user) + '>threads</a>';
-        const threadMessagesLink = '<a ' + getMessagesOfUserLinkContent(user) + '>messages</a>';
+        const threadsLink = `<a ' + getThreadsOfUserLinkContent(user) + '>${L('threads')}</a>`;
+        const threadMessagesLink = `<a ' + getMessagesOfUserLinkContent(user) + '>${L('messages')}</a>`;
         const subscribedThreadsLink = (user.subscribedThreadCount >= 0)
-            ? ` · {subscribedThreadCount} <a ${getSubscribedThreadsOfUserLinkContent(user)}>subscribed threads</a>`
+            ? ` · {subscribedThreadCount} <a ${getSubscribedThreadsOfUserLinkContent(user)}>${L('subscribed threads')}</a>`
             : '';
         const messageCommentsLink = Privileges.User.canViewUserComments(user)
-            ? ' · <a ' + getMessageCommentsWrittenByUserLinkContent(user) + '>show written comments</a>'
+            ? ' · <a ' + getMessageCommentsWrittenByUserLinkContent(user) + `>${L('show written comments')}</a>`
              :'';
         const attachmentsLink = Privileges.User.canViewUserAttachments(user)
-            ? ' · <a ' + getAttachmentsAddedByUserLinkContent(user) + '>show added attachments</a>'
+            ? ' · <a ' + getAttachmentsAddedByUserLinkContent(user) + `>${L('show added attachments')}</a>`
              :'';
-        const assignedPrivilegesLink = ' · <a class="show-assigned-privileges-of-user">show assigned privileges</a>';
+        const assignedPrivilegesLink = ` · <a class="show-assigned-privileges-of-user">${L('show assigned privileges')}</a>`;
 
         result.appendRaw(('<div>\n' +
             `    <p>{threadCount} ${threadsLink}` +
@@ -465,12 +467,12 @@ export module UsersView {
             `${subscribedThreadsLink}${messageCommentsLink}${attachmentsLink}${assignedPrivilegesLink}` +
             ` <span class="uk-label score-up">+ {upVotes}</span>` +
             ` <span class="uk-label score-down">− {downVotes}</span></p>\n` +
-            '    <p>Joined <span class="uk-text-meta">{joined}</span>' +
-            ' · Last seen <span class="uk-text-meta">{lastSeen}</span>\n' +
-            ' · Signature <span class="uk-text-meta">{signature}</span>\n' +
-            ' · Attachment Count <span class="uk-text-meta">{attachmentCount}</span>\n' +
-            ' · Attachment Total Size <span class="uk-text-meta">{attachmentTotalSize}</span>\n' +
-            ' · Attachment Quota <span class="uk-text-meta">{attachmentQuota} bytes</span></p>\n' +
+            `    <p>${L('Joined')} <span class="uk-text-meta">{joined}</span>` +
+            ` · ${L('Last seen')} <span class="uk-text-meta">{lastSeen}</span>\n` +
+            ` · ${L('Signature')} <span class="uk-text-meta">{signature}</span>\n` +
+            ` · ${L('Attachment Count')} <span class="uk-text-meta">{attachmentCount}</span>\n` +
+            ` · ${L('Attachment Total Size')} <span class="uk-text-meta">{attachmentTotalSize}</span>\n` +
+            ` · ${L('Attachment Quota')} <span class="uk-text-meta">{attachmentQuota} bytes</span></p>\n` +
             '</div>')
             .replace('{threadCount}', DisplayHelpers.intToString(user.threadCount))
             .replace('{subscribedThreadCount}', DisplayHelpers.intToString(user.subscribedThreadCount))
@@ -504,28 +506,28 @@ export module UsersView {
 
             if (Privileges.User.canEditUserName(user)) {
 
-                editContent.push('<a class="edit-user-name-link">Edit name</a>');
+                editContent.push(`<a class="edit-user-name-link">${L('Edit name')}</a>`);
             }
             if (Privileges.User.canEditUserInfo(user)) {
 
-                editContent.push('<a class="edit-user-info-link">Edit info</a>');
+                editContent.push(`<a class="edit-user-info-link">${L('Edit info')}</a>`);
             }
             if (Privileges.User.canEditUserTitle(user)) {
 
-                editContent.push('<a class="edit-user-title-link">Edit title</a>');
+                editContent.push(`<a class="edit-user-title-link">${L('Edit title')}</a>`);
             }
             if (Privileges.User.canEditUserSignature(user)) {
 
-                editContent.push('<a class="edit-user-signature-link">Edit signature</a>');
+                editContent.push(`<a class="edit-user-signature-link">${L('Edit signature')}</a>`);
             }
             if (Privileges.User.canEditUserAttachmentQuota(user)) {
 
-                editContent.push('<a class="edit-user-attachment-quota-link">Edit attachment quota</a>');
+                editContent.push(`<a class="edit-user-attachment-quota-link">${L('Edit attachment quota')}</a>`);
             }
             if (Privileges.User.canEditUserLogo(user)) {
 
-                editContent.push('<a class="clear-user-logo-link">Remove profile image</a>');
-                editContent.push('<a class="edit-user-logo-link">Upload new profile image</a>');
+                editContent.push(`<a class="clear-user-logo-link">${L('Remove profile image')}</a>`);
+                editContent.push(`<a class="edit-user-logo-link">${L('Upload new profile image')}</a>`);
             }
             if (Privileges.User.canDeleteUser(user)) {
 
@@ -555,7 +557,7 @@ export module UsersView {
         Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-name-link')[0], async (ev) =>{
 
             ev.preventDefault();
-            const name = EditViews.getInput('Edit user name', user.name);
+            const name = EditViews.getInput(L('Edit user name'), user.name);
             if (name && name.length && (name != user.name)) {
 
                 const min = Views.DisplayConfig.userNameLengths.min;
@@ -563,12 +565,12 @@ export module UsersView {
 
                 if (name.length < min) {
 
-                    Views.showWarningNotification(`User name must be at least ${min} characters long.`);
+                    Views.showWarningNotification(L('USERNAME_MIN_LENGTH', min));
                     return;
                 }
                 if (name.length > max) {
 
-                    Views.showWarningNotification(`User name must be less than ${max} characters long.`);
+                    Views.showWarningNotification(L('USERNAME_MAX_LENGTH', max));
                     return;
                 }
 
@@ -581,7 +583,7 @@ export module UsersView {
         Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-title-link')[0], (ev) =>{
 
             ev.preventDefault();
-            const title = EditViews.getInput('Edit user title', user.title);
+            const title = EditViews.getInput(L('Edit user title'), user.title);
             if ((null !== title) && (title != user.title)) {
 
                 EditViews.reloadPageIfOk(callback.editUserTitle(user.id, title));
@@ -590,7 +592,7 @@ export module UsersView {
         Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-info-link')[0], (ev) =>{
 
             ev.preventDefault();
-            const info = EditViews.getInput('Edit user info', user.info);
+            const info = EditViews.getInput(L('Edit user info'), user.info);
             if ((null !== info) && (info != user.info)) {
 
                 EditViews.reloadPageIfOk(callback.editUserInfo(user.id, info));
@@ -599,7 +601,7 @@ export module UsersView {
         Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-signature-link')[0], (ev) =>{
 
             ev.preventDefault();
-            const signature = EditViews.getInput('Edit user signature', user.signature);
+            const signature = EditViews.getInput(L('Edit user signature'), user.signature);
             if ((null !== signature) && (signature != user.signature)) {
 
                 EditViews.reloadPageIfOk(callback.editUserSignature(user.id, signature));
@@ -608,7 +610,7 @@ export module UsersView {
         Views.addClickIfElementExists(resultElement.getElementsByClassName('edit-user-attachment-quota-link')[0], (ev) =>{
 
             ev.preventDefault();
-            const newQuota = EditViews.getInput('Edit user attachment quota',
+            const newQuota = EditViews.getInput(L('Edit user attachment quota'),
                 user.attachmentQuota ? user.attachmentQuota.toString() : '');
 
             if ((null !== newQuota) && (newQuota.trim().length) && (parseInt(newQuota) != user.attachmentQuota)) {
@@ -619,7 +621,7 @@ export module UsersView {
         Views.addClickIfElementExists(resultElement.getElementsByClassName('clear-user-logo-link')[0], (ev) =>{
 
             ev.preventDefault();
-            if (EditViews.confirm('Are you sure you want to delete ' + user.name + "'s logo?")) {
+            if (EditViews.confirm(L('CONFIRM_DELETE_USER_LOGO', user.name))) {
 
                 EditViews.reloadPageIfOk(callback.deleteUserLogo(user.id));
             }
@@ -638,7 +640,7 @@ export module UsersView {
                     const file = fileInput.files[0];
                     if ('image/png' != file.type) {
 
-                        Views.showWarningNotification('Only PNG files are supported as logos');
+                        Views.showWarningNotification(L('Only PNG files are supported as logos'));
                         return;
                     }
 
@@ -657,7 +659,7 @@ export module UsersView {
         Views.addClickIfElementExists(resultElement.getElementsByClassName('delete-user-link')[0], async (ev) =>{
 
             ev.preventDefault();
-            if (EditViews.confirm('Are you sure you want to delete the user "' + user.name + '"?')) {
+            if (EditViews.confirm(L('CONFIRM_DELETE_USER', user.name))) {
 
                 if (await callback.deleteUser(user.id)) {
 

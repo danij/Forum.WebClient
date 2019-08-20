@@ -16,12 +16,14 @@ import {CategoryRepository} from '../services/categoryRepository';
 import {PrivilegesView} from './privilegesView';
 import {AttachmentsView} from "./attachmentsView";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
+import {LanguageService} from "../services/languageService";
 
 export module ThreadsView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
+    import L = LanguageService.translate;
 
     export class ThreadsPageContent {
 
@@ -59,7 +61,7 @@ export module ThreadsView {
             const data = `data-threadmessagethreadid="${DOMHelpers.escapeStringForAttribute(thread.id)}" 
                           data-threadmessagethreadpage="${parseInt(thread.latestVisitedPage.toString())}"`;
 
-            const goToPage = dA(`<a href="${pageHref}" ${data} class="uk-icon-link thread-latest-visited-page-link" uk-icon="icon: chevron-right; ratio: 1.25" title="Go to latest visited page" uk-title>`);
+            const goToPage = dA(`<a href="${pageHref}" ${data} class="uk-icon-link thread-latest-visited-page-link" uk-icon="icon: chevron-right; ratio: 1.25" title="${L('Go to latest visited page')}" uk-title>`);
             result.append(goToPage);
         }
         else {
@@ -95,7 +97,7 @@ export module ThreadsView {
 
         resultList.appendChild(result.sortControls = createThreadListSortControls(info));
         resultList.appendChild(
-            result.paginationTop = Views.createPaginationControl(collection, 'threads',
+            result.paginationTop = Views.createPaginationControl(collection, L('threads'),
                 onPageNumberChange, getLinkForPage));
 
         const tableContainer = cE('div');
@@ -104,7 +106,7 @@ export module ThreadsView {
         tableContainer.appendChild(await createThreadsTable(collection.threads));
 
         resultList.appendChild(
-            result.paginationBottom = Views.createPaginationControl(collection, 'threads',
+            result.paginationBottom = Views.createPaginationControl(collection, L('threads'),
                 onPageNumberChange, getLinkForPage));
 
         result.list = resultList;
@@ -124,15 +126,15 @@ export module ThreadsView {
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="order-by">\n' +
             '                Sort by:\n' +
-            Views.createOrderByLabel('name', 'Name', info) +
-            Views.createOrderByLabel('created', 'Created', info) +
-            Views.createOrderByLabel('latestmessagecreated', 'Latest Message Added', info) +
-            Views.createOrderByLabel('messagecount', 'Message Count', info) +
+            Views.createOrderByLabel('name', L('Name'), info) +
+            Views.createOrderByLabel('created', L('Created'), info) +
+            Views.createOrderByLabel('latestmessagecreated', L('Latest Message Added'), info) +
+            Views.createOrderByLabel('messagecount', L('Message Count'), info) +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
             '                <select class="uk-select" name="sortOrder">\n' +
-            Views.createSortOrderOption('ascending', 'Ascending', info) +
-            Views.createSortOrderOption('descending', 'Descending', info) +
+            Views.createSortOrderOption('ascending', L('Ascending'), info) +
+            Views.createSortOrderOption('descending', L('Descending'), info) +
             '                </select>\n' +
             '            </div>\n' +
             '        </div>\n' +
@@ -144,7 +146,7 @@ export module ThreadsView {
 
         if (threads.length < 1) {
 
-            return DOMHelpers.parseHTML('<span class="uk-text-warning">No threads found</span>');
+            return DOMHelpers.parseHTML(`<span class="uk-text-warning">${L('No threads found')}</span>`);
         }
 
         const allMessages = threads
@@ -156,10 +158,10 @@ export module ThreadsView {
 
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
-            '        <th class="uk-table-expand">Thread</th>\n' +
-            '        <th class="uk-text-center thread-created-header uk-table-shrink">Added</th>\n' +
-            '        <th class="uk-text-center uk-table-shrink">Statistics</th>\n' +
-            '        <th class="uk-text-right latest-message-header">Latest Message</th>\n' +
+            `        <th class="uk-table-expand">${L('Thread')}</th>\n` +
+            `        <th class="uk-text-center thread-created-header uk-table-shrink">${L('Added')}</th>\n` +
+            `        <th class="uk-text-center uk-table-shrink">${L('Statistics')}</th>\n` +
+            `        <th class="uk-text-right latest-message-header">${L('Latest Message')}</th>\n` +
             '    </tr>\n' +
             '</thead>';
         table.appendRaw(tableHeader);
@@ -178,7 +180,7 @@ export module ThreadsView {
                 row.append(nameColumn);
 
                 if (thread.pinned) {
-                    nameColumn.append(dA(`<span class="uk-icon pinned-icon" uk-icon="icon: star; ratio: 1.5" title="Thread is pinned">`));
+                    nameColumn.append(dA(`<span class="uk-icon pinned-icon" uk-icon="icon: star; ratio: 1.5" title="${L('Thread is pinned')}">`));
                 }
 
                 const threadLink = createThreadsLink(thread, true, true);
@@ -222,15 +224,15 @@ export module ThreadsView {
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
-                    '            <td class="spaced-number uk-text-left uk-text-meta">messages</td>\n' +
+                    `            <td class="spaced-number uk-text-left uk-text-meta">${L('messages')}</td>\n` +
                     '        </tr>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfViews}</td>\n' +
-                    '            <td class="spaced-number uk-text-left uk-text-meta">views</td>\n' +
+                    `            <td class="spaced-number uk-text-left uk-text-meta">${L('views')}</td>\n` +
                     '        </tr>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfSubscribed}</td>\n' +
-                    '            <td class="spaced-number uk-text-left uk-text-meta">subscribed</td>\n' +
+                    `            <td class="spaced-number uk-text-left uk-text-meta">${L('subscribed')}</td>\n` +
                     '        </tr>\n' +
                     '    </table>\n' +
                     '</td>')
@@ -350,7 +352,7 @@ export module ThreadsView {
 
         if ( ! atLeastOneThread) {
 
-            result.appendRaw('<span class="uk-text-warning">No more threads found</span>');
+            result.appendRaw(`<span class="uk-text-warning">${L('No more threads found')}</span>`);
         }
 
         const resultElement = result.toElement();
@@ -389,7 +391,7 @@ export module ThreadsView {
                 subscribeToThread = cE('button');
                 actions.appendChild(subscribeToThread);
                 DOMHelpers.addClasses(subscribeToThread, 'uk-button', 'uk-button-primary', 'uk-button-small');
-                subscribeToThread.innerText = 'Subscribe';
+                subscribeToThread.innerText = L('Subscribe');
 
                 actions.appendChild(document.createTextNode(' '));
 
@@ -409,7 +411,7 @@ export module ThreadsView {
                 unSubscribeFromThread = cE('button');
                 actions.appendChild(unSubscribeFromThread);
                 DOMHelpers.addClasses(unSubscribeFromThread, 'uk-button', 'uk-button-danger', 'uk-button-small');
-                unSubscribeFromThread.innerText = 'Unsubscribe';
+                unSubscribeFromThread.innerText = L('Unsubscribe');
 
                 actions.appendChild(document.createTextNode(' '));
 
@@ -427,10 +429,10 @@ export module ThreadsView {
 
             if (Privileges.Thread.canEditThreadApproval(thread)) {
 
-                const approveThreadLink = EditViews.createEditLink('Approve Thread', 'check');
+                const approveThreadLink = EditViews.createEditLink(L('Approve Thread'), 'check');
                 actions.appendChild(approveThreadLink);
 
-                const unApproveThreadLink = EditViews.createEditLink('Unapprove Thread', 'ban');
+                const unApproveThreadLink = EditViews.createEditLink(L('Unapprove Thread'), 'ban');
                 actions.appendChild(unApproveThreadLink);
 
                 Views.onClick(approveThreadLink, async () => {
@@ -460,11 +462,11 @@ export module ThreadsView {
 
             if (Privileges.Thread.canEditThreadPinDisplayOrder(thread)) {
 
-                const link = EditViews.createEditLink('Edit thread display order when pinned', 'star');
+                const link = EditViews.createEditLink(L('Edit thread display order when pinned'), 'star');
                 actions.appendChild(link);
                 Views.onClick(link, () => {
 
-                    const newValue = parseInt(EditViews.getInput('Edit thread display order when pinned', (thread.pinDisplayOrder || 0).toString()));
+                    const newValue = parseInt(EditViews.getInput(L('Edit thread display order when pinned'), (thread.pinDisplayOrder || 0).toString()));
 
                     if ((newValue >= 0) && (newValue != thread.pinDisplayOrder)) {
 
@@ -476,11 +478,11 @@ export module ThreadsView {
 
             if (Privileges.Thread.canEditThreadName(thread)) {
 
-                const link = EditViews.createEditLink('Edit thread name');
+                const link = EditViews.createEditLink(L('Edit thread name'));
                 actions.appendChild(link);
                 Views.onClick(link, () => {
 
-                    const name = EditViews.getInput('Edit thread name', thread.name);
+                    const name = EditViews.getInput(L('Edit thread name'), thread.name);
                     if (name && name.length && (name != thread.name)) {
 
                         const min = Views.DisplayConfig.threadNameLengths.min;
@@ -488,12 +490,12 @@ export module ThreadsView {
 
                         if (name.length < min) {
 
-                            Views.showWarningNotification(`Thread name must be at least ${min} characters long.`);
+                            Views.showWarningNotification(L('THREAD_MIN_LENGTH', min));
                             return;
                         }
                         if (name.length > max) {
 
-                            Views.showWarningNotification(`Thread name must be less than ${max} characters long.`);
+                            Views.showWarningNotification(L('THREAD_MAX_LENGTH', max));
                             return;
                         }
 
@@ -508,7 +510,7 @@ export module ThreadsView {
 
             if (Privileges.Thread.canMergeThreads(thread)) {
 
-                const link = EditViews.createEditLink('Merge threads', 'git-fork', []);
+                const link = EditViews.createEditLink(L('Merge threads'), 'git-fork', []);
                 actions.appendChild(link);
                 Views.onClick(link, async () => {
 
@@ -524,7 +526,7 @@ export module ThreadsView {
             if (Privileges.Thread.canViewThreadRequiredPrivileges(thread)
                 || Privileges.Thread.canViewThreadAssignedPrivileges(thread)) {
 
-                const link = EditViews.createEditLink('Privileges', 'settings', []);
+                const link = EditViews.createEditLink(L('Privileges'), 'settings', []);
                 actions.appendChild(link);
                 Views.onClick(link, async () => {
 
@@ -534,12 +536,12 @@ export module ThreadsView {
 
             if (Privileges.Thread.canDeleteThread(thread)) {
 
-                const deleteLink = EditViews.createDeleteLink('Delete thread', '');
+                const deleteLink = EditViews.createDeleteLink(L('Delete thread'), '');
                 actions.appendChild(deleteLink);
 
                 Views.onClick(deleteLink, () => {
 
-                    if (EditViews.confirm(`Are you sure you want to delete the following thread: ${thread.name}?`)) {
+                    if (EditViews.confirm(L('CONFIRM_THREAD_DELETION', thread.name))) {
 
                         EditViews.goToHomePageIfOk(callback.deleteThread(thread.id));
                     }
@@ -554,7 +556,7 @@ export module ThreadsView {
 
             title.appendChild(approvalNotification);
             DOMHelpers.addClasses(approvalNotification, 'uk-text-danger');
-            approvalNotification.innerText = '(Not yet approved) ';
+            approvalNotification.innerText = `(${L('Not yet approved')}) `;
 
             title.appendChild(threadTitle);
             DOMHelpers.addClasses(threadTitle, 'uk-logo', 'render-math');
@@ -576,7 +578,7 @@ export module ThreadsView {
 
             if (Privileges.Thread.canEditThreadTags(thread)) {
 
-                const link = EditViews.createEditLink('Edit thread tags', 'tag');
+                const link = EditViews.createEditLink(L('Edit thread tags'), 'tag');
                 details.appendChild(link);
                 Views.onClick(link, async () => {
 
@@ -599,7 +601,7 @@ export module ThreadsView {
                 }
             }
 
-            details.appendChild(DOMHelpers.parseHTML('<span>Displayed under: </span>'));
+            details.appendChild(DOMHelpers.parseHTML(`<span>${L('Displayed under:')} </span>`));
             if (thread.categories && thread.categories.length) {
 
                 thread.categories.sort(CategoryRepository.compareCategoriesByName);
@@ -619,7 +621,7 @@ export module ThreadsView {
                 details.appendChild(DOMHelpers.parseHTML('<span class="uk-text-warning">&lt;none&gt;</span>'));
                 details.appendChild(document.createTextNode(' · '));
             }
-            details.appendChild(document.createTextNode(`${DisplayHelpers.intToString(thread.visited)} total views · `));
+            details.appendChild(document.createTextNode(`${L('THREAD_TOTAL_VIEWS', DisplayHelpers.intToString(thread.visited))} · `));
 
             let subscribedUsersLink;
             if (Privileges.Thread.canViewThreadSubscribedUsers(thread)) {
@@ -632,7 +634,7 @@ export module ThreadsView {
                 subscribedUsersLink = cE('span');
             }
             details.appendChild(subscribedUsersLink);
-            subscribedUsersLink.innerText = `${DisplayHelpers.intToString(thread.subscribedUsersCount)} subscribed users`;
+            subscribedUsersLink.innerText = L('THREAD_SUBSCRIBED_USERS', DisplayHelpers.intToString(thread.subscribedUsersCount));
         }
         {
             card.appendChild(DOMHelpers.parseHTML('<div class="uk-clearfix"></div>'));
@@ -727,7 +729,7 @@ export module ThreadsView {
 
         const result = cE('div');
 
-        result.appendChild(DOMHelpers.parseHTML('<h2>Add a New Thread</h2>'));
+        result.appendChild(DOMHelpers.parseHTML(`<h2>${L('Add a New Thread')}</h2>`));
 
         const form = DOMHelpers.parseHTML('<form class="uk-form-stacked"></form>');
         result.appendChild(form);
@@ -740,7 +742,7 @@ export module ThreadsView {
             const div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
             form.appendChild(div);
 
-            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label" for="addThreadName">Thread Name</label>'));
+            div.appendChild(DOMHelpers.parseHTML(`<label class="uk-form-label" for="addThreadName">${L('Thread Name')}</label>`));
             const formControl = DOMHelpers.parseHTML('<div class="uk-form-controls"></div>');
             div.appendChild(formControl);
             input = DOMHelpers.parseHTML('<input class="uk-input" id="addThreadName" />') as HTMLInputElement;
@@ -750,7 +752,7 @@ export module ThreadsView {
             const div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
             form.appendChild(div);
 
-            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Tags</label>'));
+            div.appendChild(DOMHelpers.parseHTML(`<label class="uk-form-label">${L('Thread Tags')}</label>`));
             tagsContainer = TagsView.createTagSelectionView(tagCallback, allTags);
             div.appendChild(tagsContainer);
         }
@@ -760,7 +762,7 @@ export module ThreadsView {
             const div = DOMHelpers.parseHTML('<div class="uk-margin"></div>');
             form.appendChild(div);
 
-            div.appendChild(DOMHelpers.parseHTML('<label class="uk-form-label">Thread Message</label>'));
+            div.appendChild(DOMHelpers.parseHTML(`<label class="uk-form-label">${L('Thread Message')}</label>`));
             const newMessageContainer = DOMHelpers.parseHTML('<div class="reply-container"></div>');
             div.appendChild(newMessageContainer);
 
@@ -769,13 +771,13 @@ export module ThreadsView {
             newMessageContainer.appendChild(AttachmentsView.createAttachmentsOfMessageList([],
                 ThreadMessageRepository.emptyMessage()).toElement());
 
-            const link = DOMHelpers.parseHTML('<a class="add-attachment-to-message-link">Add attachment</a>');
+            const link = DOMHelpers.parseHTML(`<a class="add-attachment-to-message-link">${L('Add attachment')}</a>`);
             newMessageContainer.appendChild(link);
 
             AttachmentsView.setupAttachmentActionEvents(link, {}, futureMessageCallback);
         }
 
-        const addButton = DOMHelpers.parseHTML('<button class="uk-button uk-button-primary uk-align-center">Add</button>');
+        const addButton = DOMHelpers.parseHTML(`<button class="uk-button uk-button-primary uk-align-center">${L('Add')}</button>`);
         result.appendChild(addButton);
 
         Views.onClick(addButton, async () => {

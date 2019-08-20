@@ -5,6 +5,8 @@ import {Views} from '../views/common';
 import {MasterPage} from './masterPage';
 import {PageActions} from './action';
 import {DOMHelpers} from '../helpers/domHelpers';
+import {LanguageService} from "../services/languageService";
+import L = LanguageService.translate;
 
 /**
  * Displays a list of all tags with custom sorting
@@ -72,7 +74,7 @@ export class TagsPage implements Pages.Page {
         MasterPage.goTo(Pages.appendToUrl('tags', {
             orderBy: this.orderBy,
             sortOrder: this.sortOrder
-        }), 'Tags');
+        }), L('Tags'));
         DOMHelpers.addClasses(document.getElementById('tags-page-link'), 'uk-active');
     }
 }

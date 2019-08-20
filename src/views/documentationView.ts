@@ -2,17 +2,19 @@ import {Views} from './common';
 import {ViewsExtra} from './extra';
 import {DOMHelpers} from '../helpers/domHelpers';
 import {PageActions} from '../pages/action';
+import {LanguageService} from "../services/languageService";
 
 export module DocumentationView {
 
     import cE = DOMHelpers.cE;
     import IDocumentationCallback = PageActions.IDocumentationCallback;
+    import L = LanguageService.translate;
 
     export function showDocumentationInModal(source: string, callback: IDocumentationCallback): void {
 
         callback.getContent(source).catch(reason => {
 
-            Views.showDangerNotification('Could not load documentation: ' + reason);
+            Views.showDangerNotification(L('Could not load documentation:', reason));
 
         }).then(content => {
 
@@ -49,7 +51,7 @@ export module DocumentationView {
         }
         else {
 
-            container.appendChild(DOMHelpers.parseHTML(`<span class="uk-text-warning">Could not load documentation: ${couldNotLoadReason}</span>`));
+            container.appendChild(DOMHelpers.parseHTML(`<span class="uk-text-warning">${L('Could not load documentation:', couldNotLoadReason)}</span>`));
         }
 
         return container;

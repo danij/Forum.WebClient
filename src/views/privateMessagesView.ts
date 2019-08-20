@@ -8,6 +8,7 @@ import {PrivateMessageRepository} from "../services/privateMessageRepository";
 import {ViewsExtra} from "./extra";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {UsersView} from "./usersView";
+import {LanguageService} from "../services/languageService";
 
 export module PrivateMessagesView {
 
@@ -15,6 +16,7 @@ export module PrivateMessagesView {
     import DOMAppender = DOMHelpers.DOMAppender;
     import dA = DOMHelpers.dA;
     import TabEntry = Views.TabEntry;
+    import L = LanguageService.translate;
 
     export function displayPrivateMessages(privateMessagesCallback: PageActions.IPrivateMessageCallback,
                                            userCallback: PageActions.IUserCallback): Promise<void> {
@@ -33,11 +35,11 @@ export module PrivateMessagesView {
 
         const header = cE('h2');
         result.appendChild(header);
-        header.innerText = 'Private Messages';
+        header.innerText = L('Private Messages');
 
         var tabs: TabEntry[] = [
-            {title: 'Received Messages', content: dA('<div class="received-messages">')},
-            {title: 'Sent Messages', content: dA('<div class="sent-messages">')},
+            {title: L('Received Messages'), content: dA('<div class="received-messages">')},
+            {title: L('Sent Messages'), content: dA('<div class="sent-messages">')},
         ];
 
         const tabsElement = Views.createTabs(tabs, 0, 'center').toElement();
@@ -71,18 +73,18 @@ export module PrivateMessagesView {
 
             if (messages.length < 1) {
 
-                result.appendChild(DOMHelpers.parseHTML('<span class="uk-text-warning">No messages found</span>'));
+                result.appendChild(DOMHelpers.parseHTML(`<span class="uk-text-warning">${L('No messages found')}</span>`));
                 return result;
             }
 
-            result.appendChild(Views.createPaginationControl(collection, 'private messages',
+            result.appendChild(Views.createPaginationControl(collection, L('private messages'),
                 (value: number) => createPrivateMessagesTab(container, privateMessagesCallback,
                     value, getMessages),
                 (pageNumber: number) => '#'));
 
             result.appendChild(await createPrivateMessageList(messages, privateMessagesCallback));
 
-            result.appendChild(Views.createPaginationControl(collection, 'private messages',
+            result.appendChild(Views.createPaginationControl(collection, L('private messages'),
                 (value: number) => createPrivateMessagesTab(container, privateMessagesCallback,
                     value, getMessages),
                 (pageNumber: number) => '#'));
@@ -160,8 +162,8 @@ export module PrivateMessagesView {
 
         const replyTo = (message.source || message.destination).name;
 
-        actions.appendRaw(`<a uk-icon="icon: reply" class="reply-private-message-link" title="Reply" data-reply-to="${DOMHelpers.escapeStringForAttribute(replyTo)}"></a>`);
-        actions.appendRaw(`<a uk-icon="icon: trash" class="delete-private-message-link" title="Delete message" data-message-id="${DOMHelpers.escapeStringForAttribute(messageId)}"></a>`);
+        actions.appendRaw(`<a uk-icon="icon: reply" class="reply-private-message-link" title="${L('Reply')}" data-reply-to="${DOMHelpers.escapeStringForAttribute(replyTo)}"></a>`);
+        actions.appendRaw(`<a uk-icon="icon: trash" class="delete-private-message-link" title="${L('Delete message')}" data-message-id="${DOMHelpers.escapeStringForAttribute(messageId)}"></a>`);
 
         return actions;
     }
@@ -203,7 +205,7 @@ export module PrivateMessagesView {
                 return;
             }
 
-            if (destinationInput.value && (! EditViews.confirm(`You are writing a message to another user. Override with ${replyTo}?`))) {
+            if (destinationInput.value && (! EditViews.confirm(L('CONFIRM_PRIVATE_MESSAGE_OVERRIDE', replyTo)))) {
 
                 return;
             }
@@ -216,7 +218,7 @@ export module PrivateMessagesView {
 
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
-            if (EditViews.confirm('Are you sure you want to delete the selected message?')) {
+            if (EditViews.confirm(L('Are you sure you want to delete the selected message?'))) {
 
                 if (await privateMessagesCallback.deletePrivateMessage(messageId)) {
 
@@ -253,7 +255,7 @@ export module PrivateMessagesView {
             result.appendChild(destinationContainer);
             DOMHelpers.addClasses(destinationContainer, 'message-destination-container');
 
-            const label = DOMHelpers.parseHTML('<label for="private-message-destination">Send a new message to:</label>');
+            const label = DOMHelpers.parseHTML(`<label for="private-message-destination">${L('Send a new message to:')}</label>`);
             destinationContainer.appendChild(label);
 
             const destinationInput = DOMHelpers.parseHTML('<input id="private-message-destination" type="text" class="uk-input uk-form-width-large">') as HTMLInputElement;
@@ -264,7 +266,7 @@ export module PrivateMessagesView {
             const button = cE('button');
             result.appendChild(button);
             DOMHelpers.addClasses(button, 'uk-button', 'uk-button-primary', 'uk-align-center');
-            button.innerText = 'Send Message';
+            button.innerText = L('Send Message');
 
             Views.onClick(button, async () => {
 
@@ -272,7 +274,7 @@ export module PrivateMessagesView {
 
                 if (destinationUserName.length < 1) {
 
-                    Views.showWarningNotification('Recipient not specified.');
+                    Views.showWarningNotification(L('Recipient not specified.'));
                     return;
                 }
 
@@ -280,14 +282,14 @@ export module PrivateMessagesView {
 
                 if ( ! destinationUserId) {
 
-                    Views.showWarningNotification(`Unknown recipient: ${destinationUserName}`);
+                    Views.showWarningNotification(L('UNKNOWN_RECIPIENT', destinationUserName));
                     return;
                 }
 
                 const text = (await editControl.getText()).trim();
                 if (text.length < 1) {
 
-                    Views.showWarningNotification('Message not specified.');
+                    Views.showWarningNotification(L('Message not specified.'));
                     return;
                 }
 
@@ -296,24 +298,24 @@ export module PrivateMessagesView {
 
                 if (text.length < min) {
 
-                    Views.showWarningNotification(`Message must be at least ${min} characters long.`);
+                    Views.showWarningNotification(L('MESSAGE_MIN_LENGTH', min));
                     return;
                 }
                 if (text.length > max) {
 
-                    Views.showWarningNotification(`Message must be less than ${max} characters long.`);
+                    Views.showWarningNotification(L('MESSAGE_MAX_LENGTH', max));
                     return;
                 }
 
                 if (await privateMessagesCallback.sendPrivateMessage(destinationUserId, text)) {
 
-                    Views.showSuccessNotification('Message sent.');
+                    Views.showSuccessNotification(L('Message sent.'));
                 }
             })
         }
         else {
 
-            result.appendChild(DOMHelpers.parseHTML('<span class="uk-align-center uk-text-center uk-alert">Insufficient privileges to send private messages.</span>'));
+            result.appendChild(DOMHelpers.parseHTML(`<span class="uk-align-center uk-text-center uk-alert">${L('Insufficient privileges to send private messages.')}</span>`));
         }
 
         return result;

@@ -16,12 +16,14 @@ import {CommonEntities} from '../services/commonEntities';
 import {PrivilegesView} from './privilegesView';
 import {TagsView} from "./tagsView";
 import {AttachmentsView} from "./attachmentsView";
+import {LanguageService} from "../services/languageService";
 
 export module ThreadMessagesView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
+    import L = LanguageService.translate;
 
     export class ThreadMessagesPageContent {
 
@@ -77,7 +79,7 @@ export module ThreadMessagesView {
 
         if ( ! atLeastOneMessage) {
 
-            result.appendRaw('<span class="uk-text-warning">No more messages found</span>');
+            result.appendRaw(`<span class="uk-text-warning">${L('No more messages found')}</span>`);
         }
 
         const resultElement = result.toElement();
@@ -185,7 +187,7 @@ export module ThreadMessagesView {
             }
             votedMessageTime.appendElement(votedMessageTimeContent);
 
-            const messageContent = message.content || 'empty';
+            const messageContent = message.content || L('empty');
 
             let messageLink: HTMLElement;
             if (message.id) {
@@ -205,7 +207,7 @@ export module ThreadMessagesView {
 
         if ( ! atLeastOneMessage) {
 
-            result.appendRaw('<span class="uk-text-warning">No more messages found</span>');
+            result.appendRaw(`<span class="uk-text-warning">${L('No more messages found')}</span>`);
         }
 
         const resultElement = result.toElement();
@@ -263,7 +265,7 @@ export module ThreadMessagesView {
         }
 
         resultList.appendChild(result.paginationTop =
-            Views.createPaginationControl(collection, 'thread messages', onPageNumberChange, getLinkForPage));
+            Views.createPaginationControl(collection, L('thread messages'), onPageNumberChange, getLinkForPage));
 
         const editControl = thread ? createNewThreadMessageControl(thread, threadCallback, attachmentsCallback) : null;
 
@@ -274,7 +276,7 @@ export module ThreadMessagesView {
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
-            Views.createPaginationControl(collection, 'thread messages', onPageNumberChange, getLinkForPage));
+            Views.createPaginationControl(collection, L('thread messages'), onPageNumberChange, getLinkForPage));
 
         if (editControl) {
 
@@ -294,8 +296,8 @@ export module ThreadMessagesView {
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="uk-float-right">\n' +
             '                <select class="uk-select" name="sortOrder">\n' +
-            Views.createSortOrderOption('ascending', 'Ascending', info) +
-            Views.createSortOrderOption('descending', 'Descending', info) +
+            Views.createSortOrderOption('ascending', L('Ascending'), info) +
+            Views.createSortOrderOption('descending', L('Descending'), info) +
             '                </select>\n' +
             '            </div>\n' +
             '        </div>\n' +
@@ -317,7 +319,7 @@ export module ThreadMessagesView {
 
         if (messages.length < 1) {
 
-            result.appendRaw('<span class="uk-text-warning">No messages found</span>');
+            result.appendRaw(`<span class="uk-text-warning">${L('No messages found')}</span>`);
             return result.toElement();
         }
 
@@ -422,7 +424,7 @@ export module ThreadMessagesView {
 
         if (message.lastUpdated && message.lastUpdated.at) {
 
-            messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning">Edited ${DisplayHelpers.getDateTime(message.lastUpdated.at)} </span>`);
+            messageDetailsContainer.appendRaw(`<span class="message-time uk-text-warning">${L('EDITED_AT', DisplayHelpers.getDateTime(message.lastUpdated.at))} </span>`);
         }
         if (message.ip && message.ip.length) {
 
@@ -431,9 +433,8 @@ export module ThreadMessagesView {
         if (message.commentsCount > 0) {
 
             const total = DisplayHelpers.intToString(message.commentsCount);
-            const totalNoun = (1 == message.commentsCount) ? 'comment' : 'comments';
             const unsolved = DisplayHelpers.intToString(message.commentsCount - message.solvedCommentsCount);
-            const text = `<span uk-icon="icon: warning"></span> ${total} ${totalNoun} (${unsolved} unsolved) <span uk-icon="icon: warning"></span>`;
+            const text = `<span uk-icon="icon: warning"></span> ${L('TOTAL_COMMENTS', total)} (${L('UNSOLVED_COMMENTS', unsolved)}) <span uk-icon="icon: warning"></span>`;
             messageDetailsContainer.appendRaw(`<a class="show-thread-message-comments" data-message-id="${message.id}">${text}</a>`);
         }
 
@@ -496,13 +497,13 @@ export module ThreadMessagesView {
 
             if (Privileges.ThreadMessage.canUpVoteThreadMessage(message)) {
 
-                upVotesTooltip.push('Click to up vote message.');
+                upVotesTooltip.push(L('Click to up vote message.'));
                 upVoteData = ` data-upvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 upVoteExtraClass = 'pointer-cursor';
             }
             if (Privileges.ThreadMessage.canDownVoteThreadMessage(message)) {
 
-                downVotesTooltip.push('Click to down vote message.');
+                downVotesTooltip.push(L('Click to down vote message.'));
                 downVoteData = ` data-downvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 downVoteExtraClass = 'pointer-cursor';
             }
@@ -511,7 +512,7 @@ export module ThreadMessagesView {
 
             if (-1 == message.voteStatus) {
 
-                downVotesTooltip.push('Click to reset vote.');
+                downVotesTooltip.push(L('Click to reset vote.'));
                 downVoteData = ` data-resetvote-id="${DOMHelpers.escapeStringForAttribute(message.id)}"`;
                 downVoteExtraClass = 'pointer-cursor';
             }
@@ -541,7 +542,7 @@ export module ThreadMessagesView {
             const signatureContainer = dA('<div class="uk-text-center uk-flex-1 message-signature">');
             container.append(signatureContainer);
 
-            const signature = dA('<span title="User signature">');
+            const signature = dA(`<span title="${L('User signature')}">`);
             signatureContainer.append(signature);
             signature.appendRaw(ViewsExtra.wrapEmojis(DOMHelpers.escapeStringForContent(author.signature)));
         }
@@ -556,7 +557,7 @@ export module ThreadMessagesView {
     function createThreadMessageContent(message: ThreadMessageRepository.ThreadMessage): DOMAppender {
 
         const unapprovedClass = message.approved ? '' : 'unapproved';
-        const unapprovedTitle = message.approved ? '' : ' title="Not yet approved. Message is only visible to the author and privileged users."';
+        const unapprovedTitle = message.approved ? '' : ` title="${L('MESSAGE_NOT_YET_APPROVED')}"`;
         const content = dA(`<div class="message-content ${unapprovedClass} render-math uk-flex-1" ${unapprovedTitle}>`);
         const wrapper = dA('<div>');
         content.append(wrapper);
@@ -566,7 +567,7 @@ export module ThreadMessagesView {
 
             let reason = (message.lastUpdated.reason || '').trim();
             if (reason.length < 1) {
-                reason = '<no reason>';
+                reason = `<${L('no reason')}>`;
             }
 
             const details = dA('<span class="uk-text-warning">');
@@ -574,7 +575,7 @@ export module ThreadMessagesView {
 
             if (message.lastUpdated.userName) {
 
-                details.appendString(`Last edited by ${message.lastUpdated.userName}: ${reason}`);
+                details.appendString(L('LAST_EDITED_BY_REASON', message.lastUpdated.userName, reason));
             }
         }
 
@@ -589,40 +590,40 @@ export module ThreadMessagesView {
 
         if (Privileges.ThreadMessage.canEditThreadMessageApproval(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: check" class="approve-thread-message-link" title="Approve Content" data-message-id="${messageId}"></a>`);
-            actions.appendRaw(`<a uk-icon="icon: ban" class="unapprove-thread-message-link" title="Unapprove Content" data-message-id="${messageId}"></a>`);
+            actions.appendRaw(`<a uk-icon="icon: check" class="approve-thread-message-link" title="${L('Approve Content')}" data-message-id="${messageId}"></a>`);
+            actions.appendRaw(`<a uk-icon="icon: ban" class="unapprove-thread-message-link" title="${L('Unapprove Content')}" data-message-id="${messageId}"></a>`);
         }
 
         if (Privileges.ThreadMessage.canEditThreadMessageContent(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="Edit message content" data-message-id="${messageId}"></a>`);
+            actions.appendRaw(`<a uk-icon="icon: file-edit" class="edit-thread-message-content-link" title="${L('Edit message content')}" data-message-id="${messageId}"></a>`);
         }
 
         if (Privileges.Attachment.canAddAttachmentToMessage(message)) {
 
-            actions.appendRaw(`<a class="add-attachment-to-message-link" uk-icon="icon: upload" title="Add attachment" data-message-id="${message.id}"></a>`);
+            actions.appendRaw(`<a class="add-attachment-to-message-link" uk-icon="icon: upload" title="${L('Add attachment')}" data-message-id="${message.id}"></a>`);
         }
 
         if (Privileges.ThreadMessage.canViewThreadMessageRequiredPrivileges(message)
             || Privileges.ThreadMessage.canViewThreadMessageAssignedPrivileges(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: settings" class="show-thread-message-privileges-link" title="Privileges" data-message-id="${messageId}"></a>`);
+            actions.appendRaw(`<a uk-icon="icon: settings" class="show-thread-message-privileges-link" title="${L('Privileges')}" data-message-id="${messageId}"></a>`);
         }
         if (Privileges.ThreadMessage.canMoveThreadMessage(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: move" class="move-thread-message-link" title="Move to different thread" data-message-id="${messageId}"></a>`);
+            actions.appendRaw(`<a uk-icon="icon: move" class="move-thread-message-link" title="${L('Move to different thread')}" data-message-id="${messageId}"></a>`);
         }
         if (Privileges.ThreadMessage.canDeleteThreadMessage(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: trash" class="delete-thread-message-link" title="Delete message" data-message-id="${messageId}"></a>`);
+            actions.appendRaw(`<a uk-icon="icon: trash" class="delete-thread-message-link" title="${L('Delete message')}" data-message-id="${messageId}"></a>`);
         }
         if (Privileges.ThreadMessage.canCommentThreadMessage(message)) {
 
-            actions.appendRaw(`<a uk-icon="icon: warning" class="comment-thread-message-link" title="Flag & comment" data-message-id="${messageId}"></a>`);
+            actions.appendRaw(`<a uk-icon="icon: warning" class="comment-thread-message-link" title="${L('Flag & comment')}" data-message-id="${messageId}"></a>`);
         }
         if (quoteCallback) {
 
-            actions.appendRaw(`<a uk-icon="icon: quote-right" class="quote-thread-message-link" title="Quote content" data-message-id="${messageId}"></a>`);
+            actions.appendRaw(`<a uk-icon="icon: quote-right" class="quote-thread-message-link" title="${L('Quote content')}" data-message-id="${messageId}"></a>`);
         }
 
         return actions;
@@ -682,12 +683,12 @@ export module ThreadMessagesView {
 
                 if (text.length < min) {
 
-                    Views.showWarningNotification(`Message must be at least ${min} characters long.`);
+                    Views.showWarningNotification(L('MESSAGE_MIN_LENGTH', min));
                     return;
                 }
                 if (text.length > max) {
 
-                    Views.showWarningNotification(`Message must be less than ${max} characters long.`);
+                    Views.showWarningNotification(L('MESSAGE_MAX_LENGTH', max));
                     return;
                 }
 
@@ -720,7 +721,7 @@ export module ThreadMessagesView {
 
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
-            if (EditViews.confirm('Are you sure you want to delete the selected message?')) {
+            if (EditViews.confirm(L('Are you sure you want to delete the selected message?'))) {
 
                 EditViews.reloadPageIfOk(callback.deleteThreadMessage(messageId));
             }
@@ -730,12 +731,12 @@ export module ThreadMessagesView {
 
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
-            const comment = EditViews.getInput('Please enter a comment for the selected message');
+            const comment = EditViews.getInput(L('Please enter a comment for the selected message'));
             if (comment && comment.length) {
 
                 if (await callback.commentThreadMessage(messageId, comment)) {
 
-                    Views.showSuccessNotification('Comment sent!');
+                    Views.showSuccessNotification(L('Comment sent!'));
                 }
             }
         });
@@ -787,9 +788,9 @@ export module ThreadMessagesView {
         });
     }
 
-    function adjustVote(value: string, adjustement: number): string {
+    function adjustVote(value: string, adjustment: number): string {
 
-        return value.replace(/\d+/, (value) => (parseInt(value) + adjustement).toString());
+        return value.replace(/\d+/, (value) => (parseInt(value) + adjustment).toString());
     }
 
     const solvedCommentSpan = '<span class="uk-icon-button uk-float-right" uk-icon="check" title="Already solved"></span>';
@@ -864,7 +865,7 @@ export module ThreadMessagesView {
         else if (Privileges.ThreadMessage.canSolveThreadMessageComment(comment.message)) {
 
             const data = `data-comment-id="${DOMHelpers.escapeStringForAttribute(comment.id)}"`;
-            contentDiv.appendRaw(`<a class="solve-message-comment-link uk-float-right" ${data} title="Set comment to solved"><span class="uk-icon" uk-icon="check"></span></a>`);
+            contentDiv.appendRaw(`<a class="solve-message-comment-link uk-float-right" ${data} title="${L('Set comment to solved')}"><span class="uk-icon" uk-icon="check"></span></a>`);
         }
 
         const paragraph = dA('<p>');
@@ -906,7 +907,7 @@ export module ThreadMessagesView {
             result.appendChild(AttachmentsView.createAttachmentsOfMessageList([],
                 ThreadMessageRepository.emptyMessage()).toElement());
 
-            const link = DOMHelpers.parseHTML('<a class="add-attachment-to-message-link">Add attachment</a>');
+            const link = DOMHelpers.parseHTML(`<a class="add-attachment-to-message-link">${L('Add attachment')}</a>`);
             result.appendChild(link);
 
             const futureMessageCallback = new PageActions.AttachmentCallbackForFutureMessage(attachmentsCallback);
@@ -927,12 +928,12 @@ export module ThreadMessagesView {
 
                 if (text.length < min) {
 
-                    Views.showWarningNotification(`Message must be at least ${min} characters long.`);
+                    Views.showWarningNotification(L('MESSAGE_MIN_LENGTH', min));
                     return;
                 }
                 if (text.length > max) {
 
-                    Views.showWarningNotification(`Message must be less than ${max} characters long.`);
+                    Views.showWarningNotification(L('MESSAGE_MAX_LENGTH', max));
                     return;
                 }
 
@@ -954,7 +955,7 @@ export module ThreadMessagesView {
         }
         else {
 
-            result.appendChild(DOMHelpers.parseHTML('<span class="uk-align-center uk-text-center uk-alert">Insufficient privileges to add a new message to this thread.</span>'));
+            result.appendChild(DOMHelpers.parseHTML(`<span class="uk-align-center uk-text-center uk-alert">${L('INSUFFICIENT_PRIVILEGES_THREAD_ADD_MESSAGE')}</span>`));
             editControl = new EditViews.EditControl(result);
         }
 
@@ -1015,13 +1016,13 @@ export module ThreadMessagesView {
         else {
 
             const header = cE('h2');
-            header.innerText = 'All Thread Message Comments';
+            header.innerText = L('All Thread Message Comments');
             resultList.appendChild(header);
         }
         resultList.appendChild(result.sortControls = createThreadMessageListSortControls(info));
 
         resultList.appendChild(result.paginationTop =
-            Views.createPaginationControl(collection, 'thread message comments', onPageNumberChange, getLinkForPage));
+            Views.createPaginationControl(collection, L('thread message comments'), onPageNumberChange, getLinkForPage));
 
         const listContainer = cE('div');
         DOMHelpers.addClasses(listContainer, 'thread-message-comments-list');
@@ -1030,7 +1031,7 @@ export module ThreadMessagesView {
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
-            Views.createPaginationControl(collection, 'thread message comments', onPageNumberChange, getLinkForPage));
+            Views.createPaginationControl(collection, L('thread message comments'), onPageNumberChange, getLinkForPage));
 
         result.list = resultList;
 
@@ -1050,7 +1051,7 @@ export module ThreadMessagesView {
 
         if (comments.length < 1) {
 
-            result.appendRaw('<span class="uk-text-warning">No comments found</span>');
+            result.appendRaw(`<span class="uk-text-warning">${L('No comments found')}</span>`);
             return result.toElement();
         }
 
@@ -1155,7 +1156,7 @@ export module ThreadMessagesView {
                 ? anyMessage.parentThread.name
                 : '');
 
-        const threadTitle = threadName || 'unknown';
+        const threadTitle = threadName || L('unknown');
 
         const href = Pages.getThreadMessagesOfThreadUrlFull({
 
@@ -1201,7 +1202,7 @@ export module ThreadMessagesView {
         threadTitleElement.innerText = threadTitle;
         container.appendElement(threadTitleElement);
 
-        const messageContent = message.content || 'empty';
+        const messageContent = message.content || L('empty');
 
         let messageLink: HTMLElement;
         if (message.id) {

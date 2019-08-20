@@ -12,6 +12,7 @@ import {PageActions} from '../pages/action';
 import {AttachmentsPage} from "../pages/attachmentsPage";
 import {AttachmentsRepository} from "../services/attachmentsRepository";
 import {RequestHandler} from "../services/requestHandler";
+import {LanguageService} from "../services/languageService";
 
 export module Views {
 
@@ -19,6 +20,7 @@ export module Views {
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
     import IDocumentationCallback = PageActions.IDocumentationCallback;
+    import L = LanguageService.translate;
 
     declare var UIkit: any;
     const UIkitToUpdateOnPageLoad = ['navbar', 'icon', 'modal', 'close', 'tab'];
@@ -169,7 +171,7 @@ export module Views {
 
         const container = DOMHelpers.parseHTML(
             '<ul class="uk-pagination uk-flex-center uk-margin-remove-left uk-margin-remove-top uk-margin-remove-bottom" uk-margin>' +
-            '<li>Page:</li>' +
+            `<li>${L('Page:')}</li>` +
             '</ul>');
         result.appendChild(container);
 
@@ -218,7 +220,7 @@ export module Views {
 
             Views.onClick(span, () => {
 
-                const pageNumber = parseInt(prompt("Please enter the page number:")) || 0;
+                const pageNumber = parseInt(prompt(L('Please enter the page number:'))) || 0;
                 if (pageNumber >= 1) {
 
                     onPageNumberChange(pageNumber - 1);
@@ -833,7 +835,7 @@ export module Views {
                 error: ex => {
 
                     DOMHelpers.hide(progressElement);
-                    Views.showDangerNotification('Error uploading file: ' + ex.message);
+                    Views.showDangerNotification(L('Error uploading file:', ex.message));
                 },
                 completeAll: (request: XMLHttpRequest) => {
 
@@ -843,7 +845,7 @@ export module Views {
                     }
                     catch (ex) {
 
-                        Views.showDangerNotification('Error uploading file: ' + ex.message);
+                        Views.showDangerNotification(L('Error uploading file:', ex.message));
                     }
                     setTimeout(() => {
 

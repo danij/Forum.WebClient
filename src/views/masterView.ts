@@ -42,14 +42,23 @@ export module MasterView {
             for (let newsItem of config.newsItems || []) {
 
                 const item = cE("li");
-                item.innerHTML = DOMHelpers.parseHTML(ViewsExtra.expandContent(newsItem)).innerHTML;
+                let newsText: string;
+                if ('string' == typeof (newsItem)) {
+                    newsText = newsItem;
+                } else {
+                    const currentLanguage = LanguageService.getCurrentLanguage();
+                    if ( ! (currentLanguage in newsItem)) continue;
+                    newsText = newsItem[currentLanguage];
+                }
+
+                item.innerHTML = DOMHelpers.parseHTML(ViewsExtra.expandContent(newsText)).innerHTML;
                 newsItems.appendChild(item);
             }
             ViewsExtra.refreshMath(newsItems);
         }, 0);
     }
 
-    function createNavLink(link: Pages.PageLink, docCallback: IDocumentationCallback) : HTMLLIElement {
+    function createNavLink(link: Pages.PageLink, docCallback: IDocumentationCallback): HTMLLIElement {
 
         const linkElement = cE('a') as HTMLAnchorElement;
 
@@ -57,8 +66,7 @@ export module MasterView {
 
             linkElement.setAttribute('href', link.link);
             DOMHelpers.addRelAttribute(linkElement);
-        }
-        else if (link.docName) {
+        } else if (link.docName) {
 
             linkElement.href = DocPage.getPageUrl(link.docName);
             Views.onClick(linkElement, () => DocumentationView.showDocumentationInModal(link.docName, docCallback));
@@ -317,7 +325,7 @@ export module MasterView {
 
         const selectElement = document.getElementById('theme-select') as HTMLSelectElement;
 
-        DOMHelpers.forEach(selectElement.options, (option: HTMLOptionElement ) => {
+        DOMHelpers.forEach(selectElement.options, (option: HTMLOptionElement) => {
 
             themeIsValid = themeIsValid || (theme.toLowerCase() === option.value.toLowerCase());
         });

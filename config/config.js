@@ -77,7 +77,9 @@ window.masterPageConfig = {
     }],
     newsItems: [
         'Sample *News*',
-        'Sample *News* #2'
+        {
+            'en': 'Sample *News* #2',
+        }
     ],
     externalImagesWarningFormat: 'External link: {title}'
 };

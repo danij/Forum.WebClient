@@ -9,12 +9,14 @@ import {EditViews} from './edit';
 import {PrivilegesView} from './privilegesView';
 import {ThreadMessagesView} from './threadMessagesView';
 import {ViewsExtra} from "./extra";
+import {LanguageService} from "../services/languageService";
 
 export module TagsView {
 
     import DOMAppender = DOMHelpers.DOMAppender;
     import dA = DOMHelpers.dA;
     import cE = DOMHelpers.cE;
+    import L = LanguageService.translate;
 
     export function createTagElement(tag: TagRepository.Tag): DOMAppender {
 
@@ -82,15 +84,15 @@ export module TagsView {
 
         if (tags.length < 1) {
 
-            table.appendRaw('<span class="uk-text-warning">No tags found</span>');
+            table.appendRaw(`<span class="uk-text-warning">${L('No tags found')}</span>`);
             return tableContainer.toElement();
         }
 
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
-            '        <th class="uk-table-expand">Tag</th>\n' +
-            '        <th class="uk-text-center uk-table-shrink">Statistics</th>\n' +
-            '        <th class="uk-text-right latest-message-header">Latest Message</th>\n' +
+            `        <th class="uk-table-expand">${L('Tag')}</th>\n` +
+            `        <th class="uk-text-center uk-table-shrink">${L('Statistics')}</th>\n` +
+            `        <th class="uk-text-right latest-message-header">${L('Latest Message')}</th>\n` +
             '    </tr>\n' +
             '</thead>';
         table.appendRaw(tableHeader);
@@ -117,7 +119,7 @@ export module TagsView {
                 if (tag.categories && tag.categories.length) {
 
                     const categoryElement = dA('<span class="category-children uk-text-small">');
-                    nameColumn.appendRaw('<span class="uk-text-meta">Referenced by:</span> ');
+                    nameColumn.appendRaw(`<span class="uk-text-meta">${L('Referenced by:')}</span> `);
                     nameColumn.append(categoryElement);
 
                     for (let i = 0; i < tag.categories.length; ++i) {
@@ -142,11 +144,11 @@ export module TagsView {
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +
-                    '            <td class="spaced-number uk-text-left uk-text-meta">threads</td>\n' +
+                    `            <td class="spaced-number uk-text-left uk-text-meta">${L('threads')}</td>\n` +
                     '        </tr>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
-                    '            <td class="spaced-number uk-text-left uk-text-meta">messages</td>\n' +
+                    `            <td class="spaced-number uk-text-left uk-text-meta">${L('messages')}</td>\n` +
                     '        </tr>\n' +
                     '    </table>\n' +
                     '</td>')
@@ -176,14 +178,14 @@ export module TagsView {
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="order-by">\n' +
             '                Sort by:\n' +
-            Views.createOrderByLabel('name', 'Name', info) +
-            Views.createOrderByLabel('threadcount', 'Thread Count', info) +
-            Views.createOrderByLabel('messagecount', 'Message Count', info) +
+            Views.createOrderByLabel('name', L('Name'), info) +
+            Views.createOrderByLabel('threadcount', L('Thread Count'), info) +
+            Views.createOrderByLabel('messagecount', L('Message Count'), info) +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
             '                <select class="uk-select" name="sortOrder">\n' +
-            Views.createSortOrderOption('ascending', 'Ascending', info) +
-            Views.createSortOrderOption('descending', 'Descending', info) +
+            Views.createSortOrderOption('ascending', L('Ascending'), info) +
+            Views.createSortOrderOption('descending', L('Descending'), info) +
             '                </select>\n' +
             '            </div>\n' +
             '        </div>\n' +
@@ -202,11 +204,11 @@ export module TagsView {
 
         if (Privileges.Tag.canEditTagName(tag)) {
 
-            const link = EditViews.createEditLink('Edit tag name');
+            const link = EditViews.createEditLink(L('Edit tag name'));
             container.appendChild(link);
             Views.onClick(link, () => {
 
-                const name = EditViews.getInput('Edit tag name', tag.name);
+                const name = EditViews.getInput(L('Edit tag name'), tag.name);
                 if (name && name.length && (name != tag.name)) {
 
                     EditViews.doIfOk(callback.editTagName(tag.id, name), () => {
@@ -228,7 +230,7 @@ export module TagsView {
 
         if (Privileges.Tag.canMergeTags(tag)) {
 
-            const link = EditViews.createEditLink('Merge tags', 'git-fork');
+            const link = EditViews.createEditLink(L('Merge tags'), 'git-fork');
             container.appendChild(link);
             Views.onClick(link, async () => {
 
@@ -242,7 +244,7 @@ export module TagsView {
         if (Privileges.Tag.canViewTagRequiredPrivileges(tag)
             || Privileges.Tag.canViewTagAssignedPrivileges(tag)) {
 
-            const link = EditViews.createEditLink('Privileges', 'settings');
+            const link = EditViews.createEditLink(L('Privileges'), 'settings');
             container.appendChild(link);
             Views.onClick(link, async () => {
 
@@ -252,13 +254,13 @@ export module TagsView {
 
         const threadCount = cE('span');
         container.appendChild(threadCount);
-        threadCount.innerText = `${DisplayHelpers.intToString(tag.threadCount)} threads`;
+        threadCount.innerText = L('THREAD_COUNT', DisplayHelpers.intToString(tag.threadCount));
 
         const messageCount = cE('span');
         container.appendChild(messageCount);
-        messageCount.innerText = `${DisplayHelpers.intToString(tag.messageCount)} messages`;
+        messageCount.innerText = L('MESSAGE_COUNT', DisplayHelpers.intToString(tag.messageCount));
 
-        container.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Referenced by: </span>'));
+        container.appendChild(DOMHelpers.parseHTML(`<span class="uk-text-meta">${L('Referenced by:')} </span>`));
 
         if (tag.categories && tag.categories.length) {
 
@@ -282,12 +284,12 @@ export module TagsView {
 
         if (Privileges.Tag.canDeleteTag(tag)) {
 
-            const deleteLink = EditViews.createDeleteLink('Delete tag');
+            const deleteLink = EditViews.createDeleteLink(L('Delete tag'));
             container.appendChild(deleteLink);
 
             Views.onClick(deleteLink, () => {
 
-                if (EditViews.confirm(`Are you sure you want to delete the following tag: ${tag.name}?`)) {
+                if (EditViews.confirm(L('CONFIRM_DELETE_TAG', tag.name))) {
 
                     EditViews.goToTagsPageIfOk(callback.deleteTag(tag.id));
                 }
@@ -336,7 +338,7 @@ export module TagsView {
 
         searchForm.appendChild(DOMHelpers.parseHTML('<span class="uk-search-icon-flip" uk-search-icon></span>'));
         const searchInput =
-            DOMHelpers.parseHTML('<input class="uk-search-input" type="search" placeholder="Filter..." />') as HTMLInputElement;
+            DOMHelpers.parseHTML(`<input class="uk-search-input" type="search" placeholder="${L('Filter...')}" />`) as HTMLInputElement;
         searchForm.appendChild(searchInput);
 
         function createEntry(tagId: string, tagName: string): HTMLLabelElement {
@@ -366,7 +368,7 @@ export module TagsView {
         if (Privileges.ForumWide.canAddNewTag()) {
 
             const tagNameInput =
-                DOMHelpers.parseHTML('<input class="uk-input" type="input" placeholder="Add new tag..." />') as HTMLInputElement;
+                DOMHelpers.parseHTML(`<input class="uk-input" type="input" placeholder="${L('Add new tag...')}" />`) as HTMLInputElement;
 
             result.appendChild(tagNameInput);
 
@@ -521,11 +523,11 @@ export module TagsView {
 
     function createAddNewTagElement(callback: PageActions.ITagCallback): HTMLElement {
 
-        const button = EditViews.createAddNewButton('Add Tag');
+        const button = EditViews.createAddNewButton(L('Add Tag'));
 
         Views.onClick(button, () => {
 
-            const name = EditViews.getInput('Enter the new tag name');
+            const name = EditViews.getInput(L('Enter the new tag name'));
             if ((null === name) || (name.length < 1)) return;
 
             EditViews.reloadPageIfOk(callback.createTag(name));

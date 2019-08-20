@@ -30,9 +30,7 @@
     <div class="uk-navbar-left">
         <ul class="uk-navbar-nav">
             <li class="uk-text-center"><a id="recent-threads-modal-link">
-                <div><b>Recent</b>
-                    <div class="uk-navbar-subtitle">Threads</div>
-                </div>
+                <div translate-html>NAV_Recent Threads</div>
             </a></li>
         </ul>
     </div>
@@ -93,9 +91,7 @@
                         </div>
                     </a></li>
                     <li id="new-thread-page-link" class="uk-hidden"><a data-href="threads/new" class="uk-text-center">
-                        <div>New
-                            <div class="uk-navbar-subtitle">Thread</div>
-                        </div>
+                        <div translate-html>NAV_New Thread</div>
                     </a></li>
                 </ul>
             </div>
@@ -141,9 +137,7 @@
                 </div>
             </li>
             <li class="uk-text-center"><a id="recent-thread-messages-modal-link">
-                <div><b>Recent</b>
-                    <div class="uk-navbar-subtitle">Messages</div>
-                </div>
+                <div translate-html>NAV_Recent Messages</div>
             </a></li>
         </ul>
     </div>
@@ -406,80 +400,74 @@
         </ul>
         <ul class="uk-switcher">
             <li class="uk-active">
-                <p>This website needs to store the following first-party
-                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">HTTP cookies</a>
-                    in your browser in order to function property.</p>
+                <p translate-html>CONSENT_NeedsCookies</p>
                 <table class="uk-table uk-table-small uk-table-striped">
                     <thead>
-                    <tr><th>Name</th><th>Description</th></tr>
+                    <tr><th translate>Name</th><th transalte>Description</th></tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>allow_cookies_required</td>
-                        <td>Remembers your consent to allow required cookies.</td>
+                        <td translate>Remembers your consent to allow required cookies.</td>
                     </tr>
                     <tr>
                         <td>allow_external_content</td>
-                        <td>Remembers your consent to allow loading externally linked content.</td>
+                        <td translate>Remembers your consent to allow loading externally linked content.</td>
                     </tr>
                     <tr>
                         <td>auth</td>
-                        <td>Remembers who you are logged in as so that you do not have to log in every time you reload the page.</td>
+                        <td translate>COOKIE_REMEMBER_LOGIN</td>
                     </tr>
                     <tr>
                         <td>auth_provider</td>
-                        <td>Remembers the type of provider you have authenticated with.</td>
+                        <td translate>COOKIE_REMEMBER_PROVIDER</td>
                     </tr>
                     <tr>
                         <td>double_submit</td>
-                        <td>Protects against <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">Cross-Site Request Forgery</a> attacks.</td>
+                        <td translate-html>CONSENT_ProtectsCSRF</td>
                     </tr>
                     <tr>
                         <td>login_redirect</td>
-                        <td>Temporarily stores the url to which to redirect after logging in.</td>
+                        <td translate>COOKIE_URL_AFTER_LOGIN</td>
                     </tr>
                     <tr>
                         <td>show_my_user_in_users_online</td>
-                        <td>Stores whether to display the user name you are logged in with in the list of online users.</td>
+                        <td translate>COOKIE_DISPLAY_ONLINE_USER</td>
                     </tr>
                     </tbody>
                 </table>
                 <hr class="uk-divider-icon">
-                <p>This website needs to store the following third-party
-                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies">HTTP cookies</a>
-                    in your browser in order to function property.</p>
+                <p translate-html>CONSENT_Needs3rdPartyCookies</p>
                 <table class="uk-table uk-table-small uk-table-striped">
                     <thead>
-                    <tr><th>Domain</th><th>Description</th></tr>
+                    <tr><th translate>Domain</th><th translate>Description</th></tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>.google.com</td>
-                        <td>Using Google reCAPTCHA to check that account registration/forgot password operations are not performed by a robot.</td>
+                        <td translate>COOKIE_RECAPTCHA</td>
                     </tr>
                     </tbody>
                 </table>
             </li>
             <li>
-                <p>Messages on the forum can include images or videos stored on external sites.</p>
-                <p>Because the forum cannot control and is not responsible for other sites
-                    (how they track your visit, what cookies they use, what ads they display, etc.)
-                    it disables loading such images/videos automatically.</p>
-                <p>If you don't mind loading the images/videos automatically, you can express your consent below.</p>
+                <p translate>CONSENT_EXTERNAL_INCLUDE</p>
+                <p translate>CONSENT_EXTERNAL_CANNOT_CONTROL</p>
+                <p translate>CONSENT_EXTERNAL_EXPRESS_CONSENT</p>
             </li>
         </ul>
         <hr class="uk-divider-icon">
         <form>
             <div class="uk-margin">
                 <input type="checkbox" id="consent-required-cookies" class="uk-checkbox" />
-                <label for="consent-required-cookies">I agree to the website storing the above required cookies in my browser.</label>
+                <label for="consent-required-cookies" translate>CONSENT_AGREE_COOKIES</label>
             </div>
             <div class="uk-margin">
                 <input type="checkbox" id="consent-external-content" class="uk-checkbox" />
-                <label for="consent-external-content">I agree to the website automatically loading externally linked content.</label>
+                <label for="consent-external-content" translate>CONSENT_AGREE_LINKED_CONTENT</label>
             </div>
 
-            <button id="save-consent" class="uk-button uk-button-primary uk-align-center">Save</button>
+            <button id="save-consent" class="uk-button uk-button-primary uk-align-center" translate>Save</button>
         </form>
     </div>
 </div>
@@ -491,18 +479,18 @@
 
         <div class="uk-margin">
             <input type="checkbox" id="show-in-online-users" class="uk-checkbox" />
-            <label for="show-in-online-users">Display my user name in the public list of <emph>online users</emph></label>
+            <label for="show-in-online-users" translate-html>LOGIN_DisplayInOnlineUsersList</label>
         </div>
         <div class="uk-margin">
             <input type="checkbox" id="accept-privacy-and-tos" class="uk-checkbox" />
-            <label for="accept-privacy-and-tos">I agree to the <a class="privacy-link">Privacy Policy</a> and <a class="tos-link">Terms of Service</a></label>
+            <label for="accept-privacy-and-tos" translate-html>LOGIN_Agree</label>
         </div>
         <hr class="uk-divider-icon">
         <div class="uk-column-1-2 uk-column-divider">
             <div class="login-column-wrapper">
                 <div id="login-container-custom" class="uk-hidden">
                     <div class="uk-margin">
-                        <span>With an account created on this site:</span>
+                        <span translate>With an account created on this site:</span>
                     </div>
                     <form>
                         <div class="uk-margin">
@@ -588,13 +576,13 @@
 
         <div>
             <div class="uk-margin">
-                <p>You have logged in but have not chosen a user name yet. The user name is displayed along side all the content created by you on the site.</p>
-                <p>The following restrictions apply:</p>
+                <p translate>CREATE_USER_NoUserFound</p>
+                <p translate>The following restrictions apply:</p>
                 <ul>
-                    <li class="replace-template">Minimum length: {userNameMinLength} characters</li>
-                    <li class="replace-template">Maximum length: {userNameMaxLength} characters</li>
-                    <li>Must start and end with an alphanumeric character</li>
-                    <li>Can contain whitespace (<code> </code>), underscore (<code>_</code>) or hyphen (<code>-</code>)</li>
+                    <li class="replace-template" translate>Minimum length: {userNameMinLength} characters</li>
+                    <li class="replace-template" translate>Maximum length: {userNameMaxLength} characters</li>
+                    <li translate>Must start and end with an alphanumeric character</li>
+                    <li translate-html>CREATE_USER_CanContain</li>
                 </ul>
             </div>
             <form>
@@ -602,7 +590,7 @@
                     <input type="text" id="user-name-input" class="uk-input" placeholder="user name" />
                 </div>
                 <div class="uk-margin uk-text-center">
-                    <button id="create-user-name-button" class="uk-button uk-button-primary">Create</button>
+                    <button id="create-user-name-button" class="uk-button uk-button-primary" translate>Create</button>
                 </div>
             </form>
         </div>
@@ -616,16 +604,16 @@
 
         <form>
             <div class="uk-margin">
-                <input type="text" id="change-password-email" class="uk-input" placeholder="email" />
+                <input type="text" id="change-password-email" class="uk-input" placeholder="email" translate />
             </div>
             <div class="uk-margin">
-                <input type="password" id="change-password-old-password" class="uk-input" placeholder="old forum account password" />
+                <input type="password" id="change-password-old-password" class="uk-input" placeholder="old forum account password" translate />
             </div>
             <div class="uk-margin">
-                <input type="password" id="change-password-new-password" class="uk-input" placeholder="new forum account password" />
+                <input type="password" id="change-password-new-password" class="uk-input" placeholder="new forum account password" translate />
             </div>
             <div class="uk-margin">
-                <input type="password" id="change-password-password-confirm" class="uk-input" placeholder="confirm password" />
+                <input type="password" id="change-password-password-confirm" class="uk-input" placeholder="confirm password" translate />
             </div>
             <div class="uk-margin uk-hidden" id="change-password-check-not-a-robot">
             </div>
@@ -681,8 +669,6 @@
     </div>
     <div class="uk-float-right">
         <select id="language-select" class="uk-select">
-            <option value="en" selected>English</option>
-            <option value="ro">Română</option>
         </select>
     </div>
 </div>

@@ -4,6 +4,8 @@ import {UsersView} from '../views/usersView';
 import {Views} from '../views/common';
 import {MasterPage} from './masterPage';
 import {DOMHelpers} from '../helpers/domHelpers';
+import {LanguageService} from "../services/languageService";
+import L = LanguageService.translate;
 
 /**
  * Displays a list of users with pagination and custom sorting
@@ -73,13 +75,13 @@ export class UsersPage implements Pages.Page {
 
             if (null == userCollection) return null;
 
-            const newTopPaginationControl = Views.createPaginationControl(userCollection, 'users',
+            const newTopPaginationControl = Views.createPaginationControl(userCollection, L('users'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            const newBottomPaginationControl = Views.createPaginationControl(userCollection, 'users',
+            const newBottomPaginationControl = Views.createPaginationControl(userCollection, L('users'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);

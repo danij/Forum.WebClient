@@ -4,11 +4,13 @@ import {ViewsExtra} from './extra';
 import {Views} from './common';
 import {ThreadMessageRepository} from '../services/threadMessageRepository';
 import {UserCache} from "../services/userCache";
+import {LanguageService} from "../services/languageService";
 
 export module EditViews {
 
     import cE = DOMHelpers.cE;
     import refreshMath = ViewsExtra.refreshMath;
+    import L = LanguageService.translate;
 
     export function getInput(title: string, value: string = ''): string {
 
@@ -121,7 +123,7 @@ export module EditViews {
 
             this.previewContainer = cE('div') as HTMLDivElement;
             DOMHelpers.addClasses(this.previewContainer, 'edit-preview', 'message-content', 'render-math');
-            this.previewContainer.appendChild(DOMHelpers.parseHTML('<span class="uk-text-meta">Message Preview</span>'));
+            this.previewContainer.appendChild(DOMHelpers.parseHTML(`<span class="uk-text-meta">${L('Message Preview')}</span>`));
 
             this.resultContainer = cE('div') as HTMLDivElement;
             this.previewContainer.appendChild(this.resultContainer);
@@ -215,21 +217,21 @@ export module EditViews {
             DOMHelpers.addClasses(list, 'uk-iconnav');
 
             const actions = [
-                {icon: 'bold', title: 'Make selection bold', callback: () => this.addBold()},
-                {icon: 'italic', title: 'Make selection italic', callback: () => this.addItalic()},
-                {icon: 'code', title: 'Make selection monospace', callback: () => this.addMonospace()},
-                {icon: 'strikethrough', title: 'Make selection strikethrough', callback: () => this.addStrikeThrough()},
+                {icon: 'bold', title: L('Make selection bold'), callback: () => this.addBold()},
+                {icon: 'italic', title: L('Make selection italic'), callback: () => this.addItalic()},
+                {icon: 'code', title: L('Make selection monospace'), callback: () => this.addMonospace()},
+                {icon: 'strikethrough', title: L('Make selection strikethrough'), callback: () => this.addStrikeThrough()},
                 null,
-                {icon: 'list', title: 'Add list', callback: () => this.addList()},
-                {icon: 'table', title: 'Add table', callback: () => this.addTable()},
-                {icon: 'minus', title: 'Add horizontal rule', callback: () => this.addHorizontalRule()},
+                {icon: 'list', title: L('Add list'), callback: () => this.addList()},
+                {icon: 'table', title: L('Add table'), callback: () => this.addTable()},
+                {icon: 'minus', title: L('Add horizontal rule'), callback: () => this.addHorizontalRule()},
                 null,
-                {icon: 'file-edit', title: 'Add code', callback: () => this.addCode()},
-                {math: '$\\Sigma$', title: 'Add math', callback: () => this.addMath()},
+                {icon: 'file-edit', title: L('Add code'), callback: () => this.addCode()},
+                {math: '$\\Sigma$', title: L('Add math'), callback: () => this.addMath()},
                 null,
-                {icon: 'link', title: 'Add link', callback: () => this.addLink()},
-                {icon: 'image', title: 'Add image reference', callback: () => this.addImage()},
-                {icon: 'youtube', title: 'Embed YouTube', callback: () => this.addYouTubeLink()}
+                {icon: 'link', title: L('Add link'), callback: () => this.addLink()},
+                {icon: 'image', title: L('Add image reference'), callback: () => this.addImage()},
+                {icon: 'youtube', title: L('Embed YouTube'), callback: () => this.addYouTubeLink()}
             ];
 
             for (const action of actions) {
@@ -330,10 +332,10 @@ export module EditViews {
 
         private addLink(): void {
 
-            const link = getInput('Please enter the link to add');
+            const link = getInput(L('Please enter the link to add'));
             if (link) {
 
-                const title = getInput('Please enter the title for the link');
+                const title = getInput(L('Please enter the title for the link'));
 
                 if (title) {
 
@@ -348,10 +350,10 @@ export module EditViews {
 
         private addImage(): void {
 
-            const link = getInput('Please enter the link to the image');
+            const link = getInput(L('Please enter the link to the image'));
             if (link) {
 
-                const title = getInput('Please enter the image title');
+                const title = getInput(L('Please enter the image title'));
                 const altText = title || link;
 
                 if (title) {
@@ -374,7 +376,7 @@ export module EditViews {
 
         private addYouTubeLink(): void {
 
-            const link = getInput('Please enter the embed code');
+            const link = getInput(L('Please enter the embed code'));
             if (link) {
 
                 const src = this.getFirstMatchOrDefault(link, /src="([^"]+)"/i).trim();
@@ -387,7 +389,7 @@ export module EditViews {
                 }
                 else {
 
-                    Views.showWarningNotification('Invalid embed code.');
+                    Views.showWarningNotification(L('Invalid embed code.'));
                 }
             }
         }

@@ -10,12 +10,14 @@ import {Privileges} from "../services/privileges";
 import {EditViews} from "./edit";
 import {ThreadMessageRepository} from "../services/threadMessageRepository";
 import {UserCache} from "../services/userCache";
+import {LanguageService} from "../services/languageService";
 
 export module AttachmentsView {
 
     import cE = DOMHelpers.cE;
     import dA = DOMHelpers.dA;
     import DOMAppender = DOMHelpers.DOMAppender;
+    import L = LanguageService.translate;
 
     export interface AttachmentsPageDisplayInfo extends Views.SortInfo {
 
@@ -51,13 +53,13 @@ export module AttachmentsView {
         else {
 
             const header = cE('h2');
-            header.innerText = 'All Attachments';
+            header.innerText = L('All Attachments');
             resultList.appendChild(header);
         }
         resultList.appendChild(result.sortControls = createThreadMessageListSortControls(info));
 
         resultList.appendChild(result.paginationTop =
-            Views.createPaginationControl(collection, 'attachments', onPageNumberChange, getLinkForPage));
+            Views.createPaginationControl(collection, L('attachments'), onPageNumberChange, getLinkForPage));
 
         const listContainer = cE('div');
         DOMHelpers.addClasses(listContainer, 'attachments-table');
@@ -65,7 +67,7 @@ export module AttachmentsView {
         resultList.appendChild(listContainer);
 
         resultList.appendChild(result.paginationBottom =
-            Views.createPaginationControl(collection, 'attachments', onPageNumberChange, getLinkForPage));
+            Views.createPaginationControl(collection, L('attachments'), onPageNumberChange, getLinkForPage));
 
         result.list = resultList;
 
@@ -79,15 +81,15 @@ export module AttachmentsView {
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="order-by">\n' +
             '                Sort by:\n' +
-            Views.createOrderByLabel('name', 'Name', info) +
-            Views.createOrderByLabel('created', 'Created', info) +
-            Views.createOrderByLabel('size', 'Size', info) +
-            Views.createOrderByLabel('approval', 'Approval', info) +
+            Views.createOrderByLabel('name', L('Name'), info) +
+            Views.createOrderByLabel('created', L('Created'), info) +
+            Views.createOrderByLabel('size', L('Size'), info) +
+            Views.createOrderByLabel('approval', L('Approval'), info) +
             '            </div>\n' +
             '            <div class="uk-float-right">\n' +
             '                <select class="uk-select" name="sortOrder">\n' +
-            Views.createSortOrderOption('ascending', 'Ascending', info) +
-            Views.createSortOrderOption('descending', 'Descending', info) +
+            Views.createSortOrderOption('ascending', L('Ascending'), info) +
+            Views.createSortOrderOption('descending', L('Descending'), info) +
             '                </select>\n' +
             '            </div>\n' +
             '        </div>\n' +
@@ -109,12 +111,12 @@ export module AttachmentsView {
 
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
-            '        <th class="uk-table-expand">Attachment</th>\n' +
-            '        <th class="uk-text-right">Size</th>\n' +
-            '        <th class="uk-text-center">Added</th>\n' +
-            '        <th class="uk-text-center uk-table-shrink">By</th>\n' +
-            '        <th class="uk-text-center uk-table-shrink">Statistics</th>\n' +
-            '        <th class="uk-text-right">Actions</th>\n' +
+            `        <th class="uk-table-expand">${L('Attachment')}</th>\n` +
+            `        <th class="uk-text-right">${L('Size')}</th>\n` +
+            `        <th class="uk-text-center">${L('Added')}</th>\n` +
+            `        <th class="uk-text-center uk-table-shrink">${L('By')}</th>\n` +
+            `        <th class="uk-text-center uk-table-shrink">${L('Statistics')}</th>\n` +
+            `        <th class="uk-text-right">${L('Actions')}</th>\n` +
             '    </tr>\n' +
             '</thead>';
         table.appendRaw(tableHeader);
@@ -176,11 +178,11 @@ export module AttachmentsView {
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfDownloads}</td>\n' +
-                    '            <td class="spaced-number uk-text-left uk-text-meta">downloads</td>\n' +
+                    `           <td class="spaced-number uk-text-left uk-text-meta">${L('downloads')}</td>\n` +
                     '        </tr>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
-                    '            <td class="spaced-number uk-text-left uk-text-meta">messages</td>\n' +
+                    `            <td class="spaced-number uk-text-left uk-text-meta">${L('messages')}</td>\n` +
                     '        </tr>\n' +
                     '    </table>\n' +
                     '</td>')
@@ -194,18 +196,18 @@ export module AttachmentsView {
 
                 if (Privileges.Attachment.canEditAttachmentApproval(attachment)) {
 
-                    actionsColumn.appendRaw(`<a uk-icon="icon: check" class="approve-attachment-link" title="Approve attachment" data-attachment-id="${attachment.id}"></a>`);
-                    actionsColumn.appendRaw(`<a uk-icon="icon: ban" class="unapprove-attachment-link" title="Unapprove attachment" data-attachment-id="${attachment.id}"></a>`);
+                    actionsColumn.appendRaw(`<a uk-icon="icon: check" class="approve-attachment-link" title="${L('Approve attachment')}" data-attachment-id="${attachment.id}"></a>`);
+                    actionsColumn.appendRaw(`<a uk-icon="icon: ban" class="unapprove-attachment-link" title="${L('Unapprove attachment')}" data-attachment-id="${attachment.id}"></a>`);
                 }
 
                 if (Privileges.Attachment.canEditAttachmentName(attachment)) {
 
-                    actionsColumn.appendRaw(`<a uk-icon="icon: file-edit" class="edit-attachment-name-link" title="Edit attachment name" data-attachment-id="${attachment.id}"></a>`);
+                    actionsColumn.appendRaw(`<a uk-icon="icon: file-edit" class="edit-attachment-name-link" title="${L('Edit attachment name')}" data-attachment-id="${attachment.id}"></a>`);
                 }
 
                 if (Privileges.Attachment.canDeleteAttachment(attachment)) {
 
-                    actionsColumn.appendRaw(`<a uk-icon="icon: trash" class="delete-attachment-link" title="Delete attachment" data-attachment-id="${attachment.id}"></a>`);
+                    actionsColumn.appendRaw(`<a uk-icon="icon: trash" class="delete-attachment-link" title="${L('Delete attachment')}" data-attachment-id="${attachment.id}"></a>`);
                 }
             }
         }
@@ -291,7 +293,7 @@ export module AttachmentsView {
             const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
             const attachment = attachmentsById[attachmentId];
 
-            const newName = (EditViews.getInput('Please enter the new attachment name', attachment.name) || '').trim();
+            const newName = (EditViews.getInput(L('Please enter the new attachment name'), attachment.name) || '').trim();
 
             if (newName.length && newName != attachment.name) {
 
@@ -300,12 +302,12 @@ export module AttachmentsView {
 
                 if (newName.length < min) {
 
-                    Views.showWarningNotification(`Attachment name must be at least ${min} characters long.`);
+                    Views.showWarningNotification(L('ATTACHMENTS_MIN_LENGTH', min));
                     return;
                 }
                 if (newName.length > max) {
 
-                    Views.showWarningNotification(`Attachment name must be less than ${max} characters long.`);
+                    Views.showWarningNotification(L('ATTACHMENTS_MAX_LENGTH', max));
                     return;
                 }
 
@@ -321,7 +323,7 @@ export module AttachmentsView {
 
             const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
 
-            if (EditViews.confirm('Are you sure you want to delete the selected attachment?')) {
+            if (EditViews.confirm(L('CONFIRM_DELETE_SELECTED_ATTACHMENT'))) {
 
                 if (await callback.deleteAttachment(attachmentId)) {
 
@@ -335,7 +337,7 @@ export module AttachmentsView {
             const attachmentId = DOMHelpers.getLink(ev).getAttribute('data-attachment-id');
             const messageId = DOMHelpers.getLink(ev).getAttribute('data-message-id');
 
-            if (EditViews.confirm('Are you sure you want to remove the selected attachment from the message?')) {
+            if (EditViews.confirm(L('CONFIRM_DELETE_SELECTED_ATTACHMENT_FROM_MESSAGE'))) {
 
                 if (await callback.removeAttachmentFromMessage(attachmentId, messageId)) {
 
@@ -409,26 +411,26 @@ export module AttachmentsView {
 
             if (Privileges.Attachment.canEditAttachmentApproval(attachment)) {
 
-                actionsContainer.appendRaw(`<a uk-icon="icon: check" class="approve-attachment-link" title="Approve attachment" data-attachment-id="${attachment.id}"></a>`);
-                actionsContainer.appendRaw(`<a uk-icon="icon: ban" class="unapprove-attachment-link" title="Unapprove attachment" data-attachment-id="${attachment.id}"></a>`);
+                actionsContainer.appendRaw(`<a uk-icon="icon: check" class="approve-attachment-link" title="${L('Approve attachment')}" data-attachment-id="${attachment.id}"></a>`);
+                actionsContainer.appendRaw(`<a uk-icon="icon: ban" class="unapprove-attachment-link" title="${L('Unapprove attachment')}" data-attachment-id="${attachment.id}"></a>`);
                 showAttachmentActions = true;
             }
 
             if (Privileges.Attachment.canEditAttachmentName(attachment)) {
 
-                actionsContainer.appendRaw(`<a uk-icon="icon: file-edit" class="edit-attachment-name-link" title="Edit attachment name" data-attachment-id="${attachment.id}"></a>`);
+                actionsContainer.appendRaw(`<a uk-icon="icon: file-edit" class="edit-attachment-name-link" title="${L('Edit attachment name')}" data-attachment-id="${attachment.id}"></a>`);
                 showAttachmentActions = true;
             }
 
             if (Privileges.Attachment.canRemoveAttachmentFromMessage(attachment, message)) {
 
-                actionsContainer.appendRaw(`<a uk-icon="icon: close" class="remove-attachment-from-message-link" title="Remove attachment from message" data-attachment-id="${attachment.id}" data-message-id="${message.id}"></a>`);
+                actionsContainer.appendRaw(`<a uk-icon="icon: close" class="remove-attachment-from-message-link" title="${L('Remove attachment from message')}" data-attachment-id="${attachment.id}" data-message-id="${message.id}"></a>`);
                 showAttachmentActions = true;
             }
 
             if (Privileges.Attachment.canDeleteAttachment(attachment)) {
 
-                actionsContainer.appendRaw(`<a uk-icon="icon: trash" class="delete-attachment-link" title="Delete attachment" data-attachment-id="${attachment.id}"></a>`);
+                actionsContainer.appendRaw(`<a uk-icon="icon: trash" class="delete-attachment-link" title="${L('Delete attachment')}" data-attachment-id="${attachment.id}"></a>`);
                 showAttachmentActions = true;
             }
             if (showAttachmentActions) {
@@ -486,10 +488,10 @@ export module AttachmentsView {
 
                 const uploadElement = DOMHelpers.parseHTML("<div class=\"js-upload uk-placeholder uk-text-center\">\n" +
                     "    <span uk-icon=\"icon: upload\"></span>\n" +
-                    "    <span class=\"uk-text-middle\">Drop attachment here or</span>\n" +
+                    `    <span class=\"uk-text-middle\">${L('Drop attachment here or')}</span>\n` +
                     "    <div uk-form-custom>\n" +
                     "        <input type=\"file\">\n" +
-                    "        <span class=\"uk-link\">choose one</span>\n" +
+                    `        <span class=\"uk-link\">${L('choose one')}</span>\n` +
                     "    </div>\n" +
                     "</div>");
                 result.appendChild(uploadElement);
@@ -511,7 +513,7 @@ export module AttachmentsView {
             } else {
 
                 result.appendChild(DOMHelpers.parseHTML(
-                    '<span class="uk-text-warning">Insufficient privileges to create new attachments</span>'));
+                    `<span class="uk-text-warning">${L('Insufficient privileges to create new attachments')}</span>`));
             }
 
             const response = await Pages.getOrShowError(AttachmentsRepository.getAttachmentsAddedByUser(
@@ -545,15 +547,15 @@ export module AttachmentsView {
 
         if (( ! attachments) || ( ! attachments.length)) {
 
-            return DOMHelpers.parseHTML('<span class="uk-text-warning">No previously uploaded attachments found</span>');
+            return DOMHelpers.parseHTML(`<span class="uk-text-warning">${L('No previously uploaded attachments found')}</span>`);
         }
         const table = dA('<table class="uk-table uk-table-divider uk-table-middle uk-table-small uk-table-justify">');
 
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
-            '        <th class="uk-table-expand">Already Uploaded</th>\n' +
-            '        <th class="uk-text-right">Size</th>\n' +
-            '        <th class="uk-text-center">Added</th>\n' +
+            `        <th class="uk-table-expand">${L('Already Uploaded')}</th>\n` +
+            `        <th class="uk-text-right">${L('Size')}</th>\n` +
+            `        <th class="uk-text-center">${L('Added')}</th>\n` +
             '    </tr>\n' +
             '</thead>';
         table.appendRaw(tableHeader);

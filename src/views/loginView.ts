@@ -6,8 +6,11 @@ import {ConsentView} from './consentView';
 import {DOMHelpers} from '../helpers/domHelpers';
 import {PageActions} from '../pages/action';
 import {AuthenticationView} from './authenticationView';
+import {LanguageService} from "../services/languageService";
 
 export module LoginView {
+
+    import L = LanguageService.translate;
 
     export function setupLogin(authCallback: PageActions.IAuthCallback,
                                docCallback: PageActions.IDocumentationCallback): void {
@@ -77,7 +80,7 @@ export module LoginView {
                 }
                 else {
 
-                    Views.showWarningNotification('Consent for storing cookies is required to be able to log in.');
+                    Views.showWarningNotification(L('LOGIN_CONSENT_REQUIRED'));
                 }
             });
         }
@@ -95,7 +98,7 @@ export module LoginView {
 
         if ( ! checkBox.checked) {
 
-            Views.showWarningNotification('Cannot log in or reset the password without accepting the privacy policy and terms of service');
+            Views.showWarningNotification(L('LOGIN_ACCEPT_PP_TOS'));
         }
 
         return checkBox.checked;
@@ -129,12 +132,12 @@ export module LoginView {
 
         if ( ! AuthenticationView.validateEmail(email)) {
 
-            Views.showWarningNotification('Invalid email address!');
+            Views.showWarningNotification(L('Invalid email address!'));
             return;
         }
         if (password.length < 1) {
 
-            Views.showWarningNotification('Please enter a password!');
+            Views.showWarningNotification(L('Please enter a password!'));
             return;
         }
 
@@ -156,7 +159,7 @@ export module LoginView {
 
         if ( ! AuthenticationView.validateEmail(email)) {
 
-            Views.showWarningNotification('Invalid email address!');
+            Views.showWarningNotification(L('Invalid email address!'));
             return;
         }
 
@@ -165,13 +168,13 @@ export module LoginView {
 
         if (AuthenticationView.shouldCheckNotARobot() && (! notARobotResponse)) {
 
-            Views.showWarningNotification('Please complete the not a robot test.');
+            Views.showWarningNotification(L('Please complete the not a robot test.'));
             return;
         }
 
         if (await authCallback.resetCustomPassword(email, true, true, notARobotResponse)) {
 
-            Views.showSuccessNotification('Please check your email for details on how to reset the password.');
+            Views.showSuccessNotification(L('Please check your email for details on how to reset the password.'));
         }
     }
 }

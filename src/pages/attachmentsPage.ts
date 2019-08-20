@@ -6,6 +6,8 @@ import {PageActions} from './action';
 import {DOMHelpers} from '../helpers/domHelpers';
 import {AttachmentsRepository} from "../services/attachmentsRepository";
 import {AttachmentsView} from "../views/attachmentsView";
+import {LanguageService} from "../services/languageService";
+import L = LanguageService.translate;
 
 /**
  * Displays a list of attachments with pagination and custom sorting
@@ -110,13 +112,13 @@ export class AttachmentsPage implements Pages.Page {
 
             if (null == attachmentsCollection) return;
 
-            const newTopPaginationControl = Views.createPaginationControl(attachmentsCollection, 'attachments',
+            const newTopPaginationControl = Views.createPaginationControl(attachmentsCollection, L('attachments'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            const newBottomPaginationControl = Views.createPaginationControl(attachmentsCollection, 'attachments',
+            const newBottomPaginationControl = Views.createPaginationControl(attachmentsCollection, L('attachments'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
@@ -156,11 +158,11 @@ export class AttachmentsPage implements Pages.Page {
 
     private refreshUrl() {
 
-        let title = 'Attachments';
+        let title = L('Attachments');
 
         if (this.userName && this.userName.length) {
 
-            title = 'Attachments added by ' + this.userName;
+            title = L('ATTACHMENTS_BY', this.userName);
         }
 
         title = Views.addPageNumber(title, this.pageNumber);

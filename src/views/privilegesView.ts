@@ -16,6 +16,7 @@ import {ThreadsView} from './threadsView';
 import {Privileges} from '../services/privileges';
 import {Debug} from '../services/debug';
 import {UserCache} from "../services/userCache";
+import {LanguageService} from "../services/languageService";
 
 export module PrivilegesView {
 
@@ -24,143 +25,144 @@ export module PrivilegesView {
     import RequiredPrivilegesCollection = PrivilegesRepository.RequiredPrivilegesCollection;
     import AssignedPrivilegesCollection = PrivilegesRepository.AssignedPrivilegesCollection;
     import AssignedPrivilege = PrivilegesRepository.AssignedPrivilege;
+    import L = LanguageService.translate;
 
     const ThreadMessagePrivilegeNames = [
 
-        ['view', 'View'],
-        ['view_unapproved', 'View Unapproved'],
-        ['view_required_privileges', 'View Required Privileges'],
-        ['view_assigned_privileges', 'View Assigned Privileges'],
-        ['view_creator_user', 'View Creator User'],
-        ['view_ip_address', 'View IP Address'],
-        ['view_votes', 'View Votes'],
-        ['view_attachment', 'View Attachments'],
-        ['view_unapproved_attachment', 'View Unapproved Attachments'],
-        ['up_vote', 'Up Vote'],
-        ['down_vote', 'Down Vote'],
-        ['reset_vote', ' Reset Vote'],
-        ['add_comment', ' Add Comment'],
-        ['get_message_comments', 'View Message Comments'],
-        ['set_comment_to_solved', 'Set Comment to Solved'],
-        ['change_content', 'Change Content'],
-        ['change_approval', 'Change Approval'],
-        ['delete', 'Delete'],
-        ['move', 'Move'],
-        ['add_attachment', 'Add Attachment'],
-        ['remove_attachment', 'Remove Attachment'],
-        ['adjust_privilege', 'Adjust Privileges'],
+        ['view', L('View')],
+        ['view_unapproved', L('View Unapproved')],
+        ['view_required_privileges', L('View Required Privileges')],
+        ['view_assigned_privileges', L('View Assigned Privileges')],
+        ['view_creator_user', L('View Creator User')],
+        ['view_ip_address', L('View IP Address')],
+        ['view_votes', L('View Votes')],
+        ['view_attachment', L('View Attachments')],
+        ['view_unapproved_attachment', L('View Unapproved Attachments')],
+        ['up_vote', L('Up Vote')],
+        ['down_vote', L('Down Vote')],
+        ['reset_vote', L('Reset Vote')],
+        ['add_comment', L('Add Comment')],
+        ['get_message_comments', L('View Message Comments')],
+        ['set_comment_to_solved', L('Set Comment to Solved')],
+        ['change_content', L('Change Content')],
+        ['change_approval', L('Change Approval')],
+        ['delete', L('Delete')],
+        ['move', L('Move')],
+        ['add_attachment', L('Add Attachment')],
+        ['remove_attachment', L('Remove Attachment')],
+        ['adjust_privilege', L('Adjust Privileges')],
     ];
 
     const ThreadPrivilegeNames = [
 
-        ['view', 'View'],
-        ['view_unapproved', 'View Unapproved'],
-        ['view_required_privileges', 'View Required Privileges'],
-        ['view_assigned_privileges', 'View Assigned Privileges'],
-        ['get_subscribed_users', 'View Users Subscribed to Thread'],
-        ['subscribe', 'Subscribe'],
-        ['unsubscribe', 'Unsubscribe'],
-        ['add_message', 'Add Message'],
-        ['auto_approve_message', 'Auto Approve Message'],
-        ['change_name', 'Change Name'],
-        ['change_pin_display_order', 'Change Pin Display Order'],
-        ['change_approval', 'Change Approval'],
-        ['add_tag', 'Add Tag'],
-        ['remove_tag', 'Remove Tag'],
-        ['delete', 'Delete'],
-        ['merge', 'Merge'],
-        ['adjust_privilege', 'Adjust Privileges'],
+        ['view', L('View')],
+        ['view_unapproved', L('View Unapproved')],
+        ['view_required_privileges', L('View Required Privileges')],
+        ['view_assigned_privileges', L('View Assigned Privileges')],
+        ['get_subscribed_users', L('View Users Subscribed to Thread')],
+        ['subscribe', L('Subscribe')],
+        ['unsubscribe', L('Unsubscribe')],
+        ['add_message', L('Add Message')],
+        ['auto_approve_message', L('Auto Approve Message')],
+        ['change_name', L('Change Name')],
+        ['change_pin_display_order', L('Change Pin Display Order')],
+        ['change_approval', L('Change Approval')],
+        ['add_tag', L('Add Tag')],
+        ['remove_tag', L('Remove Tag')],
+        ['delete', L('Delete')],
+        ['merge', L('Merge')],
+        ['adjust_privilege', L('Adjust Privileges')],
     ];
 
     const TagPrivilegeNames = [
 
-        ['view', 'View'],
-        ['view_required_privileges', 'View Required Privileges'],
-        ['view_assigned_privileges', 'View Assigned Privileges'],
-        ['get_discussion_threads', 'View Threads'],
-        ['change_name', 'Change Name'],
-        //['change_uiblob', 'Change UI Blob'],
-        ['delete', 'Delete'],
-        ['merge', 'Merge'],
-        ['adjust_privilege', 'Adjust Privileges'],
+        ['view', L('View')],
+        ['view_required_privileges', L('View Required Privileges')],
+        ['view_assigned_privileges', L('View Assigned Privileges')],
+        ['get_discussion_threads', L('View Threads')],
+        ['change_name', L('Change Name')],
+        //['change_uiblob', L('Change UI Blob')],
+        ['delete', L('Delete')],
+        ['merge', L('Merge')],
+        ['adjust_privilege', L('Adjust Privileges')],
     ];
 
     const CategoryPrivilegeNames = [
 
-        ['view', 'View'],
-        ['view_required_privileges', 'View Required Privileges'],
-        ['view_assigned_privileges', 'View Assigned Privileges'],
-        ['get_discussion_threads', 'View Threads'],
-        ['change_name', 'Change Name'],
-        ['change_description', 'Change Description'],
-        ['change_parent', 'Change Parent'],
-        ['change_displayorder', 'Change Displayorder'],
-        ['add_tag', 'Add Tag'],
-        ['remove_tag', 'Remove Tag'],
-        ['delete', 'Delete'],
-        ['adjust_privilege', 'Adjust Privileges'],
+        ['view', L('View')],
+        ['view_required_privileges', L('View Required Privileges')],
+        ['view_assigned_privileges', L('View Assigned Privileges')],
+        ['get_discussion_threads', L('View Threads')],
+        ['change_name', L('Change Name')],
+        ['change_description', L('Change Description')],
+        ['change_parent', L('Change Parent')],
+        ['change_displayorder', L('Change Displayorder')],
+        ['add_tag', L('Add Tag')],
+        ['remove_tag', L('Remove Tag')],
+        ['delete', L('Delete')],
+        ['adjust_privilege', L('Adjust Privileges')],
     ];
 
     const ForumWidePrivilegeNames = [
 
-        ['add_user', 'Register User'],
-        ['get_entities_count', 'View Entities Count'],
-        ['get_version', 'View Version'],
-        ['get_all_users', 'View All Users'],
-        ['get_user_info', 'View User Info'],
-        ['get_discussion_threads_of_user', 'View Threads Of User'],
-        ['get_discussion_thread_messages_of_user', 'View Thread Messages Of User'],
-        ['get_subscribed_discussion_threads_of_user', 'View Subscribed Threads Of User'],
-        ['get_all_discussion_categories', 'View All Categories'],
-        ['get_discussion_categories_from_root', 'View Root Categories'],
-        ['get_all_discussion_tags', 'View All Tags'],
-        ['get_all_discussion_threads', 'View All Threads'],
-        ['get_all_message_comments', 'View All Message Comments'],
-        ['get_message_comments_of_user', 'View Message Comments Of User'],
-        ['get_all_attachments', 'View All Attachments'],
-        ['get_attachments_of_user', 'View Attachments of User'],
-        ['view_attachment_ip_address', 'View Attachment Creator IP Address'],
-        ['add_discussion_category', 'Add Category'],
-        ['add_discussion_tag', 'Add Tag'],
-        ['add_discussion_thread', 'Add Thread'],
-        ['auto_approve_discussion_thread', 'Auto Approve Thread'],
-        ['send_private_message', 'Send Private Message'],
-        ['view_private_message_ip_address', 'View Private Message IP Address'],
-        ['change_own_user_name', 'Change Own User Name'],
-        ['change_any_user_name', 'Change Any User Name'],
-        ['change_own_user_info', 'Change Own User Info'],
-        ['change_any_user_info', 'Change Any User Info'],
-        ['change_own_user_title', 'Change Own User Title'],
-        ['change_any_user_title', 'Change Any User Title'],
-        ['change_own_user_signature', 'Change Own User Signature'],
-        ['change_any_user_signature', 'Change Any User Signature'],
-        ['change_own_user_logo', 'Change Own User Logo'],
-        ['change_any_user_logo', 'Change Any User Logo'],
-        ['delete_own_user_logo', 'Delete Own User Logo'],
-        ['delete_any_user_logo', 'Delete Any User Logo'],
-        ['change_user_attachment_quota', 'Change Any User Attachment Quota'],
-        ['delete_any_user', 'Delete Any User'],
-        ['create_attachment', 'Create Attachment'],
-        ['auto_approve_attachment', 'Auto Approve Attachment'],
-        ['change_own_attachment_name', 'Change Own Attachment Name'],
-        ['change_any_attachment_name', 'Change Any Attachment Name'],
-        ['change_any_attachment_approval', 'Change Any Attachment Approval'],
-        ['delete_own_attachment', 'Delete Own Attachment'],
-        ['delete_any_attachment', 'Delete Any Attachment'],
-        ['view_forum_wide_required_privileges', 'View Forum Wide Required Privileges'],
-        ['view_forum_wide_assigned_privileges', 'View Forum Wide Assigned Privileges'],
-        ['view_user_assigned_privileges', 'View User Assigned Privileges'],
-        ['adjust_forum_wide_privilege', 'Adjust Privileges'],
-        ['no_throttling', 'No Throttling Exception'],
+        ['add_user', L('Register User')],
+        ['get_entities_count', L('View Entities Count')],
+        ['get_version', L('View Version')],
+        ['get_all_users', L('View All Users')],
+        ['get_user_info', L('View User Info')],
+        ['get_discussion_threads_of_user', L('View Threads Of User')],
+        ['get_discussion_thread_messages_of_user', L('View Thread Messages Of User')],
+        ['get_subscribed_discussion_threads_of_user', L('View Subscribed Threads Of User')],
+        ['get_all_discussion_categories', L('View All Categories')],
+        ['get_discussion_categories_from_root', L('View Root Categories')],
+        ['get_all_discussion_tags', L('View All Tags')],
+        ['get_all_discussion_threads', L('View All Threads')],
+        ['get_all_message_comments', L('View All Message Comments')],
+        ['get_message_comments_of_user', L('View Message Comments Of User')],
+        ['get_all_attachments', L('View All Attachments')],
+        ['get_attachments_of_user', L('View Attachments of User')],
+        ['view_attachment_ip_address', L('View Attachment Creator IP Address')],
+        ['add_discussion_category', L('Add Category')],
+        ['add_discussion_tag', L('Add Tag')],
+        ['add_discussion_thread', L('Add Thread')],
+        ['auto_approve_discussion_thread', L('Auto Approve Thread')],
+        ['send_private_message', L('Send Private Message')],
+        ['view_private_message_ip_address', L('View Private Message IP Address')],
+        ['change_own_user_name', L('Change Own User Name')],
+        ['change_any_user_name', L('Change Any User Name')],
+        ['change_own_user_info', L('Change Own User Info')],
+        ['change_any_user_info', L('Change Any User Info')],
+        ['change_own_user_title', L('Change Own User Title')],
+        ['change_any_user_title', L('Change Any User Title')],
+        ['change_own_user_signature', L('Change Own User Signature')],
+        ['change_any_user_signature', L('Change Any User Signature')],
+        ['change_own_user_logo', L('Change Own User Logo')],
+        ['change_any_user_logo', L('Change Any User Logo')],
+        ['delete_own_user_logo', L('Delete Own User Logo')],
+        ['delete_any_user_logo', L('Delete Any User Logo')],
+        ['change_user_attachment_quota', L('Change Any User Attachment Quota')],
+        ['delete_any_user', L('Delete Any User')],
+        ['create_attachment', L('Create Attachment')],
+        ['auto_approve_attachment', L('Auto Approve Attachment')],
+        ['change_own_attachment_name', L('Change Own Attachment Name')],
+        ['change_any_attachment_name', L('Change Any Attachment Name')],
+        ['change_any_attachment_approval', L('Change Any Attachment Approval')],
+        ['delete_own_attachment', L('Delete Own Attachment')],
+        ['delete_any_attachment', L('Delete Any Attachment')],
+        ['view_forum_wide_required_privileges', L('View Forum Wide Required Privileges')],
+        ['view_forum_wide_assigned_privileges', L('View Forum Wide Assigned Privileges')],
+        ['view_user_assigned_privileges', L('View User Assigned Privileges')],
+        ['adjust_forum_wide_privilege', L('Adjust Privileges')],
+        ['no_throttling', L('No Throttling Exception')],
     ];
 
     const Columns = [
 
-        ['discussionThreadMessagePrivileges', 'Message'],
-        ['discussionThreadPrivileges', 'Thread'],
-        ['discussionTagPrivileges', 'Tag'],
-        ['discussionCategoryPrivileges', 'Category'],
-        ['forumWidePrivileges', 'Forum Wide'],
+        ['discussionThreadMessagePrivileges', L('Message')],
+        ['discussionThreadPrivileges', L('Thread')],
+        ['discussionTagPrivileges', L('Tag')],
+        ['discussionCategoryPrivileges', L('Category')],
+        ['forumWidePrivileges', L('Forum Wide')],
     ];
 
     const PrivilegeTypeMapping = {
@@ -241,18 +243,18 @@ export module PrivilegesView {
 
         const result = dA('span');
 
-        const editButton = dA(`<span class="edit-required-privilege" title="Edit" ${DOMHelpers.concatAttributes(dataValues)}>`);
+        const editButton = dA(`<span class="edit-required-privilege" title="${L('Edit')}" ${DOMHelpers.concatAttributes(dataValues)}>`);
         result.append(editButton);
         editButton.appendRaw('<span uk-icon="pencil" class="edit-required-privilege-button pointer-cursor"></span>');
 
         const editInput = dA(`<input class="edit-required-privilege-input uk-hidden" value="${currentValue.toString()}" />`);
         result.append(editInput);
 
-        const saveButton = dA('<span class="edit-required-privilege-save uk-hidden" title="Save">');
+        const saveButton = dA(`<span class="edit-required-privilege-save uk-hidden" title="${L('Save')}">`);
         result.append(saveButton);
         saveButton.appendRaw('<span uk-icon="check" class="edit-required-privilege-button pointer-cursor"></span>');
 
-        const cancelButton = dA('<span class="edit-required-privilege-cancel uk-hidden" title="Cancel">');
+        const cancelButton = dA(`<span class="edit-required-privilege-cancel uk-hidden" title="${L('Cancel')}">`);
         result.append(cancelButton);
         cancelButton.appendRaw('<span uk-icon="close" class="edit-required-privilege-button pointer-cursor"></span>');
 
@@ -292,7 +294,7 @@ export module PrivilegesView {
 
             if ((value.toString() != valueString) || (value < ValueMin) || (value > ValueMax)) {
 
-                Views.showWarningNotification(`Value must be between ${ValueMin} and ${ValueMax}!`);
+                Views.showWarningNotification(L('VALUE_MUST_BE_BETWEEN', ValueMin, ValueMax));
                 return;
             }
 
@@ -309,7 +311,7 @@ export module PrivilegesView {
             }
             catch (ex) {
 
-                Views.showDangerNotification(`Could not assign privilege: ${ex}`)
+                Views.showDangerNotification(L('COULD_NOT_ASSIGN_PRIVILEGE', ex))
             }
         });
 
@@ -319,7 +321,7 @@ export module PrivilegesView {
     export function showThreadMessagePrivileges(message: ThreadMessageRepository.ThreadMessage,
                                                 callback: PageActions.IPrivilegesCallback): void {
 
-        const modal = showPrivilegesModal('Privileges For Thread Message');
+        const modal = showPrivilegesModal(L('Privileges For Thread Message'));
 
         const threadMessageRequiredPrivilegesPromises = [
 
@@ -345,7 +347,7 @@ export module PrivilegesView {
     export function showThreadPrivileges(thread: ThreadRepository.Thread,
                                          callback: PageActions.IPrivilegesCallback): void {
 
-        const modal = showPrivilegesModal('Privileges For Thread: ' + thread.name);
+        const modal = showPrivilegesModal(L('PRIVILEGES_FOR_THREAD', thread.name));
 
         const requiredPrivilegesPromises = [
 
@@ -369,7 +371,7 @@ export module PrivilegesView {
 
     export function showTagPrivileges(tag: TagRepository.Tag, callback: PageActions.IPrivilegesCallback): void {
 
-        const modal = showPrivilegesModal('Privileges For Tag: ' + tag.name);
+        const modal = showPrivilegesModal(L('PRIVILEGES_FOR_TAG', tag.name));
 
         const requiredPrivilegesPromises = [
 
@@ -391,7 +393,7 @@ export module PrivilegesView {
     export function showCategoryPrivileges(category: CategoryRepository.Category,
                                            callback: PageActions.IPrivilegesCallback): void {
 
-        const modal = showPrivilegesModal('Privileges For Category: ' + category.name);
+        const modal = showPrivilegesModal(L('PRIVILEGES_FOR_CATEGORY', category.name));
 
         const requiredPrivilegesPromises = [
 
@@ -412,7 +414,7 @@ export module PrivilegesView {
 
     export function showForumWidePrivileges(callback: PageActions.IPrivilegesCallback): void {
 
-        const modal = showPrivilegesModal('Forum Wide Privileges');
+        const modal = showPrivilegesModal(L('Forum Wide Privileges'));
 
         Views.showModal(modal);
 
@@ -449,31 +451,31 @@ export module PrivilegesView {
 
             if (threadMessageRequiredPrivileges) {
 
-                tabEntries.push(createdRequiredPrivilegesTable('Thread Message Required Levels',
+                tabEntries.push(createdRequiredPrivilegesTable(L('Thread Message Required Levels'),
                     ThreadMessagePrivilegeNames, await threadMessageRequiredPrivileges,
                     'discussionThreadMessagePrivileges'));
             }
             if (threadRequiredPrivileges) {
 
-                tabEntries.push(createdRequiredPrivilegesTable('Thread Required Levels',
+                tabEntries.push(createdRequiredPrivilegesTable(L('Thread Required Levels'),
                     ThreadPrivilegeNames, await threadRequiredPrivileges,
                     'discussionThreadPrivileges'));
             }
             if (tagRequiredPrivileges) {
 
-                tabEntries.push(createdRequiredPrivilegesTable('Tag Required Levels',
+                tabEntries.push(createdRequiredPrivilegesTable(L('Tag Required Levels'),
                     TagPrivilegeNames, await tagRequiredPrivileges,
                     'discussionTagPrivileges'));
             }
             if (categoryRequiredPrivileges) {
 
-                tabEntries.push(createdRequiredPrivilegesTable('Category Required Levels',
+                tabEntries.push(createdRequiredPrivilegesTable(L('Category Required Levels'),
                     CategoryPrivilegeNames, await categoryRequiredPrivileges,
                     'discussionCategoryPrivileges'));
             }
             if (forumWideRequiredPrivileges) {
 
-                tabEntries.push(createdRequiredPrivilegesTable('Forum Wide Required Levels',
+                tabEntries.push(createdRequiredPrivilegesTable(L('Forum Wide Required Levels'),
                     ForumWidePrivilegeNames, await forumWideRequiredPrivileges,
                     'forumWidePrivileges'));
             }
@@ -545,7 +547,7 @@ export module PrivilegesView {
             const row = dA('<tr>');
             tHead.append(row);
 
-            row.appendRaw('<th>Privilege</th>');
+            row.appendRaw(`<th>${L('Privilege')}</th>`);
 
             for (const column of Columns) {
 
@@ -668,7 +670,7 @@ export module PrivilegesView {
 
             if (0 == assignedPrivileges.length) {
 
-                appender.appendRaw('<span class="uk-text-warning">No privileges assigned</span>');
+                appender.appendRaw(`<span class="uk-text-warning">${L('No privileges assigned')}</span>`);
             }
             else {
 
@@ -709,23 +711,23 @@ export module PrivilegesView {
 
                 if (granted.length) {
 
-                    tabEntries.push(createAssignedPrivilegesTable('Granted Levels', granted, columnName, getUserLink));
+                    tabEntries.push(createAssignedPrivilegesTable(L('Granted Levels'), granted, columnName, getUserLink));
                 }
 
                 if (grantedExpired.length) {
 
-                    tabEntries.push(createAssignedPrivilegesTable('Granted Levels (Expired)', grantedExpired,
+                    tabEntries.push(createAssignedPrivilegesTable(L('Granted Levels (Expired)'), grantedExpired,
                         columnName, getUserLink));
                 }
 
                 if (revoked.length) {
 
-                    tabEntries.push(createAssignedPrivilegesTable('Revoked Levels', revoked, columnName, getUserLink));
+                    tabEntries.push(createAssignedPrivilegesTable(L('Revoked Levels'), revoked, columnName, getUserLink));
                 }
 
                 if (revokedExpired.length) {
 
-                    tabEntries.push(createAssignedPrivilegesTable('Revoked Levels (Expired)', revokedExpired,
+                    tabEntries.push(createAssignedPrivilegesTable(L('Revoked Levels (Expired)'), revokedExpired,
                         columnName, getUserLink));
                 }
 
@@ -764,9 +766,9 @@ export module PrivilegesView {
 
                 row.appendRaw(`<th>${firstColumn}</th>`);
             }
-            row.appendRaw('<th>Level</th>');
-            row.appendRaw('<th>From</th>');
-            row.appendRaw('<th>Until</th>');
+            row.appendRaw(`<th>${L('Level')}</th>`);
+            row.appendRaw(`<th>${L('From')}</th>`);
+            row.appendRaw(`<th>${L('Until')}</th>`);
         }
 
         const tBody = dA('<tbody>');
@@ -838,18 +840,18 @@ export module PrivilegesView {
         const grid = dA('<div class="uk-grid-small uk-child-width-auto uk-grid">');
         form.append(grid);
 
-        grid.appendRaw('<label for="user-input-assign-privilege">User name:</label><input type="text" id="user-input-assign-privilege" class="uk-input uk-form-small" />');
-        grid.appendRaw('<label for="value-input-assign-privilege">Level:</label><input type="text" id="value-input-assign-privilege" class="uk-input uk-form-small uk-text-right" value="0" />')
-        grid.appendRaw('<label for="duration-input-assign-privilege">Duration:</label><input type="text" id="duration-input-assign-privilege" class="uk-input uk-form-small uk-text-center" placeholder="unlimited" />')
+        grid.appendRaw(`<label for="user-input-assign-privilege">${L('User name')}:</label><input type="text" id="user-input-assign-privilege" class="uk-input uk-form-small" />`);
+        grid.appendRaw(`<label for="value-input-assign-privilege">${L('Level')}:</label><input type="text" id="value-input-assign-privilege" class="uk-input uk-form-small uk-text-right" value="0" />`);
+        grid.appendRaw(`<label for="duration-input-assign-privilege">${L('Duration')}:</label><input type="text" id="duration-input-assign-privilege" class="uk-input uk-form-small uk-text-center" placeholder="${L('unlimited')}" />`);
 
         const durationSelect = dA('<select id="duration-type-assign-privilege" class="uk-select uk-form-small">');
         grid.append(durationSelect);
 
         const durationTypes = [
-            [1, 'seconds'],
-            [60, 'minutes'],
-            [60 * 60, 'hours', true],
-            [60 * 60 * 24, 'days']
+            [1, L('seconds')],
+            [60, L('minutes')],
+            [60 * 60, L('hours'), true],
+            [60 * 60 * 24, L('days')]
         ];
 
         for (const durationType of durationTypes) {
@@ -858,7 +860,7 @@ export module PrivilegesView {
             durationSelect.appendRaw(`<option value="${durationType[0]}"${selected}>${durationType[1]}</option>`);
         }
 
-        grid.appendRaw('<button id="save-assign-privilege" class="uk-button uk-button-default uk-button-small">Save</button>')
+        grid.appendRaw(`<button id="save-assign-privilege" class="uk-button uk-button-default uk-button-small">${L('Save')}</button>`)
 
         return form;
     }
@@ -877,7 +879,7 @@ export module PrivilegesView {
 
             if (userName.trim().length < 1) {
 
-                Views.showWarningNotification('User name cannot be empty!');
+                Views.showWarningNotification(L('User name cannot be empty!'));
                 return;
             }
 
@@ -886,7 +888,7 @@ export module PrivilegesView {
 
             if ((value.toString() != valueString) || (value < ValueMin) || (value > ValueMax)) {
 
-                Views.showWarningNotification(`Value must be between ${ValueMin} and ${ValueMax}!`);
+                Views.showWarningNotification(L('VALUE_MUST_BE_BETWEEN', ValueMin, ValueMax));
                 return;
             }
 
@@ -899,7 +901,7 @@ export module PrivilegesView {
 
             if (duration < 0) {
 
-                Views.showWarningNotification('Duration cannot be negative!');
+                Views.showWarningNotification(L('Duration cannot be negative!'));
                 return;
             }
 
@@ -917,7 +919,7 @@ export module PrivilegesView {
             }
             if (! user) {
 
-                Views.showWarningNotification('Cannot find user with name: ' + userName);
+                Views.showWarningNotification(L('CANNOT_FIND_USER', userName));
                 return;
             }
 
@@ -948,11 +950,11 @@ export module PrivilegesView {
                         break;
                 }
 
-                Views.showSuccessNotification('Assigned privilege will be displayed when reopening the modal.');
+                Views.showSuccessNotification(L('PRIVILEGES_NEED_TO_REOPEN_MODAL'));
             }
             catch (ex) {
 
-                Views.showDangerNotification(`Could not assign privilege: ${ex}`);
+                Views.showDangerNotification(L('COULD_NOT_ASSIGN_PRIVILEGE', ex));
             }
         });
     }
@@ -960,7 +962,7 @@ export module PrivilegesView {
     export function showPrivilegesAssignedToUser(user: UserRepository.User,
                                                  callback: PageActions.IPrivilegesCallback): void {
 
-        const modal = showPrivilegesModal('Privileges Assigned To User: ' + user.name);
+        const modal = showPrivilegesModal(L('PRIVILEGES_ASSIGNED_TO_USER', user.name));
 
         Views.showModal(modal);
 
@@ -987,7 +989,7 @@ export module PrivilegesView {
 
             const collection = await promise;
 
-            const prefix = showRevoked ? 'Revoked' : 'Granted';
+            const prefix = showRevoked ? L('Revoked') : L('Granted');
 
             function compareFn(first: AssignedPrivilege, second: AssignedPrivilege): number {
 
@@ -1013,8 +1015,8 @@ export module PrivilegesView {
 
             if (discussionThreadPrivileges.length) {
 
-                tabEntries.push(createAssignedPrivilegesTable(`${prefix} Thread Levels`,
-                    discussionThreadPrivileges, 'Thread',
+                tabEntries.push(createAssignedPrivilegesTable(L(`${prefix} Thread Levels`),
+                    discussionThreadPrivileges, L('Thread'),
                     (assignedPrivilege) => ThreadsView.createThreadsLink({
 
                         id: assignedPrivilege.id,
@@ -1024,8 +1026,8 @@ export module PrivilegesView {
 
             if (discussionTagPrivileges.length) {
 
-                tabEntries.push(createAssignedPrivilegesTable(`${prefix} Tag Levels`,
-                    discussionTagPrivileges, 'Tag',
+                tabEntries.push(createAssignedPrivilegesTable(L(`${prefix} Tag Levels`),
+                    discussionTagPrivileges, L('Tag'),
                     (assignedPrivilege) => TagsView.createTagElement({
 
                         id: assignedPrivilege.id,
@@ -1035,8 +1037,8 @@ export module PrivilegesView {
 
             if (discussionCategoryPrivileges.length) {
 
-                tabEntries.push(createAssignedPrivilegesTable(`${prefix} Category Levels`,
-                    discussionCategoryPrivileges, 'Category',
+                tabEntries.push(createAssignedPrivilegesTable(L(`${prefix} Category Levels`),
+                    discussionCategoryPrivileges, L('Category'),
                     (assignedPrivilege) => CategoriesView.createCategoryLink({
 
                         id: assignedPrivilege.id,
@@ -1046,13 +1048,13 @@ export module PrivilegesView {
 
             if (forumWidePrivileges.length) {
 
-                tabEntries.push(createAssignedPrivilegesTable(`${prefix} Forum Wide Levels`,
+                tabEntries.push(createAssignedPrivilegesTable(L(`${prefix} Forum Wide Levels`),
                     forumWidePrivileges, '', null));
             }
 
             if (0 == tabEntries.length) {
 
-                return DOMHelpers.parseHTML(`<span class="uk-text-warning">No privileges ${showRevoked ? 'revoked' : 'assigned'}</span>`);
+                return DOMHelpers.parseHTML('<span class="uk-text-warning">' + L('No privileges ' + showRevoked ? 'revoked' : 'assigned') + '</span>');
             }
 
             const result = Views.createTabs(tabEntries, 0, 'center').toElement();

@@ -3,16 +3,41 @@ import {DOMHelpers} from "../helpers/domHelpers";
 
 export module LanguageService {
 
+    import cE = DOMHelpers.cE;
+
     const defaultLanguage: string = 'en';
     let currentLanguage: string = defaultLanguage;
 
     let languages = {};
-    en.load(languages);
+    let languageEntries = [];
+    en.load(languages, languageEntries);
+
+    setTimeout(populateLanguageEntries, 0);
+
+    function populateLanguageEntries(): void {
+
+        const select = document.getElementById('language-select');
+        for (const languageEntry of languageEntries) {
+
+            const element = cE('option');
+            select.appendChild(element);
+            element.setAttribute('value', languageEntry['id']);
+            if (languageEntry['id'] == getCurrentLanguage()) {
+                element.setAttribute('selected', '');
+            }
+            element.innerText = languageEntry['name'];
+        }
+    }
 
     export function setLanguage(language: string) {
 
         currentLanguage = language;
         translateExistingElements();
+    }
+
+    export function getCurrentLanguage(): string {
+
+        return currentLanguage;
     }
 
     export function translate(text: string, ...args: any[]) {
@@ -22,14 +47,13 @@ export module LanguageService {
 
         if (entry) {
             if ('string' == typeof entry) {
-                return '____' + entry + '____';
+                return entry;
+            } else {
+                return entry(...args);
             }
-            else {
-                return '____' + entry(...args) + '____';
-            }
-        }
-        else {
-            return '****' + text + '****';
+        } else {
+            console.log('Could not find translation for:', text);
+            return text;
         }
     }
 
@@ -53,6 +77,9 @@ export module LanguageService {
                 }
             }
         });
+        DOMHelpers.forEach(document.querySelectorAll('[translate-html]'), element => {
+
+            element.innerHTML = translate(element.innerText);
+        });
     }
-    //TODO, news, consent, create user form, privilege names
 }

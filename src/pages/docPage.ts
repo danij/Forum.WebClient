@@ -2,6 +2,8 @@ import {Pages} from './common';
 import {MasterPage} from './masterPage';
 import {DocumentationView} from '../views/documentationView';
 import {PageActions} from './action';
+import {LanguageService} from "../services/languageService";
+import L = LanguageService.translate;
 
 export class DocPage implements Pages.Page {
 
@@ -9,13 +11,13 @@ export class DocPage implements Pages.Page {
 
     display(): void {
 
-        MasterPage.goTo('documentation/' + encodeURIComponent(this.docSource), 'Documentation');
+        MasterPage.goTo('documentation/' + encodeURIComponent(this.docSource), L('Documentation'));
 
         Pages.changePage(() => DocumentationView.createDocumentationContainer(this.docSource,
             PageActions.getDocumentationCallback()));
     }
 
-    static loadPage(url: string) : boolean {
+    static loadPage(url: string): boolean {
 
         if (url.indexOf('documentation/') != 0) return false;
 

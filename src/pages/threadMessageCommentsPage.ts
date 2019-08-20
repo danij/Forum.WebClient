@@ -6,6 +6,8 @@ import {PageActions} from './action';
 import {DOMHelpers} from '../helpers/domHelpers';
 import {ThreadMessagesView} from '../views/threadMessagesView';
 import {ThreadMessageRepository} from '../services/threadMessageRepository';
+import {LanguageService} from "../services/languageService";
+import L = LanguageService.translate;
 
 /**
  * Displays a list of thread message comments with pagination and custom sorting
@@ -107,13 +109,13 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
             if (null == commentsCollection) return;
 
-            const newTopPaginationControl = Views.createPaginationControl(commentsCollection, 'message comments',
+            const newTopPaginationControl = Views.createPaginationControl(commentsCollection, L('message comments'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            const newBottomPaginationControl = Views.createPaginationControl(commentsCollection, 'message comments',
+            const newBottomPaginationControl = Views.createPaginationControl(commentsCollection, L('message comments'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
@@ -153,11 +155,11 @@ export class ThreadMessageCommentsPage implements Pages.Page {
 
     private refreshUrl() {
 
-        let title = 'Message Comments';
+        let title = L('Message Comments');
 
         if (this.userName && this.userName.length) {
 
-            title = 'Message comments added by ' + this.userName;
+            title = L('MESSAGE_COMMENTS_BY', this.userName);
         }
 
         title = Views.addPageNumber(title, this.pageNumber);

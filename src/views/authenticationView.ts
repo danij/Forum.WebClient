@@ -10,8 +10,11 @@ import {MasterView} from "./masterView";
 import {DisplayHelpers} from "../helpers/displayHelpers";
 import {PrivateMessagesView} from "./privateMessagesView";
 import {ThemeRepository} from "../services/themeRepository";
+import {LanguageService} from "../services/languageService";
 
 export module AuthenticationView {
+
+    import L = LanguageService.translate;
 
     interface RegisterConfig {
 
@@ -186,7 +189,7 @@ export module AuthenticationView {
 
         if (! isRegistrationEnabled()) {
 
-            Views.showWarningNotification('Registration is not available.');
+            Views.showWarningNotification(L('Registration is not available.'));
             return;
         }
 
@@ -208,7 +211,7 @@ export module AuthenticationView {
                 }
                 else {
 
-                    Views.showWarningNotification('Consent for storing cookies is required to be able to register.');
+                    Views.showWarningNotification(L('CREATE_USER_CONSENT_REQUIRED'));
                 }
             });
         }
@@ -276,19 +279,19 @@ export module AuthenticationView {
         {
             if (! validateEmail(email)) {
 
-                Views.showWarningNotification('Invalid email address!');
+                Views.showWarningNotification(L('Invalid email address!'));
                 return;
             }
         }
         {
             if (! validatePassword(password)) {
 
-                Views.showWarningNotification('Please use a more complex password!');
+                Views.showWarningNotification(L('Please use a more complex password!'));
                 return;
             }
             if (password != confirmPassword) {
 
-                Views.showWarningNotification('Passwords do not match!');
+                Views.showWarningNotification(L('Passwords do not match!'));
                 return;
             }
         }
@@ -300,7 +303,7 @@ export module AuthenticationView {
             }
             else {
 
-                Views.showWarningNotification('Cannot register if the Privacy Policy and Terms of Service are not accepted');
+                Views.showWarningNotification(L('CREATE_USER_PP_TOS_NOT_ACCEPTED'));
                 return;
             }
         }
@@ -313,7 +316,7 @@ export module AuthenticationView {
                 }
                 else {
 
-                    Views.showWarningNotification('You do not have the minimum age required to register on this site.');
+                    Views.showWarningNotification(L('MINIMUM_AGE_NOT_MET'));
                     return;
                 }
             }
@@ -323,7 +326,7 @@ export module AuthenticationView {
 
         if (shouldCheckNotARobot() && (! notARobotResponse)) {
 
-            Views.showWarningNotification('Please complete the not a robot test.');
+            Views.showWarningNotification(L('Please complete the not a robot test.'));
             return;
         }
 
@@ -335,7 +338,7 @@ export module AuthenticationView {
             acceptPrivacyTosCheckbox.checked = false;
             registerConfirmAgeCheckbox.checked = false;
 
-            Views.showSuccessNotification('Please check your email to complete the registration.');
+            Views.showSuccessNotification(L('Please check your email to complete the registration.'));
             Views.hideOpenModals();
         }
     }
@@ -377,22 +380,22 @@ export module AuthenticationView {
 
             if (! validateEmail(email)) {
 
-                Views.showWarningNotification('Invalid email address!');
+                Views.showWarningNotification(L('Invalid email address!'));
                 return;
             }
             if (oldPassword.length < 1) {
 
-                Views.showWarningNotification('Please specify the old password');
+                Views.showWarningNotification(L('Please specify the old password'));
                 return;
             }
             if (! validatePassword(newPassword)) {
 
-                Views.showWarningNotification('Please use a more complex password!');
+                Views.showWarningNotification(L('Please use a more complex password!'));
                 return;
             }
             if (newPassword != confirmPassword) {
 
-                Views.showWarningNotification('Passwords do not match!');
+                Views.showWarningNotification(L('Passwords do not match!'));
                 return;
             }
 
@@ -401,7 +404,7 @@ export module AuthenticationView {
 
             if (shouldCheckNotARobot() && (! notARobotResponse)) {
 
-                Views.showWarningNotification('Please complete the not a robot test.');
+                Views.showWarningNotification(L('Please complete the not a robot test.'));
                 return;
             }
 
@@ -412,7 +415,7 @@ export module AuthenticationView {
                 newPasswordInput.value = '';
                 confirmPasswordInput.value = '';
 
-                Views.showSuccessNotification('Password changed.');
+                Views.showSuccessNotification(L('Password changed.'));
                 Views.hideOpenModals();
             }
         });

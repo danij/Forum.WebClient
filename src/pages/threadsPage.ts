@@ -7,6 +7,8 @@ import {TagRepository} from '../services/tagRepository';
 import {UserRepository} from '../services/userRepository';
 import {PageActions} from './action';
 import {DOMHelpers} from '../helpers/domHelpers';
+import {LanguageService} from "../services/languageService";
+import L = LanguageService.translate;
 
 /**
  * Displays a list of threads with pagination and custom sorting
@@ -176,13 +178,13 @@ export class ThreadsPage implements Pages.Page {
 
             if (null == threadCollection) return;
 
-            const newTopPaginationControl = Views.createPaginationControl(threadCollection, 'threads',
+            const newTopPaginationControl = Views.createPaginationControl(threadCollection, L('threads'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            const newBottomPaginationControl = Views.createPaginationControl(threadCollection, 'threads',
+            const newBottomPaginationControl = Views.createPaginationControl(threadCollection, L('threads'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
@@ -229,19 +231,19 @@ export class ThreadsPage implements Pages.Page {
 
     private refreshUrl() {
 
-        let title = 'Threads';
+        let title = L('Threads');
 
         if (this.tagName && this.tagName.length) {
 
-            title = `Threads tagged with ${this.tagName}`;
+            title = L('THREADS_TAGGED_WITH', this.tagName);
         }
         else if (this.userName && this.userName.length) {
 
-            title = 'Threads added by ' + this.userName;
+            title = L('THREADS_BY', this.userName);
         }
         else if (this.subscribedByUserName && this.subscribedByUserName.length) {
 
-            title = 'Threads subscribed to by ' + this.subscribedByUserName;
+            title = L('THREADS_SUBSCRIBED_TO', this.subscribedByUserName);
         }
 
         title = Views.addPageNumber(title, this.pageNumber);

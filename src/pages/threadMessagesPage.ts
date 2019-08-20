@@ -8,6 +8,8 @@ import {ThreadMessagesView} from '../views/threadMessagesView';
 import {PageActions} from './action';
 import {DOMHelpers} from '../helpers/domHelpers';
 import {EditViews} from '../views/edit';
+import {LanguageService} from "../services/languageService";
+import L = LanguageService.translate;
 
 /**
  * Displays a list of thread messages with pagination and custom sorting
@@ -52,7 +54,7 @@ export class ThreadMessagesPage implements Pages.Page {
                 this.thread = await this.getCurrentThread();
                 if (null == this.thread) {
 
-                    Views.showDangerNotification('Thread not found');
+                    Views.showDangerNotification(L('Thread not found'));
                     return;
                 }
             }
@@ -175,14 +177,14 @@ export class ThreadMessagesPage implements Pages.Page {
 
             if (null == messageCollection) return;
 
-            const newTopPaginationControl = Views.createPaginationControl(messageCollection, 'messages',
+            const newTopPaginationControl = Views.createPaginationControl(messageCollection, L('messages'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
 
             DOMHelpers.replaceElementWith(this.topPaginationControl, newTopPaginationControl);
             this.topPaginationControl = newTopPaginationControl;
 
-            const newBottomPaginationControl = Views.createPaginationControl(messageCollection, 'messages',
+            const newBottomPaginationControl = Views.createPaginationControl(messageCollection, L('messages'),
                 (value: number) => this.onPageNumberChange(value),
                 (pageNumber: number) => this.getLinkForPage(pageNumber));
             DOMHelpers.replaceElementWith(this.bottomPaginationControl, newBottomPaginationControl);
@@ -210,7 +212,7 @@ export class ThreadMessagesPage implements Pages.Page {
     private getLinkForPage(pageNumber: number): string {
 
         let url = 'thread_messages';
-        const title = 'Thread Messages';
+        const title = L('Thread Messages');
 
         if (this.threadId && this.threadId.length) {
 
@@ -229,7 +231,7 @@ export class ThreadMessagesPage implements Pages.Page {
 
     private refreshUrl() {
 
-        let title = 'Thread Messages';
+        let title = L('Thread Messages');
         let setActive = 'threads-page-link';
 
         if (this.threadId && this.threadId.length) {
@@ -238,7 +240,7 @@ export class ThreadMessagesPage implements Pages.Page {
         }
         else if (this.userName && this.userName.length) {
 
-            title = 'Thread messages added by ' + this.userName;
+            title = L('THREAD_MESSAGES_BY', this.userName);
             setActive = 'users-page-link';
         }
 
