@@ -37,7 +37,7 @@ export module Pages {
 
     export interface PageLink {
 
-        title: string,
+        title: any,
         link: string,
         docName: string
     }

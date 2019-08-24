@@ -71,7 +71,18 @@ export module MasterView {
             linkElement.href = DocPage.getPageUrl(link.docName);
             Views.onClick(linkElement, () => DocumentationView.showDocumentationInModal(link.docName, docCallback));
         }
-        linkElement.innerText = link.title;
+        let linkTitle: string;
+        if ('string' == typeof (link.title)) {
+            linkTitle = link.title;
+        } else {
+            const currentLanguage = LanguageService.getCurrentLanguage();
+            if (currentLanguage in link.title) {
+                linkTitle = link.title[currentLanguage];
+            } else {
+                linkTitle = '<Unknown>';
+            }
+        }
+        linkElement.innerText = linkTitle;
 
         const result = cE('li') as HTMLLIElement;
         result.appendChild(linkElement);

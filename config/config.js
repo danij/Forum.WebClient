@@ -66,13 +66,22 @@ window.masterPageConfig = {
     ],
     title: "Fast Forum",
     navLinks: [{
-        title: "Help",
+        title: {
+            'en': "Help",
+            'ro': "Ajutor",
+        },
         link: "#"
     }, {
-        title: "Privacy Policy",
+        title: {
+            'en': "Privacy Policy",
+            'ro': "Politică de confidențialitate",
+        },
         docName: window.displayConfig.privacyPolicyDocName
     }, {
-        title: "Terms of Service",
+        title: {
+            'en': "Terms of Service",
+            'ro': "Termenii serviciului",
+        },
         docName: window.displayConfig.termsOfServiceDocName
     }],
     newsItems: [
