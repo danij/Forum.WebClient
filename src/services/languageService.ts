@@ -1,4 +1,5 @@
 import * as en from '../languages/en'
+import * as ro from '../languages/ro'
 import {DOMHelpers} from "../helpers/domHelpers";
 
 export module LanguageService {
@@ -11,6 +12,7 @@ export module LanguageService {
     let languages = {};
     let languageEntries = [];
     en.load(languages, languageEntries);
+    ro.load(languages, languageEntries);
 
     setTimeout(populateLanguageEntries, 0);
 
