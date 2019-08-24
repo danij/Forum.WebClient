@@ -321,7 +321,7 @@ export module CategoriesView {
         const threadCount = cE('span');
         element.appendChild(threadCount);
         DOMHelpers.addClasses(threadCount, 'uk-margin-left');
-        threadCount.innerText = L('THREAD_COUNT', DisplayHelpers.intToString(category.threadTotalCount));
+        threadCount.innerText = L('THREADS_COUNT', DisplayHelpers.intToString(category.threadTotalCount));
 
         const messageCount = cE('span');
         element.appendChild(messageCount);

@@ -177,7 +177,7 @@ export module TagsView {
             '    <form>\n' +
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="order-by">\n' +
-            '                Sort by:\n' +
+            `                ${L('Sort by:')}\n` +
             Views.createOrderByLabel('name', L('Name'), info) +
             Views.createOrderByLabel('threadcount', L('Thread Count'), info) +
             Views.createOrderByLabel('messagecount', L('Message Count'), info) +
@@ -254,7 +254,7 @@ export module TagsView {
 
         const threadCount = cE('span');
         container.appendChild(threadCount);
-        threadCount.innerText = L('THREAD_COUNT', DisplayHelpers.intToString(tag.threadCount));
+        threadCount.innerText = L('THREADS_COUNT', DisplayHelpers.intToString(tag.threadCount));
 
         const messageCount = cE('span');
         container.appendChild(messageCount);

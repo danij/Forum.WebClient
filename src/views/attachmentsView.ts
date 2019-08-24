@@ -80,7 +80,7 @@ export module AttachmentsView {
             '    <form>\n' +
             '        <div class="uk-grid-small uk-child-width-auto uk-grid">\n' +
             '            <div class="order-by">\n' +
-            '                Sort by:\n' +
+            `                ${L('Sort by:')}\n` +
             Views.createOrderByLabel('name', L('Name'), info) +
             Views.createOrderByLabel('created', L('Created'), info) +
             Views.createOrderByLabel('size', L('Size'), info) +
