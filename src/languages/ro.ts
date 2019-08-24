@@ -445,6 +445,7 @@ export function load(languages: any, languageEntries: any[]) {
         'show written comments': 'afișează comentarii adăugate',
         'subscribed threads': 'discuții abonate',
         'subscribed': 'abonat(ă)',
+        'thread message comments': 'comentarii mesaje',
         'thread messages': 'mesaje',
         'threads': 'discuții',
         'unknown': 'necunoscut',

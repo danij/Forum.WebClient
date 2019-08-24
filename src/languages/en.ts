@@ -445,6 +445,7 @@ export function load(languages: any, languageEntries: any[]) {
         'show written comments': 'show written comments',
         'subscribed threads': 'subscribed threads',
         'subscribed': 'subscribed',
+        'thread message comments': 'thread message comments',
         'thread messages': 'thread messages',
         'threads': 'threads',
         'unknown': 'unknown',
