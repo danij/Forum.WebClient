@@ -1,6 +1,7 @@
 @logo-size: 96px;
 @latest-message-logo-scale: 0.6;
 @message-extra-bottom: 2px;
+@compact-limit: 1200px;
 
 html {
     color: @fore-color;
@@ -749,7 +750,11 @@ html {
     }
 }
 
-@media (max-width: 1200px) {
+.show-compact, .show-compact-inline {
+    display: none;
+}
+
+@media (max-width: @compact-limit) {
     .page-content {
         padding-left: 2% !important;
         padding-right: 2% !important;
@@ -775,6 +780,17 @@ html {
     .message-actions {
 
         padding-left: 10px;
+    }
+
+    .hide-compact {
+        display: none;
+    }
+
+    .show-compact {
+        display: block;
+    }
+    .show-compact-inline{
+        display: inline;
     }
 }
 
@@ -868,7 +884,7 @@ html {
     }
 }
 
-@latest-message-in-table-width: 350px;
+@latest-message-in-table-width: 450px;
 
 .categories-table {
     padding: 10px 0 0 0;
@@ -899,6 +915,10 @@ html {
 
         display: inline;
         font-weight: bold;
+    }
+
+    .category-compact-tags {
+        margin-left: -5px;
     }
 
     .category-tags-header {
@@ -1016,7 +1036,7 @@ html {
         margin-top: 16px;
     }
 
-    @media (max-width: 1200px) {
+    @media (max-width: @compact-limit) {
         .pinned-icon {
             margin-left: 0;
             margin-right: 8px;

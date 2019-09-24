@@ -67,8 +67,8 @@ export module CategoriesView {
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
             `        <th class="uk-table-expand">${L('Category')}</th>\n` +
-            `        <th class="uk-text-center category-tags-header uk-table-shrink">${L('Tags')}</th>\n` +
-            `        <th class="uk-text-center uk-table-shrink">${L('Statistics')}</th>\n` +
+            `        <th class="uk-text-center category-tags-header uk-table-shrink hide-compact">${L('Tags')}</th>\n` +
+            `        <th class="uk-text-center uk-table-shrink hide-compact">${L('Statistics')}</th>\n` +
             `        <th class="uk-text-right latest-message-header">${L('Latest Message')}</th>\n` +
             '    </tr>\n' +
             '</thead>';
@@ -132,6 +132,13 @@ export module CategoriesView {
 
             const nameLink = createCategoryLink(category, true);
             nameColumn.append(nameLink);
+
+            if ( ! justName) {
+                nameColumn.appendRaw((`<span class="uk-text-meta uk-float-right show-compact-inline">` +
+                    `{nrOfThreads} ${L('threads')} · {nrOfMessages} ${L('messages')}</span>`)
+                    .replace('{nrOfThreads}', DisplayHelpers.intToString(category.threadTotalCount))
+                    .replace('{nrOfMessages}', DisplayHelpers.intToString(category.messageTotalCount)));
+            }
             nameColumn.appendRaw('<br/>');
 
             const description = dA('<span class="category-description">');
@@ -159,9 +166,20 @@ export module CategoriesView {
                     }
                 }
             }
+            if ( ! justName) {
+                const tagRow = dA('<div class="show-compact category-compact-tags">');
+                nameColumn.append(tagRow);
+
+                for (const tag of category.tags) {
+
+                    if (null == tag) continue;
+
+                    tagRow.append(TagsView.createTagElement(tag));
+                }
+            }
         }
         if ( ! justName) {
-            const tagColumn = dA('<td class="category-tags uk-text-center uk-table-shrink">');
+            const tagColumn = dA('<td class="category-tags uk-text-center uk-table-shrink hide-compact">');
             row.append(tagColumn);
 
             for (const tag of category.tags) {
@@ -174,7 +192,7 @@ export module CategoriesView {
         }
         if ( ! justName) {
 
-            const statisticsColumn = ('<td class="category-statistics uk-table-shrink">\n' +
+            const statisticsColumn = ('<td class="category-statistics uk-table-shrink hide-compact">\n' +
                 '    <table>\n' +
                 '        <tr>\n' +
                 '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +
