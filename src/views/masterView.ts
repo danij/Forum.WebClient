@@ -90,16 +90,16 @@ export module MasterView {
         return result;
     }
 
-    function getStatisticsText(statistics: StatisticsRepository.EntityCount): string {
+    function getStatisticsRaw(statistics: StatisticsRepository.EntityCount): string {
 
         const values = [
-            ['USERS_COUNT', DisplayHelpers.intToString(statistics.users)],
-            ['THREADS_COUNT', DisplayHelpers.intToString(statistics.discussionThreads)],
-            ['THREAD_MESSAGES_COUNT', DisplayHelpers.intToString(statistics.discussionMessages)],
-            ['TAGS_COUNT', DisplayHelpers.intToString(statistics.discussionTags)],
-            ['CATEGORIES_COUNT', DisplayHelpers.intToString(statistics.discussionCategories)],
+            ['users', 'USERS', DisplayHelpers.intToString(statistics.users)],
+            ['list', 'THREADS', DisplayHelpers.intToString(statistics.discussionThreads)],
+            ['mail', 'THREAD_MESSAGES', DisplayHelpers.intToString(statistics.discussionMessages)],
+            ['tag', 'TAGS', DisplayHelpers.intToString(statistics.discussionTags)],
+            ['home', 'CATEGORIES', DisplayHelpers.intToString(statistics.discussionCategories)],
         ];
-        return values.map(t => L(t[0], t[1])).join(FooterSeparator);
+        return values.map(t => `${t[2]} <span uk-icon="${t[0]}" title="${L(t[1])}"></span>`).join('&emsp;');
     }
 
     function showOnlineUsers(link: HTMLAnchorElement, users: UserRepository.User[]) {
@@ -127,7 +127,9 @@ export module MasterView {
         StatisticsRepository.getEntityCount().then(value => {
 
             const span = document.getElementById('entity-count');
-            span.innerText = getStatisticsText(value);
+            span.innerHTML = getStatisticsRaw(value);
+
+            Views.processUIkitElements(span);
 
             const visitorsStatistics = document.getElementById('visitors-statistics');
             visitorsStatistics.innerText = L('VISITORS_COUNT', DisplayHelpers.intToString(value.visitors));
