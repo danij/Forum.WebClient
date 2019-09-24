@@ -343,6 +343,7 @@ export function load(languages: any, languageEntries: any[]) {
         'TAGS': 'etichete',
         'THREADS_BY': u => `Discuții începute de ${u}`,
         'THREADS': 'discuții',
+        'THREADS_COUNT': n => (n == 1) ? 'o discuție' : `${n} discuții`,
         'THREADS_SUBSCRIBED_TO': u => `Discuții la care este abonat(ă) ${u}`,
         'THREADS_TAGGED_WITH': t => `Discuții etichetate cu ${t}`,
         'THREAD_MAX_LENGTH': n => `Numele discuției nu poate conține mai mult de ${n} caractere.`,

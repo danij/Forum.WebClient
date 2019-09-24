@@ -343,6 +343,7 @@ export function load(languages: any, languageEntries: any[]) {
         'TAGS': 'tags',
         'THREADS_BY': u => `Threads added by ${u}`,
         'THREADS': 'threads',
+        'THREADS_COUNT': n => (n == 1) ? '1 thread' : `${n} threads`,
         'THREADS_SUBSCRIBED_TO': u => `Threads subscribed to by ${u}`,
         'THREADS_TAGGED_WITH': t => `Threads tagged with ${t}`,
         'THREAD_MAX_LENGTH': n => `Thread name must be less than ${n} characters long.`,
