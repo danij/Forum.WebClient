@@ -91,7 +91,7 @@ export module TagsView {
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
             `        <th class="uk-table-expand">${L('Tag')}</th>\n` +
-            `        <th class="uk-text-center uk-table-shrink">${L('Statistics')}</th>\n` +
+            `        <th class="uk-text-center uk-table-shrink hide-compact">${L('Statistics')}</th>\n` +
             `        <th class="uk-text-right latest-message-header">${L('Latest Message')}</th>\n` +
             '    </tr>\n' +
             '</thead>';
@@ -138,9 +138,15 @@ export module TagsView {
                         }
                     }
                 }
+                nameColumn.appendRaw(('<div class="uk-text-meta show-compact">' +
+                    `{nrOfThreads} ${L('threads')} · ` +
+                    `{nrOfMessages} ${L('messages')}` +
+                    '</div>')
+                    .replace('{nrOfThreads}', DisplayHelpers.intToString(tag.threadCount))
+                    .replace('{nrOfMessages}', DisplayHelpers.intToString(tag.messageCount)));
             }
             {
-                const statisticsColumn = ('<td class="tag-statistics uk-table-shrink">\n' +
+                const statisticsColumn = ('<td class="tag-statistics uk-table-shrink hide-compact">\n' +
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfThreads}</td>\n' +
