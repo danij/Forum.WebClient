@@ -382,6 +382,7 @@ export function load(languages: any, languageEntries: any[]) {
         'Up Vote': 'Votează pozitiv',
         'Up votes': 'Voturi pozitive',
         'Upload new profile image': 'Urcare poză nouă de profil',
+        'User': 'Utilizator',
         'User Name': 'Nume utilizator',
         'User name cannot be empty!': 'Numele utilizatorului nu poate fi gol!',
         'User name': 'Nume utilizator',

@@ -707,7 +707,7 @@ export module PrivilegesView {
                     }
                 }
 
-                const columnName = 'User';
+                const columnName = L('User');
 
                 if (granted.length) {
 

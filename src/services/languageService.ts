@@ -1,13 +1,15 @@
 import * as en from '../languages/en'
 import * as ro from '../languages/ro'
 import {DOMHelpers} from "../helpers/domHelpers";
+import {LanguageRepository} from "./languageRepository";
 
 export module LanguageService {
 
     import cE = DOMHelpers.cE;
 
     const defaultLanguage: string = 'en';
-    let currentLanguage: string = defaultLanguage;
+    //need to load the language now to also translate privilege name constants
+    let currentLanguage: string = LanguageRepository.getLanguage();
 
     let languages = {};
     let languageEntries = [];

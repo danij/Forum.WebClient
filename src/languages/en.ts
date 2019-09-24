@@ -382,6 +382,7 @@ export function load(languages: any, languageEntries: any[]) {
         'Up Vote': 'Up Vote',
         'Up votes': 'Up votes',
         'Upload new profile image': 'Upload new profile image',
+        'User': 'User',
         'User Name': 'User Name',
         'User name cannot be empty!': 'User name cannot be empty!',
         'User name': 'User name',
