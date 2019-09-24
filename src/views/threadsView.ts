@@ -159,8 +159,8 @@ export module ThreadsView {
         const tableHeader = '<thead>\n' +
             '    <tr>\n' +
             `        <th class="uk-table-expand">${L('Thread')}</th>\n` +
-            `        <th class="uk-text-center thread-created-header uk-table-shrink">${L('Added')}</th>\n` +
-            `        <th class="uk-text-center uk-table-shrink">${L('Statistics')}</th>\n` +
+            `        <th class="uk-text-center thread-created-header uk-table-shrink hide-compact">${L('Added')}</th>\n` +
+            `        <th class="uk-text-center uk-table-shrink hide-compact">${L('Statistics')}</th>\n` +
             `        <th class="uk-text-right latest-message-header">${L('Latest Message')}</th>\n` +
             '    </tr>\n' +
             '</thead>';
@@ -199,7 +199,14 @@ export module ThreadsView {
                     details.appendRaw(`<span class="uk-label score-up">+ ${DisplayHelpers.intToString(thread.voteScore)}</span>`);
                 }
                 details.appendRaw(' ');
+                {
+                    const createdRow = dA('<span class="vertical-middle show-compact-inline">');
+                    details.append(createdRow);
 
+                    createdRow.append(UsersView.createAuthorSmall(thread.createdBy));
+                    createdRow.appendRaw(
+                        ` @ <span class="thread-message-time uk-text-meta">${DisplayHelpers.getDateTime(thread.created)}</span>`);
+                }
                 for (const tag of thread.tags) {
 
                     if (null == tag) continue;
@@ -207,9 +214,17 @@ export module ThreadsView {
                     details.append(TagsView.createTagElement(tag));
                     details.appendRaw(' ');
                 }
+                details.appendRaw(('<div class="uk-text-meta show-compact">\n' +
+                    `{nrOfMessages} ${L('messages')} · ` +
+                    `{nrOfViews} ${L('views')} · ` +
+                    `{nrOfSubscribed} ${L('subscribed')}` +
+                    '</div>')
+                    .replace('{nrOfMessages}', DisplayHelpers.intToString(thread.messageCount))
+                    .replace('{nrOfViews}', DisplayHelpers.intToString(thread.visited))
+                    .replace('{nrOfSubscribed}', DisplayHelpers.intToString(thread.subscribedUsersCount)));
             }
             {
-                const createdColumn = dA('<td class="thread-created uk-text-center uk-table-shrink">');
+                const createdColumn = dA('<td class="thread-created uk-text-center uk-table-shrink hide-compact">');
                 row.append(createdColumn);
 
                 createdColumn.append(UsersView.createAuthorSmall(thread.createdBy));
@@ -220,7 +235,7 @@ export module ThreadsView {
                     .replace('{Added}', DisplayHelpers.getDateTime(thread.created)));
             }
             {
-                const statisticsColumn = ('<td class="thread-statistics uk-table-shrink">\n' +
+                const statisticsColumn = ('<td class="thread-statistics uk-table-shrink hide-compact">\n' +
                     '    <table>\n' +
                     '        <tr>\n' +
                     '            <td class="spaced-number uk-text-right">{nrOfMessages}</td>\n' +
