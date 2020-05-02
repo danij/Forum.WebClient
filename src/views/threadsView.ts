@@ -688,7 +688,7 @@ export module ThreadsView {
             }
         });
 
-        let searchTimeout: number;
+        let searchTimeout: any;
 
         searchByNameElement.addEventListener('keyup', () => {
 
